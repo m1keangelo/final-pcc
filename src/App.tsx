@@ -16,6 +16,8 @@ import Clients from "./pages/Clients";
 import Analytics from "./pages/Analytics";
 import AdminDashboard from "./pages/AdminDashboard";
 import NotFound from "./pages/NotFound";
+import ReportBug from "./pages/ReportBug";
+import Suggestions from "./pages/Suggestions";
 
 const queryClient = new QueryClient();
 
@@ -42,8 +44,8 @@ const App = () => (
                     </ProtectedRoute>
                   } />
                   
-                  <Route path="/report-bug" element={<ProtectedRoute><NotFound /></ProtectedRoute>} />
-                  <Route path="/suggestions" element={<ProtectedRoute><NotFound /></ProtectedRoute>} />
+                  <Route path="/report-bug" element={<ProtectedRoute><ReportBug /></ProtectedRoute>} />
+                  <Route path="/suggestions" element={<ProtectedRoute><Suggestions /></ProtectedRoute>} />
                   
                   <Route path="*" element={<NotFound />} />
                 </Routes>

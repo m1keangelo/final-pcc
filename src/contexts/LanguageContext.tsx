@@ -1,4 +1,3 @@
-
 import React, { createContext, useState, useContext, useEffect, ReactNode } from 'react';
 
 type Language = 'en' | 'es';
@@ -10,8 +9,7 @@ interface Translations {
   };
 }
 
-// Define all translations here
-const translations: Translations = {
+const translations: Record<string, Record<Language, string>> = {
   'nav.home': {
     en: 'Home',
     es: 'Inicio'
@@ -627,4 +625,3 @@ export const LanguageProvider: React.FC<LanguageProviderProps> = ({ children }) 
     </LanguageContext.Provider>
   );
 };
-
