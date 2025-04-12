@@ -1,7 +1,7 @@
 
 import { useLanguage } from "@/contexts/LanguageContext";
 import { Button } from "@/components/ui/button";
-import { Flag } from "lucide-react";
+import { Globe } from "lucide-react";
 import { ReactNode } from "react";
 
 type LanguageToggleProps = {
@@ -19,24 +19,16 @@ const LanguageToggle = ({ className, children }: LanguageToggleProps) => {
         onClick={() => setLanguage(language === 'en' ? 'es' : 'en')}
         variant="outline"
         size="sm"
-        className="flex items-center gap-1"
+        className="flex items-center gap-1 bg-[#2a2a3a] border-[#4a4a5a] hover:bg-[#3a3a4a] text-gray-200"
         title={language === 'en' ? "Cambiar a español" : "Switch to English"}
       >
+        <Globe size={16} className="mr-1" />
         {language === 'en' ? (
-          <>
-            <span>Español</span>
-            <Flag fill="#FFD700" stroke="none" className="text-yellow-900" />
-          </>
+          <span>Español</span>
         ) : (
-          <>
-            <span>English</span>
-            <Flag fill="#3C3B6E" stroke="none" className="text-white" />
-          </>
+          <span>English</span>
         )}
       </Button>
-      <div className="text-xs text-muted-foreground hidden md:flex">
-        {language === 'en' ? "English" : "Español"}
-      </div>
     </div>
   );
 };

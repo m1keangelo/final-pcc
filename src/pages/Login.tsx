@@ -7,6 +7,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Loader2 } from "lucide-react";
+import LanguageToggle from "@/components/LanguageToggle";
 
 const Login = () => {
   const [username, setUsername] = useState("");
@@ -65,8 +66,12 @@ const Login = () => {
         ))}
       </div>
       
+      <div className="absolute top-4 right-4">
+        <LanguageToggle />
+      </div>
+      
       <div className="flex flex-1 z-10">
-        <div className="w-1/2 flex items-center justify-center p-6">
+        <div className="w-full lg:w-1/2 flex items-center justify-center p-6 order-2 lg:order-1">
           <div className="text-center">
             <div className="relative mb-6">
               <img 
@@ -78,7 +83,7 @@ const Login = () => {
           </div>
         </div>
         
-        <div className="w-1/2 flex items-center justify-center">
+        <div className="w-full lg:w-1/2 flex items-center justify-center order-1 lg:order-2">
           <div className="w-80 bg-[#2a2a3a] rounded-lg p-8 shadow-xl border border-[#9b87f5]/20">
             <h2 className="text-2xl font-bold text-center text-white mb-8">
               {t('login.title')}
