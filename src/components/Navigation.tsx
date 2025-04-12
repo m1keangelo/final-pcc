@@ -27,7 +27,7 @@ const Navigation = () => {
   
   return (
     <nav 
-      className="flex flex-col justify-between h-full py-8 bg-[#490c7c]/75 transition-all duration-300 sidebar-menu" 
+      className="flex flex-col justify-between h-full py-8 bg-[#490c7c]/45 transition-all duration-300 sidebar-menu" 
       role="navigation" 
       aria-label="Main Navigation"
     >
