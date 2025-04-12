@@ -22,7 +22,7 @@ const Layout = ({ children }: LayoutProps) => {
       </div>
       <div className="flex-1 overflow-auto">
         <MobileNav />
-        <div className="container py-6 md:py-10">
+        <div className="container max-w-[1200px] mx-auto py-6 md:py-10 px-4 md:px-6">
           {children}
         </div>
       </div>
