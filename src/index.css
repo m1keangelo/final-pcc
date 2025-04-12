@@ -1,3 +1,4 @@
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -35,7 +36,7 @@
     --radius: 0.5rem;
 
     /* Custom sidebar colors - updated per design specs */
-    --sidebar-bg: #490c7c40; /* Reduced to 25% opacity */
+    --sidebar-bg: #490c7c; /* Removed opacity for stronger color */
     --sidebar-hover: #7a2dac;
     --sidebar-active: #8c42dc;
     --sidebar-click: #5e0f99;
@@ -91,19 +92,20 @@
 }
 
 .sidebar-menu a {
-  padding: 12px 20px;
+  padding: 14px 22px;
   display: flex;
   align-items: center;
   color: #FFFFFF;
   text-decoration: none;
-  transition: all 0.3s ease;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .sidebar-menu a:hover {
   background-color: var(--sidebar-hover);
-  transform: scale(1.02);
+  transform: scale(1.03);
   color: #E0E0E0;
   text-shadow: 0 0 2px rgba(255, 255, 255, 0.3);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
 .sidebar-menu a:active {
@@ -116,17 +118,19 @@
   color: #FFFFFF;
   border-left: 3px solid var(--sidebar-highlight);
   font-weight: 500;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
 }
 
 .sidebar-menu svg {
   margin-right: 12px;
   color: #9b87f5;
-  transition: color 0.3s ease;
+  transition: all 0.3s ease;
 }
 
 .sidebar-menu a:hover svg,
 .sidebar-menu .active svg {
   color: #FFFFFF;
+  transform: scale(1.1);
 }
 
 @keyframes fadeIn {
@@ -136,6 +140,25 @@
 
 .sidebar-menu a {
   animation: fadeIn 0.5s ease-in;
+}
+
+@keyframes pulse {
+  0% { opacity: 0.8; }
+  50% { opacity: 1; }
+  100% { opacity: 0.8; }
+}
+
+.sidebar-menu .active svg {
+  animation: pulse 2s infinite ease-in-out;
+}
+
+@keyframes slideInLeft {
+  from { transform: translateX(-10px); opacity: 0; }
+  to { transform: translateX(0); opacity: 1; }
+}
+
+.sidebar-menu a svg {
+  animation: slideInLeft 0.3s ease-out;
 }
 
 #root {

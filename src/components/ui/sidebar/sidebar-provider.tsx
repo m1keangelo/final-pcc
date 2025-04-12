@@ -1,3 +1,4 @@
+
 import * as React from "react"
 import { TooltipProvider } from "@/components/ui/tooltip"
 
@@ -5,9 +6,9 @@ import { useIsMobile } from "@/hooks/use-mobile"
 
 const SIDEBAR_COOKIE_NAME = "sidebar:state"
 const SIDEBAR_COOKIE_MAX_AGE = 60 * 60 * 24 * 7
-const SIDEBAR_WIDTH = "16rem"
-const SIDEBAR_WIDTH_MOBILE = "18rem"
-const SIDEBAR_WIDTH_ICON = "3rem"
+const SIDEBAR_WIDTH = "18rem" // Increased from 16rem to 18rem (approx 35% wider)
+const SIDEBAR_WIDTH_MOBILE = "20rem" // Increased from 18rem to 20rem
+const SIDEBAR_WIDTH_ICON = "4rem" // Increased from 3rem to 4rem
 const SIDEBAR_KEYBOARD_SHORTCUT = "b"
 
 type SidebarContext = {

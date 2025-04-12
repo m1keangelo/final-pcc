@@ -27,24 +27,24 @@ const Navigation = () => {
   
   return (
     <nav 
-      className="flex flex-col justify-between h-full py-6 bg-[#490c7c] transition-all duration-300 sidebar-menu" 
+      className="flex flex-col justify-between h-full py-8 bg-[#490c7c] transition-all duration-300 sidebar-menu" 
       role="navigation" 
       aria-label="Main Navigation"
     >
-      <div className="space-y-1">
+      <div className="space-y-2">
         <SidebarMenu>
-          <NavItem href="/" icon={<Home size={20} />} label={t('nav.home')} aria-label={t('nav.home')} />
-          <NavItem href="/form" icon={<FileText size={20} />} label={t('nav.form')} aria-label={t('nav.form')} />
-          <NavItem href="/clients" icon={<Users size={20} />} label={t('nav.clients')} aria-label={t('nav.clients')} />
-          <NavItem href="/analytics" icon={<BarChart size={20} />} label={t('nav.analytics')} aria-label={t('nav.analytics')} />
+          <NavItem href="/" icon={<Home size={22} />} label={t('nav.home')} aria-label={t('nav.home')} />
+          <NavItem href="/form" icon={<FileText size={22} />} label={t('nav.form')} aria-label={t('nav.form')} />
+          <NavItem href="/clients" icon={<Users size={22} />} label={t('nav.clients')} aria-label={t('nav.clients')} />
+          <NavItem href="/analytics" icon={<BarChart size={22} />} label={t('nav.analytics')} aria-label={t('nav.analytics')} />
           
           {isSuperAdmin && (
-            <NavItem href="/admin" icon={<Settings size={20} />} label="Admin" aria-label="Admin" />
+            <NavItem href="/admin" icon={<Settings size={22} />} label="Admin" aria-label="Admin" />
           )}
         </SidebarMenu>
       </div>
       
-      <div className="space-y-4 px-4">
+      <div className="space-y-5 px-5">
         <LanguageToggle />
         
         <TooltipProvider>
@@ -52,12 +52,12 @@ const Navigation = () => {
             <TooltipTrigger asChild>
               <Button
                 variant="ghost"
-                className="w-full justify-start text-white hover:bg-[#7a2dac] hover:text-[#E0E0E0] transition-all duration-300 hover:shadow-md active:bg-[#5e0f99] active:scale-98"
+                className="w-full justify-start text-white hover:bg-[#7a2dac] hover:text-[#E0E0E0] transition-all duration-300 hover:shadow-md active:bg-[#5e0f99] active:scale-98 h-12"
                 onClick={logout}
                 aria-label={t('nav.logout')}
               >
-                <LogOut className="mr-3 h-5 w-5 text-[#9b87f5]" />
-                <span className="text-[15px]">{t('nav.logout')}</span>
+                <LogOut className="mr-3 h-6 w-6 text-[#9b87f5]" />
+                <span className="text-[16px] font-medium">{t('nav.logout')}</span>
               </Button>
             </TooltipTrigger>
             <TooltipContent side="right">
@@ -66,9 +66,9 @@ const Navigation = () => {
           </Tooltip>
         </TooltipProvider>
         
-        <div className="flex items-center gap-3 px-3 py-2 mt-2 border-t border-[#7a2dac] text-sm text-white/80">
-          <User size={16} className="text-[#9b87f5]" />
-          <span className="font-medium text-[15px]">{user?.name}</span>
+        <div className="flex items-center gap-3 px-3 py-3 mt-2 border-t border-[#7a2dac] text-sm text-white/80">
+          <User size={18} className="text-[#9b87f5]" />
+          <span className="font-medium text-[16px]">{user?.name}</span>
         </div>
       </div>
     </nav>
@@ -91,17 +91,18 @@ const NavItem = ({ href, icon, label, ...props }: NavItemProps) => (
             <NavLink
               to={href}
               className={({ isActive }) =>
-                `flex items-center gap-3 px-4 py-3 transition-all duration-300 rounded-sm
+                `flex items-center gap-3 px-5 py-4 transition-all duration-300 rounded-sm group
                 ${isActive
-                  ? "active bg-[#8c42dc] text-white border-l-3 border-white font-medium"
+                  ? "active bg-[#8c42dc] text-white border-l-3 border-white font-medium shadow-md"
                   : "text-white hover:bg-[#7a2dac] hover:text-[#E0E0E0] hover:shadow-md active:bg-[#5e0f99] active:scale-98"
                 }`
               }
               {...props}
             >
               <span className="text-[#9b87f5] group-hover:text-white transition-colors duration-300">{icon}</span>
-              <span className="text-[15px]">{label}</span>
-              <ChevronRight size={16} className="ml-auto opacity-0 group-hover:opacity-100 text-white/70 transition-opacity duration-300" />
+              <span className="text-[16px] font-medium">{label}</span>
+              <ChevronRight size={18} className="ml-auto opacity-0 group-hover:opacity-100 text-white/70 transition-all duration-300 transform group-hover:translate-x-1" />
+              <span className="absolute left-0 top-0 bottom-0 w-1 bg-white scale-y-0 origin-bottom transition-transform duration-300 group-hover:scale-y-100"></span>
             </NavLink>
           </SidebarMenuButton>
         </TooltipTrigger>

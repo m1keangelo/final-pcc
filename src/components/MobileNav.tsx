@@ -18,13 +18,13 @@ const MobileNav = () => {
           <Button 
             variant="outline" 
             size="icon" 
-            className="md:hidden fixed top-4 left-4 z-10"
+            className="md:hidden fixed top-4 left-4 z-10 h-12 w-12"
           >
-            <Menu />
+            <Menu size={24} />
             <span className="sr-only">Open menu</span>
           </Button>
         </SheetTrigger>
-        <SheetContent side="left" className="p-0 w-64">
+        <SheetContent side="left" className="p-0 w-72">
           <Navigation />
         </SheetContent>
       </Sheet>
