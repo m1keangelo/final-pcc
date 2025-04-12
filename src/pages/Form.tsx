@@ -1,9 +1,10 @@
+
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { useAuth } from "@/contexts/AuthContext";
-import { FormQuestions } from "@/components/form/FormQuestions";
-import { SummaryOutcome } from "@/components/form/SummaryOutcome";
+import FormQuestions from "@/components/form/FormQuestions";
+import SummaryOutcome from "@/components/form/SummaryOutcome";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 
