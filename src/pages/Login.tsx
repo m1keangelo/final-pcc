@@ -3,7 +3,6 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 import { useLanguage } from "@/contexts/LanguageContext";
-import LanguageToggle from "@/components/LanguageToggle";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
@@ -43,10 +42,6 @@ const Login = () => {
 
   return (
     <div className="min-h-screen flex flex-col bg-[#1a1a2e] relative overflow-hidden">
-      <div className="absolute top-4 right-4 z-10">
-        <LanguageToggle />
-      </div>
-      
       {/* Matrix code background effect */}
       <div className="absolute inset-0 overflow-hidden opacity-40">
         {Array.from({ length: 20 }).map((_, i) => (

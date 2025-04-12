@@ -1,13 +1,27 @@
-// Update this page (the content is just a fallback if you fail to update the page)
+
+import { useLanguage } from "@/contexts/LanguageContext";
+import { useAuth } from "@/contexts/AuthContext";
+import Layout from "@/components/Layout";
 
 const Index = () => {
+  const { t } = useLanguage();
+  const { user } = useAuth();
+  
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100">
-      <div className="text-center">
-        <h1 className="text-4xl font-bold mb-4">Welcome to Your Blank App</h1>
-        <p className="text-xl text-gray-600">Start building your amazing project here!</p>
+    <Layout>
+      <div className="space-y-8">
+        <div>
+          <h1 className="text-4xl font-bold mb-2">{t('dashboard.welcome')}</h1>
+          <p className="text-xl text-muted-foreground">
+            {t('dashboard.subtitle')}
+          </p>
+        </div>
+        
+        <div className="bg-card rounded-lg p-6 border">
+          <p className="text-lg">{t('dashboard.description')}</p>
+        </div>
       </div>
-    </div>
+    </Layout>
   );
 };
 

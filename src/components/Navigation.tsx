@@ -4,6 +4,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import { NavLink, useNavigate } from "react-router-dom";
 import { Home, FileText, Users, BarChart, LogOut } from "lucide-react";
 import { cn } from "@/lib/utils";
+import LanguageToggle from "./LanguageToggle";
 
 const Navigation = () => {
   const { t } = useLanguage();
@@ -81,13 +82,17 @@ const Navigation = () => {
         </NavLink>
       </div>
 
-      <button 
-        className="flex items-center gap-3 px-4 py-3 text-gray-300 hover:bg-secondary-foreground/10 rounded-md transition-colors mt-auto"
-        onClick={handleLogout}
-      >
-        <LogOut size={20} />
-        <span>{t('nav.logout')}</span>
-      </button>
+      <div className="mt-auto space-y-4">
+        <LanguageToggle className="justify-center" />
+        
+        <button 
+          className="flex items-center gap-3 px-4 py-3 text-gray-300 hover:bg-secondary-foreground/10 rounded-md transition-colors w-full"
+          onClick={handleLogout}
+        >
+          <LogOut size={20} />
+          <span>{t('nav.logout')}</span>
+        </button>
+      </div>
     </nav>
   );
 };
