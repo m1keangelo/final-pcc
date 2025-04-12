@@ -1,3 +1,4 @@
+
 export type FormState = {
   timeline: 'immediately' | '3months' | '3to6months' | '6to12months' | 'exploring' | null;
   firstTimeBuyer: boolean | null;
@@ -69,11 +70,28 @@ export const getQualificationCategory = (state: FormState): 'ready' | 'fixesNeed
     return 'notReady';
   }
   
-  if (
-    (state.creditCategory === 'poor' || state.creditCategory === 'fair') || 
-    (state.employmentType === '1099' && state.selfEmployedYears && state.selfEmployedYears < 2) ||
-    (state.hasCreditIssues && state.creditIssueType === 'collections' && (state.creditIssueAmount || 0) > 500)
-  ) {
+  // Check for issues that need fixes but don't disqualify
+  const needsFixes = [
+    // Credit issues
+    (state.creditCategory === 'poor' || state.creditCategory === 'fair'),
+    
+    // Income/employment issues
+    (state.employmentType === '1099' && state.selfEmployedYears && state.selfEmployedYears < 2),
+    
+    // Collections issues
+    (state.hasCreditIssues && 
+     state.creditIssueType === 'collections' && 
+     (state.creditIssueAmount || 0) > 500),
+     
+    // No down payment
+    (!state.downPaymentSaved && !state.assistanceOpen),
+    
+    // ITIN only (might need special programs)
+    (state.idType === 'ITIN')
+  ];
+  
+  // If any of the conditions are true, fixes are needed
+  if (needsFixes.some(condition => condition)) {
     return 'fixesNeeded';
   }
   
