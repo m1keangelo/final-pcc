@@ -1,3 +1,4 @@
+
 import React, { createContext, useContext, useState, ReactNode, useEffect } from 'react';
 
 // Language type
@@ -13,7 +14,7 @@ type LanguageContextType = {
 // Create the context
 const LanguageContext = createContext<LanguageContextType | undefined>(undefined);
 
-// Define the translations
+// Translations
 const translations = {
   en: {
     // Login page
@@ -30,8 +31,6 @@ const translations = {
     'nav.analytics': 'Analytics',
     'nav.logout': 'Logout',
     'nav.menu': 'Open menu',
-    'nav.reportBug': 'Report Bug',
-    'nav.suggestions': 'Suggestions',
     
     // Dashboard
     'dashboard.welcome': 'Welcome to Gallo Avión',
@@ -170,8 +169,6 @@ const translations = {
     'nav.analytics': 'Análisis',
     'nav.logout': 'Salir',
     'nav.menu': 'Abrir menú',
-    'nav.reportBug': 'Reportar Error',
-    'nav.suggestions': 'Sugerencias',
     
     // Dashboard
     'dashboard.welcome': 'Bienvenido a Gallo Avión',
