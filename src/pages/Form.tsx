@@ -10,7 +10,7 @@ import { Card } from "@/components/ui/card";
 import { FormState } from "@/types/form";
 
 const Form = () => {
-  const { t } = useLanguage();
+  const { t, language } = useLanguage();
   const { user } = useAuth();
   const navigate = useNavigate();
 
@@ -42,9 +42,11 @@ const Form = () => {
   return (
     <div className="space-y-8 animate-fade-in">
       <div>
-        <h1 className="text-4xl font-bold mb-2">{t('form.title')}</h1>
+        <h1 className="text-4xl font-bold mb-2">
+          {language === 'en' ? 'Loan Prequalification Form' : 'Formulario de Precalificación de Préstamo'}
+        </h1>
         <p className="text-xl text-muted-foreground">
-          {t('form.subtitle')}
+          {language === 'en' ? 'Fill out the form below to prequalify' : 'Complete el formulario a continuación para precalificar'}
         </p>
       </div>
 

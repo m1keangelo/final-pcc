@@ -21,12 +21,12 @@ export const TimelineQuestion = ({
   currentStep: number;
   totalSteps: number;
 }) => {
-  const { t } = useLanguage();
+  const { t, language } = useLanguage();
   
   return (
     <QuestionContainer
-      title={t('q.timeline.title')}
-      questionText={t('q.timeline.question')}
+      title={language === 'en' ? 'Homebuying Timeline' : 'Línea de tiempo para comprar casa'}
+      questionText={language === 'en' ? 'How soon are you looking to buy a home?' : '¿En cuánto tiempo está buscando comprar una casa?'}
       questionId="timeline"
       currentStep={currentStep}
       totalSteps={totalSteps}
@@ -36,36 +36,36 @@ export const TimelineQuestion = ({
           variant={value === 'immediately' ? 'default' : 'outline'}
           onClick={() => onChange('immediately')}
         >
-          {t('q.timeline.immediately')}
+          {language === 'en' ? 'Immediately (I\'ve found a home)' : 'Inmediatamente (Ya encontré una casa)'}
         </Button>
         <Button
           variant={value === '3months' ? 'default' : 'outline'}
           onClick={() => onChange('3months')}
         >
-          {t('q.timeline.3months')}
+          {language === 'en' ? 'Within 3 months' : 'En menos de 3 meses'}
         </Button>
         <Button
           variant={value === '3to6months' ? 'default' : 'outline'}
           onClick={() => onChange('3to6months')}
         >
-          {t('q.timeline.3to6months')}
+          {language === 'en' ? '3-6 months' : '3-6 meses'}
         </Button>
         <Button
           variant={value === '6to12months' ? 'default' : 'outline'}
           onClick={() => onChange('6to12months')}
         >
-          {t('q.timeline.6to12months')}
+          {language === 'en' ? '6-12 months' : '6-12 meses'}
         </Button>
         <Button
           variant={value === 'exploring' ? 'default' : 'outline'}
           onClick={() => onChange('exploring')}
         >
-          {t('q.timeline.exploring')}
+          {language === 'en' ? 'Just exploring/Not sure' : 'Solo explorando/No estoy seguro'}
         </Button>
       </div>
       
       <div className="mt-8 flex justify-end">
-        <Button onClick={onNext}>{t('form.next')}</Button>
+        <Button onClick={onNext}>{language === 'en' ? 'Next' : 'Siguiente'}</Button>
       </div>
     </QuestionContainer>
   );
@@ -86,12 +86,12 @@ export const FirstTimeBuyerQuestion = ({
   currentStep: number;
   totalSteps: number;
 }) => {
-  const { t } = useLanguage();
+  const { t, language } = useLanguage();
   
   return (
     <QuestionContainer
-      title={t('q.firsttime.title')}
-      questionText={t('q.firsttime.question')}
+      title={language === 'en' ? 'First-time Homebuyer' : 'Comprador de primera vez'}
+      questionText={language === 'en' ? 'Are you a first-time homebuyer?' : '¿Es usted un comprador de vivienda por primera vez?'}
       questionId="firsttime"
       currentStep={currentStep}
       totalSteps={totalSteps}
@@ -101,19 +101,21 @@ export const FirstTimeBuyerQuestion = ({
           variant={value === true ? 'default' : 'outline'}
           onClick={() => onChange(true)}
         >
-          {t('q.firsttime.yes')}
+          {language === 'en' ? 'Yes' : 'Sí'}
         </Button>
         <Button
           variant={value === false ? 'default' : 'outline'}
           onClick={() => onChange(false)}
         >
-          {t('q.firsttime.no')}
+          {language === 'en' ? 'No' : 'No'}
         </Button>
       </div>
       
       {value === true && (
         <div className="mt-4 text-sm text-yellow-500 text-base">
-          {t('q.firsttime.help')}
+          {language === 'en' 
+            ? 'Great! There are special programs for first-time buyers that help with low down payments.' 
+            : '¡Genial! Hay programas especiales para compradores por primera vez que ayudan con pagos iniciales bajos.'}
         </div>
       )}
       
@@ -123,9 +125,9 @@ export const FirstTimeBuyerQuestion = ({
           variant="outline"
           onClick={onBack}
         >
-          {t('form.previous')}
+          {language === 'en' ? 'Previous' : 'Anterior'}
         </Button>
-        <Button onClick={onNext}>{t('form.next')}</Button>
+        <Button onClick={onNext}>{language === 'en' ? 'Next' : 'Siguiente'}</Button>
       </div>
     </QuestionContainer>
   );
@@ -146,12 +148,12 @@ export const EmploymentQuestion = ({
   currentStep: number;
   totalSteps: number;
 }) => {
-  const { t } = useLanguage();
+  const { t, language } = useLanguage();
   
   return (
     <QuestionContainer
-      title={t('q1.title')}
-      questionText={t('q1.question')}
+      title={language === 'en' ? 'Employment Type' : 'Tipo de Empleo'}
+      questionText={language === 'en' ? 'What is your employment status?' : '¿Cuál es su situación laboral?'}
       questionId="employment"
       currentStep={currentStep}
       totalSteps={totalSteps}
@@ -161,31 +163,31 @@ export const EmploymentQuestion = ({
           variant={value === 'W-2' ? 'default' : 'outline'}
           onClick={() => onChange('W-2')}
         >
-          {t('q1.option1')}
+          {language === 'en' ? 'W-2 Employee' : 'Empleado W-2'}
         </Button>
         <Button
           variant={value === '1099' ? 'default' : 'outline'}
           onClick={() => onChange('1099')}
         >
-          {t('q1.option2')}
+          {language === 'en' ? 'Self-employed / 1099 Contractor' : 'Trabajador independiente / Contratista 1099'}
         </Button>
         <Button
           variant={value === 'retired' ? 'default' : 'outline'}
           onClick={() => onChange('retired')}
         >
-          {t('q1.option3')}
+          {language === 'en' ? 'Retired' : 'Jubilado'}
         </Button>
         <Button
           variant={value === 'unemployed' ? 'default' : 'outline'}
           onClick={() => onChange('unemployed')}
         >
-          {t('q1.option4')}
+          {language === 'en' ? 'Unemployed' : 'Desempleado'}
         </Button>
         <Button
           variant={value === 'other' ? 'default' : 'outline'}
           onClick={() => onChange('other')}
         >
-          {t('q1.option5')}
+          {language === 'en' ? 'Other Income Source' : 'Otra fuente de ingresos'}
         </Button>
       </div>
       
@@ -195,9 +197,9 @@ export const EmploymentQuestion = ({
           variant="outline"
           onClick={onBack}
         >
-          {t('form.previous')}
+          {language === 'en' ? 'Previous' : 'Anterior'}
         </Button>
-        <Button onClick={onNext}>{t('form.next')}</Button>
+        <Button onClick={onNext}>{language === 'en' ? 'Next' : 'Siguiente'}</Button>
       </div>
     </QuestionContainer>
   );
@@ -218,12 +220,12 @@ export const SelfEmployedYearsQuestion = ({
   currentStep: number;
   totalSteps: number;
 }) => {
-  const { t } = useLanguage();
+  const { t, language } = useLanguage();
   
   return (
     <QuestionContainer
-      title={t('q.selfyears.title')}
-      questionText={t('q.selfyears.question')}
+      title={language === 'en' ? 'Years Self-Employed' : 'Años como Autónomo'}
+      questionText={language === 'en' ? 'How many years have you been self-employed?' : '¿Cuántos años ha trabajado por cuenta propia?'}
       questionId="selfemployementyears"
       currentStep={currentStep}
       totalSteps={totalSteps}
@@ -231,7 +233,7 @@ export const SelfEmployedYearsQuestion = ({
       <div className="grid gap-4">
         <Input
           type="number"
-          placeholder={t('q.selfyears.placeholder')}
+          placeholder={language === 'en' ? 'Enter number of years' : 'Ingresa número de años'}
           value={value === null ? '' : value.toString()}
           onChange={(e) => {
             const parsedValue = parseInt(e.target.value);
@@ -240,7 +242,9 @@ export const SelfEmployedYearsQuestion = ({
         />
         {value !== null && value < 2 && (
           <div className="mt-2 text-sm text-yellow-500 text-base">
-            {t('q.selfyears.warning')}
+            {language === 'en'
+              ? 'Most lenders require at least 2 years of self-employment history.'
+              : 'La mayoría de los prestamistas requieren al menos 2 años de historial de trabajo por cuenta propia.'}
           </div>
         )}
       </div>
@@ -251,9 +255,9 @@ export const SelfEmployedYearsQuestion = ({
           variant="outline"
           onClick={onBack}
         >
-          {t('form.previous')}
+          {language === 'en' ? 'Previous' : 'Anterior'}
         </Button>
-        <Button onClick={onNext}>{t('form.next')}</Button>
+        <Button onClick={onNext}>{language === 'en' ? 'Next' : 'Siguiente'}</Button>
       </div>
     </QuestionContainer>
   );
@@ -278,12 +282,12 @@ export const IncomeQuestion = ({
   currentStep: number;
   totalSteps: number;
 }) => {
-  const { t } = useLanguage();
+  const { t, language } = useLanguage();
   
   return (
     <QuestionContainer
-      title={t('q2.title')}
-      questionText={t('q2.question')}
+      title={language === 'en' ? 'Income' : 'Ingreso'}
+      questionText={language === 'en' ? 'What is your monthly income?' : '¿Cuál es su ingreso mensual?'}
       questionId="income"
       currentStep={currentStep}
       totalSteps={totalSteps}
@@ -294,13 +298,13 @@ export const IncomeQuestion = ({
             variant={incomeTypeValue === 'annual' ? 'default' : 'outline'}
             onClick={() => onChangeIncomeType('annual')}
           >
-            {t('q2.annual')}
+            {language === 'en' ? 'Annual' : 'Anual'}
           </Button>
           <Button
             variant={incomeTypeValue === 'monthly' ? 'default' : 'outline'}
             onClick={() => onChangeIncomeType('monthly')}
           >
-            {t('q2.monthly')}
+            {language === 'en' ? 'Monthly' : 'Mensual'}
           </Button>
         </div>
         <Input
@@ -320,9 +324,9 @@ export const IncomeQuestion = ({
           variant="outline"
           onClick={onBack}
         >
-          {t('form.previous')}
+          {language === 'en' ? 'Previous' : 'Anterior'}
         </Button>
-        <Button onClick={onNext}>{t('form.next')}</Button>
+        <Button onClick={onNext}>{language === 'en' ? 'Next' : 'Siguiente'}</Button>
       </div>
     </QuestionContainer>
   );
@@ -343,12 +347,12 @@ export const CreditQuestion = ({
   currentStep: number;
   totalSteps: number;
 }) => {
-  const { t } = useLanguage();
+  const { t, language } = useLanguage();
   
   return (
     <QuestionContainer
-      title={t('q3.title')}
-      questionText={t('q3.question')}
+      title={language === 'en' ? 'Credit Category' : 'Categoría de Crédito'}
+      questionText={language === 'en' ? 'What is your credit score category?' : '¿Cuál es su categoría de crédito?'}
       questionId="credit"
       currentStep={currentStep}
       totalSteps={totalSteps}
@@ -358,25 +362,25 @@ export const CreditQuestion = ({
           variant={value === 'poor' ? 'default' : 'outline'}
           onClick={() => onChange('poor')}
         >
-          {t('q3.option1')}
+          {language === 'en' ? 'Poor' : 'Malo'}
         </Button>
         <Button
           variant={value === 'fair' ? 'default' : 'outline'}
           onClick={() => onChange('fair')}
         >
-          {t('q3.option2')}
+          {language === 'en' ? 'Fair' : 'Regular'}
         </Button>
         <Button
           variant={value === 'good' ? 'default' : 'outline'}
           onClick={() => onChange('good')}
         >
-          {t('q3.option3')}
+          {language === 'en' ? 'Good' : 'Bueno'}
         </Button>
         <Button
           variant={value === 'excellent' ? 'default' : 'outline'}
           onClick={() => onChange('excellent')}
         >
-          {t('q3.option4')}
+          {language === 'en' ? 'Excellent' : 'Excelente'}
         </Button>
       </div>
       
@@ -386,9 +390,9 @@ export const CreditQuestion = ({
           variant="outline"
           onClick={onBack}
         >
-          {t('form.previous')}
+          {language === 'en' ? 'Previous' : 'Anterior'}
         </Button>
-        <Button onClick={onNext}>{t('form.next')}</Button>
+        <Button onClick={onNext}>{language === 'en' ? 'Next' : 'Siguiente'}</Button>
       </div>
     </QuestionContainer>
   );
@@ -409,12 +413,12 @@ export const CreditScoreQuestion = ({
   currentStep: number;
   totalSteps: number;
 }) => {
-  const { t } = useLanguage();
+  const { t, language } = useLanguage();
   
   return (
     <QuestionContainer
-      title={t('q3a.title')}
-      questionText={t('q3a.question')}
+      title={language === 'en' ? 'Credit Score' : 'Puntuación de Crédito'}
+      questionText={language === 'en' ? 'What is your credit score?' : '¿Cuál es su puntuación de crédito?'}
       questionId="creditscore"
       currentStep={currentStep}
       totalSteps={totalSteps}
@@ -422,7 +426,7 @@ export const CreditScoreQuestion = ({
       <div className="grid gap-4">
         <Input
           type="number"
-          placeholder={t('q3a.placeholder')}
+          placeholder={language === 'en' ? 'Enter your credit score' : 'Ingresa tu puntuación de crédito'}
           value={value === null ? '' : value.toString()}
           onChange={(e) => {
             const parsedValue = parseInt(e.target.value);
@@ -433,7 +437,7 @@ export const CreditScoreQuestion = ({
           variant="outline"
           onClick={() => onChange(null)}
         >
-          {t('q3a.unknown')}
+          {language === 'en' ? 'Unknown' : 'Desconocido'}
         </Button>
       </div>
       
@@ -443,9 +447,9 @@ export const CreditScoreQuestion = ({
           variant="outline"
           onClick={onBack}
         >
-          {t('form.previous')}
+          {language === 'en' ? 'Previous' : 'Anterior'}
         </Button>
-        <Button onClick={onNext}>{t('form.next')}</Button>
+        <Button onClick={onNext}>{language === 'en' ? 'Next' : 'Siguiente'}</Button>
       </div>
     </QuestionContainer>
   );
@@ -466,12 +470,12 @@ export const DownPaymentQuestion = ({
   currentStep: number;
   totalSteps: number;
 }) => {
-  const { t } = useLanguage();
+  const { t, language } = useLanguage();
   
   return (
     <QuestionContainer
-      title={t('q4.title')}
-      questionText={t('q4.question')}
+      title={language === 'en' ? 'Down Payment' : 'Pago de Descuento'}
+      questionText={language === 'en' ? 'Have you saved any money for a down payment?' : '¿Has ahorrado dinero para un pago de descuento?'}
       questionId="downpayment"
       currentStep={currentStep}
       totalSteps={totalSteps}
@@ -481,13 +485,13 @@ export const DownPaymentQuestion = ({
           variant={value === true ? 'default' : 'outline'}
           onClick={() => onChange(true)}
         >
-          {t('q4.yes')}
+          {language === 'en' ? 'Yes' : 'Sí'}
         </Button>
         <Button
           variant={value === false ? 'default' : 'outline'}
           onClick={() => onChange(false)}
         >
-          {t('q4.no')}
+          {language === 'en' ? 'No' : 'No'}
         </Button>
       </div>
       
@@ -497,9 +501,9 @@ export const DownPaymentQuestion = ({
           variant="outline"
           onClick={onBack}
         >
-          {t('form.previous')}
+          {language === 'en' ? 'Previous' : 'Anterior'}
         </Button>
-        <Button onClick={onNext}>{t('form.next')}</Button>
+        <Button onClick={onNext}>{language === 'en' ? 'Next' : 'Siguiente'}</Button>
       </div>
     </QuestionContainer>
   );
@@ -520,12 +524,12 @@ export const DownPaymentAmountQuestion = ({
   currentStep: number;
   totalSteps: number;
 }) => {
-  const { t } = useLanguage();
+  const { t, language } = useLanguage();
   
   return (
     <QuestionContainer
-      title={t('q4a.title')}
-      questionText={t('q4a.question')}
+      title={language === 'en' ? 'Down Payment Amount' : 'Monto del Pago de Descuento'}
+      questionText={language === 'en' ? 'How much have you saved for a down payment?' : '¿Cuánto has ahorrado para un pago de descuento?'}
       questionId="downpaymentamount"
       currentStep={currentStep}
       totalSteps={totalSteps}
@@ -548,9 +552,9 @@ export const DownPaymentAmountQuestion = ({
           variant="outline"
           onClick={onBack}
         >
-          {t('form.previous')}
+          {language === 'en' ? 'Previous' : 'Anterior'}
         </Button>
-        <Button onClick={onNext}>{t('form.next')}</Button>
+        <Button onClick={onNext}>{language === 'en' ? 'Next' : 'Siguiente'}</Button>
       </div>
     </QuestionContainer>
   );
@@ -571,7 +575,7 @@ export const DownPaymentAssistanceQuestion = ({
   currentStep: number;
   totalSteps: number;
 }) => {
-  const { t } = useLanguage();
+  const { t, language } = useLanguage();
   
   return (
     <QuestionContainer
@@ -602,9 +606,9 @@ export const DownPaymentAssistanceQuestion = ({
           variant="outline"
           onClick={onBack}
         >
-          {t('form.previous')}
+          {language === 'en' ? 'Previous' : 'Anterior'}
         </Button>
-        <Button onClick={onNext}>{t('form.next')}</Button>
+        <Button onClick={onNext}>{language === 'en' ? 'Next' : 'Siguiente'}</Button>
       </div>
     </QuestionContainer>
   );
@@ -625,7 +629,7 @@ export const MonthlyDebtsQuestion = ({
   currentStep: number;
   totalSteps: number;
 }) => {
-  const { t } = useLanguage();
+  const { t, language } = useLanguage();
   
   return (
     <QuestionContainer
@@ -650,9 +654,9 @@ export const MonthlyDebtsQuestion = ({
           variant="outline"
           onClick={onBack}
         >
-          {t('form.previous')}
+          {language === 'en' ? 'Previous' : 'Anterior'}
         </Button>
-        <Button onClick={onNext}>{t('form.next')}</Button>
+        <Button onClick={onNext}>{language === 'en' ? 'Next' : 'Siguiente'}</Button>
       </div>
     </QuestionContainer>
   );
@@ -673,7 +677,7 @@ export const CreditIssuesQuestion = ({
   currentStep: number;
   totalSteps: number;
 }) => {
-  const { t } = useLanguage();
+  const { t, language } = useLanguage();
   
   return (
     <QuestionContainer
@@ -704,9 +708,9 @@ export const CreditIssuesQuestion = ({
           variant="outline"
           onClick={onBack}
         >
-          {t('form.previous')}
+          {language === 'en' ? 'Previous' : 'Anterior'}
         </Button>
-        <Button onClick={onNext}>{t('form.next')}</Button>
+        <Button onClick={onNext}>{language === 'en' ? 'Next' : 'Siguiente'}</Button>
       </div>
     </QuestionContainer>
   );
@@ -735,7 +739,7 @@ export const CreditIssueDetailsQuestion = ({
   currentStep: number;
   totalSteps: number;
 }) => {
-  const { t } = useLanguage();
+  const { t, language } = useLanguage();
   
   return (
     <QuestionContainer
@@ -783,9 +787,9 @@ export const CreditIssueDetailsQuestion = ({
           variant="outline"
           onClick={onBack}
         >
-          {t('form.previous')}
+          {language === 'en' ? 'Previous' : 'Anterior'}
         </Button>
-        <Button onClick={onNext}>{t('form.next')}</Button>
+        <Button onClick={onNext}>{language === 'en' ? 'Next' : 'Siguiente'}</Button>
       </div>
     </QuestionContainer>
   );
@@ -806,12 +810,12 @@ export const IdTypeQuestion = ({
   currentStep: number;
   totalSteps: number;
 }) => {
-  const { t } = useLanguage();
+  const { t, language } = useLanguage();
   
   return (
     <QuestionContainer
-      title={t('q5.title')}
-      questionText={t('q5.question')}
+      title={language === 'en' ? 'ID Type' : 'Tipo de Identificación'}
+      questionText={language === 'en' ? 'What is your ID type?' : '¿Cuál es su tipo de identificación?'}
       questionId="idtype"
       currentStep={currentStep}
       totalSteps={totalSteps}
@@ -843,9 +847,9 @@ export const IdTypeQuestion = ({
           variant="outline"
           onClick={onBack}
         >
-          {t('form.previous')}
+          {language === 'en' ? 'Previous' : 'Anterior'}
         </Button>
-        <Button onClick={onNext}>{t('form.next')}</Button>
+        <Button onClick={onNext}>{language === 'en' ? 'Next' : 'Siguiente'}</Button>
       </div>
     </QuestionContainer>
   );
@@ -878,7 +882,7 @@ export const ContactInfoQuestion = ({
   currentStep: number;
   totalSteps: number;
 }) => {
-  const { t } = useLanguage();
+  const { t, language } = useLanguage();
   
   return (
     <QuestionContainer
@@ -921,9 +925,9 @@ export const ContactInfoQuestion = ({
           variant="outline"
           onClick={onBack}
         >
-          {t('form.previous')}
+          {language === 'en' ? 'Previous' : 'Anterior'}
         </Button>
-        <Button onClick={onNext}>{t('form.next')}</Button>
+        <Button onClick={onNext}>{language === 'en' ? 'Next' : 'Siguiente'}</Button>
       </div>
     </QuestionContainer>
   );
@@ -981,7 +985,7 @@ export const SummaryQuestion = ({
 };
 
 const FormQuestions = ({ onComplete }: { onComplete: (data: FormState) => void }) => {
-  const { t } = useLanguage();
+  const { t, language } = useLanguage();
   const [currentStep, setCurrentStep] = useState(1);
   const totalSteps = 12;
 
