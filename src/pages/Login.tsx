@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
@@ -66,21 +65,18 @@ const Login = () => {
       </div>
       
       <div className="flex flex-1 z-10">
-        {/* Left side with mascot */}
         <div className="w-1/2 flex items-center justify-center p-6">
           <div className="text-center">
             <div className="relative mb-6">
               <img 
                 src="/lovable-uploads/b9619f78-7281-46a1-93d2-c7c8123e5e56.png" 
                 alt="Gallo Avión Cyberpunk" 
-                className="w-full max-w-[130%] mx-auto rounded-xl shadow-2xl transform hover:scale-105 transition-transform duration-300 border-2 border-solid border-white"
+                className="w-full max-w-[130%] mx-auto rounded-xl shadow-2xl transform hover:scale-105 transition-transform duration-300 border-2 border-solid border-[#690dac]"
               />
             </div>
-            {/* Removed GALLOAVIÓN text as requested */}
           </div>
         </div>
         
-        {/* Right side with login form */}
         <div className="w-1/2 flex items-center justify-center">
           <div className="w-80 bg-[#2a2a3a] rounded-lg p-8 shadow-xl border border-[#9b87f5]/20">
             <h2 className="text-2xl font-bold text-center text-white mb-8">
