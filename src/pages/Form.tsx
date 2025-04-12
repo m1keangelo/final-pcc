@@ -14,23 +14,29 @@ const Form = () => {
   const navigate = useNavigate();
 
   const [formStage, setFormStage] = useState<'questions' | 'summary'>('questions');
+  const [formData, setFormData] = useState({}); // Added to pass to SummaryOutcome
 
   return (
-    <div className="space-y-8 animate-fade-in max-w-[1200px] mx-auto px-4 md:px-6">
-      <div>
+    <div className="space-y-8 animate-fade-in">
+      <div className="max-w-[1200px] mx-auto px-4 md:px-6">
         <h1 className="text-4xl font-bold mb-2">{t('form.title')}</h1>
         <p className="text-xl text-muted-foreground">
           {t('form.subtitle')}
         </p>
       </div>
 
-      <Card className="w-full">
-        {formStage === 'questions' ? (
-          <FormQuestions onComplete={() => setFormStage('summary')} />
-        ) : (
-          <SummaryOutcome onRestart={() => setFormStage('questions')} />
-        )}
-      </Card>
+      <div className="max-w-[1200px] mx-auto px-4 md:px-6">
+        <Card className="w-full">
+          {formStage === 'questions' ? (
+            <FormQuestions onComplete={() => setFormStage('summary')} />
+          ) : (
+            <SummaryOutcome 
+              formData={formData}
+              onProceedToDocuments={() => console.log('Proceeding to documents')} 
+            />
+          )}
+        </Card>
+      </div>
     </div>
   );
 };
