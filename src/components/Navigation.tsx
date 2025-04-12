@@ -26,7 +26,11 @@ const Navigation = () => {
   const isSuperAdmin = user?.username === "admin" || user?.email === "m1keangelo@icloud.com";
   
   return (
-    <nav className="flex flex-col justify-between h-full py-6" role="navigation" aria-label="Main Navigation">
+    <nav 
+      className="flex flex-col justify-between h-full py-6 bg-[#2E2E3A] transition-all duration-300" 
+      role="navigation" 
+      aria-label="Main Navigation"
+    >
       <div className="space-y-1">
         <SidebarMenu>
           <NavItem href="/" icon={<Home size={20} />} label={t('nav.home')} aria-label={t('nav.home')} />
@@ -48,7 +52,7 @@ const Navigation = () => {
             <TooltipTrigger asChild>
               <Button
                 variant="ghost"
-                className="w-full justify-start text-white hover:bg-[#4A4E69] hover:text-[#9AEDFE] transition-all duration-300"
+                className="w-full justify-start text-white hover:bg-[#4D4D5F] hover:text-[#9AEDFE] hover:scale-105 active:scale-95 active:bg-[#5C5C6D] transition-all duration-300"
                 onClick={logout}
                 aria-label={t('nav.logout')}
               >
@@ -87,17 +91,17 @@ const NavItem = ({ href, icon, label, ...props }: NavItemProps) => (
             <NavLink
               to={href}
               className={({ isActive }) =>
-                `flex items-center gap-3 px-4 py-3 transition-all duration-300 rounded-sm ${
-                  isActive
-                    ? "active bg-[#4A4E69] text-[#9AEDFE]"
-                    : "text-white"
+                `flex items-center gap-3 px-4 py-3 transition-all duration-300 rounded-sm
+                ${isActive
+                  ? "active bg-[#4D4D5F] text-[#9AEDFE] border-l-3 border-[#9AEDFE] scale-[1.02]"
+                  : "text-white hover:bg-[#4D4D5F] hover:text-[#9AEDFE] hover:scale-105 active:scale-95 active:bg-[#5C5C6D]"
                 }`
               }
               {...props}
             >
-              <span className="text-[#6272A4] group-hover:text-[#9AEDFE]">{icon}</span>
+              <span className={`text-[#6272A4] group-hover:text-[#9AEDFE] transition-colors duration-300`}>{icon}</span>
               <span className="text-[15px] font-medium">{label}</span>
-              <ChevronRight size={16} className="ml-auto opacity-0 group-hover:opacity-100 text-[#6272A4] transition-opacity" />
+              <ChevronRight size={16} className="ml-auto opacity-0 group-hover:opacity-100 text-[#6272A4] transition-opacity duration-300" />
             </NavLink>
           </SidebarMenuButton>
         </TooltipTrigger>
