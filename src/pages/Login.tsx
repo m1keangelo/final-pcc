@@ -26,7 +26,7 @@ const Login = () => {
         </div>
         
         {/* Right Column - Brand Imagery */}
-        <div className="w-full md:w-3/5 bg-[#1a1f2c]/60 flex items-center justify-center order-1 md:order-2 overflow-hidden relative">
+        <div className="w-full md:w-3/5 bg-[#1a1f2c]/75 flex items-center justify-center order-1 md:order-2 overflow-hidden relative">
           <BrandImagery />
         </div>
       </div>
