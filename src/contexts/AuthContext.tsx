@@ -1,3 +1,4 @@
+
 import React, { createContext, useContext, useState, ReactNode, useEffect } from 'react';
 import { toast } from "../lib/toast";
 
@@ -6,6 +7,8 @@ type User = {
   id: string;
   name: string;
   username: string;
+  email?: string;
+  role?: string;
 };
 
 // Auth context type
@@ -20,15 +23,19 @@ type AuthContextType = {
 const MOCK_USERS: Record<string, { password: string, user: User }> = {
   'admin': {
     password: 'password123',
-    user: { id: '1', name: 'Admin User', username: 'admin' }
+    user: { id: '1', name: 'Admin User', username: 'admin', role: 'admin', email: 'm1keangelo@icloud.com' }
   },
   'maria': {
     password: 'password123',
-    user: { id: '2', name: 'Maria Rodriguez', username: 'maria' }
+    user: { id: '2', name: 'Maria Rodriguez', username: 'maria', role: 'assistant' }
   },
   'juan': {
     password: 'password123',
-    user: { id: '3', name: 'Juan Perez', username: 'juan' }
+    user: { id: '3', name: 'Juan Perez', username: 'juan', role: 'assistant' }
+  },
+  'm1keangelo@icloud.com': {
+    password: 'password123',
+    user: { id: '1', name: 'Super Admin', username: 'admin', role: 'admin', email: 'm1keangelo@icloud.com' }
   }
 };
 
@@ -62,7 +69,9 @@ export const AuthProvider: React.FC<{children: ReactNode}> = ({ children }) => {
     // Simulate network request
     await new Promise(resolve => setTimeout(resolve, 800));
     
-    const userRecord = MOCK_USERS[username.toLowerCase()];
+    // Check if username is an email
+    const userKey = username.toLowerCase();
+    const userRecord = MOCK_USERS[userKey];
     
     if (userRecord && userRecord.password === password) {
       setUser(userRecord.user);

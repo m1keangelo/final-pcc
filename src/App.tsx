@@ -13,6 +13,7 @@ import Login from "./pages/Login";
 import Form from "./pages/Form";
 import Clients from "./pages/Clients";
 import Analytics from "./pages/Analytics";
+import AdminDashboard from "./pages/AdminDashboard";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -33,6 +34,7 @@ const App = () => (
                 <Route path="/form" element={<ProtectedRoute><Form /></ProtectedRoute>} />
                 <Route path="/clients" element={<ProtectedRoute><Clients /></ProtectedRoute>} />
                 <Route path="/analytics" element={<ProtectedRoute><Analytics /></ProtectedRoute>} />
+                <Route path="/admin" element={<ProtectedRoute><AdminDashboard /></ProtectedRoute>} />
                 
                 <Route path="*" element={<NotFound />} />
               </Routes>
