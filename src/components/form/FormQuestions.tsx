@@ -21,12 +21,12 @@ export const TimelineQuestion = ({
   currentStep: number;
   totalSteps: number;
 }) => {
-  const { t, language } = useLanguage();
+  const { t } = useLanguage();
   
   return (
     <QuestionContainer
-      title="Homebuying Timeline"
-      questionText="How soon are you looking to buy a home?"
+      title={t('q.timeline.title')}
+      questionText={t('q.timeline.question')}
       questionId="timeline"
       currentStep={currentStep}
       totalSteps={totalSteps}
@@ -36,36 +36,36 @@ export const TimelineQuestion = ({
           variant={value === 'immediately' ? 'default' : 'outline'}
           onClick={() => onChange('immediately')}
         >
-          Immediately (I've found a home)
+          {t('q.timeline.immediately')}
         </Button>
         <Button
           variant={value === '3months' ? 'default' : 'outline'}
           onClick={() => onChange('3months')}
         >
-          Within 3 months
+          {t('q.timeline.3months')}
         </Button>
         <Button
           variant={value === '3to6months' ? 'default' : 'outline'}
           onClick={() => onChange('3to6months')}
         >
-          3-6 months
+          {t('q.timeline.3to6months')}
         </Button>
         <Button
           variant={value === '6to12months' ? 'default' : 'outline'}
           onClick={() => onChange('6to12months')}
         >
-          6-12 months
+          {t('q.timeline.6to12months')}
         </Button>
         <Button
           variant={value === 'exploring' ? 'default' : 'outline'}
           onClick={() => onChange('exploring')}
         >
-          Just exploring/Not sure
+          {t('q.timeline.exploring')}
         </Button>
       </div>
       
       <div className="mt-8 flex justify-end">
-        <Button onClick={onNext}>Next</Button>
+        <Button onClick={onNext}>{t('form.next')}</Button>
       </div>
     </QuestionContainer>
   );

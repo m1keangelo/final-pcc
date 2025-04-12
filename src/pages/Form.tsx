@@ -5,6 +5,7 @@ import { useLanguage } from "@/contexts/LanguageContext";
 import { useAuth } from "@/contexts/AuthContext";
 import FormQuestions from "@/components/form/FormQuestions";
 import SummaryOutcome from "@/components/form/SummaryOutcome";
+import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { FormState } from "@/types/form";
 
@@ -41,26 +42,28 @@ const Form = () => {
   return (
     <div className="space-y-8 animate-fade-in">
       <div>
-        <h1 className="text-4xl font-bold mb-2">Loan Prequalification Form</h1>
+        <h1 className="text-4xl font-bold mb-2">{t('form.title')}</h1>
         <p className="text-xl text-muted-foreground">
-          Fill out the form below to prequalify
+          {t('form.subtitle')}
         </p>
       </div>
 
       <div>
-        {formStage === 'questions' ? (
-          <FormQuestions 
-            onComplete={(data: FormState) => {
-              setFormData(data);
-              setFormStage('summary');
-            }} 
-          />
-        ) : (
-          <SummaryOutcome 
-            formData={formData}
-            onProceedToDocuments={() => console.log('Proceeding to documents')} 
-          />
-        )}
+        <Card className="w-full max-w-[1200px] mx-auto">
+          {formStage === 'questions' ? (
+            <FormQuestions 
+              onComplete={(data: FormState) => {
+                setFormData(data);
+                setFormStage('summary');
+              }} 
+            />
+          ) : (
+            <SummaryOutcome 
+              formData={formData}
+              onProceedToDocuments={() => console.log('Proceeding to documents')} 
+            />
+          )}
+        </Card>
       </div>
     </div>
   );
