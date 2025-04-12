@@ -42,94 +42,93 @@ const Login = () => {
   };
 
   return (
-    <div className="min-h-screen flex flex-col">
-      <div className="absolute top-4 right-4">
+    <div className="min-h-screen flex flex-col bg-[#1a1a2e] relative overflow-hidden">
+      <div className="absolute top-4 right-4 z-10">
         <LanguageToggle />
       </div>
       
-      <div className="flex flex-col md:flex-row flex-1">
-        {/* Left column with branding */}
-        <div className="w-full md:w-1/2 bg-matrix-pattern flex flex-col justify-center items-center p-8 relative">
-          <div className="relative z-10 text-center">
-            <img 
-              src="/gallo-logo.png" 
-              alt="Gallo Avión" 
-              className="w-40 mx-auto mb-6 animate-fade-in"
-            />
-            <h1 className="text-4xl font-bold text-gallopurple mb-2">Gallo Avión</h1>
-            <p className="text-gray-300 text-xl mb-8">Prequalification Assistant</p>
-            
-            <div className="w-64 mx-auto">
-              <img 
-                src="/rooster-mascot.png" 
-                alt="Rooster Mascot" 
-                className="w-full hover:scale-105 transition-transform duration-300"
-              />
-            </div>
-          </div>
-          
-          <div className="absolute inset-0 opacity-30 overflow-hidden">
-            {Array.from({ length: 10 }).map((_, i) => (
-              <div 
-                key={i} 
-                className="matrix-code text-xs absolute animate-fade-in"
-                style={{
-                  left: `${Math.random() * 100}%`,
-                  top: `${Math.random() * 100}%`,
-                  animationDelay: `${Math.random() * 2}s`,
-                }}
-              >
-                {Array.from({ length: 20 }).map((_, j) => (
-                  <div key={j}>
-                    {String.fromCharCode(33 + Math.floor(Math.random() * 94))}
-                  </div>
-                ))}
+      {/* Matrix code background effect */}
+      <div className="absolute inset-0 overflow-hidden opacity-40">
+        {Array.from({ length: 20 }).map((_, i) => (
+          <div 
+            key={i} 
+            className="matrix-code text-xs absolute animate-fade-in"
+            style={{
+              left: `${Math.random() * 100}%`,
+              top: `${Math.random() * 100}%`,
+              animationDelay: `${Math.random() * 2}s`,
+            }}
+          >
+            {Array.from({ length: 20 }).map((_, j) => (
+              <div key={j}>
+                {String.fromCharCode(33 + Math.floor(Math.random() * 94))}
               </div>
             ))}
           </div>
+        ))}
+      </div>
+      
+      <div className="flex flex-1 z-10">
+        {/* Left side with mascot */}
+        <div className="w-1/2 flex items-center justify-center p-6">
+          <div className="text-center">
+            <div className="relative mb-6">
+              <img 
+                src="/lovable-uploads/db182bb3-d1bd-46fe-ada3-75fca9b9554e.png" 
+                alt="Gallo Avión" 
+                className="w-full max-w-md mx-auto"
+              />
+            </div>
+            <h1 className="text-5xl font-bold tracking-wider text-white mb-4">
+              <span className="text-[#9b87f5]">GALLO</span> 
+              <span className="text-gray-300">AVIÓN</span>
+            </h1>
+          </div>
         </div>
         
-        {/* Right column with form */}
-        <div className="w-full md:w-1/2 bg-background flex items-center justify-center p-8">
-          <div className="w-full max-w-md space-y-8 animate-fade-in">
-            <div className="text-center">
-              <h2 className="text-3xl font-bold tracking-tight">{t('login.title')}</h2>
-            </div>
+        {/* Right side with login form */}
+        <div className="w-1/2 flex items-center justify-center">
+          <div className="w-80 bg-[#2a2a3a] rounded-lg p-8 shadow-xl">
+            <h2 className="text-2xl font-bold text-center text-white mb-8">
+              {t('login.title')}
+            </h2>
             
             <form onSubmit={handleSubmit} className="space-y-6">
               <div className="space-y-4">
                 <div className="space-y-2">
-                  <Label htmlFor="username">{t('login.username')}</Label>
+                  <Label htmlFor="username" className="text-gray-300">{t('login.username')}</Label>
                   <Input
                     id="username"
                     type="text"
                     placeholder="admin"
                     value={username}
                     onChange={(e) => setUsername(e.target.value)}
+                    className="bg-[#3a3a4a] border-[#4a4a5a] text-gray-200"
                   />
                 </div>
                 
                 <div className="space-y-2">
-                  <Label htmlFor="password">{t('login.password')}</Label>
+                  <Label htmlFor="password" className="text-gray-300">{t('login.password')}</Label>
                   <Input
                     id="password"
                     type="password"
                     placeholder="••••••••"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
+                    className="bg-[#3a3a4a] border-[#4a4a5a] text-gray-200"
                   />
                 </div>
               </div>
               
               {error && (
-                <div className="text-sm text-red-500 text-center">
+                <div className="text-sm text-red-400 text-center">
                   {error}
                 </div>
               )}
               
               <Button 
                 type="submit" 
-                className="w-full bg-gallopurple hover:bg-gallopurple-dark transition-colors"
+                className="w-full bg-[#9b87f5] hover:bg-[#7E69AB] text-white transition-colors"
                 disabled={isSubmitting}
               >
                 {isSubmitting ? (
@@ -141,7 +140,7 @@ const Login = () => {
               </Button>
             </form>
             
-            <div className="text-center text-sm text-muted-foreground">
+            <div className="text-center text-xs text-gray-400 mt-6">
               <p>Username: admin, maria, or juan</p>
               <p>Password: password123</p>
             </div>
