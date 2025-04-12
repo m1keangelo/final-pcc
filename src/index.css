@@ -69,6 +69,32 @@
       transform: translateY(1000%);
     }
   }
+  
+  .border-l-3 {
+    border-left-width: 3px;
+  }
+}
+
+/* Sidebar CSS */
+.sidebar-menu {
+  background-color: #333; /* Dark background for the sidebar */
+  color: #fff; /* White text color */
+  min-height: 100vh; /* Full height */
+}
+
+.sidebar-menu a {
+  display: block; /* Make links fill their containers */
+  color: #fff; /* White text color */
+  text-decoration: none; /* No underline */
+}
+
+.sidebar-menu a:hover {
+  background-color: #444; /* Slightly lighter on hover */
+}
+
+.sidebar-menu .active {
+  background-color: #666; /* Distinctly lighter for active tab */
+  border-left: 3px solid #00BFFF; /* Highlight with a bright blue left border */
 }
 
 #root {
