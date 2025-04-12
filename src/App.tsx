@@ -7,6 +7,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { LanguageProvider } from "./contexts/LanguageContext";
 import { AuthProvider } from "./contexts/AuthContext";
 import { DataProvider } from "./contexts/DataContext";
+import { SidebarProvider } from "./components/ui/sidebar";
 import ProtectedRoute from "./components/ProtectedRoute";
 import Dashboard from "./pages/Dashboard";
 import Login from "./pages/Login";
@@ -24,29 +25,31 @@ const App = () => (
       <AuthProvider>
         <DataProvider>
           <TooltipProvider>
-            <Toaster />
-            <Sonner />
-            <BrowserRouter>
-              <Routes>
-                <Route path="/login" element={<Login />} />
-                
-                <Route path="/" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
-                <Route path="/form" element={<ProtectedRoute><Form /></ProtectedRoute>} />
-                <Route path="/clients" element={<ProtectedRoute><Clients /></ProtectedRoute>} />
-                <Route path="/analytics" element={
-                  <ProtectedRoute permission="ACCESS_ANALYTICS">
-                    <Analytics />
-                  </ProtectedRoute>
-                } />
-                <Route path="/admin" element={
-                  <ProtectedRoute requiresAdmin={true}>
-                    <AdminDashboard />
-                  </ProtectedRoute>
-                } />
-                
-                <Route path="*" element={<NotFound />} />
-              </Routes>
-            </BrowserRouter>
+            <SidebarProvider>
+              <Toaster />
+              <Sonner />
+              <BrowserRouter>
+                <Routes>
+                  <Route path="/login" element={<Login />} />
+                  
+                  <Route path="/" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
+                  <Route path="/form" element={<ProtectedRoute><Form /></ProtectedRoute>} />
+                  <Route path="/clients" element={<ProtectedRoute><Clients /></ProtectedRoute>} />
+                  <Route path="/analytics" element={
+                    <ProtectedRoute permission="ACCESS_ANALYTICS">
+                      <Analytics />
+                    </ProtectedRoute>
+                  } />
+                  <Route path="/admin" element={
+                    <ProtectedRoute requiresAdmin={true}>
+                      <AdminDashboard />
+                    </ProtectedRoute>
+                  } />
+                  
+                  <Route path="*" element={<NotFound />} />
+                </Routes>
+              </BrowserRouter>
+            </SidebarProvider>
           </TooltipProvider>
         </DataProvider>
       </AuthProvider>

@@ -1,3 +1,4 @@
+
 import React from "react";
 import { NavLink } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
@@ -15,6 +16,7 @@ import {
   Settings,
   ChevronRight
 } from "lucide-react";
+import { SidebarMenu, SidebarMenuItem, SidebarMenuButton } from "@/components/ui/sidebar";
 
 const Navigation = () => {
   const { user, logout } = useAuth();
@@ -24,16 +26,18 @@ const Navigation = () => {
   const isSuperAdmin = user?.username === "admin" || user?.email === "m1keangelo@icloud.com";
   
   return (
-    <nav className="flex flex-col justify-between h-full py-6 sidebar-menu" role="navigation" aria-label="Main Navigation">
+    <nav className="flex flex-col justify-between h-full py-6" role="navigation" aria-label="Main Navigation">
       <div className="space-y-1">
-        <NavItem href="/" icon={<Home size={20} />} label={t('nav.home')} aria-label={t('nav.home')} />
-        <NavItem href="/form" icon={<FileText size={20} />} label={t('nav.form')} aria-label={t('nav.form')} />
-        <NavItem href="/clients" icon={<Users size={20} />} label={t('nav.clients')} aria-label={t('nav.clients')} />
-        <NavItem href="/analytics" icon={<BarChart size={20} />} label={t('nav.analytics')} aria-label={t('nav.analytics')} />
-        
-        {isSuperAdmin && (
-          <NavItem href="/admin" icon={<Settings size={20} />} label="Admin" aria-label="Admin" />
-        )}
+        <SidebarMenu>
+          <NavItem href="/" icon={<Home size={20} />} label={t('nav.home')} aria-label={t('nav.home')} />
+          <NavItem href="/form" icon={<FileText size={20} />} label={t('nav.form')} aria-label={t('nav.form')} />
+          <NavItem href="/clients" icon={<Users size={20} />} label={t('nav.clients')} aria-label={t('nav.clients')} />
+          <NavItem href="/analytics" icon={<BarChart size={20} />} label={t('nav.analytics')} aria-label={t('nav.analytics')} />
+          
+          {isSuperAdmin && (
+            <NavItem href="/admin" icon={<Settings size={20} />} label="Admin" aria-label="Admin" />
+          )}
+        </SidebarMenu>
       </div>
       
       <div className="space-y-4 px-4">
@@ -75,30 +79,34 @@ interface NavItemProps {
 }
 
 const NavItem = ({ href, icon, label, ...props }: NavItemProps) => (
-  <TooltipProvider>
-    <Tooltip>
-      <TooltipTrigger asChild>
-        <NavLink
-          to={href}
-          className={({ isActive }) =>
-            `flex items-center gap-3 px-4 py-3 transition-all duration-300 rounded-sm ${
-              isActive
-                ? "active"
-                : ""
-            }`
-          }
-          {...props}
-        >
-          <span className="text-[#6272A4] group-hover:text-[#9AEDFE]">{icon}</span>
-          <span className="text-[15px] font-medium">{label}</span>
-          <ChevronRight size={16} className="ml-auto opacity-0 group-hover:opacity-100 text-[#6272A4] transition-opacity" />
-        </NavLink>
-      </TooltipTrigger>
-      <TooltipContent side="right">
-        <p>{label}</p>
-      </TooltipContent>
-    </Tooltip>
-  </TooltipProvider>
+  <SidebarMenuItem>
+    <TooltipProvider>
+      <Tooltip>
+        <TooltipTrigger asChild>
+          <SidebarMenuButton asChild tooltip={label}>
+            <NavLink
+              to={href}
+              className={({ isActive }) =>
+                `flex items-center gap-3 px-4 py-3 transition-all duration-300 rounded-sm ${
+                  isActive
+                    ? "active bg-[#4A4E69] text-[#9AEDFE]"
+                    : "text-white"
+                }`
+              }
+              {...props}
+            >
+              <span className="text-[#6272A4] group-hover:text-[#9AEDFE]">{icon}</span>
+              <span className="text-[15px] font-medium">{label}</span>
+              <ChevronRight size={16} className="ml-auto opacity-0 group-hover:opacity-100 text-[#6272A4] transition-opacity" />
+            </NavLink>
+          </SidebarMenuButton>
+        </TooltipTrigger>
+        <TooltipContent side="right">
+          <p>{label}</p>
+        </TooltipContent>
+      </Tooltip>
+    </TooltipProvider>
+  </SidebarMenuItem>
 );
 
 export default Navigation;
