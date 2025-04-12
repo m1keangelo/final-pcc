@@ -1,3 +1,4 @@
+
 #root {
   max-width: 1280px;
   margin: 0 auto;
@@ -39,4 +40,33 @@
 
 .read-the-docs {
   color: #888;
+}
+
+/* Enhanced sidebar hover/focus accessibility styles */
+.sidebar-menu a:focus-visible {
+  outline: 2px solid white;
+  outline-offset: -2px;
+  border-radius: 2px;
+}
+
+/* Smooth sidebar transition effects */
+.sidebar-transition {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Subtle visual feedback for active elements */
+.active-nav-indicator {
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 3px;
+  background-color: white;
+  transform: scaleY(0);
+  transform-origin: bottom;
+  transition: transform 0.2s ease-in-out;
+}
+
+.sidebar-menu .active .active-nav-indicator {
+  transform: scaleY(1);
 }

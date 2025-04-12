@@ -35,11 +35,12 @@
     
     --radius: 0.5rem;
 
-    /* Custom sidebar colors */
-    --sidebar-bg: #2E2E3A;
-    --sidebar-hover: #4D4D5F;
-    --sidebar-active: #5C5C6D;
-    --sidebar-highlight: #9AEDFE;
+    /* Custom sidebar colors - updated per design specs */
+    --sidebar-bg: #490c7c;
+    --sidebar-hover: #7a2dac;
+    --sidebar-active: #8c42dc;
+    --sidebar-click: #5e0f99;
+    --sidebar-highlight: #ffffff;
   }
 }
 
@@ -81,7 +82,7 @@
   }
 }
 
-/* Enhanced Sidebar CSS */
+/* Enhanced Sidebar CSS - updated per design specs */
 .sidebar-menu {
   background-color: var(--sidebar-bg);
   color: #FFFFFF;
@@ -91,7 +92,7 @@
 }
 
 .sidebar-menu a {
-  padding: 15px 20px;
+  padding: 12px 20px;
   display: flex;
   align-items: center;
   color: #FFFFFF;
@@ -101,31 +102,32 @@
 
 .sidebar-menu a:hover {
   background-color: var(--sidebar-hover);
-  transform: scale(1.05);
-  color: var(--sidebar-highlight);
+  transform: scale(1.02);
+  color: #E0E0E0;
+  text-shadow: 0 0 2px rgba(255, 255, 255, 0.3);
 }
 
 .sidebar-menu a:active {
-  transform: scale(0.95);
-  background-color: var(--sidebar-active);
+  transform: scale(0.98);
+  background-color: var(--sidebar-click);
 }
 
 .sidebar-menu .active {
-  background-color: var(--sidebar-hover);
-  color: var(--sidebar-highlight);
+  background-color: var(--sidebar-active);
+  color: #FFFFFF;
   border-left: 3px solid var(--sidebar-highlight);
-  transform: scale(1.02);
+  font-weight: 500;
 }
 
 .sidebar-menu svg {
-  margin-right: 10px;
-  color: #6272A4;
+  margin-right: 12px;
+  color: #9b87f5;
   transition: color 0.3s ease;
 }
 
 .sidebar-menu a:hover svg,
 .sidebar-menu .active svg {
-  color: var(--sidebar-highlight);
+  color: #FFFFFF;
 }
 
 @keyframes fadeIn {

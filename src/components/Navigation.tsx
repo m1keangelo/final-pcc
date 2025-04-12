@@ -27,7 +27,7 @@ const Navigation = () => {
   
   return (
     <nav 
-      className="flex flex-col justify-between h-full py-6 bg-[#2E2E3A] transition-all duration-300" 
+      className="flex flex-col justify-between h-full py-6 bg-[#490c7c] transition-all duration-300 sidebar-menu" 
       role="navigation" 
       aria-label="Main Navigation"
     >
@@ -52,11 +52,11 @@ const Navigation = () => {
             <TooltipTrigger asChild>
               <Button
                 variant="ghost"
-                className="w-full justify-start text-white hover:bg-[#4D4D5F] hover:text-[#9AEDFE] hover:scale-105 active:scale-95 active:bg-[#5C5C6D] transition-all duration-300"
+                className="w-full justify-start text-white hover:bg-[#7a2dac] hover:text-[#E0E0E0] transition-all duration-300 hover:shadow-md active:bg-[#5e0f99] active:scale-98"
                 onClick={logout}
                 aria-label={t('nav.logout')}
               >
-                <LogOut className="mr-3 h-5 w-5 text-[#6272A4]" />
+                <LogOut className="mr-3 h-5 w-5 text-[#9b87f5]" />
                 <span className="text-[15px]">{t('nav.logout')}</span>
               </Button>
             </TooltipTrigger>
@@ -66,8 +66,8 @@ const Navigation = () => {
           </Tooltip>
         </TooltipProvider>
         
-        <div className="flex items-center gap-3 px-3 py-2 mt-2 border-t border-[#44475A] text-sm text-white/80">
-          <User size={16} className="text-[#6272A4]" />
+        <div className="flex items-center gap-3 px-3 py-2 mt-2 border-t border-[#7a2dac] text-sm text-white/80">
+          <User size={16} className="text-[#9b87f5]" />
           <span className="font-medium text-[15px]">{user?.name}</span>
         </div>
       </div>
@@ -93,15 +93,15 @@ const NavItem = ({ href, icon, label, ...props }: NavItemProps) => (
               className={({ isActive }) =>
                 `flex items-center gap-3 px-4 py-3 transition-all duration-300 rounded-sm
                 ${isActive
-                  ? "active bg-[#4D4D5F] text-[#9AEDFE] border-l-3 border-[#9AEDFE] scale-[1.02]"
-                  : "text-white hover:bg-[#4D4D5F] hover:text-[#9AEDFE] hover:scale-105 active:scale-95 active:bg-[#5C5C6D]"
+                  ? "active bg-[#8c42dc] text-white border-l-3 border-white font-medium"
+                  : "text-white hover:bg-[#7a2dac] hover:text-[#E0E0E0] hover:shadow-md active:bg-[#5e0f99] active:scale-98"
                 }`
               }
               {...props}
             >
-              <span className={`text-[#6272A4] group-hover:text-[#9AEDFE] transition-colors duration-300`}>{icon}</span>
-              <span className="text-[15px] font-medium">{label}</span>
-              <ChevronRight size={16} className="ml-auto opacity-0 group-hover:opacity-100 text-[#6272A4] transition-opacity duration-300" />
+              <span className="text-[#9b87f5] group-hover:text-white transition-colors duration-300">{icon}</span>
+              <span className="text-[15px]">{label}</span>
+              <ChevronRight size={16} className="ml-auto opacity-0 group-hover:opacity-100 text-white/70 transition-opacity duration-300" />
             </NavLink>
           </SidebarMenuButton>
         </TooltipTrigger>
