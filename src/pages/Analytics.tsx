@@ -1,4 +1,3 @@
-
 import { useLanguage } from "@/contexts/LanguageContext";
 import { useData } from "@/contexts/DataContext";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -39,7 +38,7 @@ const Analytics = () => {
   const disqualifierData = [
     { 
       name: 'Credit Issues', 
-      value: clients.filter(c => c.creditCategory === 'Poor' || c.creditScore === 550).length 
+      value: clients.filter(c => c.creditCategory === 'Poor' || (c.creditScoreApprox && c.creditScoreApprox <= 550)).length 
     },
     { 
       name: 'No Legal Status', 

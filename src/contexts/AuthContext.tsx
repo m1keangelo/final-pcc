@@ -1,6 +1,5 @@
-
 import React, { createContext, useContext, useState, ReactNode, useEffect } from 'react';
-import { toast } from "@/components/ui/sonner";
+import { toast } from "../lib/toast";
 
 // User type
 type User = {
