@@ -55,8 +55,8 @@
 @layer utilities {
   .matrix-code {
     font-family: monospace;
-    color: #0F8;
-    text-shadow: 0 0 5px #0F8;
+    color: #690dac;
+    text-shadow: 0 0 5px #690dac;
     opacity: 0.7;
     animation: fall 10s linear infinite;
   }

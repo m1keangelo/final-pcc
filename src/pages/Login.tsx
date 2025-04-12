@@ -41,8 +41,8 @@ const Login = () => {
   };
 
   return (
-    <div className="min-h-screen flex flex-col bg-[#1a1a2e] relative overflow-hidden">
-      {/* Matrix code background effect */}
+    <div className="min-h-screen flex flex-col bg-black relative overflow-hidden">
+      {/* Matrix code background effect with updated color */}
       <div className="absolute inset-0 overflow-hidden opacity-40">
         {Array.from({ length: 20 }).map((_, i) => (
           <div 
@@ -52,6 +52,8 @@ const Login = () => {
               left: `${Math.random() * 100}%`,
               top: `${Math.random() * 100}%`,
               animationDelay: `${Math.random() * 2}s`,
+              color: '#690dac',
+              textShadow: '0 0 5px #690dac',
             }}
           >
             {Array.from({ length: 20 }).map((_, j) => (
@@ -71,13 +73,10 @@ const Login = () => {
               <img 
                 src="/lovable-uploads/b9619f78-7281-46a1-93d2-c7c8123e5e56.png" 
                 alt="Gallo Avión Cyberpunk" 
-                className="w-full max-w-md mx-auto rounded-xl shadow-2xl transform hover:scale-105 transition-transform duration-300"
+                className="w-full max-w-[130%] mx-auto rounded-xl shadow-2xl transform hover:scale-105 transition-transform duration-300 border-2 border-solid border-white"
               />
             </div>
-            <h1 className="text-5xl font-bold tracking-wider text-white mb-4">
-              <span className="text-[#9b87f5]">GALLO</span> 
-              <span className="text-gray-300">AVIÓN</span>
-            </h1>
+            {/* Removed GALLOAVIÓN text as requested */}
           </div>
         </div>
         
@@ -123,7 +122,7 @@ const Login = () => {
               
               <Button 
                 type="submit" 
-                className="w-full bg-[#9b87f5] hover:bg-[#7E69AB] text-white transition-colors"
+                className="w-full bg-[#690dac] hover:bg-[#5A079A] text-white transition-colors"
                 disabled={isSubmitting}
               >
                 {isSubmitting ? (
