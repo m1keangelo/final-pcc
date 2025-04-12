@@ -980,7 +980,7 @@ export const SummaryQuestion = ({
   );
 };
 
-const FormQuestions = ({ onComplete }: { onComplete: () => void }) => {
+const FormQuestions = ({ onComplete }: { onComplete: (data: FormState) => void }) => {
   const { t } = useLanguage();
   const [currentStep, setCurrentStep] = useState(1);
   const totalSteps = 12;
@@ -1013,7 +1013,7 @@ const FormQuestions = ({ onComplete }: { onComplete: () => void }) => {
     if (currentStep < totalSteps) {
       setCurrentStep(currentStep + 1);
     } else {
-      onComplete();
+      onComplete(formData);
     }
   };
 
