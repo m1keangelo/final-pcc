@@ -2,7 +2,7 @@
 #root {
   max-width: none;
   margin: 0 auto;
-  padding: 2rem;
+  padding: 0; /* Removed padding */
   text-align: center;
   width: 100%;
 }
@@ -70,4 +70,16 @@
 
 .sidebar-menu .active .active-nav-indicator {
   transform: scaleY(1);
+}
+
+/* Text shadow utility for the login page */
+.text-shadow {
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+}
+
+/* Additional login page styles */
+@media (max-width: 768px) {
+  .login-columns {
+    flex-direction: column-reverse;
+  }
 }
