@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
@@ -185,9 +184,6 @@ const Login = () => {
               <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-2 text-shadow">
                 Gallo <span className="text-[#9b87f5]">Avión</span>
               </h1>
-              <p className="text-lg md:text-xl text-gray-300">
-                Secure Admin Dashboard
-              </p>
             </div>
             
             {/* Main Brand Image */}
@@ -203,7 +199,7 @@ const Login = () => {
             {/* Decorative Elements */}
             <div className="absolute bottom-10 right-10 md:bottom-16 md:right-16 text-right">
               <p className="text-sm md:text-base text-[#9b87f5] font-medium">
-                Powered by next-generation technology
+                Fuck Mediocrity, Unleashing Bold Marketing Power!
               </p>
             </div>
           </div>
