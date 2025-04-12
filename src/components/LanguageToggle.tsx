@@ -20,6 +20,7 @@ const LanguageToggle = ({ className, children }: LanguageToggleProps) => {
         variant="outline"
         size="sm"
         className="flex items-center gap-1"
+        title={language === 'en' ? "Cambiar a español" : "Switch to English"}
       >
         {language === 'en' ? (
           <>
@@ -33,6 +34,9 @@ const LanguageToggle = ({ className, children }: LanguageToggleProps) => {
           </>
         )}
       </Button>
+      <div className="text-xs text-muted-foreground hidden md:flex">
+        {language === 'en' ? "English" : "Español"}
+      </div>
     </div>
   );
 };

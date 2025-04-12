@@ -1,15 +1,22 @@
 
 import { useState } from "react";
 import { useLanguage } from "@/contexts/LanguageContext";
-import { FormState, FormStep } from "@/types/form";
+import { FormState, FormStep, isQualified, getQualificationCategory } from "@/types/form";
 import {
+  TimelineQuestion,
+  FirstTimeBuyerQuestion,
   EmploymentQuestion,
+  SelfEmployedYearsQuestion,
   IncomeQuestion,
   CreditQuestion,
   CreditScoreQuestion,
   DownPaymentQuestion,
   DownPaymentAmountQuestion,
-  LegalStatusQuestion,
+  DownPaymentAssistanceQuestion,
+  MonthlyDebtsQuestion,
+  CreditIssuesQuestion,
+  CreditIssueDetailsQuestion,
+  IdTypeQuestion,
   ContactInfoQuestion,
   SummaryQuestion
 } from "@/components/form/FormQuestions";
@@ -17,23 +24,33 @@ import {
 const Form = () => {
   const { t } = useLanguage();
   
-  // Form state
+  // Form state with default values
   const [formData, setFormData] = useState<FormState>({
+    timeline: null,
+    firstTimeBuyer: null,
     employmentType: null,
+    selfEmployedYears: null,
     incomeType: 'annual',
     income: null,
     creditCategory: null,
     creditScore: null,
     downPaymentSaved: null,
     downPaymentAmount: null,
-    legalStatus: null,
+    assistanceOpen: null,
+    monthlyDebts: '',
+    hasCreditIssues: null,
+    creditIssueType: null,
+    creditIssueYear: null,
+    creditIssueAmount: null,
+    idType: null,
     name: '',
     phone: '',
+    email: '',
     comments: ''
   });
   
   // Current step state
-  const [currentStep, setCurrentStep] = useState<FormStep>('employment');
+  const [currentStep, setCurrentStep] = useState<FormStep>('timeline');
   
   // Update form data helper
   const updateFormData = (field: keyof FormState, value: any) => {
@@ -50,24 +67,114 @@ const Form = () => {
     setCurrentStep(prevStep);
     window.scrollTo(0, 0);
   };
+  
+  // Conditional navigation logic
+  const handleTimelineNext = () => {
+    goToNext('firstTimeBuyer');
+  };
+  
+  const handleFirstTimeBuyerNext = () => {
+    goToNext('employment');
+  };
+  
+  const handleEmploymentNext = () => {
+    if (formData.employmentType === '1099') {
+      goToNext('selfEmployedYears');
+    } else {
+      goToNext('income');
+    }
+  };
+  
+  const handleSelfEmployedYearsNext = () => {
+    goToNext('income');
+  };
+  
+  const handleIncomeNext = () => {
+    goToNext('credit');
+  };
+  
+  const handleCreditNext = () => {
+    if (formData.creditCategory === 'poor' || formData.creditCategory === 'fair') {
+      goToNext('creditScore');
+    } else {
+      goToNext('downPayment');
+    }
+  };
+  
+  const handleCreditScoreNext = () => {
+    goToNext('downPayment');
+  };
+  
+  const handleDownPaymentNext = () => {
+    if (formData.downPaymentSaved) {
+      goToNext('downPaymentAmount');
+    } else {
+      goToNext('downPaymentAssistance');
+    }
+  };
+  
+  const handleDownPaymentAmountNext = () => {
+    goToNext('monthlyDebts');
+  };
+  
+  const handleDownPaymentAssistanceNext = () => {
+    goToNext('monthlyDebts');
+  };
+  
+  const handleMonthlyDebtsNext = () => {
+    goToNext('creditIssues');
+  };
+  
+  const handleCreditIssuesNext = () => {
+    if (formData.hasCreditIssues) {
+      goToNext('creditIssueDetails');
+    } else {
+      goToNext('idType');
+    }
+  };
+  
+  const handleCreditIssueDetailsNext = () => {
+    goToNext('idType');
+  };
+  
+  const handleIdTypeNext = () => {
+    goToNext('contactInfo');
+  };
+  
+  const handleContactInfoNext = () => {
+    goToNext('summary');
+  };
 
   // Total steps for progress indicator
-  const totalSteps = 7;
+  const totalSteps = 10;
   
   // Current step number for progress indicator
   const getCurrentStepNumber = () => {
-    switch (currentStep) {
-      case 'employment': return 1;
-      case 'income': return 2;
-      case 'credit': return 3;
-      case 'creditScore': return 3;
-      case 'downPayment': return 4;
-      case 'downPaymentAmount': return 4;
-      case 'legalStatus': return 5;
-      case 'contactInfo': return 6;
-      case 'summary': return 7;
-      default: return 1;
-    }
+    const stepOrder: FormStep[] = [
+      'timeline',
+      'firstTimeBuyer',
+      'employment',
+      'income',
+      'credit',
+      'downPayment',
+      'monthlyDebts',
+      'creditIssues',
+      'idType',
+      'contactInfo',
+      'summary'
+    ];
+    
+    // Find the main step (ignoring conditional steps)
+    const currentMainStepIndex = stepOrder.findIndex(step => {
+      if (currentStep === step) return true;
+      if (currentStep === 'selfEmployedYears' && step === 'employment') return true;
+      if (currentStep === 'creditScore' && step === 'credit') return true;
+      if ((currentStep === 'downPaymentAmount' || currentStep === 'downPaymentAssistance') && step === 'downPayment') return true;
+      if (currentStep === 'creditIssueDetails' && step === 'creditIssues') return true;
+      return false;
+    });
+    
+    return currentMainStepIndex + 1;
   };
 
   return (
@@ -87,140 +194,204 @@ const Form = () => {
         </div>
       </div>
       
-      {/* Render current step */}
-      {currentStep === 'employment' && (
-        <EmploymentQuestion 
-          value={formData.employmentType}
-          onChange={(value) => updateFormData('employmentType', value)}
-          onNext={() => goToNext('income')}
+      {/* Timeline Question */}
+      {currentStep === 'timeline' && (
+        <TimelineQuestion 
+          value={formData.timeline}
+          onChange={(value) => updateFormData('timeline', value)}
+          onNext={handleTimelineNext}
           currentStep={getCurrentStepNumber()}
           totalSteps={totalSteps}
         />
       )}
       
-      {currentStep === 'income' && (
-        <IncomeQuestion 
-          incomeValue={formData.income}
-          incomeTypeValue={formData.incomeType}
-          onChangeIncome={(value) => updateFormData('income', value)}
-          onChangeIncomeType={(value) => updateFormData('incomeType', value)}
-          onNext={() => goToNext('credit')}
+      {/* First Time Buyer Question */}
+      {currentStep === 'firstTimeBuyer' && (
+        <FirstTimeBuyerQuestion 
+          value={formData.firstTimeBuyer}
+          onChange={(value) => updateFormData('firstTimeBuyer', value)}
+          onNext={handleFirstTimeBuyerNext}
+          onBack={() => goToPrevious('timeline')}
+          currentStep={getCurrentStepNumber()}
+          totalSteps={totalSteps}
+        />
+      )}
+      
+      {/* Employment Question */}
+      {currentStep === 'employment' && (
+        <EmploymentQuestion 
+          value={formData.employmentType}
+          onChange={(value) => updateFormData('employmentType', value)}
+          onNext={handleEmploymentNext}
+          onBack={() => goToPrevious('firstTimeBuyer')}
+          currentStep={getCurrentStepNumber()}
+          totalSteps={totalSteps}
+        />
+      )}
+      
+      {/* Self-Employed Years Question (conditional) */}
+      {currentStep === 'selfEmployedYears' && (
+        <SelfEmployedYearsQuestion
+          value={formData.selfEmployedYears}
+          onChange={(value) => updateFormData('selfEmployedYears', value)}
+          onNext={handleSelfEmployedYearsNext}
           onBack={() => goToPrevious('employment')}
           currentStep={getCurrentStepNumber()}
           totalSteps={totalSteps}
         />
       )}
       
+      {/* Income Question */}
+      {currentStep === 'income' && (
+        <IncomeQuestion 
+          incomeValue={formData.income}
+          incomeTypeValue={formData.incomeType}
+          onChangeIncome={(value) => updateFormData('income', value)}
+          onChangeIncomeType={(value) => updateFormData('incomeType', value)}
+          onNext={handleIncomeNext}
+          onBack={() => formData.employmentType === '1099' ? goToPrevious('selfEmployedYears') : goToPrevious('employment')}
+          currentStep={getCurrentStepNumber()}
+          totalSteps={totalSteps}
+        />
+      )}
+      
+      {/* Credit Question */}
       {currentStep === 'credit' && (
         <CreditQuestion 
           value={formData.creditCategory}
-          onChange={(value) => {
-            updateFormData('creditCategory', value);
-            // If they change to a category that doesn't need score, clear it
-            if (value !== 'Poor' && value !== 'Fair') {
-              updateFormData('creditScore', null);
-            }
-          }}
-          onNext={() => {
-            // Conditional navigation based on credit category
-            if (formData.creditCategory === 'Poor' || formData.creditCategory === 'Fair') {
-              goToNext('creditScore');
-            } else {
-              goToNext('downPayment');
-            }
-          }}
+          onChange={(value) => updateFormData('creditCategory', value)}
+          onNext={handleCreditNext}
           onBack={() => goToPrevious('income')}
           currentStep={getCurrentStepNumber()}
           totalSteps={totalSteps}
         />
       )}
       
+      {/* Credit Score Question (conditional) */}
       {currentStep === 'creditScore' && (
         <CreditScoreQuestion 
           value={formData.creditScore}
           onChange={(value) => updateFormData('creditScore', value)}
-          onNext={() => goToNext('downPayment')}
+          onNext={handleCreditScoreNext}
           onBack={() => goToPrevious('credit')}
           currentStep={getCurrentStepNumber()}
           totalSteps={totalSteps}
         />
       )}
       
+      {/* Down Payment Question */}
       {currentStep === 'downPayment' && (
         <DownPaymentQuestion 
           value={formData.downPaymentSaved}
-          onChange={(value) => {
-            updateFormData('downPaymentSaved', value);
-            // If they change to No, clear any amount
-            if (!value) {
-              updateFormData('downPaymentAmount', null);
-            }
-          }}
-          onNext={() => {
-            // Conditional navigation based on down payment answer
-            if (formData.downPaymentSaved) {
-              goToNext('downPaymentAmount');
-            } else {
-              goToNext('legalStatus');
-            }
-          }}
-          onBack={() => {
-            // Go back to credit score if they had poor/fair credit, otherwise to credit
-            if (formData.creditCategory === 'Poor' || formData.creditCategory === 'Fair') {
-              goToPrevious('creditScore');
-            } else {
-              goToPrevious('credit');
-            }
-          }}
+          onChange={(value) => updateFormData('downPaymentSaved', value)}
+          onNext={handleDownPaymentNext}
+          onBack={() => formData.creditCategory === 'poor' || formData.creditCategory === 'fair' 
+            ? goToPrevious('creditScore') 
+            : goToPrevious('credit')}
           currentStep={getCurrentStepNumber()}
           totalSteps={totalSteps}
         />
       )}
       
+      {/* Down Payment Amount Question (conditional) */}
       {currentStep === 'downPaymentAmount' && (
         <DownPaymentAmountQuestion 
           value={formData.downPaymentAmount}
           onChange={(value) => updateFormData('downPaymentAmount', value)}
-          onNext={() => goToNext('legalStatus')}
+          onNext={handleDownPaymentAmountNext}
           onBack={() => goToPrevious('downPayment')}
           currentStep={getCurrentStepNumber()}
           totalSteps={totalSteps}
         />
       )}
       
-      {currentStep === 'legalStatus' && (
-        <LegalStatusQuestion 
-          value={formData.legalStatus}
-          onChange={(value) => updateFormData('legalStatus', value)}
-          onNext={() => goToNext('contactInfo')}
-          onBack={() => {
-            // Go back to amount if they had savings, otherwise to down payment
-            if (formData.downPaymentSaved) {
-              goToPrevious('downPaymentAmount');
-            } else {
-              goToPrevious('downPayment');
-            }
-          }}
+      {/* Down Payment Assistance Question (conditional) */}
+      {currentStep === 'downPaymentAssistance' && (
+        <DownPaymentAssistanceQuestion 
+          value={formData.assistanceOpen}
+          onChange={(value) => updateFormData('assistanceOpen', value)}
+          onNext={handleDownPaymentAssistanceNext}
+          onBack={() => goToPrevious('downPayment')}
           currentStep={getCurrentStepNumber()}
           totalSteps={totalSteps}
         />
       )}
       
+      {/* Monthly Debts Question */}
+      {currentStep === 'monthlyDebts' && (
+        <MonthlyDebtsQuestion 
+          value={formData.monthlyDebts}
+          onChange={(value) => updateFormData('monthlyDebts', value)}
+          onNext={handleMonthlyDebtsNext}
+          onBack={() => formData.downPaymentSaved 
+            ? goToPrevious('downPaymentAmount') 
+            : goToPrevious('downPaymentAssistance')}
+          currentStep={getCurrentStepNumber()}
+          totalSteps={totalSteps}
+        />
+      )}
+      
+      {/* Credit Issues Question */}
+      {currentStep === 'creditIssues' && (
+        <CreditIssuesQuestion 
+          value={formData.hasCreditIssues}
+          onChange={(value) => updateFormData('hasCreditIssues', value)}
+          onNext={handleCreditIssuesNext}
+          onBack={() => goToPrevious('monthlyDebts')}
+          currentStep={getCurrentStepNumber()}
+          totalSteps={totalSteps}
+        />
+      )}
+      
+      {/* Credit Issue Details Question (conditional) */}
+      {currentStep === 'creditIssueDetails' && (
+        <CreditIssueDetailsQuestion 
+          type={formData.creditIssueType}
+          year={formData.creditIssueYear}
+          amount={formData.creditIssueAmount}
+          onChangeType={(value) => updateFormData('creditIssueType', value)}
+          onChangeYear={(value) => updateFormData('creditIssueYear', value)}
+          onChangeAmount={(value) => updateFormData('creditIssueAmount', value)}
+          onNext={handleCreditIssueDetailsNext}
+          onBack={() => goToPrevious('creditIssues')}
+          currentStep={getCurrentStepNumber()}
+          totalSteps={totalSteps}
+        />
+      )}
+      
+      {/* ID Type Question */}
+      {currentStep === 'idType' && (
+        <IdTypeQuestion 
+          value={formData.idType}
+          onChange={(value) => updateFormData('idType', value)}
+          onNext={handleIdTypeNext}
+          onBack={() => formData.hasCreditIssues 
+            ? goToPrevious('creditIssueDetails') 
+            : goToPrevious('creditIssues')}
+          currentStep={getCurrentStepNumber()}
+          totalSteps={totalSteps}
+        />
+      )}
+      
+      {/* Contact Info Question */}
       {currentStep === 'contactInfo' && (
         <ContactInfoQuestion 
           name={formData.name}
           phone={formData.phone}
+          email={formData.email}
           comments={formData.comments}
           onChangeName={(value) => updateFormData('name', value)}
           onChangePhone={(value) => updateFormData('phone', value)}
+          onChangeEmail={(value) => updateFormData('email', value)}
           onChangeComments={(value) => updateFormData('comments', value)}
-          onNext={() => goToNext('summary')}
-          onBack={() => goToPrevious('legalStatus')}
+          onNext={handleContactInfoNext}
+          onBack={() => goToPrevious('idType')}
           currentStep={getCurrentStepNumber()}
           totalSteps={totalSteps}
         />
       )}
       
+      {/* Summary Question */}
       {currentStep === 'summary' && (
         <SummaryQuestion 
           formData={formData}

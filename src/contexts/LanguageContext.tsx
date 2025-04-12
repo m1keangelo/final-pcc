@@ -37,22 +37,50 @@ const translations = {
     'dashboard.description': 'Use this application to prequalify clients for home loans.',
     
     // Form Phase 1
-    'form.title': 'Prequalification Form',
+    'form.title': 'Loan Prequalification Form',
     'form.progress': 'Question {current} of {total}',
     'form.next': 'Next',
     'form.previous': 'Back',
     'form.complete': 'Complete',
     
-    'q1.title': 'Employment Type',
-    'q1.question': 'Are you employed (W-2), or are you an independent contractor (1099)?',
+    // Timeline
+    'q.timeline.title': 'Homebuying Timeline',
+    'q.timeline.question': 'How soon are you looking to buy a home?',
+    'q.timeline.immediately': 'Immediately (I\'ve found a home)',
+    'q.timeline.3months': 'Within 3 months',
+    'q.timeline.3to6months': '3-6 months',
+    'q.timeline.6to12months': '6-12 months',
+    'q.timeline.exploring': 'Just exploring/Not sure',
+    
+    // First-Time Buyer
+    'q.firsttime.title': 'First-Time Homebuyer',
+    'q.firsttime.question': 'Have you purchased a home before, or would this be your first time buying?',
+    'q.firsttime.yes': 'First-time buyer',
+    'q.firsttime.no': 'I\'ve owned a home before',
+    'q.firsttime.help': 'Great! There are special programs for first-time buyers that help with low down payments.',
+    
+    // Employment Questions
+    'q1.title': 'Employment Status',
+    'q1.question': 'What is your current employment situation?',
     'q1.option1': 'Employed (W-2)',
     'q1.option2': 'Self-employed (1099)',
+    'q1.option3': 'Retired',
+    'q1.option4': 'Unemployed/No income',
+    'q1.option5': 'Other',
     
-    'q2.title': 'Income',
-    'q2.question': 'How much did you earn last year, or how much do you make per month?',
+    // Self-Employment Years
+    'q.selfyears.title': 'Self-Employment History',
+    'q.selfyears.question': 'How long have you been self-employed? Have you been in business at least two years?',
+    'q.selfyears.placeholder': 'Enter number of years',
+    'q.selfyears.warning': 'It can be harder to get a loan with less than 2 years of self-employment. You might need a co-signer or a special program.',
+    
+    // Income
+    'q2.title': 'Income Level',
+    'q2.question': 'Approximately how much do you earn per year or per month (before taxes)?',
     'q2.annual': 'Annual Income',
     'q2.monthly': 'Monthly Income',
     
+    // Credit
     'q3.title': 'Credit Health',
     'q3.question': 'How would you describe your credit?',
     'q3.option1': 'Poor',
@@ -65,6 +93,7 @@ const translations = {
     'q3a.placeholder': 'Enter estimated score',
     'q3a.unknown': 'I don\'t know',
     
+    // Down Payment
     'q4.title': 'Down Payment',
     'q4.question': 'Do you have savings set aside for a down payment?',
     'q4.yes': 'Yes',
@@ -73,6 +102,7 @@ const translations = {
     'q4a.title': 'Down Payment Amount',
     'q4a.question': 'Approximately how much have you saved?',
     
+    // ID Type
     'q5.title': 'Legal Status',
     'q5.question': 'What is your legal residency/citizenship status in the US?',
     'q5.option1': 'US Citizen',
@@ -81,6 +111,7 @@ const translations = {
     'q5.option4': 'Undocumented',
     
     'form.result.qualified': 'You may qualify for a home loan! 🎉 Let\'s move forward with collecting your documents.',
+    'form.result.fixesNeeded': 'With a few improvements, you should be able to qualify! We\'ll help create a plan.',
     'form.result.notqualified': 'Not quite ready to qualify yet. But with a good game plan, you can qualify in the future!',
     
     // Clients page
@@ -148,16 +179,44 @@ const translations = {
     'form.previous': 'Atrás',
     'form.complete': 'Completar',
     
-    'q1.title': 'Tipo de Empleo',
-    'q1.question': '¿Eres empleado (W-2) o trabajas por tu cuenta (1099)?',
-    'q1.option1': 'Empleado (W-2)',
-    'q1.option2': 'Trabaja por tu cuenta (1099)',
+    // Timeline
+    'q.timeline.title': 'Plazo para Comprar Casa',
+    'q.timeline.question': '¿Qué tan pronto busca comprar una casa?',
+    'q.timeline.immediately': 'Inmediatamente (ya encontré una casa)',
+    'q.timeline.3months': 'Dentro de 3 meses',
+    'q.timeline.3to6months': '3-6 meses',
+    'q.timeline.6to12months': '6-12 meses',
+    'q.timeline.exploring': 'Solo explorando/No estoy seguro',
     
+    // First-Time Buyer
+    'q.firsttime.title': 'Comprador de Primera Vez',
+    'q.firsttime.question': '¿Ha comprado una casa antes, o esta sería su primera vez comprando?',
+    'q.firsttime.yes': 'Comprador de primera vez',
+    'q.firsttime.no': 'He tenido casa antes',
+    'q.firsttime.help': '¡Genial! Hay programas para compradores primerizos que ayudan con un pago inicial bajo.',
+    
+    // Employment
+    'q1.title': 'Tipo de Empleo',
+    'q1.question': '¿Cuál es su situación laboral actual?',
+    'q1.option1': 'Empleado (W-2)',
+    'q1.option2': 'Trabajador por cuenta propia (1099)',
+    'q1.option3': 'Jubilado',
+    'q1.option4': 'Desempleado/Sin ingresos',
+    'q1.option5': 'Otro',
+    
+    // Self-Employment Years
+    'q.selfyears.title': 'Historial de Autoempleo',
+    'q.selfyears.question': '¿Hace cuánto trabaja por cuenta propia? ¿Lleva al menos dos años con su negocio?',
+    'q.selfyears.placeholder': 'Ingrese número de años',
+    'q.selfyears.warning': 'Con menos de 2 años como autónomo es más difícil calificar. Podría necesitar un co-firmante o un programa especial.',
+    
+    // Income
     'q2.title': 'Ingresos',
-    'q2.question': '¿Cuánto ganaste el año pasado o cuánto ganas mensualmente?',
+    'q2.question': '¿Aproximadamente cuánto gana al año o al mes (antes de impuestos)?',
     'q2.annual': 'Ingreso Anual',
     'q2.monthly': 'Ingreso Mensual',
     
+    // Credit
     'q3.title': 'Estado del Crédito',
     'q3.question': '¿Cómo describirías tu crédito?',
     'q3.option1': 'Malo',
@@ -170,6 +229,7 @@ const translations = {
     'q3a.placeholder': 'Ingrese puntaje estimado',
     'q3a.unknown': 'No lo sé',
     
+    // Down Payment
     'q4.title': 'Enganche',
     'q4.question': '¿Tienes dinero ahorrado para el enganche?',
     'q4.yes': 'Sí',
@@ -178,6 +238,7 @@ const translations = {
     'q4a.title': 'Cantidad de Enganche',
     'q4a.question': '¿Aproximadamente cuánto tienes ahorrado?',
     
+    // ID Type
     'q5.title': 'Estatus Migratorio',
     'q5.question': '¿Cuál es tu estatus migratorio o legal en EE.UU.?',
     'q5.option1': 'Ciudadano de EE.UU.',
@@ -185,8 +246,9 @@ const translations = {
     'q5.option3': 'Permiso de Trabajo (Autorización de Empleo)',
     'q5.option4': 'Indocumentado',
     
-    'form.result.qualified': '¡Es posible que califiques para un préstamo! 🎉 Sigamos adelante reuniendo tus documentos.',
-    'form.result.notqualified': 'Aún no estás listo para calificar. ¡Pero con un buen plan de acción, podrás calificar pronto!',
+    'form.result.qualified': '¡Es posible que califique para un préstamo! 🎉 Sigamos adelante reuniendo sus documentos.',
+    'form.result.fixesNeeded': '¡Con algunas mejoras, debería poder calificar! Le ayudaremos a crear un plan.',
+    'form.result.notqualified': 'Aún no está listo para calificar. ¡Pero con un buen plan de acción, podrá calificar pronto!',
     
     // Clients page
     'clients.title': 'Lista de Clientes',
