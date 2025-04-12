@@ -49,7 +49,7 @@ const Form = () => {
       </div>
 
       <div>
-        <Card className="w-full max-w-[1200px] mx-auto">
+        <Card className="w-full">
           {formStage === 'questions' ? (
             <FormQuestions 
               onComplete={(data: FormState) => {
