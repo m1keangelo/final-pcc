@@ -35,7 +35,7 @@
     --radius: 0.5rem;
 
     /* Custom sidebar colors - updated per design specs */
-    --sidebar-bg: #490c7c80; /* Added 80 hex opacity (50% transparent) */
+    --sidebar-bg: #490c7c40; /* Reduced to 25% opacity */
     --sidebar-hover: #7a2dac;
     --sidebar-active: #8c42dc;
     --sidebar-click: #5e0f99;
