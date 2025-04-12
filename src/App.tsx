@@ -42,6 +42,9 @@ const App = () => (
                     </ProtectedRoute>
                   } />
                   
+                  <Route path="/report-bug" element={<ProtectedRoute><NotFound /></ProtectedRoute>} />
+                  <Route path="/suggestions" element={<ProtectedRoute><NotFound /></ProtectedRoute>} />
+                  
                   <Route path="*" element={<NotFound />} />
                 </Routes>
               </BrowserRouter>

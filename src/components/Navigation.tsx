@@ -1,6 +1,6 @@
 
 import React from "react";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { Button } from "@/components/ui/button";
@@ -23,6 +23,7 @@ import { SidebarMenu, SidebarMenuItem, SidebarMenuButton, SidebarSeparator } fro
 const Navigation = () => {
   const { user, logout } = useAuth();
   const { t } = useLanguage();
+  const navigate = useNavigate();
 
   // Check if user is a super admin
   const isSuperAdmin = user?.username === "admin" || user?.email === "m1keangelo@icloud.com";
@@ -40,7 +41,7 @@ const Navigation = () => {
           <NavItem href="/clients" icon={<Users size={22} />} label={t('nav.clients')} aria-label={t('nav.clients')} />
           <NavItem href="/analytics" icon={<BarChart size={22} />} label={t('nav.analytics')} aria-label={t('nav.analytics')} />
           
-          {isSuperAdmin && (
+          {(user?.role === 'admin' || user?.role === 'superadmin') && (
             <NavItem href="/admin" icon={<Settings size={22} />} label="Admin" aria-label="Admin" />
           )}
         </SidebarMenu>
