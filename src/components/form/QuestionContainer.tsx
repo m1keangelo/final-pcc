@@ -21,7 +21,7 @@ const QuestionContainer = ({
   totalSteps
 }: QuestionContainerProps) => {
   return (
-    <Card className="w-full max-w-[1200px] mx-auto animate-fade-in shadow-lg">
+    <Card className="w-full mx-auto animate-fade-in shadow-lg bg-background">
       <CardHeader className="border-b border-border">
         <div className="flex items-center justify-between">
           <span className="text-sm text-muted-foreground">
