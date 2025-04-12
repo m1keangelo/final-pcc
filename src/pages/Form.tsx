@@ -10,7 +10,7 @@ import { Card } from "@/components/ui/card";
 import { FormState } from "@/types/form";
 
 const Form = () => {
-  const { t, language } = useLanguage();
+  const { language } = useLanguage();
   const { user } = useAuth();
   const navigate = useNavigate();
 
