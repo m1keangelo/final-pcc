@@ -1355,12 +1355,28 @@ export const SummaryQuestion = ({
       ? formData.income! 
       : formData.income! * 12;
     
+    // Map employment type to supported values in the client structure
+    let mappedEmploymentType: 'W-2' | '1099' = 'W-2';
+    if (formData.employmentType === '1099') {
+      mappedEmploymentType = '1099';
+    }
+    
+    // Map credit category with proper capitalization
+    let mappedCreditCategory: 'Poor' | 'Fair' | 'Good' | 'Excellent' = 'Poor';
+    if (formData.creditCategory === 'excellent') {
+      mappedCreditCategory = 'Excellent';
+    } else if (formData.creditCategory === 'good') {
+      mappedCreditCategory = 'Good';
+    } else if (formData.creditCategory === 'fair') {
+      mappedCreditCategory = 'Fair';
+    }
+    
     addClient({
       name: formData.name,
       phone: formData.phone,
-      employmentType: formData.employmentType || 'W-2',
+      employmentType: mappedEmploymentType,
       incomeAnnual: annualIncome,
-      creditCategory: formData.creditCategory === 'unknown' ? 'Poor' : formData.creditCategory || 'Poor',
+      creditCategory: formData.creditCategory === 'unknown' ? 'Poor' : mappedCreditCategory,
       creditScoreApprox: formData.creditScore || undefined,
       downPaymentSaved: formData.downPaymentSaved || false,
       downPaymentAmount: formData.downPaymentSaved ? formData.downPaymentAmount! : undefined,
