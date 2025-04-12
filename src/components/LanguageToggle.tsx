@@ -23,13 +23,13 @@ const LanguageToggle = ({ className, children }: LanguageToggleProps) => {
       >
         {language === 'en' ? (
           <>
-            <span>US</span>
-            <Flag className="text-blue-600 fill-blue-100" />
+            <span>Español</span>
+            <Flag className="text-yellow-500 fill-yellow-100" />
           </>
         ) : (
           <>
-            <span>CO</span>
-            <Flag className="text-yellow-500 fill-yellow-100" />
+            <span>English</span>
+            <Flag className="text-blue-600 fill-blue-100" />
           </>
         )}
       </Button>
@@ -38,4 +38,3 @@ const LanguageToggle = ({ className, children }: LanguageToggleProps) => {
 };
 
 export default LanguageToggle;
-
