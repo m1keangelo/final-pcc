@@ -8,6 +8,7 @@ import SummaryOutcome from "@/components/form/SummaryOutcome";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { FormState } from "@/types/form";
+import Layout from "@/components/Layout";
 
 const Form = () => {
   const { t } = useLanguage();
@@ -40,32 +41,34 @@ const Form = () => {
   });
 
   return (
-    <div className="space-y-8 animate-fade-in">
-      <div className="max-w-[1200px] mx-auto px-4 md:px-6">
-        <h1 className="text-4xl font-bold mb-2">{t('form.title')}</h1>
-        <p className="text-xl text-muted-foreground">
-          {t('form.subtitle')}
-        </p>
-      </div>
+    <Layout>
+      <div className="space-y-8 animate-fade-in">
+        <div>
+          <h1 className="text-4xl font-bold mb-2">{t('form.title')}</h1>
+          <p className="text-xl text-muted-foreground">
+            {t('form.subtitle')}
+          </p>
+        </div>
 
-      <div className="max-w-[1200px] mx-auto px-4 md:px-6">
-        <Card className="w-full">
-          {formStage === 'questions' ? (
-            <FormQuestions 
-              onComplete={(data: FormState) => {
-                setFormData(data);
-                setFormStage('summary');
-              }} 
-            />
-          ) : (
-            <SummaryOutcome 
-              formData={formData}
-              onProceedToDocuments={() => console.log('Proceeding to documents')} 
-            />
-          )}
-        </Card>
+        <div>
+          <Card className="w-full">
+            {formStage === 'questions' ? (
+              <FormQuestions 
+                onComplete={(data: FormState) => {
+                  setFormData(data);
+                  setFormStage('summary');
+                }} 
+              />
+            ) : (
+              <SummaryOutcome 
+                formData={formData}
+                onProceedToDocuments={() => console.log('Proceeding to documents')} 
+              />
+            )}
+          </Card>
+        </div>
       </div>
-    </div>
+    </Layout>
   );
 };
 

@@ -21,7 +21,7 @@ const MobileNav = () => {
             className="md:hidden fixed top-4 left-4 z-10 h-12 w-12"
           >
             <Menu size={24} />
-            <span className="sr-only">Open menu</span>
+            <span className="sr-only">{t('nav.menu')}</span>
           </Button>
         </SheetTrigger>
         <SheetContent side="left" className="p-0 w-72">

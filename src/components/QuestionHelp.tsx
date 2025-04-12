@@ -44,7 +44,7 @@ const QuestionHelp = ({ questionId, helpLink = "#" }: QuestionHelpProps) => {
               onClick={() => setIsOpen(true)}
             >
               <HelpCircle size={18} />
-              <span className="sr-only">Help</span>
+              <span className="sr-only">{t('help.title')}</span>
             </Button>
           </TooltipTrigger>
           <TooltipContent>

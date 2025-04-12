@@ -1,5 +1,5 @@
 
-import React, { createContext, useContext, useState, ReactNode } from 'react';
+import React, { createContext, useContext, useState, ReactNode, useEffect } from 'react';
 
 // Language type
 export type Language = 'en' | 'es';
@@ -30,6 +30,7 @@ const translations = {
     'nav.clients': 'Clients',
     'nav.analytics': 'Analytics',
     'nav.logout': 'Logout',
+    'nav.menu': 'Open menu',
     
     // Dashboard
     'dashboard.welcome': 'Welcome to Gallo Avión',
@@ -42,6 +43,7 @@ const translations = {
     'form.next': 'Next',
     'form.previous': 'Back',
     'form.complete': 'Complete',
+    'form.subtitle': 'Fill out the form below to prequalify',
     
     // Timeline
     'q.timeline.title': 'Homebuying Timeline',
@@ -166,6 +168,7 @@ const translations = {
     'nav.clients': 'Clientes',
     'nav.analytics': 'Análisis',
     'nav.logout': 'Salir',
+    'nav.menu': 'Abrir menú',
     
     // Dashboard
     'dashboard.welcome': 'Bienvenido a Gallo Avión',
@@ -178,6 +181,7 @@ const translations = {
     'form.next': 'Siguiente',
     'form.previous': 'Atrás',
     'form.complete': 'Completar',
+    'form.subtitle': 'Complete el formulario a continuación para precalificar',
     
     // Timeline
     'q.timeline.title': 'Plazo para Comprar Casa',
@@ -292,6 +296,27 @@ const translations = {
 // Provider component
 export const LanguageProvider: React.FC<{children: ReactNode}> = ({ children }) => {
   const [language, setLanguage] = useState<Language>('en');
+
+  // Save language preference to localStorage
+  useEffect(() => {
+    try {
+      localStorage.setItem('preferredLanguage', language);
+    } catch (e) {
+      console.error("Failed to save language preference to localStorage", e);
+    }
+  }, [language]);
+
+  // Load language preference from localStorage on mount
+  useEffect(() => {
+    try {
+      const savedLanguage = localStorage.getItem('preferredLanguage') as Language;
+      if (savedLanguage && (savedLanguage === 'en' || savedLanguage === 'es')) {
+        setLanguage(savedLanguage);
+      }
+    } catch (e) {
+      console.error("Failed to load language preference from localStorage", e);
+    }
+  }, []);
 
   // Translation function
   const t = (key: string): string => {
