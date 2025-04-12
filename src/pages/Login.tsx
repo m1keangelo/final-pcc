@@ -69,9 +69,9 @@ const Login = () => {
           <div className="text-center">
             <div className="relative mb-6">
               <img 
-                src="/lovable-uploads/db182bb3-d1bd-46fe-ada3-75fca9b9554e.png" 
-                alt="Gallo Avión" 
-                className="w-full max-w-md mx-auto"
+                src="/lovable-uploads/b9619f78-7281-46a1-93d2-c7c8123e5e56.png" 
+                alt="Gallo Avión Cyberpunk" 
+                className="w-full max-w-md mx-auto rounded-xl shadow-2xl transform hover:scale-105 transition-transform duration-300"
               />
             </div>
             <h1 className="text-5xl font-bold tracking-wider text-white mb-4">
@@ -83,7 +83,7 @@ const Login = () => {
         
         {/* Right side with login form */}
         <div className="w-1/2 flex items-center justify-center">
-          <div className="w-80 bg-[#2a2a3a] rounded-lg p-8 shadow-xl">
+          <div className="w-80 bg-[#2a2a3a] rounded-lg p-8 shadow-xl border border-[#9b87f5]/20">
             <h2 className="text-2xl font-bold text-center text-white mb-8">
               {t('login.title')}
             </h2>
