@@ -301,9 +301,6 @@ export const LanguageProvider: React.FC<{children: ReactNode}> = ({ children }) 
   useEffect(() => {
     try {
       localStorage.setItem('preferredLanguage', language);
-      // Force re-render of all components when language changes
-      document.documentElement.lang = language;
-      console.log(`Language changed to: ${language}`);
     } catch (e) {
       console.error("Failed to save language preference to localStorage", e);
     }
@@ -315,7 +312,6 @@ export const LanguageProvider: React.FC<{children: ReactNode}> = ({ children }) 
       const savedLanguage = localStorage.getItem('preferredLanguage') as Language;
       if (savedLanguage && (savedLanguage === 'en' || savedLanguage === 'es')) {
         setLanguage(savedLanguage);
-        document.documentElement.lang = savedLanguage;
       }
     } catch (e) {
       console.error("Failed to load language preference from localStorage", e);
@@ -324,10 +320,7 @@ export const LanguageProvider: React.FC<{children: ReactNode}> = ({ children }) 
 
   // Translation function
   const t = (key: string): string => {
-    const translationSet = translations[language];
-    if (!translationSet) return key;
-    
-    return translationSet[key as keyof typeof translationSet] || key;
+    return translations[language][key as keyof typeof translations[typeof language]] || key;
   };
 
   return (
