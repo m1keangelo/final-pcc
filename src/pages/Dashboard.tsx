@@ -16,7 +16,7 @@ const Dashboard = () => {
   );
 
   return (
-    <div className="space-y-8 animate-fade-in">
+    <div className="space-y-8 animate-fade-in max-w-[1200px] mx-auto px-4 md:px-6">
       <div>
         <h1 className="text-4xl font-bold mb-2">{t('dashboard.welcome')}</h1>
         <p className="text-xl text-muted-foreground">
