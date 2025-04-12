@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
@@ -71,7 +72,7 @@ const Login = () => {
               <img 
                 src="/lovable-uploads/b9619f78-7281-46a1-93d2-c7c8123e5e56.png" 
                 alt="Gallo Avión Cyberpunk" 
-                className="w-full max-w-[130%] mx-auto rounded-xl shadow-2xl transform hover:scale-105 transition-transform duration-300 border-2 border-solid border-[#690dac]"
+                className="w-full max-w-[170%] mx-auto rounded-xl shadow-2xl transform hover:scale-105 transition-transform duration-300 border-2 border-solid border-[#690dac]"
               />
             </div>
           </div>
