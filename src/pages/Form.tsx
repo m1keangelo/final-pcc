@@ -40,27 +40,31 @@ const Form = () => {
   });
 
   return (
-    <div className="container mx-auto py-6 animate-fade-in">
-      <div className="mb-8">
+    <div className="space-y-8 animate-fade-in">
+      <div>
         <h1 className="text-4xl font-bold mb-2">{t('form.title')}</h1>
         <p className="text-xl text-muted-foreground">
           {t('form.subtitle')}
         </p>
       </div>
 
-      {formStage === 'questions' ? (
-        <FormQuestions 
-          onComplete={(data: FormState) => {
-            setFormData(data);
-            setFormStage('summary');
-          }} 
-        />
-      ) : (
-        <SummaryOutcome 
-          formData={formData}
-          onProceedToDocuments={() => console.log('Proceeding to documents')} 
-        />
-      )}
+      <div>
+        <Card className="w-full max-w-[1200px] mx-auto">
+          {formStage === 'questions' ? (
+            <FormQuestions 
+              onComplete={(data: FormState) => {
+                setFormData(data);
+                setFormStage('summary');
+              }} 
+            />
+          ) : (
+            <SummaryOutcome 
+              formData={formData}
+              onProceedToDocuments={() => console.log('Proceeding to documents')} 
+            />
+          )}
+        </Card>
+      </div>
     </div>
   );
 };
