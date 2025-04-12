@@ -14,9 +14,11 @@ import {
   Users, 
   BarChart, 
   Settings,
-  ChevronRight
+  ChevronRight,
+  BugOff,
+  MessageSquarePlus
 } from "lucide-react";
-import { SidebarMenu, SidebarMenuItem, SidebarMenuButton } from "@/components/ui/sidebar";
+import { SidebarMenu, SidebarMenuItem, SidebarMenuButton, SidebarSeparator } from "@/components/ui/sidebar";
 
 const Navigation = () => {
   const { user, logout } = useAuth();
@@ -42,6 +44,27 @@ const Navigation = () => {
             <NavItem href="/admin" icon={<Settings size={22} />} label="Admin" aria-label="Admin" />
           )}
         </SidebarMenu>
+        
+        {/* Secondary navigation items with separator */}
+        <div className="mt-8">
+          <SidebarSeparator className="mb-4 opacity-50" />
+          <SidebarMenu>
+            <NavItem 
+              href="/report-bug" 
+              icon={<BugOff size={20} />} 
+              label={t('nav.reportBug')} 
+              aria-label={t('nav.reportBug')} 
+              secondary={true} 
+            />
+            <NavItem 
+              href="/suggestions" 
+              icon={<MessageSquarePlus size={20} />} 
+              label={t('nav.suggestions')} 
+              aria-label={t('nav.suggestions')}
+              secondary={true} 
+            />
+          </SidebarMenu>
+        </div>
       </div>
       
       <div className="space-y-5 px-5">
@@ -79,10 +102,11 @@ interface NavItemProps {
   href: string;
   icon: React.ReactNode;
   label: string;
+  secondary?: boolean;
   'aria-label'?: string;
 }
 
-const NavItem = ({ href, icon, label, ...props }: NavItemProps) => (
+const NavItem = ({ href, icon, label, secondary = false, ...props }: NavItemProps) => (
   <SidebarMenuItem>
     <TooltipProvider>
       <Tooltip>
@@ -95,13 +119,13 @@ const NavItem = ({ href, icon, label, ...props }: NavItemProps) => (
                 ${isActive
                   ? "active bg-[#8c42dc] text-white border-l-3 border-white font-medium shadow-md"
                   : "text-white hover:bg-[#7a2dac] hover:text-[#E0E0E0] hover:shadow-md active:bg-[#5e0f99] active:scale-98"
-                }`
+                } ${secondary ? "opacity-70 text-sm py-3" : ""}`
               }
               {...props}
             >
-              <span className="text-[#9b87f5] group-hover:text-white transition-colors duration-300">{icon}</span>
-              <span className="text-[16px] font-medium">{label}</span>
-              <ChevronRight size={18} className="ml-auto opacity-0 group-hover:opacity-100 text-white/70 transition-all duration-300 transform group-hover:translate-x-1" />
+              <span className={`text-[#9b87f5] group-hover:text-white transition-colors duration-300 ${secondary ? "opacity-80" : ""}`}>{icon}</span>
+              <span className={`${secondary ? "text-[14px]" : "text-[16px]"} font-medium`}>{label}</span>
+              <ChevronRight size={secondary ? 16 : 18} className="ml-auto opacity-0 group-hover:opacity-100 text-white/70 transition-all duration-300 transform group-hover:translate-x-1" />
               <span className="absolute left-0 top-0 bottom-0 w-1 bg-white scale-y-0 origin-bottom transition-transform duration-300 group-hover:scale-y-100"></span>
             </NavLink>
           </SidebarMenuButton>
