@@ -19,7 +19,7 @@ import {
 import { SidebarMenu, SidebarMenuItem, SidebarMenuButton } from "@/components/ui/sidebar";
 
 const Navigation = () => {
-  const { user, logout } = useAuth();
+  const { user, logout, hasPermission } = useAuth();
   const { t } = useLanguage();
 
   // Check if user is a super admin
@@ -32,7 +32,10 @@ const Navigation = () => {
           <NavItem href="/" icon={<Home size={20} />} label={t('nav.home')} aria-label={t('nav.home')} />
           <NavItem href="/form" icon={<FileText size={20} />} label={t('nav.form')} aria-label={t('nav.form')} />
           <NavItem href="/clients" icon={<Users size={20} />} label={t('nav.clients')} aria-label={t('nav.clients')} />
-          <NavItem href="/analytics" icon={<BarChart size={20} />} label={t('nav.analytics')} aria-label={t('nav.analytics')} />
+          
+          {hasPermission("ACCESS_ANALYTICS") && (
+            <NavItem href="/analytics" icon={<BarChart size={20} />} label={t('nav.analytics')} aria-label={t('nav.analytics')} />
+          )}
           
           {isSuperAdmin && (
             <NavItem href="/admin" icon={<Settings size={20} />} label="Admin" aria-label="Admin" />

@@ -36,7 +36,7 @@ const App = () => (
                   <Route path="/form" element={<ProtectedRoute><Form /></ProtectedRoute>} />
                   <Route path="/clients" element={<ProtectedRoute><Clients /></ProtectedRoute>} />
                   <Route path="/analytics" element={
-                    <ProtectedRoute permission="ACCESS_ANALYTICS">
+                    <ProtectedRoute>
                       <Analytics />
                     </ProtectedRoute>
                   } />
