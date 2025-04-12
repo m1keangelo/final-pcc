@@ -42,7 +42,7 @@ const Login = () => {
   };
 
   return (
-    <div className="min-h-screen flex flex-col bg-black relative overflow-hidden">
+    <div className="min-h-screen flex flex-col bg-black relative overflow-hidden w-full">
       <div className="absolute inset-0 overflow-hidden opacity-100">
         {Array.from({ length: 20 }).map((_, i) => (
           <div 
@@ -70,20 +70,20 @@ const Login = () => {
         <LanguageToggle />
       </div>
       
-      <div className="flex flex-1 z-10">
-        <div className="w-full lg:w-1/2 flex items-center justify-center p-6 order-2 lg:order-1">
-          <div className="text-center">
+      <div className="flex flex-1 z-10 w-full">
+        <div className="w-full md:w-1/2 flex items-center justify-center p-6 order-2 lg:order-1">
+          <div className="text-center w-full max-w-md">
             <div className="relative mb-6">
               <img 
                 src="/lovable-uploads/b9619f78-7281-46a1-93d2-c7c8123e5e56.png" 
                 alt="Gallo Avión Cyberpunk" 
-                className="w-full max-w-[170%] mx-auto rounded-xl shadow-2xl transform hover:scale-105 transition-transform duration-300 border-2 border-solid border-[#690dac]"
+                className="w-full max-w-[80%] mx-auto rounded-xl shadow-2xl transform hover:scale-105 transition-transform duration-300 border-2 border-solid border-[#690dac]"
               />
             </div>
           </div>
         </div>
         
-        <div className="w-full lg:w-1/2 flex items-center justify-center order-1 lg:order-2">
+        <div className="w-full md:w-1/2 flex items-center justify-center order-1 lg:order-2">
           <div className="w-80 bg-[#2a2a3a] rounded-lg p-8 shadow-xl border border-[#9b87f5]/20">
             <h2 className="text-2xl font-bold text-center text-white mb-8">
               {t('login.title')}
