@@ -33,8 +33,16 @@ const App = () => (
                 <Route path="/" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
                 <Route path="/form" element={<ProtectedRoute><Form /></ProtectedRoute>} />
                 <Route path="/clients" element={<ProtectedRoute><Clients /></ProtectedRoute>} />
-                <Route path="/analytics" element={<ProtectedRoute><Analytics /></ProtectedRoute>} />
-                <Route path="/admin" element={<ProtectedRoute><AdminDashboard /></ProtectedRoute>} />
+                <Route path="/analytics" element={
+                  <ProtectedRoute permission="ACCESS_ANALYTICS">
+                    <Analytics />
+                  </ProtectedRoute>
+                } />
+                <Route path="/admin" element={
+                  <ProtectedRoute requiresAdmin={true}>
+                    <AdminDashboard />
+                  </ProtectedRoute>
+                } />
                 
                 <Route path="*" element={<NotFound />} />
               </Routes>

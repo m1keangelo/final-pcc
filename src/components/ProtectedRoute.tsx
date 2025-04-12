@@ -4,8 +4,20 @@ import { useAuth } from "@/contexts/AuthContext";
 import Layout from "./Layout";
 import { ReactNode } from "react";
 
-const ProtectedRoute = ({ children }: { children: ReactNode }) => {
-  const { user, isLoading } = useAuth();
+interface ProtectedRouteProps {
+  children: ReactNode;
+  requiresAdmin?: boolean;
+  requiresSuperAdmin?: boolean;
+  permission?: string;
+}
+
+const ProtectedRoute = ({ 
+  children, 
+  requiresAdmin = false,
+  requiresSuperAdmin = false,
+  permission
+}: ProtectedRouteProps) => {
+  const { user, isLoading, isAdmin, isSuperAdmin, hasPermission } = useAuth();
   
   if (isLoading) {
     return (
@@ -17,6 +29,21 @@ const ProtectedRoute = ({ children }: { children: ReactNode }) => {
   
   if (!user) {
     return <Navigate to="/login" replace />;
+  }
+
+  // Check for super admin requirement
+  if (requiresSuperAdmin && !isSuperAdmin) {
+    return <Navigate to="/" replace />;
+  }
+  
+  // Check for admin requirement
+  if (requiresAdmin && !isAdmin) {
+    return <Navigate to="/" replace />;
+  }
+  
+  // Check for specific permission
+  if (permission && !hasPermission(permission)) {
+    return <Navigate to="/" replace />;
   }
   
   return <Layout>{children}</Layout>;

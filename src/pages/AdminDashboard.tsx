@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -8,22 +7,25 @@ import { useAuth } from "@/contexts/AuthContext";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { FormState } from "@/types/form";
 import { useData } from "@/contexts/DataContext";
-import { PlusCircle, Trash2, Upload, Users, School, HelpCircle, FileText } from "lucide-react";
+import { 
+  PlusCircle, Trash2, Upload, Users, School, 
+  HelpCircle, FileText, Shield, User 
+} from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 
 const AdminDashboard = () => {
-  const { user } = useAuth();
+  const { user, hasPermission } = useAuth();
   const { t } = useLanguage();
   const { clients } = useData();
   const [activeTab, setActiveTab] = useState("users");
   
-  // Check if user is a super admin
-  const isSuperAdmin = user?.username === "admin" || user?.email === "m1keangelo@icloud.com";
-  
-  if (!isSuperAdmin) {
+  // Check if user has admin access
+  if (!hasPermission("VIEW_ADMIN_DASHBOARD")) {
     return (
       <div className="max-w-3xl mx-auto p-6 text-center">
+        <Shield className="w-12 h-12 mx-auto mb-4 text-red-500" />
         <h2 className="text-2xl font-bold mb-4">Access Denied</h2>
         <p>You do not have permission to view this page. Please contact an administrator.</p>
       </div>
@@ -32,10 +34,15 @@ const AdminDashboard = () => {
 
   return (
     <div className="animate-fade-in">
-      <h1 className="text-3xl font-bold mb-6">Admin Dashboard</h1>
+      <div className="flex justify-between items-center mb-6">
+        <h1 className="text-3xl font-bold">Admin Dashboard</h1>
+        <Badge variant={user?.role === 'superadmin' ? 'destructive' : 'outline'} className="text-sm">
+          {user?.role === 'superadmin' ? 'Super Admin' : 'Admin'}
+        </Badge>
+      </div>
       
       <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-        <TabsList className="grid grid-cols-4 mb-6">
+        <TabsList className="grid grid-cols-5 mb-6">
           <TabsTrigger value="users" className="flex items-center gap-2">
             <Users className="h-4 w-4" />
             <span>User Management</span>
@@ -51,6 +58,10 @@ const AdminDashboard = () => {
           <TabsTrigger value="animations" className="flex items-center gap-2">
             <HelpCircle className="h-4 w-4" />
             <span>Animations</span>
+          </TabsTrigger>
+          <TabsTrigger value="campaigns" className="flex items-center gap-2">
+            <User className="h-4 w-4" />
+            <span>Campaigns</span>
           </TabsTrigger>
         </TabsList>
         
@@ -69,6 +80,10 @@ const AdminDashboard = () => {
         <TabsContent value="animations" className="space-y-6">
           <AnimationsTab />
         </TabsContent>
+        
+        <TabsContent value="campaigns" className="space-y-6">
+          <CampaignsTab />
+        </TabsContent>
       </Tabs>
     </div>
   );
@@ -76,18 +91,27 @@ const AdminDashboard = () => {
 
 // User Management Tab
 const UserManagementTab = () => {
+  const { user: currentUser, hasPermission } = useAuth();
   const [newUser, setNewUser] = useState({
     username: "",
     password: "",
     name: "",
-    role: "assistant" // Default role
+    role: "assistant",
+    campaign: "Dennis"
   });
+  const [showUserDialog, setShowUserDialog] = useState(false);
   
   const mockUsers = [
-    { id: '1', username: 'admin', name: 'Admin User', role: 'admin' },
-    { id: '2', username: 'maria', name: 'Maria Rodriguez', role: 'assistant' },
-    { id: '3', username: 'juan', name: 'Juan Perez', role: 'assistant' }
+    { id: '0', username: 'm1keangelo', name: 'Super Admin', role: 'superadmin', email: 'm1keangelo@icloud.com' },
+    { id: '1', username: 'admin', name: 'Admin User', role: 'admin', email: 'admin@galloavion.com' },
+    { id: '2', username: 'maria', name: 'Maria Rodriguez', role: 'assistant', campaign: 'Dennis' },
+    { id: '3', username: 'juan', name: 'Juan Perez', role: 'assistant', campaign: 'Michael' },
+    { id: '4', username: 'sophia', name: 'Sophia Garcia', role: 'assistant', campaign: 'Tito' },
+    { id: '5', username: 'carlos', name: 'Carlos Mendez', role: 'assistant', campaign: 'Alvaro' }
   ];
+  
+  // Check if current user can manage users
+  const canManageUsers = hasPermission("MANAGE_USERS");
 
   return (
     <div>
@@ -104,6 +128,7 @@ const UserManagementTab = () => {
                 value={newUser.username}
                 onChange={(e) => setNewUser({...newUser, username: e.target.value})}
                 placeholder="username"
+                disabled={!canManageUsers}
               />
             </div>
             <div>
@@ -113,6 +138,7 @@ const UserManagementTab = () => {
                 value={newUser.password}
                 onChange={(e) => setNewUser({...newUser, password: e.target.value})}
                 placeholder="••••••••"
+                disabled={!canManageUsers}
               />
             </div>
             <div>
@@ -121,6 +147,7 @@ const UserManagementTab = () => {
                 value={newUser.name}
                 onChange={(e) => setNewUser({...newUser, name: e.target.value})}
                 placeholder="Full Name"
+                disabled={!canManageUsers}
               />
             </div>
             <div>
@@ -129,13 +156,37 @@ const UserManagementTab = () => {
                 className="w-full p-2 border rounded"
                 value={newUser.role}
                 onChange={(e) => setNewUser({...newUser, role: e.target.value})}
+                disabled={!canManageUsers}
               >
                 <option value="assistant">Assistant</option>
                 <option value="admin">Admin</option>
+                {currentUser?.role === 'superadmin' && <option value="superadmin">Super Admin</option>}
               </select>
             </div>
+            {newUser.role === 'assistant' && (
+              <div>
+                <label className="block mb-2 text-sm font-medium">Campaign</label>
+                <select
+                  className="w-full p-2 border rounded"
+                  value={newUser.campaign}
+                  onChange={(e) => setNewUser({...newUser, campaign: e.target.value})}
+                  disabled={!canManageUsers}
+                >
+                  <option value="Dennis">Dennis</option>
+                  <option value="Michael">Michael</option>
+                  <option value="Tito">Tito</option>
+                  <option value="Alvaro">Alvaro</option>
+                </select>
+              </div>
+            )}
           </div>
-          <Button className="w-full">Add User</Button>
+          <Button 
+            className="w-full" 
+            disabled={!canManageUsers}
+            onClick={() => canManageUsers && setShowUserDialog(true)}
+          >
+            Add User
+          </Button>
         </CardContent>
       </Card>
       
@@ -152,6 +203,7 @@ const UserManagementTab = () => {
                   <th className="text-left p-2">Name</th>
                   <th className="text-left p-2">Username</th>
                   <th className="text-left p-2">Role</th>
+                  <th className="text-left p-2">Campaign</th>
                   <th className="text-left p-2">Actions</th>
                 </tr>
               </thead>
@@ -161,14 +213,25 @@ const UserManagementTab = () => {
                     <td className="p-2">{user.name}</td>
                     <td className="p-2">{user.username}</td>
                     <td className="p-2">
-                      <Badge variant={user.role === 'admin' ? 'destructive' : 'default'}>
+                      <Badge variant={
+                        user.role === 'superadmin' ? 'destructive' : 
+                        user.role === 'admin' ? 'default' : 'outline'
+                      }>
                         {user.role}
                       </Badge>
                     </td>
+                    <td className="p-2">{user.campaign || 'All Campaigns'}</td>
                     <td className="p-2">
                       <div className="flex gap-2">
-                        <Button size="sm" variant="outline">Edit</Button>
-                        <Button size="sm" variant="outline" className="text-red-500">
+                        <Button size="sm" variant="outline" disabled={!canManageUsers || user.role === 'superadmin'}>
+                          Edit
+                        </Button>
+                        <Button 
+                          size="sm" 
+                          variant="outline" 
+                          className="text-red-500" 
+                          disabled={!canManageUsers || user.role === 'superadmin'}
+                        >
                           <Trash2 className="h-4 w-4" />
                         </Button>
                       </div>
@@ -180,6 +243,52 @@ const UserManagementTab = () => {
           </div>
         </CardContent>
       </Card>
+      
+      {/* Add User Confirmation Dialog */}
+      <Dialog open={showUserDialog} onOpenChange={setShowUserDialog}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Add New User</DialogTitle>
+            <DialogDescription>
+              This will create a new user account with the following details:
+            </DialogDescription>
+          </DialogHeader>
+          <div className="space-y-2 py-4">
+            <div className="grid grid-cols-2 gap-x-4 gap-y-2">
+              <div className="font-medium">Username:</div>
+              <div>{newUser.username}</div>
+              <div className="font-medium">Name:</div>
+              <div>{newUser.name}</div>
+              <div className="font-medium">Role:</div>
+              <div>{newUser.role}</div>
+              {newUser.role === 'assistant' && (
+                <>
+                  <div className="font-medium">Campaign:</div>
+                  <div>{newUser.campaign}</div>
+                </>
+              )}
+            </div>
+          </div>
+          <div className="flex justify-end space-x-4">
+            <Button variant="outline" onClick={() => setShowUserDialog(false)}>Cancel</Button>
+            <Button onClick={() => {
+              // Here we would add user to the database
+              toast.success(`User ${newUser.username} added successfully!`);
+              setShowUserDialog(false);
+              // Reset the form
+              setNewUser({
+                username: "",
+                password: "",
+                name: "",
+                role: "assistant",
+                campaign: "Dennis"
+              });
+            }}>
+              Add User
+            </Button>
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };
@@ -539,6 +648,100 @@ const AnimationsTab = () => {
           
           <div className="text-center p-8 text-muted-foreground">
             <p>No custom animations added yet</p>
+          </div>
+        </CardContent>
+      </Card>
+    </div>
+  );
+};
+
+// Campaigns Tab
+const CampaignsTab = () => {
+  const { hasPermission } = useAuth();
+  const canManageCampaigns = hasPermission("VIEW_ALL_CAMPAIGNS");
+  const [newCampaign, setNewCampaign] = useState("");
+  
+  const campaigns = [
+    { id: '1', name: 'Dennis', leadsCount: 42, qualifiedCount: 18 },
+    { id: '2', name: 'Michael', leadsCount: 36, qualifiedCount: 15 },
+    { id: '3', name: 'Tito', leadsCount: 28, qualifiedCount: 12 },
+    { id: '4', name: 'Alvaro', leadsCount: 22, qualifiedCount: 8 },
+  ];
+
+  return (
+    <div>
+      <Card className="mb-6">
+        <CardHeader>
+          <CardTitle>Campaign Management</CardTitle>
+          <CardDescription>Manage marketing campaigns and track performance</CardDescription>
+        </CardHeader>
+        <CardContent>
+          <div className="flex gap-4 mb-6">
+            <Input 
+              placeholder="New campaign name" 
+              value={newCampaign}
+              onChange={(e) => setNewCampaign(e.target.value)}
+              disabled={!canManageCampaigns}
+            />
+            <Button disabled={!canManageCampaigns || !newCampaign}>Add Campaign</Button>
+          </div>
+          
+          <div className="overflow-x-auto">
+            <table className="w-full">
+              <thead>
+                <tr className="border-b">
+                  <th className="text-left p-2">Campaign Name</th>
+                  <th className="text-left p-2">Total Leads</th>
+                  <th className="text-left p-2">Qualified Leads</th>
+                  <th className="text-left p-2">Qualification Rate</th>
+                  <th className="text-left p-2">Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                {campaigns.map(campaign => {
+                  const qualRate = ((campaign.qualifiedCount / campaign.leadsCount) * 100).toFixed(1);
+                  return (
+                    <tr key={campaign.id} className="border-b">
+                      <td className="p-2 font-medium">{campaign.name}</td>
+                      <td className="p-2">{campaign.leadsCount}</td>
+                      <td className="p-2">{campaign.qualifiedCount}</td>
+                      <td className="p-2">{qualRate}%</td>
+                      <td className="p-2">
+                        <div className="flex gap-2">
+                          <Button 
+                            size="sm" 
+                            variant="outline"
+                            disabled={!canManageCampaigns}
+                          >
+                            Edit
+                          </Button>
+                          <Button 
+                            size="sm" 
+                            variant="outline" 
+                            className="text-red-500"
+                            disabled={!canManageCampaigns}
+                          >
+                            <Trash2 className="h-4 w-4" />
+                          </Button>
+                        </div>
+                      </td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+          </div>
+        </CardContent>
+      </Card>
+      
+      <Card>
+        <CardHeader>
+          <CardTitle>Campaign Performance</CardTitle>
+          <CardDescription>Comparative analysis of campaign effectiveness</CardDescription>
+        </CardHeader>
+        <CardContent>
+          <div className="h-80 flex items-center justify-center bg-gray-50 rounded-md">
+            <p className="text-gray-500">Campaign performance charts will be displayed here</p>
           </div>
         </CardContent>
       </Card>
