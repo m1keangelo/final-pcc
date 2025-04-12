@@ -23,6 +23,8 @@ const Login = () => {
     e.preventDefault();
     setError("");
     
+    console.log("Login attempt with:", { username, password });
+    
     if (!username || !password) {
       setError(t('login.error'));
       return;
@@ -30,12 +32,19 @@ const Login = () => {
     
     setIsSubmitting(true);
     try {
+      console.log("Calling login function...");
       const success = await login(username, password);
+      console.log("Login result:", success);
       if (success) {
+        console.log("Login successful, navigating to /");
         navigate("/");
       } else {
+        console.log("Login failed");
         setError(t('login.error'));
       }
+    } catch (error) {
+      console.error("Login error:", error);
+      setError(t('login.error'));
     } finally {
       setIsSubmitting(false);
     }
