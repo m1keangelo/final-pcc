@@ -42,8 +42,7 @@ const Login = () => {
 
   return (
     <div className="min-h-screen flex flex-col bg-black relative overflow-hidden">
-      {/* Matrix code background effect with updated color */}
-      <div className="absolute inset-0 overflow-hidden opacity-40">
+      <div className="absolute inset-0 overflow-hidden opacity-100">
         {Array.from({ length: 20 }).map((_, i) => (
           <div 
             key={i} 
@@ -54,6 +53,7 @@ const Login = () => {
               animationDelay: `${Math.random() * 2}s`,
               color: '#690dac',
               textShadow: '0 0 5px #690dac',
+              opacity: 1
             }}
           >
             {Array.from({ length: 20 }).map((_, j) => (
