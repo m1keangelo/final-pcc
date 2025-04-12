@@ -1,6 +1,7 @@
 
 import { useLanguage } from "@/contexts/LanguageContext";
 import { Button } from "@/components/ui/button";
+import { Flag } from "lucide-react";
 import { ReactNode } from "react";
 
 type LanguageToggleProps = {
@@ -22,13 +23,13 @@ const LanguageToggle = ({ className, children }: LanguageToggleProps) => {
       >
         {language === 'en' ? (
           <>
-            <span>Español</span>
-            <span className="text-lg">🇪🇸</span>
+            <span>US</span>
+            <Flag className="text-blue-600 fill-blue-100" />
           </>
         ) : (
           <>
-            <span>English</span>
-            <span className="text-lg">🇺🇸</span>
+            <span>CO</span>
+            <Flag className="text-yellow-500 fill-yellow-100" />
           </>
         )}
       </Button>
@@ -37,3 +38,4 @@ const LanguageToggle = ({ className, children }: LanguageToggleProps) => {
 };
 
 export default LanguageToggle;
+
