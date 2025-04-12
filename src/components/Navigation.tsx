@@ -15,8 +15,7 @@ import {
   Settings,
   ChevronRight,
   BugOff,
-  MessageSquarePlus,
-  AlertCircle
+  MessageSquarePlus
 } from "lucide-react";
 import { SidebarMenu, SidebarMenuItem, SidebarMenuButton, SidebarSeparator } from "@/components/ui/sidebar";
 

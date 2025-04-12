@@ -1,3 +1,4 @@
+
 import React, { createContext, useState, useContext, useEffect, ReactNode } from 'react';
 
 type Language = 'en' | 'es';
@@ -563,7 +564,7 @@ const translations: Translations = {
     en: 'Edit Role Permissions',
     es: 'Editar Permisos de Rol'
   },
-   'admin.rolePermissionsUpdated': {
+  'admin.rolePermissionsUpdated': {
     en: 'Role permissions updated successfully!',
     es: '¡Permisos de rol actualizados con éxito!'
   },
@@ -575,9 +576,17 @@ const translations: Translations = {
     en: 'Bug',
     es: 'Error'
   },
-  'nav.suggestions': {
-    en: 'Suggestions',
-    es: 'Sugerencias'
+  'help.title': {
+    en: 'Help',
+    es: 'Ayuda'
+  },
+  'help.copyLink': {
+    en: 'Copy Link',
+    es: 'Copiar Enlace'
+  },
+  'help.linkCopied': {
+    en: 'Link Copied',
+    es: 'Enlace Copiado'
   }
 };
 
@@ -618,3 +627,4 @@ export const LanguageProvider: React.FC<LanguageProviderProps> = ({ children }) 
     </LanguageContext.Provider>
   );
 };
+
