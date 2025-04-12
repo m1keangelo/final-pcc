@@ -112,7 +112,7 @@ export const FirstTimeBuyerQuestion = ({
       </div>
       
       {value === true && (
-        <div className="mt-4 text-sm text-muted-foreground">
+        <div className="mt-4 text-sm text-yellow-500 text-base">
           {t('q.firsttime.help')}
         </div>
       )}
@@ -239,7 +239,7 @@ export const SelfEmployedYearsQuestion = ({
           }}
         />
         {value !== null && value < 2 && (
-          <div className="mt-2 text-sm text-yellow-500">
+          <div className="mt-2 text-sm text-yellow-500 text-base">
             {t('q.selfyears.warning')}
           </div>
         )}
