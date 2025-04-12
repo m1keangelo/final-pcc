@@ -13,7 +13,8 @@ import {
   FileText, 
   Users, 
   BarChart, 
-  Settings 
+  Settings,
+  ChevronRight
 } from "lucide-react";
 
 const Navigation = () => {
@@ -24,19 +25,19 @@ const Navigation = () => {
   const isSuperAdmin = user?.username === "admin" || user?.email === "m1keangelo@icloud.com";
   
   return (
-    <nav className="flex flex-col justify-between h-full py-6 bg-[#333] text-white sidebar-menu">
+    <nav className="flex flex-col justify-between h-full py-6 sidebar-menu" role="navigation" aria-label="Main Navigation">
       <div className="space-y-1">
-        <NavItem href="/" icon={<Home size={20} />} label={t('nav.home')} />
-        <NavItem href="/form" icon={<FileText size={20} />} label={t('nav.form')} />
-        <NavItem href="/clients" icon={<Users size={20} />} label={t('nav.clients')} />
-        <NavItem href="/analytics" icon={<BarChart size={20} />} label={t('nav.analytics')} />
+        <NavItem href="/" icon={<Home size={20} />} label={t('nav.home')} aria-label={t('nav.home')} />
+        <NavItem href="/form" icon={<FileText size={20} />} label={t('nav.form')} aria-label={t('nav.form')} />
+        <NavItem href="/clients" icon={<Users size={20} />} label={t('nav.clients')} aria-label={t('nav.clients')} />
+        <NavItem href="/analytics" icon={<BarChart size={20} />} label={t('nav.analytics')} aria-label={t('nav.analytics')} />
         
         {isSuperAdmin && (
-          <NavItem href="/admin" icon={<Settings size={20} />} label="Admin" />
+          <NavItem href="/admin" icon={<Settings size={20} />} label="Admin" aria-label="Admin" />
         )}
       </div>
       
-      <div className="space-y-4 px-2">
+      <div className="space-y-4 px-4">
         <LanguageToggle />
         
         <TooltipProvider>
@@ -44,11 +45,12 @@ const Navigation = () => {
             <TooltipTrigger asChild>
               <Button
                 variant="ghost"
-                className="w-full justify-start text-white hover:bg-[#444] hover:text-white"
+                className="w-full justify-start text-white hover:bg-[#4A4E69] hover:text-[#9AEDFE] transition-all duration-300"
                 onClick={logout}
+                aria-label={t('nav.logout')}
               >
-                <LogOut className="mr-2 h-4 w-4" />
-                <span>{t('nav.logout')}</span>
+                <LogOut className="mr-3 h-5 w-5 text-[#6272A4]" />
+                <span className="text-[15px]">{t('nav.logout')}</span>
               </Button>
             </TooltipTrigger>
             <TooltipContent side="right">
@@ -57,9 +59,9 @@ const Navigation = () => {
           </Tooltip>
         </TooltipProvider>
         
-        <div className="flex items-center gap-3 px-2 py-1.5 text-sm text-white/80">
-          <User size={16} />
-          <span className="font-medium">{user?.name}</span>
+        <div className="flex items-center gap-3 px-3 py-2 mt-2 border-t border-[#44475A] text-sm text-white/80">
+          <User size={16} className="text-[#6272A4]" />
+          <span className="font-medium text-[15px]">{user?.name}</span>
         </div>
       </div>
     </nav>
@@ -70,24 +72,27 @@ interface NavItemProps {
   href: string;
   icon: React.ReactNode;
   label: string;
+  'aria-label'?: string;
 }
 
-const NavItem = ({ href, icon, label }: NavItemProps) => (
+const NavItem = ({ href, icon, label, ...props }: NavItemProps) => (
   <TooltipProvider>
     <Tooltip>
       <TooltipTrigger asChild>
         <NavLink
           to={href}
           className={({ isActive }) =>
-            `flex items-center gap-3 px-4 py-2.5 transition-colors ${
+            `flex items-center gap-3 px-4 py-3 transition-all duration-300 rounded-sm ${
               isActive
-                ? "bg-[#666] text-white font-semibold border-l-3 border-[#00BFFF] active"
-                : "text-white hover:bg-[#444]"
+                ? "active"
+                : ""
             }`
           }
+          {...props}
         >
-          <span className="opacity-90">{icon}</span>
-          <span className="text-[15px]">{label}</span>
+          <span className="text-[#6272A4] group-hover:text-[#9AEDFE]">{icon}</span>
+          <span className="text-[15px] font-medium">{label}</span>
+          <ChevronRight size={16} className="ml-auto opacity-0 group-hover:opacity-100 text-[#6272A4] transition-opacity" />
         </NavLink>
       </TooltipTrigger>
       <TooltipContent side="right">

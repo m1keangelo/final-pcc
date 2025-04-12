@@ -77,24 +77,49 @@
 
 /* Sidebar CSS */
 .sidebar-menu {
-  background-color: #333; /* Dark background for the sidebar */
-  color: #fff; /* White text color */
+  background-color: #282A36; /* Darker shade for background */
+  color: #FFFFFF; /* White text for better readability */
+  font-family: 'Arial', sans-serif; /* Consistent typography */
   min-height: 100vh; /* Full height */
+  transition: all 0.3s ease;
 }
 
 .sidebar-menu a {
-  display: block; /* Make links fill their containers */
-  color: #fff; /* White text color */
-  text-decoration: none; /* No underline */
+  padding: 12px 20px;
+  display: flex;
+  align-items: center;
+  color: #FFFFFF;
+  text-decoration: none;
+  transition: background-color 0.3s, color 0.3s;
 }
 
 .sidebar-menu a:hover {
-  background-color: #444; /* Slightly lighter on hover */
+  background-color: #4A4E69; /* Highlight color on hover */
+  color: #9AEDFE; /* Light blue for text on hover */
 }
 
 .sidebar-menu .active {
-  background-color: #666; /* Distinctly lighter for active tab */
-  border-left: 3px solid #00BFFF; /* Highlight with a bright blue left border */
+  background-color: #4A4E69; /* Highlight color on active */
+  color: #9AEDFE; /* Light blue for text on active */
+  border-left: 3px solid #9AEDFE; /* Highlight with a bright blue left border */
+}
+
+.sidebar-menu svg {
+  margin-right: 10px; /* Space between icon and text */
+  color: #6272A4; /* Icon color */
+}
+
+.sidebar-menu .active svg {
+  color: #9AEDFE; /* Icon color for active items */
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.sidebar-menu a {
+  animation: fadeIn 0.5s ease-in;
 }
 
 #root {
