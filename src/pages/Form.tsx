@@ -40,7 +40,7 @@ const Form = () => {
   });
 
   return (
-    <div className="space-y-8 animate-fade-in w-full max-w-[1200px] mx-auto">
+    <div className="space-y-8 animate-fade-in">
       <div>
         <h1 className="text-4xl font-bold mb-2">{t('form.title')}</h1>
         <p className="text-xl text-muted-foreground">
@@ -48,20 +48,22 @@ const Form = () => {
         </p>
       </div>
 
-      <div className="w-full">
-        {formStage === 'questions' ? (
-          <FormQuestions 
-            onComplete={(data: FormState) => {
-              setFormData(data);
-              setFormStage('summary');
-            }} 
-          />
-        ) : (
-          <SummaryOutcome 
-            formData={formData}
-            onProceedToDocuments={() => console.log('Proceeding to documents')} 
-          />
-        )}
+      <div>
+        <Card className="w-full max-w-[1200px] mx-auto">
+          {formStage === 'questions' ? (
+            <FormQuestions 
+              onComplete={(data: FormState) => {
+                setFormData(data);
+                setFormStage('summary');
+              }} 
+            />
+          ) : (
+            <SummaryOutcome 
+              formData={formData}
+              onProceedToDocuments={() => console.log('Proceeding to documents')} 
+            />
+          )}
+        </Card>
       </div>
     </div>
   );
