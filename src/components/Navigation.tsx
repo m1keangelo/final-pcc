@@ -6,7 +6,15 @@ import { useLanguage } from "@/contexts/LanguageContext";
 import { Button } from "@/components/ui/button";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import LanguageToggle from "./LanguageToggle";
-import { User, LogOut, Home, FileText, Users, BarChart, Settings } from "lucide-react";
+import { 
+  User, 
+  LogOut, 
+  Home, 
+  FileText, 
+  Users, 
+  BarChart, 
+  Settings 
+} from "lucide-react";
 
 const Navigation = () => {
   const { user, logout } = useAuth();
@@ -18,13 +26,13 @@ const Navigation = () => {
   return (
     <nav className="flex flex-col justify-between h-full py-6">
       <div className="space-y-1">
-        <NavItem href="/" icon={<Home size={18} />} label={t('nav.home')} />
-        <NavItem href="/form" icon={<FileText size={18} />} label={t('nav.form')} />
-        <NavItem href="/clients" icon={<Users size={18} />} label={t('nav.clients')} />
-        <NavItem href="/analytics" icon={<BarChart size={18} />} label={t('nav.analytics')} />
+        <NavItem href="/" icon={<Home size={20} />} label={t('nav.home')} />
+        <NavItem href="/form" icon={<FileText size={20} />} label={t('nav.form')} />
+        <NavItem href="/clients" icon={<Users size={20} />} label={t('nav.clients')} />
+        <NavItem href="/analytics" icon={<BarChart size={20} />} label={t('nav.analytics')} />
         
         {isSuperAdmin && (
-          <NavItem href="/admin" icon={<Settings size={18} />} label="Admin" />
+          <NavItem href="/admin" icon={<Settings size={20} />} label="Admin" />
         )}
       </div>
       
@@ -71,14 +79,14 @@ const NavItem = ({ href, icon, label }: NavItemProps) => (
         <NavLink
           to={href}
           className={({ isActive }) =>
-            `flex items-center py-2 px-3 rounded-md transition-colors ${
+            `flex items-center gap-3 px-3 py-2 rounded-md transition-colors group ${
               isActive
-                ? "bg-primary/10 text-primary"
-                : "text-muted-foreground hover:text-foreground hover:bg-muted"
+                ? "bg-primary/10 text-primary font-semibold"
+                : "text-muted-foreground hover:bg-accent/10 hover:text-foreground"
             }`
           }
         >
-          <span className="mr-2">{icon}</span>
+          <span className="opacity-80 group-hover:opacity-100 group-[.active]:opacity-100">{icon}</span>
           <span>{label}</span>
         </NavLink>
       </TooltipTrigger>
