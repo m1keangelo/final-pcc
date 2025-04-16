@@ -347,18 +347,26 @@ const determineLanguageToUse = async (): Promise<string> => {
   const browserLanguage = getBrowserLanguage();
   const inLatinAmerica = await isInLatinAmerica();
   
-  // If browser is set to English, use English regardless of location
+  console.group('🌐 Language Detection Diagnostics');
+  console.log('Browser Language:', browserLanguage);
+  console.log('In Latin America:', inLatinAmerica);
+  
+  let selectedLanguage = 'en'; // Default
+  
   if (browserLanguage === 'en') {
-    return 'en';
+    selectedLanguage = 'en';
+    console.log('🇺🇸 Forcing English due to browser setting');
+  } else if (inLatinAmerica || browserLanguage === 'es') {
+    selectedLanguage = 'es';
+    console.log('🇪🇸 Selecting Spanish (Location or Browser)');
+  } else {
+    console.log('🔄 Defaulting to English');
   }
   
-  // If in Latin America or browser is set to Spanish, use Spanish
-  if (inLatinAmerica || browserLanguage === 'es') {
-    return 'es';
-  }
+  console.log('Selected Language:', selectedLanguage);
+  console.groupEnd();
   
-  // Default to English
-  return 'en';
+  return selectedLanguage;
 };
 
 /**
