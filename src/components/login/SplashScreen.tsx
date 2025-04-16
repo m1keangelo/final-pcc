@@ -1,8 +1,20 @@
 
 import { useEffect, useState } from "react";
+import { getRandomQuote } from "@/utils/quoteUtils";
 
 const SplashScreen = ({ onComplete }: { onComplete: () => void }) => {
   const [fadeOut, setFadeOut] = useState(false);
+  const [quote, setQuote] = useState<{text: string, language: string}>({text: "", language: ""});
+  
+  // Get a random quote on component mount
+  useEffect(() => {
+    const fetchQuote = async () => {
+      const randomQuote = await getRandomQuote();
+      setQuote(randomQuote);
+    };
+    
+    fetchQuote();
+  }, []);
   
   // Handle the splash screen timing
   useEffect(() => {
@@ -42,14 +54,12 @@ const SplashScreen = ({ onComplete }: { onComplete: () => void }) => {
           />
         </div>
         
-        {/* Tagline */}
-        <h1 className="text-5xl md:text-6xl font-bold leading-tight mb-2 animate-fade-in">
-          <span className="text-[#9b87f5]">Fuck Mediocrity,</span>
-        </h1>
-        
-        <h2 className="text-5xl md:text-6xl font-bold leading-tight mb-6 animate-fade-in" style={{ animationDelay: '1s' }}>
-          <span className="text-[#9b87f5]">Unleashing</span> <span className="text-white">Real Estate</span> <span className="text-[#9b87f5]">Marketing Power!</span>
-        </h2>
+        {/* Quote */}
+        <div className="mb-12 animate-fade-in">
+          <h2 className="text-4xl md:text-5xl font-bold leading-tight mb-8 text-[#9b87f5]">
+            {quote.text}
+          </h2>
+        </div>
         
         {/* Animated loading indicator */}
         <div className="mt-8 w-full max-w-xs h-1 bg-gray-800 rounded-full overflow-hidden">
