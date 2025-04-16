@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useLanguage } from "@/contexts/LanguageContext";
@@ -112,6 +113,10 @@ const Form = () => {
     const incomeAnnual = data.income 
       ? (data.incomeType === 'monthly' ? data.income * 12 : data.income) 
       : 0;
+    
+    const incomeMonthly = data.income
+      ? (data.incomeType === 'annual' ? data.income / 12 : data.income)
+      : 0;
 
     let legalStatus: 'US Citizen' | 'Permanent Resident' | 'Work Permit' | 'Undocumented';
     switch (data.idType) {
@@ -141,8 +146,21 @@ const Form = () => {
       'other': 'W-2',
     };
     
+    // Format credit issues details
     const creditIssueComments = [];
-    if (data.hasCreditIssues && data.creditIssues) {
+    const hasCreditIssues = data.hasCreditIssues === true;
+    let creditIssueDetails = {};
+    
+    if (hasCreditIssues && data.creditIssues) {
+      creditIssueDetails = {
+        hasCreditIssues: true,
+        bankruptcy: !!data.creditIssues.bankruptcy,
+        foreclosure: !!data.creditIssues.foreclosure,
+        collections: !!data.creditIssues.collections,
+        medical: !!data.creditIssues.medical,
+        other: !!data.creditIssues.other,
+      };
+      
       if (data.creditIssues.bankruptcy) {
         const details = data.creditIssues.bankruptcyDetails;
         creditIssueComments.push(`Bankruptcy: $${details?.amount || 'unknown'}, ${details?.timeframe || 'unknown'} ago, ${details?.inCollection ? 'In collection' : 'Not in collection'}`);
@@ -169,6 +187,10 @@ const Form = () => {
       }
     }
     
+    if (creditIssueComments.length > 0) {
+      (creditIssueDetails as any).details = creditIssueComments.join('; ');
+    }
+    
     const combinedComments = [
       data.comments || '',
       creditIssueComments.length > 0 ? 'Credit Issues: ' + creditIssueComments.join('; ') : ''
@@ -177,14 +199,23 @@ const Form = () => {
     return {
       name: data.name,
       phone: data.phone,
+      email: data.email,
+      agent: selectedAgent,
       employmentType: employmentTypeMap[data.employmentType || 'W-2'],
+      selfEmployedYears: data.selfEmployedYears || undefined,
       incomeAnnual,
+      incomeMonthly,
       creditCategory: creditCategoryMap[data.creditCategory || 'unknown'],
       creditScoreApprox: data.creditScore || undefined,
+      creditIssues: hasCreditIssues ? creditIssueDetails : undefined,
       downPaymentSaved: !!data.downPaymentSaved,
       downPaymentAmount: data.downPaymentAmount || undefined,
+      assistanceInterested: data.assistanceOpen !== null ? !!data.assistanceOpen : undefined,
+      monthlyDebts: data.monthlyDebts || undefined,
+      timeline: data.timeline || undefined,
+      firstTimeBuyer: data.firstTimeBuyer !== null ? data.firstTimeBuyer : undefined,
       legalStatus,
-      qualified: true,
+      qualified: true, // This will be determined by business logic in the DataContext
       consentGiven: true,
       comments: combinedComments,
     };
@@ -204,6 +235,10 @@ const Form = () => {
     
     const transformedData = transformFormData(finalData);
     addClient(transformedData);
+    
+    toast.success(language === 'en' ? 
+      'Your information has been submitted successfully!' : 
+      '¡Su información ha sido enviada con éxito!');
   };
 
   return (
