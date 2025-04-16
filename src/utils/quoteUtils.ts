@@ -392,6 +392,12 @@ export const getRandomQuote = async (): Promise<{text: string, language: string,
   // Determine which language to use
   const languageToUse = await determineLanguageToUse();
   
+  console.log('Language Detection Debug:', {
+    browserLanguage: getBrowserLanguage(),
+    isInLatinAmerica: await isInLatinAmerica(),
+    selectedLanguage: languageToUse
+  });
+
   // Get the appropriate text for the language
   const text = quote[languageToUse as keyof Quote] as string;
   
@@ -401,6 +407,12 @@ export const getRandomQuote = async (): Promise<{text: string, language: string,
   // Create HTML version with highlighted words
   const html = highlightWords(text, wordsToHighlight);
   
+  console.log('Quote Debug:', {
+    originalQuote: quote,
+    selectedText: text,
+    highlightedHtml: html
+  });
+
   return {
     text,
     language: languageToUse,

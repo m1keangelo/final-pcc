@@ -1,6 +1,6 @@
-
 import { useEffect, useState } from "react";
 import { getRandomQuote } from "@/utils/quoteUtils";
+import { getBrowserLanguage } from "@/utils/quoteUtils";
 
 const SplashScreen = ({ onComplete }: { onComplete: () => void }) => {
   const [fadeOut, setFadeOut] = useState(false);
@@ -10,24 +10,33 @@ const SplashScreen = ({ onComplete }: { onComplete: () => void }) => {
     html: ""
   });
   
-  // Get a random quote on component mount
+  const [debugInfo, setDebugInfo] = useState<{
+    browserLanguage: string;
+    quoteLanguage: string;
+  }>({
+    browserLanguage: '',
+    quoteLanguage: ''
+  });
+  
   useEffect(() => {
     const fetchQuote = async () => {
       const randomQuote = await getRandomQuote();
       setQuote(randomQuote);
+      
+      setDebugInfo({
+        browserLanguage: getBrowserLanguage(),
+        quoteLanguage: randomQuote.language
+      });
     };
     
     fetchQuote();
   }, []);
   
-  // Handle the splash screen timing
   useEffect(() => {
-    // Start fade out after 8 seconds
     const fadeOutTimer = setTimeout(() => {
       setFadeOut(true);
     }, 8000);
     
-    // Complete transition after 9 seconds (total time)
     const completeTimer = setTimeout(() => {
       onComplete();
     }, 9000);
@@ -44,9 +53,7 @@ const SplashScreen = ({ onComplete }: { onComplete: () => void }) => {
         fadeOut ? 'opacity-0' : 'opacity-100'
       }`}
     >
-      {/* Center content */}
       <div className="relative flex flex-col items-center text-center max-w-4xl px-6">
-        {/* Logo container */}
         <div className="mb-6">
           <img 
             src="/lovable-uploads/b9619f78-7281-46a1-93d2-c7c8123e5e56.png" 
@@ -58,7 +65,6 @@ const SplashScreen = ({ onComplete }: { onComplete: () => void }) => {
           />
         </div>
         
-        {/* Quote */}
         <div className="mb-12 animate-fade-in">
           <h2 
             className="text-4xl md:text-5xl font-bold leading-tight mb-8 text-[#9b87f5]"
@@ -66,7 +72,6 @@ const SplashScreen = ({ onComplete }: { onComplete: () => void }) => {
           />
         </div>
         
-        {/* Animated loading indicator */}
         <div className="mt-8 w-full max-w-xs h-1 bg-gray-800 rounded-full overflow-hidden">
           <div 
             className="h-full bg-[#9b87f5] rounded-full" 
@@ -84,6 +89,13 @@ const SplashScreen = ({ onComplete }: { onComplete: () => void }) => {
           100% { width: 100%; }
         }
       `}</style>
+      
+      {process.env.NODE_ENV === 'development' && (
+        <div className="absolute bottom-4 left-4 text-white bg-gray-800 p-2 rounded">
+          <p>Browser Language: {debugInfo.browserLanguage}</p>
+          <p>Quote Language: {debugInfo.quoteLanguage}</p>
+        </div>
+      )}
     </div>
   );
 };
