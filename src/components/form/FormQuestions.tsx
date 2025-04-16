@@ -1,11 +1,14 @@
+
 import { useState } from "react";
 import { FormState } from "@/types/form";
 import { useLanguage } from "@/contexts/LanguageContext";
 
-// Import the question component directly from its file
+// Import components directly from their respective files
 import { CreditHelpQuestion } from './questions/CreditHelpQuestion';
+import { CurrentHousingQuestion } from './questions/CurrentHousingQuestion';
+import { LeaseEndDateQuestion } from './questions/LeaseEndDateQuestion';
 
-// Import all other question components from the questions.tsx file
+// Import other question components from the questions.tsx file
 import {
   TimelineQuestion,
   FirstTimeBuyerQuestion,
@@ -22,8 +25,6 @@ import {
   CreditIssueDetailsQuestion,
   IdTypeQuestion,
   ContactInfoQuestion,
-  CurrentHousingQuestion,
-  LeaseEndDateQuestion,
   SummaryQuestion
 } from './questions';
 
