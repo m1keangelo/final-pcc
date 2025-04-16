@@ -1,0 +1,170 @@
+
+import React, { useEffect } from "react";
+import { useLanguage } from "@/contexts/LanguageContext";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { Card } from "@/components/ui/card";
+import { ArrowRight } from "lucide-react";
+import { toast } from "sonner";
+import { FormState } from "@/types/form";
+
+interface InitialInfoFormProps {
+  formData: FormState;
+  onFormDataChange: (field: keyof FormState, value: string) => void;
+  selectedAgent: string;
+  setSelectedAgent: (agent: string) => void;
+  onNext: () => void;
+}
+
+const InitialInfoForm: React.FC<InitialInfoFormProps> = ({
+  formData,
+  onFormDataChange,
+  selectedAgent,
+  setSelectedAgent,
+  onNext,
+}) => {
+  const { language } = useLanguage();
+
+  const handleInitialInfoChange = (field: keyof FormState, value: string) => {
+    onFormDataChange(field, value);
+  };
+
+  const handleNextFromInitialInfo = () => {
+    if (formData.name && formData.phone && formData.email) {
+      onNext();
+      toast.success(
+        language === "en"
+          ? "Contact information saved"
+          : "Información de contacto guardada"
+      );
+    } else {
+      toast.error(
+        language === "en"
+          ? "Please fill all contact information fields"
+          : "Por favor complete todos los campos de información de contacto"
+      );
+    }
+  };
+
+  const agents = [
+    { id: "soreal", name: "SoReal Estate" },
+    { id: "tito", name: "Tito Baptista" },
+    { id: "dens", name: "Dens Taveras" },
+    { id: "dennis", name: "Dennis Lopez" },
+    { id: "alvaro", name: "Alvaro Terry" },
+  ];
+
+  return (
+    <Card className="w-full max-w-[800px] mx-auto shadow-lg border-t-4 border-t-purple-500">
+      <div className="p-6 space-y-6">
+        <h2 className="text-2xl font-bold text-center mb-6">
+          {language === "en"
+            ? "Contact Information"
+            : "Información de Contacto"}
+        </h2>
+
+        <div className="space-y-6">
+          <div className="space-y-3">
+            <Label className="text-base font-medium">
+              {language === "en" ? "Select Agent" : "Seleccionar Agente"}
+            </Label>
+            <RadioGroup
+              value={selectedAgent}
+              onValueChange={setSelectedAgent}
+              className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 mt-2"
+            >
+              {agents.map((agent) => (
+                <div
+                  key={agent.id}
+                  className="flex items-center space-x-2 border rounded-md p-3 hover:bg-muted/20 cursor-pointer transition-colors"
+                >
+                  <RadioGroupItem value={agent.name} id={agent.id} />
+                  <Label htmlFor={agent.id} className="cursor-pointer w-full">
+                    {agent.name}
+                  </Label>
+                </div>
+              ))}
+            </RadioGroup>
+          </div>
+
+          <div className="grid gap-6 md:grid-cols-2">
+            <div className="space-y-2">
+              <Label htmlFor="name">
+                {language === "en" ? "Full Name" : "Nombre Completo"}
+              </Label>
+              <Input
+                id="name"
+                value={formData.name}
+                onChange={(e) =>
+                  handleInitialInfoChange("name", e.target.value)
+                }
+                placeholder={
+                  language === "en"
+                    ? "Enter your full name"
+                    : "Ingrese su nombre completo"
+                }
+                className="h-11"
+              />
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="phone">
+                {language === "en" ? "Phone Number" : "Número de Teléfono"}
+              </Label>
+              <Input
+                id="phone"
+                value={formData.phone}
+                onChange={(e) =>
+                  handleInitialInfoChange("phone", e.target.value)
+                }
+                placeholder={
+                  language === "en"
+                    ? "(123) 456-7890"
+                    : "Ingrese su número de teléfono"
+                }
+                type="tel"
+                inputMode="numeric"
+                className="h-11"
+              />
+            </div>
+          </div>
+
+          <div className="space-y-2">
+            <Label htmlFor="email">
+              {language === "en" ? "Email Address" : "Correo Electrónico"}
+            </Label>
+            <Input
+              id="email"
+              value={formData.email}
+              onChange={(e) => handleInitialInfoChange("email", e.target.value)}
+              placeholder={
+                language === "en"
+                  ? "yourname@example.com"
+                  : "Ingrese su correo electrónico"
+              }
+              type="email"
+              className="h-11"
+            />
+          </div>
+        </div>
+
+        <div className="flex justify-end mt-8">
+          <Button
+            onClick={handleNextFromInitialInfo}
+            size="lg"
+            className="bg-purple-600 hover:bg-purple-700 transition-colors w-full sm:w-auto"
+          >
+            {language === "en"
+              ? "Start Questionnaire"
+              : "Comenzar Cuestionario"}
+            <ArrowRight className="ml-2 h-4 w-4" />
+          </Button>
+        </div>
+      </div>
+    </Card>
+  );
+};
+
+export default InitialInfoForm;
