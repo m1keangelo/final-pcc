@@ -8,6 +8,7 @@ import SummaryOutcome from "@/components/form/SummaryOutcome";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { FormState } from "@/types/form";
+import { toast } from "@/hooks/use-toast";
 
 const Form = () => {
   const { language } = useLanguage();
@@ -36,8 +37,39 @@ const Form = () => {
     name: "",
     phone: "",
     email: "",
-    comments: ""
+    comments: "",
+    currentHousing: null,
+    wantsCreditHelp: null,
+    leaseEndDate: null,
+    creditRatingScore: null,
+    creditRatingTier: null
   });
+
+  // Handle form completion
+  const handleFormComplete = (data: FormState) => {
+    setFormData(data);
+    setFormStage('summary');
+    
+    // Show toast notification
+    toast({
+      title: language === 'en' ? "Form completed" : "Formulario completado",
+      description: language === 'en' ? "The prequalification form has been completed." : "El formulario de precalificación ha sido completado.",
+    });
+    
+    // In a real implementation, we would save the data to a CRM here
+    console.log("Form data submitted:", data);
+  };
+
+  // Handle proceeding to documents
+  const handleProceedToDocuments = () => {
+    toast({
+      title: language === 'en' ? "Processing" : "Procesando",
+      description: language === 'en' ? "Proceeding to document submission." : "Avanzando al envío de documentos.",
+    });
+    
+    // In a real implementation, we would navigate to a documents page
+    console.log("Proceeding to documents with data:", formData);
+  };
 
   return (
     <div className="space-y-8 animate-fade-in">
@@ -54,15 +86,12 @@ const Form = () => {
         <Card className="w-full max-w-[1200px] mx-auto">
           {formStage === 'questions' ? (
             <FormQuestions 
-              onComplete={(data: FormState) => {
-                setFormData(data);
-                setFormStage('summary');
-              }} 
+              onComplete={handleFormComplete} 
             />
           ) : (
             <SummaryOutcome 
               formData={formData}
-              onProceedToDocuments={() => console.log('Proceeding to documents')} 
+              onProceedToDocuments={handleProceedToDocuments} 
             />
           )}
         </Card>
