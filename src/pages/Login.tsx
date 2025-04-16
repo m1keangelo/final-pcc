@@ -10,7 +10,7 @@ const Login = () => {
   const { isLoading } = useAuth();
   
   if (isLoading) {
-    return <SplashScreen />;
+    return <SplashScreen onComplete={() => {}} />;
   }
   
   return (

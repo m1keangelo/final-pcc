@@ -29,6 +29,12 @@ const timeframeOptions = [
 
 type CreditIssueType = 'bankruptcy' | 'foreclosure' | 'collections' | 'medical' | 'other';
 
+interface CreditIssueDetails {
+  amount: number | null;
+  timeframe: string | null;
+  inCollection: boolean | null;
+}
+
 export const CreditIssuesQuestion = ({
   value,
   creditIssues,
@@ -67,19 +73,15 @@ export const CreditIssuesQuestion = ({
   const handleIssueToggle = (issueType: CreditIssueType, isChecked: boolean) => {
     const updatedIssues = { ...creditIssues };
     
-    // Update the checked status
     updatedIssues[issueType] = isChecked;
     
-    // Initialize details object if checked and doesn't exist
     if (isChecked) {
       const detailsKey = `${issueType}Details` as keyof typeof updatedIssues;
-      if (!updatedIssues[detailsKey]) {
-        updatedIssues[detailsKey] = {
-          amount: null,
-          timeframe: null,
-          inCollection: null
-        };
-      }
+      updatedIssues[detailsKey] = {
+        amount: null,
+        timeframe: null,
+        inCollection: null
+      } as any;
     }
     
     onCreditIssuesChange(updatedIssues);
@@ -91,11 +93,12 @@ export const CreditIssuesQuestion = ({
     value: any
   ) => {
     const detailsKey = `${issueType}Details` as keyof typeof creditIssues;
+    const currentDetails = creditIssues[detailsKey] || { amount: null, timeframe: null, inCollection: null };
     
     const updatedIssues = { 
       ...creditIssues,
       [detailsKey]: {
-        ...creditIssues[detailsKey],
+        ...currentDetails,
         [field]: value
       }
     };
@@ -103,12 +106,10 @@ export const CreditIssuesQuestion = ({
     onCreditIssuesChange(updatedIssues);
   };
   
-  // Check if any issue is selected to enable the next button
   const isAnyIssueComplete = () => {
     if (value === false) return true;
     
     if (value === true) {
-      // Check if at least one issue type is selected
       const issueTypes: CreditIssueType[] = ['bankruptcy', 'foreclosure', 'collections', 'medical', 'other'];
       return issueTypes.some(type => creditIssues[type]);
     }
@@ -118,7 +119,7 @@ export const CreditIssuesQuestion = ({
   
   const renderIssueDetails = (issueType: CreditIssueType) => {
     const detailsKey = `${issueType}Details` as keyof typeof creditIssues;
-    const details = creditIssues[detailsKey] as any;
+    const details = creditIssues[detailsKey] as CreditIssueDetails | undefined;
     
     if (!details) return null;
     
@@ -214,7 +215,6 @@ export const CreditIssuesQuestion = ({
             {t('q.creditIssues.selectAll')}
           </p>
           
-          {/* Bankruptcy Option */}
           <div className="border rounded-lg overflow-hidden">
             <Collapsible 
               open={openIssues.bankruptcy} 
@@ -251,7 +251,6 @@ export const CreditIssuesQuestion = ({
             </Collapsible>
           </div>
           
-          {/* Foreclosure Option */}
           <div className="border rounded-lg overflow-hidden">
             <Collapsible 
               open={openIssues.foreclosure} 
@@ -288,7 +287,6 @@ export const CreditIssuesQuestion = ({
             </Collapsible>
           </div>
           
-          {/* Collections Option */}
           <div className="border rounded-lg overflow-hidden">
             <Collapsible 
               open={openIssues.collections} 
@@ -325,7 +323,6 @@ export const CreditIssuesQuestion = ({
             </Collapsible>
           </div>
           
-          {/* Medical Option */}
           <div className="border rounded-lg overflow-hidden">
             <Collapsible 
               open={openIssues.medical} 
@@ -362,7 +359,6 @@ export const CreditIssuesQuestion = ({
             </Collapsible>
           </div>
           
-          {/* Other Option */}
           <div className="border rounded-lg overflow-hidden">
             <Collapsible 
               open={openIssues.other} 
