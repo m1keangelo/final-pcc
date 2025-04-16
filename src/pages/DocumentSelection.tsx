@@ -73,7 +73,7 @@ const DocumentSelection = () => {
             >
               <Upload className="mr-2 h-4 w-4" />
               {uploadedDocs.preapproval 
-                ? (language === 'en' ? 'Replace Document' : 'Reemplazar Documento') 
+                ? (language === 'en' ? 'Replace Document' : 'Reemplazar Documento')
                 : (language === 'en' ? 'Upload Document' : 'Subir Documento')}
             </Button>
           </CardContent>
@@ -117,8 +117,8 @@ const DocumentSelection = () => {
           <CardContent>
             <p className="text-muted-foreground mb-4">
               {language === 'en' 
-                ? 'A government-issued photo ID (driver's license or passport).'
-                : 'Una identificación con foto emitida por el gobierno (licencia de conducir o pasaporte).'}
+                ? "A government-issued photo ID (driver's license or passport)."
+                : "Una identificación con foto emitida por el gobierno (licencia de conducir o pasaporte)."}
             </p>
             <Button 
               onClick={() => handleDocUpload('ID')}
