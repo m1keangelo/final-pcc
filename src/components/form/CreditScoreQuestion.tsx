@@ -72,7 +72,7 @@ export const CreditScoreQuestion = ({
           </div>
           
           <div className="text-center text-sm text-muted-foreground mt-4">
-            {t('q.creditScore.category')}: {getCreditCategory(sliderValue)}
+            {getCreditCategory(sliderValue)}
           </div>
         </div>
       </div>
