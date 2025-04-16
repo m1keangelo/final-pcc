@@ -44,17 +44,17 @@ export const ContactInfoQuestion = ({
     // Remove all non-digit characters
     const cleaned = value.replace(/\D/g, '');
     
-    // Format the number
-    let formatted = '';
-    if (cleaned.length <= 3) {
-      formatted = cleaned;
-    } else if (cleaned.length <= 6) {
-      formatted = `(${cleaned.slice(0, 3)}) ${cleaned.slice(3)}`;
-    } else {
-      formatted = `(${cleaned.slice(0, 3)}) ${cleaned.slice(3, 6)}-${cleaned.slice(6, 10)}`;
-    }
+    // Limit to 10 digits
+    const truncated = cleaned.slice(0, 10);
     
-    return formatted;
+    // Format the number
+    if (truncated.length <= 3) {
+      return truncated;
+    } else if (truncated.length <= 6) {
+      return `(${truncated.slice(0, 3)}) ${truncated.slice(3)}`;
+    } else {
+      return `(${truncated.slice(0, 3)}) ${truncated.slice(3, 6)}-${truncated.slice(6)}`;
+    }
   };
   
   const handlePhoneChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -135,3 +135,4 @@ export const ContactInfoQuestion = ({
 };
 
 export default ContactInfoQuestion;
+
