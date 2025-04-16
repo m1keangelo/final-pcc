@@ -21,23 +21,30 @@ const QuestionContainer = ({
   totalSteps
 }: QuestionContainerProps) => {
   return (
-    <Card className="w-full max-w-[1200px] mx-auto animate-fade-in shadow-lg">
+    <Card className="w-full max-w-[900px] mx-auto animate-fade-in shadow-lg border-t-4 border-t-purple-500">
       <CardHeader className="border-b border-border">
-        <div className="flex items-center justify-between">
-          <span className="text-sm text-muted-foreground">
+        {/* Progress indicator */}
+        <div className="flex items-center justify-between mb-2">
+          <span className="text-xs font-medium text-muted-foreground bg-muted/30 px-3 py-1 rounded-full">
             {currentStep}/{totalSteps}
           </span>
+          <div className="w-full max-w-[200px] bg-gray-200 dark:bg-gray-700 rounded-full h-1.5 ml-4 mr-0">
+            <div 
+              className="bg-purple-600 h-1.5 rounded-full" 
+              style={{ width: `${(currentStep / totalSteps) * 100}%` }}
+            ></div>
+          </div>
         </div>
         
         <div className="flex items-start justify-between">
           <div>
-            <h3 className="text-lg font-medium">{title}</h3>
-            <p className="text-muted-foreground mt-1">{questionText}</p>
+            <h3 className="text-xl font-bold text-foreground mb-1">{title}</h3>
+            <p className="text-muted-foreground">{questionText}</p>
           </div>
           <QuestionHelp questionId={questionId} />
         </div>
       </CardHeader>
-      <CardContent className="py-6">
+      <CardContent className="py-6 px-6">
         {children}
       </CardContent>
     </Card>

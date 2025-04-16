@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useLanguage } from "@/contexts/LanguageContext";
@@ -208,63 +207,67 @@ const Form = () => {
   };
 
   return (
-    <div className="space-y-8 animate-fade-in bg-background">
-      <div>
-        <h1 className="text-4xl font-bold mb-2 text-foreground dark:text-white">
+    <div className="max-w-5xl mx-auto px-4 py-8 md:py-12 space-y-8 animate-fade-in bg-gradient-to-b from-background to-background/95">
+      <div className="text-center max-w-3xl mx-auto">
+        <h1 className="text-4xl font-bold mb-3 text-foreground bg-clip-text text-transparent bg-gradient-to-r from-purple-700 to-purple-500 dark:from-purple-400 dark:to-purple-600">
           {t('form.title')}
         </h1>
-        <p className="text-xl text-muted-foreground dark:text-gray-300">
+        <p className="text-xl text-muted-foreground">
           {t('form.subtitle')}
         </p>
       </div>
 
       <div>
-        <Card className="w-full">
-          {formStage === 'initialInfo' && (
+        {formStage === 'initialInfo' && (
+          <Card className="w-full max-w-[800px] mx-auto shadow-lg border-t-4 border-t-purple-500">
             <div className="p-6 space-y-6">
-              <h2 className="text-2xl font-semibold mb-4">
+              <h2 className="text-2xl font-bold text-center mb-6">
                 {language === 'en' ? 'Contact Information' : 'Información de Contacto'}
               </h2>
               
-              <div className="space-y-4">
-                <div className="space-y-2">
+              <div className="space-y-6">
+                <div className="space-y-3">
                   <Label className="text-base font-medium">
                     {language === 'en' ? 'Select Agent' : 'Seleccionar Agente'}
                   </Label>
                   <RadioGroup 
                     value={selectedAgent} 
                     onValueChange={setSelectedAgent}
-                    className="flex flex-wrap gap-4 mt-2"
+                    className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 mt-2"
                   >
                     {agents.map((agent) => (
-                      <div key={agent.id} className="flex items-center space-x-2">
+                      <div key={agent.id} className="flex items-center space-x-2 border rounded-md p-3 hover:bg-muted/20 cursor-pointer transition-colors">
                         <RadioGroupItem value={agent.name} id={agent.id} />
-                        <Label htmlFor={agent.id} className="cursor-pointer">{agent.name}</Label>
+                        <Label htmlFor={agent.id} className="cursor-pointer w-full">{agent.name}</Label>
                       </div>
                     ))}
                   </RadioGroup>
                 </div>
                 
-                <div className="space-y-2">
-                  <Label htmlFor="name">{language === 'en' ? 'Full Name' : 'Nombre Completo'}</Label>
-                  <Input 
-                    id="name" 
-                    value={formData.name} 
-                    onChange={(e) => handleInitialInfoChange('name', e.target.value)}
-                    placeholder={language === 'en' ? 'Enter your full name' : 'Ingrese su nombre completo'}
-                  />
-                </div>
+                <div className="grid gap-6 md:grid-cols-2">
+                  <div className="space-y-2">
+                    <Label htmlFor="name">{language === 'en' ? 'Full Name' : 'Nombre Completo'}</Label>
+                    <Input 
+                      id="name" 
+                      value={formData.name} 
+                      onChange={(e) => handleInitialInfoChange('name', e.target.value)}
+                      placeholder={language === 'en' ? 'Enter your full name' : 'Ingrese su nombre completo'}
+                      className="h-11"
+                    />
+                  </div>
                 
-                <div className="space-y-2">
-                  <Label htmlFor="phone">{language === 'en' ? 'Phone Number' : 'Número de Teléfono'}</Label>
-                  <Input 
-                    id="phone" 
-                    value={formData.phone} 
-                    onChange={(e) => handleInitialInfoChange('phone', e.target.value)}
-                    placeholder={language === 'en' ? 'Enter your phone number' : 'Ingrese su número de teléfono'}
-                    type="tel"
-                    inputMode="numeric"
-                  />
+                  <div className="space-y-2">
+                    <Label htmlFor="phone">{language === 'en' ? 'Phone Number' : 'Número de Teléfono'}</Label>
+                    <Input 
+                      id="phone" 
+                      value={formData.phone} 
+                      onChange={(e) => handleInitialInfoChange('phone', e.target.value)}
+                      placeholder={language === 'en' ? '(123) 456-7890' : 'Ingrese su número de teléfono'}
+                      type="tel"
+                      inputMode="numeric"
+                      className="h-11"
+                    />
+                  </div>
                 </div>
                 
                 <div className="space-y-2">
@@ -273,34 +276,39 @@ const Form = () => {
                     id="email" 
                     value={formData.email} 
                     onChange={(e) => handleInitialInfoChange('email', e.target.value)}
-                    placeholder={language === 'en' ? 'Enter your email address' : 'Ingrese su correo electrónico'}
+                    placeholder={language === 'en' ? 'yourname@example.com' : 'Ingrese su correo electrónico'}
                     type="email"
+                    className="h-11"
                   />
                 </div>
               </div>
               
-              <div className="flex justify-end mt-6">
-                <Button onClick={handleNextFromInitialInfo}>
-                  {language === 'en' ? 'Next' : 'Siguiente'}
+              <div className="flex justify-end mt-8">
+                <Button 
+                  onClick={handleNextFromInitialInfo}
+                  size="lg"
+                  className="bg-purple-600 hover:bg-purple-700 transition-colors w-full sm:w-auto"
+                >
+                  {language === 'en' ? 'Start Questionnaire' : 'Comenzar Cuestionario'}
                   <ArrowRight className="ml-2 h-4 w-4" />
                 </Button>
               </div>
             </div>
-          )}
+          </Card>
+        )}
 
-          {formStage === 'questions' ? (
-            <FormQuestions 
-              initialData={formData}
-              onComplete={handleFormComplete}
-              onBack={() => setFormStage('initialInfo')}
-            />
-          ) : formStage === 'summary' ? (
-            <SummaryOutcome 
-              formData={formData}
-              onProceedToDocuments={() => console.log('Proceeding to documents')} 
-            />
-          ) : null}
-        </Card>
+        {formStage === 'questions' ? (
+          <FormQuestions 
+            initialData={formData}
+            onComplete={handleFormComplete}
+            onBack={() => setFormStage('initialInfo')}
+          />
+        ) : formStage === 'summary' ? (
+          <SummaryOutcome 
+            formData={formData}
+            onProceedToDocuments={() => console.log('Proceeding to documents')} 
+          />
+        ) : null}
       </div>
     </div>
   );
