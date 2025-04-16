@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { FormState } from "@/types/form";
 import { useLanguage } from "@/contexts/LanguageContext";
@@ -366,6 +365,7 @@ const FormQuestions = ({ onComplete }: { onComplete: (data: FormState) => void }
           <SummaryQuestion
             formData={formData}
             onBack={handleBack}
+            onNext={() => onComplete(formData)}
             currentStep={currentStep}
             totalSteps={totalSteps}
           />
