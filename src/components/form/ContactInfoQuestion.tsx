@@ -40,6 +40,28 @@ export const ContactInfoQuestion = ({
     return name.trim() !== '' && phone.trim() !== '' && email.trim() !== '';
   };
   
+  const formatPhoneNumber = (value: string) => {
+    // Remove all non-digit characters
+    const cleaned = value.replace(/\D/g, '');
+    
+    // Format the number
+    let formatted = '';
+    if (cleaned.length <= 3) {
+      formatted = cleaned;
+    } else if (cleaned.length <= 6) {
+      formatted = `(${cleaned.slice(0, 3)}) ${cleaned.slice(3)}`;
+    } else {
+      formatted = `(${cleaned.slice(0, 3)}) ${cleaned.slice(3, 6)}-${cleaned.slice(6, 10)}`;
+    }
+    
+    return formatted;
+  };
+  
+  const handlePhoneChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const formattedValue = formatPhoneNumber(e.target.value);
+    onChangePhone(formattedValue);
+  };
+  
   return (
     <QuestionContainer
       title={t('q.contactInfo.title')}
@@ -65,8 +87,9 @@ export const ContactInfoQuestion = ({
             id="phone"
             type="tel"
             value={phone}
-            onChange={(e) => onChangePhone(e.target.value)}
+            onChange={handlePhoneChange}
             placeholder={t('q.contactInfo.phonePlaceholder')}
+            maxLength={14} // (XXX) XXX-XXXX = 14 characters
           />
         </div>
         
