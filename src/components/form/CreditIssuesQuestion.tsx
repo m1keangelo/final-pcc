@@ -77,12 +77,11 @@ export const CreditIssuesQuestion = ({
     
     if (isChecked) {
       const detailsKey = `${issueType}Details` as keyof typeof updatedIssues;
-      const details: CreditIssueDetails = {
+      updatedIssues[detailsKey] = {
         amount: null,
         timeframe: null,
         inCollection: null
       };
-      updatedIssues[detailsKey] = details;
     }
     
     onCreditIssuesChange(updatedIssues);
@@ -94,18 +93,24 @@ export const CreditIssuesQuestion = ({
     value: any
   ) => {
     const detailsKey = `${issueType}Details` as keyof typeof creditIssues;
+    
     const currentDetails = creditIssues[detailsKey] || { amount: null, timeframe: null, inCollection: null };
     
-    const updatedIssues = { 
-      ...creditIssues,
-      [detailsKey]: {
+    const updatedIssues = { ...creditIssues };
+    
+    if (typeof currentDetails === 'object' && currentDetails !== null) {
+      updatedIssues[detailsKey] = {
+        ...currentDetails,
+        [field]: value
+      };
+    } else {
+      updatedIssues[detailsKey] = {
         amount: null,
         timeframe: null,
         inCollection: null,
-        ...(typeof currentDetails === 'object' && currentDetails !== null ? currentDetails : {}),
         [field]: value
-      }
-    };
+      };
+    }
     
     onCreditIssuesChange(updatedIssues);
   };
