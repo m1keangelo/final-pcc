@@ -6,6 +6,7 @@ import { Textarea } from "@/components/ui/textarea";
 import QuestionContainer from "@/components/form/QuestionContainer";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { ArrowLeft, ArrowRight } from "lucide-react";
+import { useEffect } from "react";
 
 export const ContactInfoQuestion = ({
   name,
@@ -40,6 +41,20 @@ export const ContactInfoQuestion = ({
     return name.trim() !== '' && phone.trim() !== '' && email.trim() !== '';
   };
   
+  // Format the phone number whenever it changes
+  useEffect(() => {
+    if (phone) {
+      // Only format if there's actual content and it's not already formatted
+      const cleaned = phone.replace(/\D/g, '');
+      const formattedValue = formatPhoneNumber(cleaned);
+      
+      // Only update if the formatted value is different to avoid loops
+      if (formattedValue !== phone) {
+        onChangePhone(formattedValue);
+      }
+    }
+  }, [phone, onChangePhone]);
+  
   const formatPhoneNumber = (value: string) => {
     // Remove all non-digit characters
     const cleaned = value.replace(/\D/g, '');
@@ -58,8 +73,9 @@ export const ContactInfoQuestion = ({
   };
   
   const handlePhoneChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const formattedValue = formatPhoneNumber(e.target.value);
-    onChangePhone(formattedValue);
+    // Just store the raw value - the useEffect will handle formatting
+    const value = e.target.value.replace(/\D/g, '');
+    onChangePhone(value);
   };
   
   return (
@@ -89,7 +105,7 @@ export const ContactInfoQuestion = ({
             value={phone}
             onChange={handlePhoneChange}
             placeholder={t('q.contactInfo.phonePlaceholder')}
-            maxLength={14} // (XXX) XXX-XXXX = 14 characters
+            inputMode="numeric"
           />
         </div>
         
@@ -135,4 +151,3 @@ export const ContactInfoQuestion = ({
 };
 
 export default ContactInfoQuestion;
-

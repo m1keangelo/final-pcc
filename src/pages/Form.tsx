@@ -1,5 +1,5 @@
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { useAuth } from "@/contexts/AuthContext";
@@ -47,6 +47,19 @@ const Form = () => {
     comments: ""
   });
 
+  // Format phone number automatically when it changes
+  useEffect(() => {
+    if (formData.phone) {
+      const cleaned = formData.phone.replace(/\D/g, '');
+      const formatted = formatPhoneNumber(cleaned);
+      
+      // Only update if the formatted value is different to avoid loops
+      if (formatted !== formData.phone) {
+        setFormData(prev => ({ ...prev, phone: formatted }));
+      }
+    }
+  }, [formData.phone]);
+
   // List of agents - can be moved to a separate file or CMS integration later
   const agents = [
     { id: "soreal", name: "SoReal Estate" },
@@ -56,11 +69,37 @@ const Form = () => {
     { id: "alvaro", name: "Alvaro Terry" }
   ];
 
+  const formatPhoneNumber = (value: string) => {
+    // Remove all non-digit characters
+    const cleaned = value.replace(/\D/g, '');
+    
+    // Limit to 10 digits
+    const truncated = cleaned.slice(0, 10);
+    
+    // Format the number
+    if (truncated.length <= 3) {
+      return truncated;
+    } else if (truncated.length <= 6) {
+      return `(${truncated.slice(0, 3)}) ${truncated.slice(3)}`;
+    } else {
+      return `(${truncated.slice(0, 3)}) ${truncated.slice(3, 6)}-${truncated.slice(6)}`;
+    }
+  };
+
   const handleInitialInfoChange = (field: keyof FormState, value: string) => {
-    setFormData({
-      ...formData,
-      [field]: value
-    });
+    if (field === 'phone') {
+      // For phone fields, strip non-digit characters to handle raw input
+      const onlyDigits = value.replace(/\D/g, '');
+      setFormData({
+        ...formData,
+        [field]: onlyDigits
+      });
+    } else {
+      setFormData({
+        ...formData,
+        [field]: value
+      });
+    }
   };
 
   const handleNextFromInitialInfo = () => {
@@ -147,6 +186,7 @@ const Form = () => {
                     onChange={(e) => handleInitialInfoChange('phone', e.target.value)}
                     placeholder={language === 'en' ? 'Enter your phone number' : 'Ingrese su número de teléfono'}
                     type="tel"
+                    inputMode="numeric"
                   />
                 </div>
                 
