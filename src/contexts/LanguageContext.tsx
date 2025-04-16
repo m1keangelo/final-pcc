@@ -46,6 +46,7 @@ const translations = {
     'form.previous': 'Back',
     'form.complete': 'Complete',
     'form.subtitle': 'Fill out the form below to prequalify',
+    'form.backToContactInfo': 'Back to Contact Info',
     
     // Timeline
     'q.timeline.title': 'Homebuying Timeline',
@@ -188,6 +189,7 @@ const translations = {
     'form.previous': 'Atrás',
     'form.complete': 'Completar',
     'form.subtitle': 'Complete el formulario a continuación para precalificar',
+    'form.backToContactInfo': 'Volver a Información de Contacto',
     
     // Timeline
     'q.timeline.title': 'Plazo para Comprar Casa',
