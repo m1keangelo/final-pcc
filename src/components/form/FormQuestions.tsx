@@ -4,21 +4,8 @@ import { Button } from "@/components/ui/button";
 import { FormState } from "@/types/form";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { ArrowLeft } from "lucide-react";
-import TimelineQuestion from "./TimelineQuestion";
-import FirstTimeBuyerQuestion from "./FirstTimeBuyerQuestion";
-import EmploymentQuestion from "./EmploymentQuestion";
-import SelfEmployedYearsQuestion from "./SelfEmployedYearsQuestion";
-import IncomeQuestion from "./IncomeQuestion";
-import CreditQuestion from "./CreditQuestion";
-import CreditScoreQuestion from "./CreditScoreQuestion";
-import DownPaymentQuestion from "./DownPaymentQuestion";
-import DownPaymentAmountQuestion from "./DownPaymentAmountQuestion";
-import DownPaymentAssistanceQuestion from "./DownPaymentAssistanceQuestion";
-import MonthlyDebtsQuestion from "./MonthlyDebtsQuestion";
-import CreditIssuesQuestion from "./CreditIssuesQuestion";
-import IdTypeQuestion from "./IdTypeQuestion";
-import ContactInfoQuestion from "./ContactInfoQuestion";
-import SummaryQuestion from "./SummaryQuestion";
+import QuestionRouter from "./QuestionRouter";
+import { getNextStep, getPreviousStep, getTotalSteps } from "@/utils/formNavigationUtils";
 
 const FormQuestions = ({ 
   initialData,
@@ -31,7 +18,7 @@ const FormQuestions = ({
 }) => {
   const { t } = useLanguage();
   const [currentStep, setCurrentStep] = useState(1);
-  const totalSteps = 12;
+  const totalSteps = getTotalSteps();
 
   const [formData, setFormData] = useState<FormState>(initialData || {
     timeline: 'exploring',
@@ -61,16 +48,13 @@ const FormQuestions = ({
 
   const handleNext = () => {
     if (currentStep < totalSteps) {
-      // Special case for the unemployed selection - skip income questions
+      // Set income to 0 if unemployed before skipping
       if (currentStep === 3 && formData.employmentType === 'unemployed') {
-        // Set income to 0 since unemployed
         setFormData(prev => ({ ...prev, income: 0 }));
-        // Skip to question 6 (credit question)
-        setCurrentStep(6);
-        return;
       }
       
-      setCurrentStep(currentStep + 1);
+      const nextStep = getNextStep(currentStep, formData);
+      setCurrentStep(nextStep);
     } else {
       onComplete(formData);
     }
@@ -78,13 +62,8 @@ const FormQuestions = ({
 
   const handleBack = () => {
     if (currentStep > 1) {
-      // Special case for going back when unemployed
-      if (currentStep === 6 && formData.employmentType === 'unemployed') {
-        setCurrentStep(3);
-        return;
-      }
-      
-      setCurrentStep(currentStep - 1);
+      const prevStep = getPreviousStep(currentStep, formData);
+      setCurrentStep(prevStep);
     } else if (onBack) {
       onBack();
     }
@@ -92,275 +71,6 @@ const FormQuestions = ({
 
   const updateFormData = <K extends keyof FormState>(key: K, value: FormState[K]) => {
     setFormData({ ...formData, [key]: value });
-  };
-
-  const renderCurrentQuestion = () => {
-    switch (currentStep) {
-      case 1:
-        return (
-          <TimelineQuestion
-            value={formData.timeline}
-            onChange={(value) => updateFormData('timeline', value)}
-            onNext={handleNext}
-            onBack={handleBack}
-            currentStep={currentStep}
-            totalSteps={totalSteps}
-          />
-        );
-      case 2:
-        return (
-          <FirstTimeBuyerQuestion
-            value={formData.firstTimeBuyer}
-            onChange={(value) => updateFormData('firstTimeBuyer', value)}
-            onNext={handleNext}
-            onBack={handleBack}
-            currentStep={currentStep}
-            totalSteps={totalSteps}
-          />
-        );
-      case 3:
-        return (
-          <EmploymentQuestion
-            value={formData.employmentType}
-            otherEmploymentDetails={formData.otherEmploymentDetails}
-            onChange={(value) => updateFormData('employmentType', value)}
-            onChangeOtherDetails={(value) => updateFormData('otherEmploymentDetails', value)}
-            onNext={handleNext}
-            onBack={handleBack}
-            currentStep={currentStep}
-            totalSteps={totalSteps}
-          />
-        );
-      case 4:
-        return formData.employmentType === '1099' ? (
-          <SelfEmployedYearsQuestion
-            value={formData.selfEmployedYears}
-            onChange={(value) => updateFormData('selfEmployedYears', value)}
-            onNext={handleNext}
-            onBack={handleBack}
-            currentStep={currentStep}
-            totalSteps={totalSteps}
-          />
-        ) : (
-          <IncomeQuestion
-            incomeValue={formData.income}
-            incomeTypeValue={formData.incomeType}
-            onChangeIncome={(value) => updateFormData('income', value)}
-            onChangeIncomeType={(value) => updateFormData('incomeType', value)}
-            onNext={handleNext}
-            onBack={handleBack}
-            currentStep={currentStep}
-            totalSteps={totalSteps}
-          />
-        );
-      case 5:
-        return formData.employmentType === '1099' ? (
-          <IncomeQuestion
-            incomeValue={formData.income}
-            incomeTypeValue={formData.incomeType}
-            onChangeIncome={(value) => updateFormData('income', value)}
-            onChangeIncomeType={(value) => updateFormData('incomeType', value)}
-            onNext={handleNext}
-            onBack={handleBack}
-            currentStep={currentStep}
-            totalSteps={totalSteps}
-          />
-        ) : (
-          <CreditQuestion
-            value={formData.creditCategory}
-            onChange={(value) => updateFormData('creditCategory', value)}
-            onNext={handleNext}
-            onBack={handleBack}
-            currentStep={currentStep}
-            totalSteps={totalSteps}
-          />
-        );
-      case 6:
-        return formData.employmentType === '1099' ? (
-          <CreditQuestion
-            value={formData.creditCategory}
-            onChange={(value) => updateFormData('creditCategory', value)}
-            onNext={handleNext}
-            onBack={handleBack}
-            currentStep={currentStep}
-            totalSteps={totalSteps}
-          />
-        ) : (
-          <CreditScoreQuestion
-            value={formData.creditScore}
-            onChange={(value) => updateFormData('creditScore', value)}
-            onNext={handleNext}
-            onBack={handleBack}
-            currentStep={currentStep}
-            totalSteps={totalSteps}
-          />
-        );
-      case 7:
-        return formData.employmentType === '1099' ? (
-          <CreditScoreQuestion
-            value={formData.creditScore}
-            onChange={(value) => updateFormData('creditScore', value)}
-            onNext={handleNext}
-            onBack={handleBack}
-            currentStep={currentStep}
-            totalSteps={totalSteps}
-          />
-        ) : (
-          <DownPaymentQuestion
-            value={formData.downPaymentSaved}
-            onChange={(value) => updateFormData('downPaymentSaved', value)}
-            onNext={handleNext}
-            onBack={handleBack}
-            currentStep={currentStep}
-            totalSteps={totalSteps}
-          />
-        );
-      case 8:
-        return (
-          formData.employmentType === '1099' ? (
-            <DownPaymentQuestion
-              value={formData.downPaymentSaved}
-              onChange={(value) => updateFormData('downPaymentSaved', value)}
-              onNext={handleNext}
-              onBack={handleBack}
-              currentStep={currentStep}
-              totalSteps={totalSteps}
-            />
-          ) : (
-            formData.downPaymentSaved ? (
-              <DownPaymentAmountQuestion
-                value={formData.downPaymentAmount}
-                onChange={(value) => updateFormData('downPaymentAmount', value)}
-                onNext={handleNext}
-                onBack={handleBack}
-                currentStep={currentStep}
-                totalSteps={totalSteps}
-              />
-            ) : (
-              <DownPaymentAssistanceQuestion
-                value={formData.assistanceOpen}
-                onChange={(value) => updateFormData('assistanceOpen', value)}
-                onNext={handleNext}
-                onBack={handleBack}
-                currentStep={currentStep}
-                totalSteps={totalSteps}
-              />
-            )
-          )
-        );
-      case 9:
-        return (
-          formData.employmentType === '1099' ? (
-            formData.downPaymentSaved ? (
-              <DownPaymentAmountQuestion
-                value={formData.downPaymentAmount}
-                onChange={(value) => updateFormData('downPaymentAmount', value)}
-                onNext={handleNext}
-                onBack={handleBack}
-                currentStep={currentStep}
-                totalSteps={totalSteps}
-              />
-            ) : (
-              <DownPaymentAssistanceQuestion
-                value={formData.assistanceOpen}
-                onChange={(value) => updateFormData('assistanceOpen', value)}
-                onNext={handleNext}
-                onBack={handleBack}
-                currentStep={currentStep}
-                totalSteps={totalSteps}
-              />
-            )
-          ) : (
-            <MonthlyDebtsQuestion
-              value={formData.monthlyDebts}
-              onChange={(value) => updateFormData('monthlyDebts', value)}
-              onNext={handleNext}
-              onBack={handleBack}
-              currentStep={currentStep}
-              totalSteps={totalSteps}
-            />
-          )
-        );
-      case 10:
-        return (
-          formData.employmentType === '1099' ? (
-            <MonthlyDebtsQuestion
-              value={formData.monthlyDebts}
-              onChange={(value) => updateFormData('monthlyDebts', value)}
-              onNext={handleNext}
-              onBack={handleBack}
-              currentStep={currentStep}
-              totalSteps={totalSteps}
-            />
-          ) : (
-            <CreditIssuesQuestion
-              value={formData.hasCreditIssues}
-              creditIssues={formData.creditIssues}
-              onChange={(value) => updateFormData('hasCreditIssues', value)}
-              onCreditIssuesChange={(issues) => updateFormData('creditIssues', issues)}
-              onNext={handleNext}
-              onBack={handleBack}
-              currentStep={currentStep}
-              totalSteps={totalSteps}
-            />
-          )
-        );
-      case 11:
-        return (
-          formData.employmentType === '1099' ? (
-            <CreditIssuesQuestion
-              value={formData.hasCreditIssues}
-              creditIssues={formData.creditIssues}
-              onChange={(value) => updateFormData('hasCreditIssues', value)}
-              onCreditIssuesChange={(issues) => updateFormData('creditIssues', issues)}
-              onNext={handleNext}
-              onBack={handleBack}
-              currentStep={currentStep}
-              totalSteps={totalSteps}
-            />
-          ) : (
-            <IdTypeQuestion
-              value={formData.idType}
-              onChange={(value) => updateFormData('idType', value)}
-              onNext={handleNext}
-              onBack={handleBack}
-              currentStep={currentStep}
-              totalSteps={totalSteps}
-            />
-          )
-        );
-      case 12:
-        return (
-          formData.employmentType === '1099' ? (
-            <IdTypeQuestion
-              value={formData.idType}
-              onChange={(value) => updateFormData('idType', value)}
-              onNext={handleNext}
-              onBack={handleBack}
-              currentStep={currentStep}
-              totalSteps={totalSteps}
-            />
-          ) : (
-            <IdTypeQuestion
-              value={formData.idType}
-              onChange={(value) => updateFormData('idType', value)}
-              onNext={handleNext}
-              onBack={handleBack}
-              currentStep={currentStep}
-              totalSteps={totalSteps}
-            />
-          )
-        );
-      default:
-        return (
-          <SummaryQuestion
-            formData={formData}
-            onBack={handleBack}
-            currentStep={currentStep}
-            totalSteps={totalSteps}
-          />
-        );
-    }
   };
 
   return (
@@ -373,7 +83,14 @@ const FormQuestions = ({
           </Button>
         </div>
       )}
-      {renderCurrentQuestion()}
+      <QuestionRouter
+        currentStep={currentStep}
+        totalSteps={totalSteps}
+        formData={formData}
+        updateFormData={updateFormData}
+        handleNext={handleNext}
+        handleBack={handleBack}
+      />
     </div>
   );
 };
