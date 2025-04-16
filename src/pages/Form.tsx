@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useLanguage } from "@/contexts/LanguageContext";
@@ -108,14 +107,52 @@ const Form = () => {
     }
   };
 
-  // Add the transformFormData function that was missing
   const transformFormData = (data: FormState) => {
-    // Transform the form data to the format needed by the data context
+    const incomeAnnual = data.income 
+      ? (data.incomeType === 'monthly' ? data.income * 12 : data.income) 
+      : 0;
+
+    let legalStatus: 'US Citizen' | 'Permanent Resident' | 'Work Permit' | 'Undocumented';
+    switch (data.idType) {
+      case 'SSN':
+        legalStatus = 'US Citizen';
+        break;
+      case 'ITIN':
+        legalStatus = 'Permanent Resident';
+        break;
+      default:
+        legalStatus = 'Undocumented';
+    }
+
+    const creditCategoryMap: Record<string, 'Excellent' | 'Good' | 'Fair' | 'Poor'> = {
+      'excellent': 'Excellent',
+      'good': 'Good',
+      'fair': 'Fair',
+      'poor': 'Poor',
+      'unknown': 'Fair',
+    };
+
+    const employmentTypeMap: Record<string, 'W-2' | '1099'> = {
+      'W-2': 'W-2',
+      '1099': '1099',
+      'retired': 'W-2',
+      'unemployed': 'W-2',
+      'other': 'W-2',
+    };
+
     return {
-      ...data,
-      date: new Date().toISOString(),
-      id: Date.now().toString(),
-      status: 'new'
+      name: data.name,
+      phone: data.phone,
+      employmentType: employmentTypeMap[data.employmentType || 'W-2'],
+      incomeAnnual,
+      creditCategory: creditCategoryMap[data.creditCategory || 'unknown'],
+      creditScoreApprox: data.creditScore || undefined,
+      downPaymentSaved: !!data.downPaymentSaved,
+      downPaymentAmount: data.downPaymentAmount || undefined,
+      legalStatus,
+      qualified: true,
+      consentGiven: true,
+      comments: data.comments || '',
     };
   };
 
@@ -131,7 +168,8 @@ const Form = () => {
     setFormData(finalData);
     setFormStage('summary');
     
-    addClient({ ...transformFormData(finalData) });
+    const transformedData = transformFormData(finalData);
+    addClient(transformedData);
   };
 
   return (
