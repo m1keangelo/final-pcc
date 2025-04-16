@@ -1,4 +1,3 @@
-
 interface Quote {
   en: string;
   es: string;
@@ -136,7 +135,7 @@ const quotes: Quote[] = [
   },
   {
     en: "'Someday' is for suckers. It's day one or never.",
-    es: ""Algún día" es pa' los pendejos. Es hoy… o nunca."
+    es: "Algún día es pa' los pendejos. Es hoy… o nunca."
   },
   {
     en: "Lions don't argue with sheep. They eat 'em.",
