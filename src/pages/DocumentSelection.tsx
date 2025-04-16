@@ -100,7 +100,7 @@ const DocumentSelection = () => {
             >
               <Upload className="mr-2 h-4 w-4" />
               {uploadedDocs.credit 
-                ? (language === 'en' ? 'Replace Document' : 'Reemplazar Documento') 
+                ? (language === 'en' ? 'Replace Document' : 'Reemplazar Documento')
                 : (language === 'en' ? 'Upload Document' : 'Subir Documento')}
             </Button>
           </CardContent>
@@ -127,7 +127,7 @@ const DocumentSelection = () => {
             >
               <Upload className="mr-2 h-4 w-4" />
               {uploadedDocs.id 
-                ? (language === 'en' ? 'Replace Document' : 'Reemplazar Documento') 
+                ? (language === 'en' ? 'Replace Document' : 'Reemplazar Documento')
                 : (language === 'en' ? 'Upload Document' : 'Subir Documento')}
             </Button>
           </CardContent>
@@ -154,7 +154,7 @@ const DocumentSelection = () => {
             >
               <Upload className="mr-2 h-4 w-4" />
               {uploadedDocs.socialSecurity 
-                ? (language === 'en' ? 'Replace Document' : 'Reemplazar Documento') 
+                ? (language === 'en' ? 'Replace Document' : 'Reemplazar Documento')
                 : (language === 'en' ? 'Upload Document' : 'Subir Documento')}
             </Button>
           </CardContent>
