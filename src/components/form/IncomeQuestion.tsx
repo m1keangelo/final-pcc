@@ -1,9 +1,9 @@
 
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { Slider } from "@/components/ui/slider";
 import QuestionContainer from "@/components/form/QuestionContainer";
 import { FormState } from "@/types/form";
 import { useLanguage } from "@/contexts/LanguageContext";
@@ -29,18 +29,22 @@ export const IncomeQuestion = ({
   totalSteps: number;
 }) => {
   const { t } = useLanguage();
-  const [inputValue, setInputValue] = useState(incomeValue?.toString() || "");
+  const [sliderValue, setSliderValue] = useState(incomeValue || 10);
   
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const val = e.target.value;
-    setInputValue(val);
-    
-    const numVal = parseFloat(val);
-    if (!isNaN(numVal)) {
-      onChangeIncome(numVal);
-    } else {
-      onChangeIncome(null);
-    }
+  // Format currency
+  const formatCurrency = (value: number) => {
+    return new Intl.NumberFormat('en-US', {
+      style: 'currency',
+      currency: 'USD',
+      maximumFractionDigits: 0
+    }).format(value);
+  };
+  
+  // Handle slider change
+  const handleSliderChange = (val: number[]) => {
+    const income = val[0];
+    setSliderValue(income);
+    onChangeIncome(income);
   };
   
   return (
@@ -73,20 +77,30 @@ export const IncomeQuestion = ({
         
         <div>
           <Label htmlFor="income">{t('q.income.amountLabel')}</Label>
-          <div className="relative mt-1">
-            <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
-              <span className="text-gray-500">$</span>
+          <div className="mt-4 mb-8">
+            <div className="flex items-center justify-center mb-6">
+              <div className="flex items-center justify-center bg-muted/30 p-3 rounded-full h-16 w-56 border border-primary/20">
+                <span className="text-2xl font-semibold">
+                  {formatCurrency(sliderValue)}
+                </span>
+              </div>
             </div>
-            <Input
-              id="income"
-              type="number"
-              min="0"
-              step="1000"
-              value={inputValue}
-              onChange={handleChange}
-              placeholder={t('q.income.placeholder')}
-              className="pl-6"
-            />
+            
+            <div className="pt-4">
+              <Slider
+                id="income"
+                value={[sliderValue]}
+                min={10}
+                max={1000000}
+                step={10}
+                onValueChange={handleSliderChange}
+                className="my-6"
+              />
+              <div className="flex justify-between text-xs text-muted-foreground mt-2">
+                <span>{formatCurrency(10)}</span>
+                <span>{formatCurrency(1000000)}</span>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -100,7 +114,7 @@ export const IncomeQuestion = ({
           <ArrowLeft className="mr-2 h-4 w-4" />
           {t('form.previous')}
         </Button>
-        <Button onClick={onNext} disabled={incomeValue === null}>
+        <Button onClick={onNext}>
           {t('form.next')}
           <ArrowRight className="ml-2 h-4 w-4" />
         </Button>
