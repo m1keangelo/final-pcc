@@ -2,7 +2,6 @@
 import { ReactNode } from "react";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import QuestionHelp from "@/components/QuestionHelp";
-import { useLanguage } from "@/contexts/LanguageContext";
 
 interface QuestionContainerProps {
   children: ReactNode;
@@ -21,8 +20,6 @@ const QuestionContainer = ({
   currentStep,
   totalSteps
 }: QuestionContainerProps) => {
-  const { language } = useLanguage();
-  
   return (
     <Card className="w-full max-w-[1200px] mx-auto animate-fade-in shadow-lg">
       <CardHeader className="border-b border-border">

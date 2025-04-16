@@ -1,3 +1,4 @@
+
 import { FormState, ClientRating, calculateClientRating } from '@/types/form';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { Button } from '@/components/ui/button';
@@ -72,11 +73,6 @@ const SummaryOutcome = ({ formData, onProceedToDocuments }: SummaryOutcomeProps)
     return language === 'en' ? "Poor" : "Malo";
   };
 
-  // Check if we should show the credit improvement message
-  const shouldShowCreditImprovementMessage = () => {
-    return formData.creditRatingScore !== null && formData.creditRatingScore < 8;
-  };
-
   return (
     <div className="space-y-6 animate-fade-in">
       {/* Animation Area */}
@@ -106,17 +102,6 @@ const SummaryOutcome = ({ formData, onProceedToDocuments }: SummaryOutcomeProps)
         </AlertTitle>
       </Alert>
 
-      {/* Credit Improvement Message (if applicable) */}
-      {shouldShowCreditImprovementMessage() && (
-        <Alert className="border-l-4 border-l-blue-500 bg-blue-50 dark:bg-opacity-10">
-          <AlertDescription>
-            {language === 'en' 
-              ? "Based on your current credit standing, we may need a little preparation — but don't worry, we've helped hundreds of clients improve their credit. With teamwork and our guidance, you could be ready within 3 months."
-              : "Según su situación crediticia actual, es posible que necesitemos un poco de preparación — pero no se preocupe, hemos ayudado a cientos de clientes a mejorar su crédito. Con trabajo en equipo y nuestra guía, podría estar listo en 3 meses."}
-          </AlertDescription>
-        </Alert>
-      )}
-
       {/* Client Rating Card */}
       <Card>
         <CardContent className="pt-6">
@@ -136,20 +121,18 @@ const SummaryOutcome = ({ formData, onProceedToDocuments }: SummaryOutcomeProps)
           </div>
           
           <div className="space-y-4">
-            {/* Credit Rating Display */}
             <div>
               <div className="flex justify-between mb-1">
                 <span className="text-sm font-medium">
                   {language === 'en' ? 'Credit' : 'Crédito'}: {clientRating.creditRating}/10
                 </span>
                 <span className="text-sm font-medium">
-                  {formData.creditRatingTier || getRatingLabel(clientRating.creditRating)}
+                  {getRatingLabel(clientRating.creditRating)}
                 </span>
               </div>
               <Progress value={clientRating.creditRating * 10} className={`h-2 ${getRatingColor(clientRating.creditRating)}`} />
             </div>
             
-            {/* Other ratings (income, down payment, etc.) */}
             <div>
               <div className="flex justify-between mb-1">
                 <span className="text-sm font-medium">
@@ -197,67 +180,6 @@ const SummaryOutcome = ({ formData, onProceedToDocuments }: SummaryOutcomeProps)
               </div>
               <Progress value={clientRating.readinessRating * 10} className={`h-2 ${getRatingColor(clientRating.readinessRating)}`} />
             </div>
-          </div>
-        </CardContent>
-      </Card>
-
-      {/* Contact Information Card */}
-      <Card>
-        <CardContent className="pt-6">
-          <h3 className="text-lg font-medium mb-4">
-            {language === 'en' ? 'Contact Information' : 'Información de Contacto'}
-          </h3>
-          
-          <div className="space-y-2">
-            <div className="flex justify-between">
-              <span className="font-medium">{language === 'en' ? 'Name' : 'Nombre'}:</span>
-              <span>{formData.name}</span>
-            </div>
-            <div className="flex justify-between">
-              <span className="font-medium">{language === 'en' ? 'Phone' : 'Teléfono'}:</span>
-              <span>{formData.phone}</span>
-            </div>
-            <div className="flex justify-between">
-              <span className="font-medium">{language === 'en' ? 'Email' : 'Correo'}:</span>
-              <span>{formData.email}</span>
-            </div>
-            
-            {/* Housing and Lease */}
-            {formData.currentHousing && (
-              <div className="flex justify-between">
-                <span className="font-medium">
-                  {language === 'en' ? 'Housing' : 'Vivienda'}:
-                </span>
-                <span>
-                  {language === 'en' 
-                    ? formData.currentHousing === 'own' ? 'Owns' : formData.currentHousing === 'rent' ? 'Rents' : 'Other'
-                    : formData.currentHousing === 'own' ? 'Propietario' : formData.currentHousing === 'rent' ? 'Alquila' : 'Otro'}
-                </span>
-              </div>
-            )}
-            
-            {formData.currentHousing === 'rent' && formData.leaseEndDate && (
-              <div className="flex justify-between">
-                <span className="font-medium">
-                  {language === 'en' ? 'Lease Ends' : 'Fin de Contrato'}:
-                </span>
-                <span>{formData.leaseEndDate}</span>
-              </div>
-            )}
-            
-            {/* Credit Improvement Interest */}
-            {formData.wantsCreditHelp !== null && (
-              <div className="flex justify-between">
-                <span className="font-medium">
-                  {language === 'en' ? 'Wants Credit Help' : 'Desea Ayuda con Crédito'}:
-                </span>
-                <span>
-                  {language === 'en'
-                    ? formData.wantsCreditHelp ? 'Yes' : 'No'
-                    : formData.wantsCreditHelp ? 'Sí' : 'No'}
-                </span>
-              </div>
-            )}
           </div>
         </CardContent>
       </Card>

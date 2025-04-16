@@ -1,3 +1,4 @@
+
 export type FormState = {
   timeline: 'immediately' | '3months' | '3to6months' | '6to12months' | 'exploring' | null;
   firstTimeBuyer: boolean | null;
@@ -20,11 +21,6 @@ export type FormState = {
   phone: string;
   email: string;
   comments: string;
-  currentHousing: 'own' | 'rent' | 'other' | null;
-  wantsCreditHelp: boolean | null;
-  leaseEndDate: string | null;
-  creditRatingScore: number | null;
-  creditRatingTier: string | null;
 };
 
 export type FormStep = 
@@ -45,6 +41,7 @@ export type FormStep =
   | 'contactInfo'
   | 'summary';
 
+// Client Rating Types
 export type ClientRating = {
   overall: number;
   creditRating: number;
@@ -63,6 +60,7 @@ export type AnalyticMetric = {
 };
 
 export const calculateClientRating = (state: FormState): ClientRating => {
+  // Credit Rating (0-10)
   let creditRating = 0;
   if (state.creditCategory === 'excellent') creditRating = 10;
   else if (state.creditCategory === 'good') creditRating = 8;
@@ -71,12 +69,14 @@ export const calculateClientRating = (state: FormState): ClientRating => {
   
   if (state.hasCreditIssues) {
     if (state.creditIssueType === 'bankruptcy' || state.creditIssueType === 'foreclosure') {
+      // Recent bankruptcy or foreclosure reduces score significantly
       if (state.creditIssueYear && (new Date().getFullYear() - state.creditIssueYear < 3)) {
         creditRating = Math.max(0, creditRating - 5);
       } else {
         creditRating = Math.max(0, creditRating - 2);
       }
     } else if (state.creditIssueType === 'collections') {
+      // Collections reduce score based on amount
       if (state.creditIssueAmount && state.creditIssueAmount > 1000) {
         creditRating = Math.max(0, creditRating - 3);
       } else {
@@ -85,6 +85,7 @@ export const calculateClientRating = (state: FormState): ClientRating => {
     }
   }
   
+  // Income Rating (0-10)
   let incomeRating = 0;
   if (state.income) {
     const annualIncome = state.incomeType === 'monthly' ? state.income * 12 : state.income;
@@ -94,11 +95,13 @@ export const calculateClientRating = (state: FormState): ClientRating => {
     else if (annualIncome >= 25000) incomeRating = 4;
     else incomeRating = 2;
     
+    // Self-employment penalty if less than 2 years
     if (state.employmentType === '1099' && state.selfEmployedYears && state.selfEmployedYears < 2) {
       incomeRating = Math.max(0, incomeRating - 3);
     }
   }
   
+  // Down Payment Rating (0-10)
   let downPaymentRating = 0;
   if (state.downPaymentSaved) {
     if (state.downPaymentAmount) {
@@ -108,19 +111,21 @@ export const calculateClientRating = (state: FormState): ClientRating => {
       else if (state.downPaymentAmount >= 5000) downPaymentRating = 4;
       else downPaymentRating = 2;
     } else {
-      downPaymentRating = 5;
+      downPaymentRating = 5; // Has savings but amount unknown
     }
   } else if (state.assistanceOpen) {
-    downPaymentRating = 3;
+    downPaymentRating = 3; // No savings but open to assistance
   } else {
-    downPaymentRating = 0;
+    downPaymentRating = 0; // No savings and not open to assistance
   }
   
+  // Documentation Rating (based on ID type)
   let documentationRating = 0;
   if (state.idType === 'SSN') documentationRating = 10;
   else if (state.idType === 'ITIN') documentationRating = 6;
   else documentationRating = 0;
   
+  // Readiness Rating (based on timeline)
   let readinessRating = 0;
   if (state.timeline === 'immediately') readinessRating = 10;
   else if (state.timeline === '3months') readinessRating = 8;
@@ -128,6 +133,7 @@ export const calculateClientRating = (state: FormState): ClientRating => {
   else if (state.timeline === '6to12months') readinessRating = 4;
   else readinessRating = 2;
   
+  // Calculate overall rating (weighted average)
   const overall = Math.round(
     (creditRating * 0.3) +
     (incomeRating * 0.25) +
@@ -175,74 +181,30 @@ export const getQualificationCategory = (state: FormState): 'ready' | 'fixesNeed
     return 'notReady';
   }
   
+  // Check for issues that need fixes but don't disqualify
   const needsFixes = [
+    // Credit issues
     (state.creditCategory === 'poor' || state.creditCategory === 'fair'),
+    
+    // Income/employment issues
     (state.employmentType === '1099' && state.selfEmployedYears && state.selfEmployedYears < 2),
+    
+    // Collections issues
     (state.hasCreditIssues && 
      state.creditIssueType === 'collections' && 
      (state.creditIssueAmount || 0) > 500),
+     
+    // No down payment
     (!state.downPaymentSaved && !state.assistanceOpen),
+    
+    // ITIN only (might need special programs)
     (state.idType === 'ITIN')
   ];
   
+  // If any of the conditions are true, fixes are needed
   if (needsFixes.some(condition => condition)) {
     return 'fixesNeeded';
   }
   
   return 'ready';
-};
-
-export const getLeaseEndDateProximity = (leaseEndDate: string | null): 'soon' | 'distant' | null => {
-  if (!leaseEndDate) return null;
-  
-  try {
-    const [month, year] = leaseEndDate.split('/');
-    const leaseDate = new Date(parseInt(year), parseInt(month) - 1);
-    const currentDate = new Date();
-    
-    const monthsDifference = 
-      (leaseDate.getFullYear() - currentDate.getFullYear()) * 12 + 
-      (leaseDate.getMonth() - currentDate.getMonth());
-    
-    return monthsDifference < 3 ? 'soon' : 'distant';
-  } catch (error) {
-    console.error('Error parsing lease end date:', error);
-    return null;
-  }
-};
-
-export const getCreditRatingScore = (category: FormState['creditCategory']): number => {
-  switch (category) {
-    case 'excellent':
-      return 10;
-    case 'good':
-      return 8;
-    case 'fair':
-      return 6;
-    case 'poor':
-      return 3;
-    case 'unknown':
-      return 2;
-    default:
-      return 0;
-  }
-};
-
-export const getCreditRatingTier = (category: FormState['creditCategory'], language: 'en' | 'es'): string => {
-  if (!category) return language === 'en' ? 'Not Provided' : 'No Proporcionado';
-  
-  switch (category) {
-    case 'excellent':
-      return language === 'en' ? 'Excellent' : 'Excelente';
-    case 'good':
-      return language === 'en' ? 'Good' : 'Bueno';
-    case 'fair':
-      return language === 'en' ? 'Fair' : 'Regular';
-    case 'poor':
-      return language === 'en' ? 'Poor' : 'Malo';
-    case 'unknown':
-      return language === 'en' ? 'Unknown/No Credit' : 'Desconocido/Sin Crédito';
-    default:
-      return language === 'en' ? 'Not Provided' : 'No Proporcionado';
-  }
 };
