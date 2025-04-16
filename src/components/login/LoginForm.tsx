@@ -16,7 +16,7 @@ const LoginForm = () => {
   const [showPassword, setShowPassword] = useState(false);
   
   const { login } = useAuth();
-  const { t } = useLanguage();
+  const { t, language } = useLanguage();
   const navigate = useNavigate();
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -52,6 +52,14 @@ const LoginForm = () => {
 
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
+  };
+
+  // Dynamic login button text based on language
+  const getLoginButtonText = () => {
+    if (isSubmitting) {
+      return language === 'en' ? 'Login...' : 'Iniciando...';
+    }
+    return language === 'en' ? 'Login' : 'Iniciar';
   };
 
   return (
@@ -127,9 +135,9 @@ const LoginForm = () => {
           {isSubmitting ? (
             <>
               <Loader2 size={16} className="mr-2 animate-spin" />
-              {t('login.button')}...
+              {getLoginButtonText()}
             </>
-          ) : t('login.button')}
+          ) : getLoginButtonText()}
         </Button>
       </form>
       

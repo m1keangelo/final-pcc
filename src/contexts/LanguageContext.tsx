@@ -1,3 +1,4 @@
+
 import React, { createContext, useContext, useState, ReactNode, useEffect } from 'react';
 
 // Language type
@@ -22,6 +23,7 @@ const translations = {
     'login.password': 'Password',
     'login.button': 'Login',
     'login.error': 'Invalid username or password',
+    'login.forgotPassword': 'Forgot password?',
     
     // Navigation
     'nav.home': 'Home',
@@ -160,8 +162,9 @@ const translations = {
     'login.title': 'Iniciar Sesión',
     'login.username': 'Usuario',
     'login.password': 'Contraseña',
-    'login.button': 'Ingresar',
+    'login.button': 'Iniciar',
     'login.error': 'Usuario o contraseña inválidos',
+    'login.forgotPassword': '¿Olvidó su contraseña?',
     
     // Navigation
     'nav.home': 'Inicio',
