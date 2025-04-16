@@ -13,16 +13,16 @@ const Login = () => {
       {/* Animated Background */}
       <MatrixBackground />
       
-      {/* Language Toggle */}
-      <div className="absolute top-4 right-4 z-20">
-        <LanguageToggle />
-      </div>
-      
       {/* Main Content Container */}
       <div className="flex w-full h-screen z-10">
         {/* Left Column - Login Form */}
-        <div className="w-full md:w-2/5 flex items-center justify-center p-4 order-2 md:order-1">
+        <div className="w-full md:w-2/5 flex flex-col items-center justify-center p-4 order-2 md:order-1">
           <LoginForm />
+          
+          {/* Language Toggle - Now centered under login form */}
+          <div className="mt-6">
+            <LanguageToggle />
+          </div>
         </div>
         
         {/* Right Column - Brand Imagery */}
