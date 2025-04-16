@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useLanguage } from "@/contexts/LanguageContext";
@@ -150,20 +149,26 @@ const Form = () => {
     const creditIssueComments = [];
     const hasCreditIssues = data.hasCreditIssues === true;
     
-    // Initialize creditIssueDetails with the required hasCreditIssues property
-    let creditIssueDetails = {
+    // Initialize the creditIssueDetails object with the correct TypeScript interface structure
+    const creditIssueDetails: {
+      hasCreditIssues: boolean;
+      bankruptcy?: boolean;
+      foreclosure?: boolean;
+      collections?: boolean;
+      medical?: boolean;
+      other?: boolean;
+      details?: string;
+    } = {
       hasCreditIssues: hasCreditIssues
     };
     
     if (hasCreditIssues && data.creditIssues) {
-      creditIssueDetails = {
-        hasCreditIssues: true,
-        bankruptcy: !!data.creditIssues.bankruptcy,
-        foreclosure: !!data.creditIssues.foreclosure,
-        collections: !!data.creditIssues.collections,
-        medical: !!data.creditIssues.medical,
-        other: !!data.creditIssues.other,
-      };
+      // Add the specific credit issue flags if they exist
+      if (data.creditIssues.bankruptcy) creditIssueDetails.bankruptcy = true;
+      if (data.creditIssues.foreclosure) creditIssueDetails.foreclosure = true;
+      if (data.creditIssues.collections) creditIssueDetails.collections = true;
+      if (data.creditIssues.medical) creditIssueDetails.medical = true;
+      if (data.creditIssues.other) creditIssueDetails.other = true;
       
       if (data.creditIssues.bankruptcy) {
         const details = data.creditIssues.bankruptcyDetails;
@@ -192,7 +197,7 @@ const Form = () => {
     }
     
     if (creditIssueComments.length > 0) {
-      (creditIssueDetails as any).details = creditIssueComments.join('; ');
+      creditIssueDetails.details = creditIssueComments.join('; ');
     }
     
     const combinedComments = [
@@ -211,7 +216,7 @@ const Form = () => {
       incomeMonthly,
       creditCategory: creditCategoryMap[data.creditCategory || 'unknown'],
       creditScoreApprox: data.creditScore || undefined,
-      creditIssues: creditIssueDetails,  // Now this will always have the hasCreditIssues property
+      creditIssues: creditIssueDetails,  // This will always have the hasCreditIssues property
       downPaymentSaved: !!data.downPaymentSaved,
       downPaymentAmount: data.downPaymentAmount || undefined,
       assistanceInterested: data.assistanceOpen !== null ? !!data.assistanceOpen : undefined,
