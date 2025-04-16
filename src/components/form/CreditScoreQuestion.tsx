@@ -24,7 +24,7 @@ export const CreditScoreQuestion = ({
   currentStep: number;
   totalSteps: number;
 }) => {
-  const { t } = useLanguage();
+  const { t, language } = useLanguage();
   const [inputValue, setInputValue] = useState(value?.toString() || "");
   
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -105,10 +105,10 @@ export const CreditScoreQuestion = ({
           onClick={onBack}
         >
           <ArrowLeft className="mr-2 h-4 w-4" />
-          {t('form.previous')}
+          {language === 'en' ? 'Back' : 'Atrás'}
         </Button>
         <Button onClick={onNext} disabled={value === null}>
-          {t('form.next')}
+          {language === 'en' ? 'Next' : 'Siguiente'}
           <ArrowRight className="ml-2 h-4 w-4" />
         </Button>
       </div>

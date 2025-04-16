@@ -77,18 +77,19 @@ export const CreditIssuesQuestion = ({
     
     if (isChecked) {
       const detailsKey = `${issueType}Details` as keyof typeof updatedIssues;
-      updatedIssues[detailsKey] = {
+      const details: CreditIssueDetails = {
         amount: null,
         timeframe: null,
         inCollection: null
-      } as any;
+      };
+      updatedIssues[detailsKey] = details as any;
     }
     
     onCreditIssuesChange(updatedIssues);
   };
 
-  const handleDetailsChange = (
-    issueType: CreditIssueType, 
+  const handleIssueDetailChange = (
+    issueType: CreditIssueType,
     field: 'amount' | 'timeframe' | 'inCollection',
     value: any
   ) => {
@@ -98,7 +99,7 @@ export const CreditIssuesQuestion = ({
     const updatedIssues = { 
       ...creditIssues,
       [detailsKey]: {
-        ...currentDetails,
+        ...(currentDetails as object),
         [field]: value
       }
     };
@@ -133,7 +134,7 @@ export const CreditIssuesQuestion = ({
               type="number"
               placeholder="$ Amount"
               value={details.amount || ''}
-              onChange={e => handleDetailsChange(
+              onChange={e => handleIssueDetailChange(
                 issueType, 
                 'amount', 
                 e.target.value ? Number(e.target.value) : null
@@ -145,7 +146,7 @@ export const CreditIssuesQuestion = ({
             <Label htmlFor={`${issueType}-timeframe`}>How long ago?</Label>
             <Select
               value={details.timeframe || ''}
-              onValueChange={value => handleDetailsChange(issueType, 'timeframe', value)}
+              onValueChange={value => handleIssueDetailChange(issueType, 'timeframe', value)}
             >
               <SelectTrigger id={`${issueType}-timeframe`}>
                 <SelectValue placeholder="Select timeframe" />
@@ -165,7 +166,7 @@ export const CreditIssuesQuestion = ({
           <Label>Collection Status</Label>
           <RadioGroup
             value={details.inCollection !== null ? details.inCollection.toString() : ''}
-            onValueChange={value => handleDetailsChange(
+            onValueChange={value => handleIssueDetailChange(
               issueType, 
               'inCollection', 
               value === 'true'
