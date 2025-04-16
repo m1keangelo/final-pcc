@@ -18,9 +18,15 @@ const BrandImagery = () => {
         }}
       />
       
-      {/* Removed decorative elements */}
+      {/* Restored Decorative Elements */}
+      <div className="absolute bottom-10 right-10 md:bottom-16 md:right-16 text-right">
+        <p className="text-sm md:text-base text-[#9b87f5] font-medium">
+          Fuck Mediocrity, Unleashing Bold Marketing Power!
+        </p>
+      </div>
     </div>
   );
 };
 
 export default BrandImagery;
+
