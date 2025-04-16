@@ -4,7 +4,11 @@ import { getRandomQuote } from "@/utils/quoteUtils";
 
 const SplashScreen = ({ onComplete }: { onComplete: () => void }) => {
   const [fadeOut, setFadeOut] = useState(false);
-  const [quote, setQuote] = useState<{text: string, language: string}>({text: "", language: ""});
+  const [quote, setQuote] = useState<{text: string, language: string, html: string}>({
+    text: "", 
+    language: "",
+    html: ""
+  });
   
   // Get a random quote on component mount
   useEffect(() => {
@@ -56,9 +60,10 @@ const SplashScreen = ({ onComplete }: { onComplete: () => void }) => {
         
         {/* Quote */}
         <div className="mb-12 animate-fade-in">
-          <h2 className="text-4xl md:text-5xl font-bold leading-tight mb-8 text-[#9b87f5]">
-            {quote.text}
-          </h2>
+          <h2 
+            className="text-4xl md:text-5xl font-bold leading-tight mb-8 text-[#9b87f5]"
+            dangerouslySetInnerHTML={{ __html: quote.html }}
+          />
         </div>
         
         {/* Animated loading indicator */}
