@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -239,7 +240,10 @@ export const CreditIssuesQuestion = ({
                 }
                 className="h-5 w-5 bg-[#121826] border-purple-600 data-[state=checked]:bg-purple-600 data-[state=checked]:text-white"
               />
-              <Label htmlFor={`${issueType}-check`} className="font-medium text-base cursor-pointer text-black">
+              <Label 
+                htmlFor={`${issueType}-check`} 
+                className="font-medium text-base cursor-pointer text-white"
+              >
                 {label}
               </Label>
             </div>
