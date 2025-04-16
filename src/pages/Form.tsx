@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useLanguage } from "@/contexts/LanguageContext";
@@ -208,12 +207,12 @@ const Form = () => {
   };
 
   return (
-    <div className="space-y-8 animate-fade-in">
+    <div className="space-y-8 animate-fade-in bg-background">
       <div>
-        <h1 className="text-4xl font-bold mb-2 text-foreground dark:text-white">
+        <h1 className="text-4xl font-bold mb-2 text-foreground">
           {t('form.title')}
         </h1>
-        <p className="text-xl text-muted-foreground dark:text-gray-300">
+        <p className="text-xl text-muted-foreground">
           {t('form.subtitle')}
         </p>
       </div>
@@ -307,4 +306,3 @@ const Form = () => {
 };
 
 export default Form;
-
