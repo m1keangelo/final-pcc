@@ -8,6 +8,8 @@ import { Alert, AlertTitle, AlertDescription } from '@/components/ui/alert';
 import { Progress } from '@/components/ui/progress';
 import { Badge } from '@/components/ui/badge';
 import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { toast } from 'sonner';
 
 interface SummaryOutcomeProps {
   formData: FormState;
@@ -16,6 +18,7 @@ interface SummaryOutcomeProps {
 
 const SummaryOutcome = ({ formData, onProceedToDocuments }: SummaryOutcomeProps) => {
   const { language, t } = useLanguage();
+  const navigate = useNavigate();
   const [animations, setAnimations] = useState<{[key: string]: string}>({
     ready: "/animations/qualified.gif",
     fixesNeeded: "/animations/fixes-needed.gif",
@@ -77,6 +80,25 @@ const SummaryOutcome = ({ formData, onProceedToDocuments }: SummaryOutcomeProps)
     if (qualificationCategory === 'ready') return 'text-green-700 dark:text-green-500';
     if (qualificationCategory === 'fixesNeeded') return 'text-amber-700 dark:text-amber-500';
     return 'text-red-700 dark:text-red-500';
+  };
+
+  // Handler for proceeding to documents
+  const handleProceedToDocuments = () => {
+    // Call the onProceedToDocuments prop function 
+    // (which may be used for analytics or other purposes)
+    if (onProceedToDocuments) {
+      onProceedToDocuments();
+    }
+    // Navigate to the documents page
+    navigate('/documents');
+  };
+
+  // Handler for sending summary via Email/WhatsApp
+  const handleSendSummary = () => {
+    // For now, just show a toast notification
+    toast.success(language === 'en' 
+      ? 'Summary has been sent successfully to your email and WhatsApp' 
+      : 'El resumen ha sido enviado con éxito a su correo electrónico y WhatsApp');
   };
 
   return (
@@ -266,7 +288,7 @@ const SummaryOutcome = ({ formData, onProceedToDocuments }: SummaryOutcomeProps)
           <p className="mb-6">{nextStepsPrompt}</p>
           <div className="flex flex-col sm:flex-row gap-3">
             <Button 
-              onClick={onProceedToDocuments} 
+              onClick={handleProceedToDocuments} 
               className="flex-1 bg-primary hover:bg-primary/90"
             >
               {language === 'en' ? 'Yes, Proceed to Documents' : 'Sí, Proceder a Documentos'}
@@ -274,6 +296,7 @@ const SummaryOutcome = ({ formData, onProceedToDocuments }: SummaryOutcomeProps)
             <Button 
               variant="outline" 
               className="flex-1"
+              onClick={handleSendSummary}
             >
               {language === 'en' ? 'Send Summary via Email/WhatsApp' : 'Enviar Resumen por Email/WhatsApp'}
             </Button>

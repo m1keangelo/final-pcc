@@ -145,11 +145,9 @@ const Form = () => {
       'other': 'W-2',
     };
     
-    // Format credit issues details
     const creditIssueComments = [];
     const hasCreditIssues = data.hasCreditIssues === true;
     
-    // Initialize the creditIssueDetails object with the correct TypeScript interface structure
     const creditIssueDetails: {
       hasCreditIssues: boolean;
       bankruptcy?: boolean;
@@ -163,7 +161,6 @@ const Form = () => {
     };
     
     if (hasCreditIssues && data.creditIssues) {
-      // Add the specific credit issue flags if they exist
       if (data.creditIssues.bankruptcy) creditIssueDetails.bankruptcy = true;
       if (data.creditIssues.foreclosure) creditIssueDetails.foreclosure = true;
       if (data.creditIssues.collections) creditIssueDetails.collections = true;
@@ -216,7 +213,7 @@ const Form = () => {
       incomeMonthly,
       creditCategory: creditCategoryMap[data.creditCategory || 'unknown'],
       creditScoreApprox: data.creditScore || undefined,
-      creditIssues: creditIssueDetails,  // This will always have the hasCreditIssues property
+      creditIssues: creditIssueDetails,
       downPaymentSaved: !!data.downPaymentSaved,
       downPaymentAmount: data.downPaymentAmount || undefined,
       assistanceInterested: data.assistanceOpen !== null ? !!data.assistanceOpen : undefined,
@@ -224,7 +221,7 @@ const Form = () => {
       timeline: data.timeline || undefined,
       firstTimeBuyer: data.firstTimeBuyer !== null ? data.firstTimeBuyer : undefined,
       legalStatus,
-      qualified: true, // This will be determined by business logic in the DataContext
+      qualified: true,
       consentGiven: true,
       comments: combinedComments,
     };
@@ -248,6 +245,10 @@ const Form = () => {
     toast.success(language === 'en' ? 
       'Your information has been submitted successfully!' : 
       '¡Su información ha sido enviada con éxito!');
+  };
+
+  const handleProceedToDocuments = () => {
+    navigate('/documents');
   };
 
   return (
@@ -350,7 +351,7 @@ const Form = () => {
         ) : formStage === 'summary' ? (
           <SummaryOutcome 
             formData={formData}
-            onProceedToDocuments={() => console.log('Proceeding to documents')} 
+            onProceedToDocuments={handleProceedToDocuments} 
           />
         ) : null}
       </div>

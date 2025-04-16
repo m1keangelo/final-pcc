@@ -12,6 +12,7 @@ import ProtectedRoute from "./components/ProtectedRoute";
 import Dashboard from "./pages/Dashboard";
 import Login from "./pages/Login";
 import Form from "./pages/Form";
+import DocumentSelection from "./pages/DocumentSelection";
 import Clients from "./pages/Clients";
 import Analytics from "./pages/Analytics";
 import AdminDashboard from "./pages/AdminDashboard";
@@ -33,6 +34,7 @@ const App = () => (
                 
                 <Route path="/" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
                 <Route path="/form" element={<ProtectedRoute><Form /></ProtectedRoute>} />
+                <Route path="/documents" element={<ProtectedRoute><DocumentSelection /></ProtectedRoute>} />
                 <Route path="/clients" element={<ProtectedRoute><Clients /></ProtectedRoute>} />
                 <Route path="/analytics" element={<ProtectedRoute><Analytics /></ProtectedRoute>} />
                 <Route path="/admin" element={
