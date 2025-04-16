@@ -37,6 +37,7 @@ const FormQuestions = ({
     timeline: 'exploring',
     firstTimeBuyer: null,
     employmentType: null,
+    otherEmploymentDetails: "",
     selfEmployedYears: null,
     income: null,
     incomeType: 'annual',
@@ -105,7 +106,9 @@ const FormQuestions = ({
         return (
           <EmploymentQuestion
             value={formData.employmentType}
+            otherEmploymentDetails={formData.otherEmploymentDetails}
             onChange={(value) => updateFormData('employmentType', value)}
+            onChangeOtherDetails={(value) => updateFormData('otherEmploymentDetails', value)}
             onNext={handleNext}
             onBack={handleBack}
             currentStep={currentStep}

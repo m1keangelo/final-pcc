@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useLanguage } from "@/contexts/LanguageContext";
@@ -27,6 +26,7 @@ const Form = () => {
     timeline: 'exploring',
     firstTimeBuyer: null,
     employmentType: null,
+    otherEmploymentDetails: "",
     selfEmployedYears: null,
     income: null,
     incomeType: 'annual',
@@ -47,20 +47,17 @@ const Form = () => {
     comments: ""
   });
 
-  // Format phone number automatically when it changes
   useEffect(() => {
     if (formData.phone) {
       const cleaned = formData.phone.replace(/\D/g, '');
       const formatted = formatPhoneNumber(cleaned);
       
-      // Only update if the formatted value is different to avoid loops
       if (formatted !== formData.phone) {
         setFormData(prev => ({ ...prev, phone: formatted }));
       }
     }
   }, [formData.phone]);
 
-  // List of agents - can be moved to a separate file or CMS integration later
   const agents = [
     { id: "soreal", name: "SoReal Estate" },
     { id: "tito", name: "Tito Baptista" },
@@ -70,13 +67,9 @@ const Form = () => {
   ];
 
   const formatPhoneNumber = (value: string) => {
-    // Remove all non-digit characters
     const cleaned = value.replace(/\D/g, '');
-    
-    // Limit to 10 digits
     const truncated = cleaned.slice(0, 10);
     
-    // Format the number
     if (truncated.length <= 3) {
       return truncated;
     } else if (truncated.length <= 6) {
@@ -88,7 +81,6 @@ const Form = () => {
 
   const handleInitialInfoChange = (field: keyof FormState, value: string) => {
     if (field === 'phone') {
-      // For phone fields, strip non-digit characters to handle raw input
       const onlyDigits = value.replace(/\D/g, '');
       setFormData({
         ...formData,
@@ -103,7 +95,6 @@ const Form = () => {
   };
 
   const handleNextFromInitialInfo = () => {
-    // Check if all required fields are filled
     if (formData.name && formData.phone && formData.email) {
       setFormStage('questions');
       toast.success(language === 'en' ? 
@@ -122,14 +113,13 @@ const Form = () => {
       name: formData.name,
       phone: formData.phone,
       email: formData.email,
-      agent: selectedAgent // Add the selected agent to the form data
+      agent: selectedAgent
     };
     
     setFormData(finalData);
     setFormStage('summary');
     
-    // Here, we could save the data to our database
-    // addClient({ ...transformFormData(finalData) });
+    addClient({ ...transformFormData(finalData) });
   };
 
   return (

@@ -1,4 +1,3 @@
-
 import React, { createContext, useContext, useState, ReactNode, useEffect } from 'react';
 
 // Language type
@@ -65,13 +64,14 @@ const translations = {
     'q.firsttime.help': 'Great! There are special programs for first-time buyers that help with low down payments.',
     
     // Employment Questions
-    'q1.title': 'Employment Status',
-    'q1.question': 'What is your current employment situation?',
-    'q1.option1': 'Employed (W-2)',
-    'q1.option2': 'Self-employed (1099)',
-    'q1.option3': 'Retired',
-    'q1.option4': 'Unemployed/No income',
-    'q1.option5': 'Other',
+    'q.employment.title': 'Employment Status',
+    'q.employment.question': 'What is your current employment situation?',
+    'q.employment.w2': 'W-2 Employee',
+    'q.employment.1099': '1099 Contractor',
+    'q.employment.retired': 'Retired',
+    'q.employment.unemployed': 'Unemployed',
+    'q.employment.other': 'Other',
+    'q.employment.otherPlaceholder': 'Please specify your employment situation',
     
     // Self-Employment Years
     'q.selfyears.title': 'Self-Employment History',
@@ -206,13 +206,14 @@ const translations = {
     'q.firsttime.help': '¡Genial! Hay programas para compradores primerizos que ayudan con un pago inicial bajo.',
     
     // Employment
-    'q1.title': 'Tipo de Empleo',
-    'q1.question': '¿Cuál es su situación laboral actual?',
-    'q1.option1': 'Empleado (W-2)',
-    'q1.option2': 'Trabajador por cuenta propia (1099)',
-    'q1.option3': 'Jubilado',
-    'q1.option4': 'Desempleado/Sin ingresos',
-    'q1.option5': 'Otro',
+    'q.employment.title': 'Tipo de Empleo',
+    'q.employment.question': '¿Cuál es su situación laboral actual?',
+    'q.employment.w2': 'Empleado W-2',
+    'q.employment.1099': 'Contratista 1099',
+    'q.employment.retired': 'Jubilado',
+    'q.employment.unemployed': 'Desempleado',
+    'q.employment.other': 'Otro',
+    'q.employment.otherPlaceholder': 'Por favor, especifique su situación laboral',
     
     // Self-Employment Years
     'q.selfyears.title': 'Historial de Autoempleo',
