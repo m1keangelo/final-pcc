@@ -62,6 +62,10 @@ const translations: Record<string, Record<Language, string>> = {
     en: 'Invalid username or password',
     es: 'Nombre de usuario o contraseña inválidos'
   },
+  'login.forgotPassword': {
+    en: 'Forgot Password',
+    es: 'Olvidé mi Contraseña'
+  },
   'admin.users': {
     en: 'Users',
     es: 'Usuarios'
