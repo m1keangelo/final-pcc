@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { FormState } from "@/types/form";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { ArrowLeft } from "lucide-react";
-import QuestionRouter from "./QuestionRouter";
+import QuestionRouter from "./questionRouter/QuestionRouter";
 import { getNextStep, getPreviousStep, getTotalSteps } from "@/utils/formNavigationUtils";
 
 const FormQuestions = ({ 
