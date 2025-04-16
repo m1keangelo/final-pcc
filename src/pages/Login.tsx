@@ -1,8 +1,8 @@
 
-import { LoginForm } from "@/components/login/LoginForm";
-import { BrandImagery } from "@/components/login/BrandImagery";
-import { MatrixBackground } from "@/components/login/MatrixBackground";
-import { SplashScreen } from "@/components/login/SplashScreen";
+import SplashScreen from "@/components/login/SplashScreen";
+import LoginForm from "@/components/login/LoginForm";
+import BrandImagery from "@/components/login/BrandImagery";
+import MatrixBackground from "@/components/login/MatrixBackground";
 import { LanguageProvider } from "@/contexts/LanguageContext";
 import { useAuth } from "@/contexts/AuthContext";
 

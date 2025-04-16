@@ -1,4 +1,6 @@
 
+import React from 'react';
+
 const MatrixBackground = () => {
   return (
     <div className="absolute inset-0 overflow-hidden opacity-100">
