@@ -1,11 +1,10 @@
-
 import React, { useState } from "react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { toast } from "@/hooks/use-toast";
-import { ImageUpload } from "lucide-react";
+import { ImagePlus } from "lucide-react";
 
 interface BugReportDialogProps {
   isOpen: boolean;
@@ -103,7 +102,7 @@ const BugReportDialog = ({ isOpen, onClose }: BugReportDialogProps) => {
                   className="absolute inset-0 opacity-0 cursor-pointer"
                   onChange={handleImageChange}
                 />
-                <ImageUpload className="mr-2 h-4 w-4" />
+                <ImagePlus className="mr-2 h-4 w-4" />
                 {t('bugReport.uploadImage')}
               </Button>
               {selectedImage && (
