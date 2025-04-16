@@ -1,8 +1,7 @@
 
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
+import { Slider } from "@/components/ui/slider";
 import QuestionContainer from "@/components/form/QuestionContainer";
 import { FormState } from "@/types/form";
 import { useLanguage } from "@/contexts/LanguageContext";
@@ -24,18 +23,13 @@ export const SelfEmployedYearsQuestion = ({
   totalSteps: number;
 }) => {
   const { t } = useLanguage();
-  const [inputValue, setInputValue] = useState(value?.toString() || "");
+  const [sliderValue, setSliderValue] = useState(value || 1);
   
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const val = e.target.value;
-    setInputValue(val);
-    
-    const numVal = parseFloat(val);
-    if (!isNaN(numVal)) {
-      onChange(numVal);
-    } else {
-      onChange(null);
-    }
+  // Handle slider change
+  const handleSliderChange = (val: number[]) => {
+    const years = val[0];
+    setSliderValue(years);
+    onChange(years);
   };
   
   return (
@@ -47,21 +41,32 @@ export const SelfEmployedYearsQuestion = ({
       totalSteps={totalSteps}
     >
       <div className="space-y-4">
-        <div>
-          <Label htmlFor="selfEmployedYears">{t('q.selfyears.yearsLabel')}</Label>
-          <Input
-            id="selfEmployedYears"
-            type="number"
-            step="0.5"
-            min="0"
-            value={inputValue}
-            onChange={handleChange}
-            className="mt-1"
-            placeholder={t('q.selfyears.placeholder')}
-          />
+        <div className="mt-4 mb-8">
+          <div className="flex items-center justify-center mb-6">
+            <div className="flex items-center justify-center bg-muted/30 p-3 rounded-full h-16 w-40 border border-primary/20">
+              <span className="text-2xl font-semibold">
+                {sliderValue} {sliderValue === 1 ? t('q.selfyears.year') : t('q.selfyears.years')}
+              </span>
+            </div>
+          </div>
+          
+          <div className="pt-4">
+            <Slider
+              value={[sliderValue]}
+              min={1}
+              max={100}
+              step={1}
+              onValueChange={handleSliderChange}
+              className="my-6"
+            />
+            <div className="flex justify-between text-xs text-muted-foreground mt-2">
+              <span>1 {t('q.selfyears.year')}</span>
+              <span>100 {t('q.selfyears.years')}</span>
+            </div>
+          </div>
         </div>
         
-        {value !== null && value < 2 && (
+        {sliderValue < 2 && (
           <div className="text-sm text-amber-500 bg-amber-50 p-3 rounded-md border border-amber-200">
             {t('q.selfyears.warning')}
           </div>
@@ -77,7 +82,7 @@ export const SelfEmployedYearsQuestion = ({
           <ArrowLeft className="mr-2 h-4 w-4" />
           {t('form.previous')}
         </Button>
-        <Button onClick={onNext} disabled={value === null}>
+        <Button onClick={onNext}>
           {t('form.next')}
           <ArrowRight className="ml-2 h-4 w-4" />
         </Button>
