@@ -6,9 +6,6 @@ const BrandImagery = () => {
 
   return (
     <div className="w-full h-full flex items-center justify-center p-6 relative">
-      {/* Removed the brand logo/tagline overlay */}
-      
-      {/* Main Brand Image */}
       <img 
         src="/lovable-uploads/b9619f78-7281-46a1-93d2-c7c8123e5e56.png" 
         alt="Gallo Avión Cyberpunk" 
@@ -17,16 +14,8 @@ const BrandImagery = () => {
           filter: "drop-shadow(0 0 20px rgba(105, 13, 172, 0.4))"
         }}
       />
-      
-      {/* Restored Decorative Elements */}
-      <div className="absolute bottom-10 right-10 md:bottom-16 md:right-16 text-right">
-        <p className="text-sm md:text-base text-[#9b87f5] font-medium">
-          Fuck Mediocrity, Unleashing Bold Marketing Power!
-        </p>
-      </div>
     </div>
   );
 };
 
 export default BrandImagery;
-
