@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -76,12 +77,18 @@ export const CreditIssuesQuestion = ({
     updatedIssues[issueType] = isChecked;
     
     if (isChecked) {
+      // Create a key for the details object
       const detailsKey = `${issueType}Details` as keyof typeof updatedIssues;
-      updatedIssues[detailsKey] = {
+      
+      // Create a properly typed details object
+      const details: CreditIssueDetails = {
         amount: null,
         timeframe: null,
         inCollection: null
       };
+      
+      // Assign it to the updated issues object using type assertion
+      updatedIssues[detailsKey] = details as any;
     }
     
     onCreditIssuesChange(updatedIssues);
@@ -94,22 +101,30 @@ export const CreditIssuesQuestion = ({
   ) => {
     const detailsKey = `${issueType}Details` as keyof typeof creditIssues;
     
+    // Get the current details or create a default if it doesn't exist
     const currentDetails = creditIssues[detailsKey] || { amount: null, timeframe: null, inCollection: null };
     
     const updatedIssues = { ...creditIssues };
     
+    // We need to handle the type compatibility issue
     if (typeof currentDetails === 'object' && currentDetails !== null) {
-      updatedIssues[detailsKey] = {
+      const updatedDetails = {
         ...currentDetails,
         [field]: value
       };
+      
+      // Use type assertion to avoid TypeScript errors
+      updatedIssues[detailsKey] = updatedDetails as any;
     } else {
-      updatedIssues[detailsKey] = {
+      const newDetails = {
         amount: null,
         timeframe: null,
         inCollection: null,
         [field]: value
       };
+      
+      // Use type assertion to avoid TypeScript errors
+      updatedIssues[detailsKey] = newDetails as any;
     }
     
     onCreditIssuesChange(updatedIssues);
