@@ -589,6 +589,10 @@ const translations: Record<string, Record<Language, string>> = {
   'help.linkCopied': {
     en: 'Link Copied',
     es: 'Enlace Copiado'
+  },
+  'login.button': {
+    en: 'Login',
+    es: 'Iniciar'
   }
 };
 
