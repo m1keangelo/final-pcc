@@ -1,11 +1,13 @@
 
-import React from "react";
+import React, { useState } from "react";
 import { NavLink } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { Button } from "@/components/ui/button";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import LanguageToggle from "./LanguageToggle";
+import BugReportDialog from "./BugReportDialog";
+import SuggestionDialog from "./SuggestionDialog";
 import { 
   User, 
   LogOut, 
@@ -23,7 +25,9 @@ import { SidebarMenu, SidebarMenuItem, SidebarMenuButton, SidebarSeparator } fro
 const Navigation = () => {
   const { user, logout } = useAuth();
   const { t } = useLanguage();
-
+  const [isBugReportOpen, setIsBugReportOpen] = useState(false);
+  const [isSuggestionOpen, setIsSuggestionOpen] = useState(false);
+  
   // Check if user is a super admin
   const isSuperAdmin = user?.username === "admin" || user?.email === "m1keangelo@icloud.com";
   
@@ -44,56 +48,73 @@ const Navigation = () => {
             <NavItem href="/admin" icon={<Settings size={22} />} label="Admin" aria-label="Admin" />
           )}
         </SidebarMenu>
-        
-        {/* Secondary navigation items with separator */}
-        <div className="mt-8">
-          <SidebarSeparator className="mb-4 opacity-50" />
-          <SidebarMenu>
-            <NavItem 
-              href="/report-bug" 
-              icon={<BugOff size={20} />} 
-              label={t('nav.reportBug')} 
-              aria-label={t('nav.reportBug')} 
-              secondary={true} 
-            />
-            <NavItem 
-              href="/suggestions" 
-              icon={<MessageSquarePlus size={20} />} 
-              label={t('nav.suggestions')} 
+      </div>
+      
+      <div className="mt-auto space-y-5">
+        {/* Feedback section */}
+        <div className="px-5 pt-5 border-t border-[#7a2dac]">
+          <div className="flex items-center justify-center space-x-2 mb-5">
+            <button 
+              className="text-gray-400 hover:text-white hover:scale-110 transition-all duration-300 active:opacity-90"
+              onClick={() => setIsBugReportOpen(true)}
+              aria-label={t('nav.reportBug')}
+            >
+              {t('nav.reportBug')}
+            </button>
+            <div className="text-gray-500">|</div>
+            <button 
+              className="text-gray-400 hover:text-white hover:scale-110 transition-all duration-300 active:opacity-90"
+              onClick={() => setIsSuggestionOpen(true)}
               aria-label={t('nav.suggestions')}
-              secondary={true} 
-            />
-          </SidebarMenu>
+            >
+              {t('nav.suggestions')}
+            </button>
+          </div>
+          
+          {/* Centered language toggle */}
+          <div className="flex justify-center">
+            <LanguageToggle />
+          </div>
+        </div>
+        
+        {/* User info and logout */}
+        <div className="space-y-3 px-5">
+          <TooltipProvider>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Button
+                  variant="ghost"
+                  className="w-full justify-start text-white hover:bg-[#7a2dac] hover:text-[#E0E0E0] transition-all duration-300 hover:shadow-md active:bg-[#5e0f99] active:scale-98 h-12"
+                  onClick={logout}
+                  aria-label={t('nav.logout')}
+                >
+                  <LogOut className="mr-3 h-6 w-6 text-[#9b87f5]" />
+                  <span className="text-[16px] font-medium">{t('nav.logout')}</span>
+                </Button>
+              </TooltipTrigger>
+              <TooltipContent side="right">
+                <p>{t('nav.logout')}</p>
+              </TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
+          
+          <div className="flex items-center gap-3 px-3 py-3 border-t border-[#7a2dac] text-sm text-white/80">
+            <User size={18} className="text-[#9b87f5]" />
+            <span className="font-medium text-[16px]">{user?.name}</span>
+          </div>
         </div>
       </div>
       
-      <div className="space-y-5 px-5">
-        <LanguageToggle />
-        
-        <TooltipProvider>
-          <Tooltip>
-            <TooltipTrigger asChild>
-              <Button
-                variant="ghost"
-                className="w-full justify-start text-white hover:bg-[#7a2dac] hover:text-[#E0E0E0] transition-all duration-300 hover:shadow-md active:bg-[#5e0f99] active:scale-98 h-12"
-                onClick={logout}
-                aria-label={t('nav.logout')}
-              >
-                <LogOut className="mr-3 h-6 w-6 text-[#9b87f5]" />
-                <span className="text-[16px] font-medium">{t('nav.logout')}</span>
-              </Button>
-            </TooltipTrigger>
-            <TooltipContent side="right">
-              <p>{t('nav.logout')}</p>
-            </TooltipContent>
-          </Tooltip>
-        </TooltipProvider>
-        
-        <div className="flex items-center gap-3 px-3 py-3 mt-2 border-t border-[#7a2dac] text-sm text-white/80">
-          <User size={18} className="text-[#9b87f5]" />
-          <span className="font-medium text-[16px]">{user?.name}</span>
-        </div>
-      </div>
+      {/* Dialog components */}
+      <BugReportDialog 
+        isOpen={isBugReportOpen} 
+        onClose={() => setIsBugReportOpen(false)} 
+      />
+      
+      <SuggestionDialog 
+        isOpen={isSuggestionOpen} 
+        onClose={() => setIsSuggestionOpen(false)} 
+      />
     </nav>
   );
 };
