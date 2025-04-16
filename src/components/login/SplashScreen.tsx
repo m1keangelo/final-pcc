@@ -77,7 +77,7 @@ const SplashScreen = ({ onComplete }: { onComplete: () => void }) => {
           <img 
             src="/lovable-uploads/b9619f78-7281-46a1-93d2-c7c8123e5e56.png" 
             alt="Gallo Avión Logo" 
-            className="w-32 h-32 md:w-40 md:h-40 object-contain animate-pulse"
+            className="w-24 h-24 md:w-28 md:h-28 object-contain animate-pulse"
             style={{
               filter: "drop-shadow(0 0 20px rgba(105, 13, 172, 0.6))"
             }}
@@ -143,4 +143,3 @@ const SplashScreen = ({ onComplete }: { onComplete: () => void }) => {
 };
 
 export default SplashScreen;
-

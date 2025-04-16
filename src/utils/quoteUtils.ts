@@ -1,8 +1,7 @@
-
 interface Quote {
   en: string;
   es: string;
-  highlightWords?: {
+  badWords?: {
     en: string[];
     es: string[];
   };
@@ -13,159 +12,159 @@ const quotes: Quote[] = [
   {
     en: "Don't chase money. Control the fuckin' board — the money's just a side effect.",
     es: "No corras detrás del billete. Controlá el puto juego — la plata llega sola.",
-    highlightWords: {
-      en: ["Control", "board"],
-      es: ["Controlá", "juego"]
+    badWords: {
+      en: ["fuckin'"],
+      es: ["puto"]
     }
   },
   {
     en: "Revenge is for hotheads. Strategy is how real killers move.",
     es: "La venganza es pa' calentones. La estrategia es de los que saben matar en frío.",
-    highlightWords: {
-      en: ["Strategy", "killers"],
-      es: ["estrategia", "matar"]
+    badWords: {
+      en: ["killers"],
+      es: ["matar"]
     }
   },
   {
     en: "Shut your mouth. Power don't brag, it builds.",
     es: "Cerrá la boca. El poder no presume, construye.",
-    highlightWords: {
-      en: ["Power", "builds"],
-      es: ["poder", "construye"]
+    badWords: {
+      en: [],
+      es: []
     }
   },
   {
     en: "Your value goes up the second you stop being everyone's bitch.",
     es: "Tu valor sube en cuanto dejas de ser el que todos usan.",
-    highlightWords: {
-      en: ["value", "stop"],
-      es: ["valor", "dejas"]
+    badWords: {
+      en: ["bitch"],
+      es: []
     }
   },
   {
     en: "The calmest motherfucker in the room is usually the one who buries bodies.",
     es: "El más tranquilo del cuarto es el que termina enterrando a todos.",
-    highlightWords: {
-      en: ["calmest", "buries"],
-      es: ["tranquilo", "enterrando"]
+    badWords: {
+      en: ["motherfucker"],
+      es: []
     }
   },
   {
     en: "Don't explain shit. Let your results slap 'em in the face.",
     es: "No expliques ni mierda. Que los resultados les revienten la cara.",
-    highlightWords: {
-      en: ["results", "slap"],
-      es: ["resultados", "revienten"]
+    badWords: {
+      en: ["shit"],
+      es: ["mierda"]
     }
   },
   {
     en: "Fear is for the broke. Stay ice cold or stay behind.",
     es: "El miedo es pa' los quebrados. Mente fría o te quedás atrás.",
-    highlightWords: {
-      en: ["Fear", "broke", "ice cold"],
-      es: ["miedo", "quebrados", "fría"]
+    badWords: {
+      en: [],
+      es: []
     }
   },
   {
     en: "Feelings? Fuck feelings. They'll cost you everything.",
     es: "¿Sentimientos? Que se jodan. Te cuestan todo.",
-    highlightWords: {
-      en: ["Fuck feelings", "cost"],
-      es: ["jodan", "cuestan"]
+    badWords: {
+      en: ["Fuck"],
+      es: ["jodan"]
     }
   },
   {
     en: "Protect your energy like it's your last damn bullet.",
     es: "Cuidá tu energía como si fuera tu última bala.",
-    highlightWords: {
-      en: ["Protect", "energy", "bullet"],
-      es: ["Cuidá", "energía", "bala"]
+    badWords: {
+      en: ["damn"],
+      es: []
     }
   },
   {
     en: "Loyalty ain't begged for — you earn it or get the fuck out.",
     es: "La lealtad no se mendiga. Se gana, o te largas.",
-    highlightWords: {
-      en: ["Loyalty", "earn", "fuck out"],
-      es: ["lealtad", "gana", "largas"]
+    badWords: {
+      en: ["fuck"],
+      es: []
     }
   },
   {
     en: "Let 'em talk. They're too stupid to see what you're building.",
     es: "Que hablen. No les da la cabeza pa' entender lo que estás montando.",
-    highlightWords: {
-      en: ["talk", "building"],
-      es: ["hablen", "montando"]
+    badWords: {
+      en: ["stupid"],
+      es: []
     }
   },
   {
     en: "The elephant doesn't talk. It just walks — and the earth shakes.",
     es: "El elefante no habla. Camina — y el suelo tiembla.",
-    highlightWords: {
-      en: ["walks", "earth shakes"],
-      es: ["Camina", "suelo tiembla"]
+    badWords: {
+      en: [],
+      es: []
     }
   },
   {
     en: "The man who fears nothing has already burned it all down once.",
     es: "El que no teme perder… ya lo perdió todo y volvió más cabrón.",
-    highlightWords: {
-      en: ["fears nothing", "burned"],
-      es: ["teme perder", "perdió"]
+    badWords: {
+      en: [],
+      es: ["cabrón"]
     }
   },
   {
     en: "Control your mind or it'll make you its bitch.",
     es: "Controla tu mente o vas a ser su esclavo.",
-    highlightWords: {
-      en: ["Control", "mind"],
-      es: ["Controla", "mente"]
+    badWords: {
+      en: ["bitch"],
+      es: []
     }
   },
   {
     en: "Detach from this weak-ass world. Real power don't cling to shit.",
     es: "Desapégate de este mundo de flojos. El poder real no se aferra a nada.",
-    highlightWords: {
-      en: ["Detach", "power"],
-      es: ["Desapégate", "poder"]
+    badWords: {
+      en: ["ass", "shit"],
+      es: []
     }
   },
   {
     en: "You can't kill what already embraced darkness.",
     es: "No podés matar a quien ya abrazó su oscuridad.",
-    highlightWords: {
-      en: ["kill", "darkness"],
-      es: ["matar", "oscuridad"]
+    badWords: {
+      en: ["kill"],
+      es: ["matar"]
     }
   },
   {
     en: "Pain ain't punishment. It's tuition, motherfucker.",
     es: "El dolor no es castigo. Es el precio, y vos sos el alumno.",
-    highlightWords: {
-      en: ["Pain", "tuition"],
-      es: ["dolor", "precio"]
+    badWords: {
+      en: ["motherfucker"],
+      es: []
     }
   },
   {
     en: "Break a man. Watch him rebuild stronger than you'll ever be.",
     es: "Rompe a un verdadero hombre y vuelve hecho una bestia.",
-    highlightWords: {
-      en: ["Break", "rebuild stronger"],
-      es: ["Rompe", "vuelve"]
+    badWords: {
+      en: [],
+      es: []
     }
   },
   {
     en: "Stillness isn't weakness. It's the calm before you snap a neck.",
     es: "La quietud no es debilidad. Es la calma antes de romperle el cuello a alguien.",
-    highlightWords: {
-      en: ["Stillness", "snap a neck"],
-      es: ["quietud", "romperle el cuello"]
+    badWords: {
+      en: ["snap a neck"],
+      es: ["romperle el cuello"]
     }
   },
   {
     en: "The quiet guy already figured out how to end you.",
     es: "El callado ya decidió cómo borrarte del mapa.",
-    highlightWords: {
+    badWords: {
       en: ["end you"],
       es: ["borrarte"]
     }
@@ -173,15 +172,15 @@ const quotes: Quote[] = [
   {
     en: "The strongest ain't loud. They're busy building empires in the dark.",
     es: "El más duro no grita. Está levantando imperios en silencio.",
-    highlightWords: {
-      en: ["strongest", "building empires"],
-      es: ["duro", "levantando imperios"]
+    badWords: {
+      en: [],
+      es: []
     }
   },
   {
     en: "Discomfort's not your enemy. It's your f*ckin' trainer.",
     es: "La incomodidad no es tu enemiga. Es tu entrenador, gonorrea.",
-    highlightWords: {
+    badWords: {
       en: ["Discomfort", "trainer"],
       es: ["incomodidad", "entrenador"]
     }
@@ -189,7 +188,7 @@ const quotes: Quote[] = [
   {
     en: "Power moves in silence. Not in arguments.",
     es: "El poder se mueve en silencio, no en peleítas de barrio.",
-    highlightWords: {
+    badWords: {
       en: ["Power moves", "silence"],
       es: ["poder", "silencio"]
     }
@@ -197,7 +196,7 @@ const quotes: Quote[] = [
   {
     en: "They start respecting you the moment you stop giving a fuck.",
     es: "Empiezan a respetarte cuando te vale verga.",
-    highlightWords: {
+    badWords: {
       en: ["respecting", "stop giving a fuck"],
       es: ["respetarte", "vale verga"]
     }
@@ -205,7 +204,7 @@ const quotes: Quote[] = [
   {
     en: "No feelings. Just get the job done.",
     es: "Sin sentimientos. Solo haz lo que toca.",
-    highlightWords: {
+    badWords: {
       en: ["get the job done"],
       es: ["haz lo que toca"]
     }
@@ -213,7 +212,7 @@ const quotes: Quote[] = [
   {
     en: "Discipline means telling your wants to shut the fuck up.",
     es: "La disciplina es mandarle a callar la jeta a tus caprichos.",
-    highlightWords: {
+    badWords: {
       en: ["Discipline", "shut the fuck up"],
       es: ["disciplina", "callar la jeta"]
     }
@@ -221,7 +220,7 @@ const quotes: Quote[] = [
   {
     en: "You were born a wolf. They trained you to act like a poodle.",
     es: "Naciste lobo. Te entrenaron pa' portarte como perrito faldero.",
-    highlightWords: {
+    badWords: {
       en: ["wolf", "poodle"],
       es: ["lobo", "perrito faldero"]
     }
@@ -229,7 +228,7 @@ const quotes: Quote[] = [
   {
     en: "The cage door's open. You stay in 'cause you're soft.",
     es: "La jaula está abierta. Si no salís es porque sos blando.",
-    highlightWords: {
+    badWords: {
       en: ["cage door's open", "soft"],
       es: ["jaula", "blando"]
     }
@@ -237,7 +236,7 @@ const quotes: Quote[] = [
   {
     en: "You don't meet your real self 'til life kicks your ass.",
     es: "No conocés quién sos hasta que la vida te mete una patada en la jeta.",
-    highlightWords: {
+    badWords: {
       en: ["real self", "kicks your ass"],
       es: ["quién sos", "patada en la jeta"]
     }
@@ -245,7 +244,7 @@ const quotes: Quote[] = [
   {
     en: "Nobody's coming, bro. Get the fuck up and move.",
     es: "Nadie viene, marica. Parate y movete ya.",
-    highlightWords: {
+    badWords: {
       en: ["Get the fuck up", "move"],
       es: ["Parate", "movete"]
     }
@@ -253,7 +252,7 @@ const quotes: Quote[] = [
   {
     en: "Hitting rock bottom? Good. Now you got something solid to push off.",
     es: "¿Tocaste fondo? Bien. Ya tenés piso pa' impulsarte.",
-    highlightWords: {
+    badWords: {
       en: ["rock bottom", "push off"],
       es: ["Tocaste fondo", "impulsarte"]
     }
@@ -261,7 +260,7 @@ const quotes: Quote[] = [
   {
     en: "Get obsessed or stay broke and forgotten.",
     es: "Obsesionate o seguí pobre y olvidado.",
-    highlightWords: {
+    badWords: {
       en: ["obsessed", "forgotten"],
       es: ["Obsesionate", "olvidado"]
     }
@@ -269,7 +268,7 @@ const quotes: Quote[] = [
   {
     en: "'Someday' is for suckers. It's day one or never.",
     es: "Algún día es pa' los pendejos. Es hoy… o nunca.",
-    highlightWords: {
+    badWords: {
       en: ["day one", "never"],
       es: ["hoy", "nunca"]
     }
@@ -277,7 +276,7 @@ const quotes: Quote[] = [
   {
     en: "Lions don't argue with sheep. They eat 'em.",
     es: "Los leones no discuten con ovejas. Se las comen.",
-    highlightWords: {
+    badWords: {
       en: ["Lions", "eat"],
       es: ["leones", "comen"]
     }
@@ -285,7 +284,7 @@ const quotes: Quote[] = [
   {
     en: "Dreams don't work unless you do. So stop dreaming, start swinging.",
     es: "Los sueños no sirven si no currás. Así que dejá de soñar y metele duro.",
-    highlightWords: {
+    badWords: {
       en: ["work", "swinging"],
       es: ["currás", "metele duro"]
     }
@@ -293,7 +292,7 @@ const quotes: Quote[] = [
   {
     en: "Tough times build monsters. Soft times build bitches.",
     es: "Los tiempos duros hacen monstruos. Los blandos, solo llorones.",
-    highlightWords: {
+    badWords: {
       en: ["monsters", "bitches"],
       es: ["monstruos", "llorones"]
     }
@@ -301,7 +300,7 @@ const quotes: Quote[] = [
   {
     en: "If you had any clue how dangerous you could be, you'd stop doubting real quick.",
     es: "Si supieras lo letal que podés llegar a ser, dejás de dudar en seco.",
-    highlightWords: {
+    badWords: {
       en: ["dangerous", "stop doubting"],
       es: ["letal", "dejás de dudar"]
     }
@@ -389,16 +388,16 @@ const determineLanguageToUse = async (): Promise<string> => {
 };
 
 /**
- * Highlights specific words in a quote
+ * Highlights only bad words in a quote
  * @param text The quote text
- * @param wordsToHighlight Array of words to highlight
- * @returns Object with processed text and language
+ * @param badWords Array of bad words to highlight
+ * @returns String with HTML for highlighted bad words
  */
-const highlightWords = (text: string, wordsToHighlight: string[] = []): string => {
-  if (!wordsToHighlight.length) return text;
+const highlightBadWords = (text: string, badWords: string[] = []): string => {
+  if (!badWords.length) return text;
   
   let processedText = text;
-  wordsToHighlight.forEach(word => {
+  badWords.forEach(word => {
     // Case-insensitive replace with HTML span
     const regex = new RegExp(`(${word})`, 'gi');
     processedText = processedText.replace(regex, '<span class="text-white font-bold">$1</span>');
@@ -470,8 +469,8 @@ export const getQuoteByIndex = async (
   const languageToUse = forceLang || await determineLanguageToUse();
   
   const text = quote[languageToUse as keyof Quote] as string;
-  const wordsToHighlight = quote.highlightWords?.[languageToUse as 'en' | 'es'] || [];
-  const html = highlightWords(text, wordsToHighlight);
+  const badWordsToHighlight = quote.badWords?.[languageToUse as 'en' | 'es'] || [];
+  const html = highlightBadWords(text, badWordsToHighlight);
   
   return {
     text,
@@ -502,11 +501,11 @@ export const getRandomQuote = async (): Promise<{text: string, language: string,
   // Get the appropriate text for the language
   const text = quote[languageToUse as keyof Quote] as string;
   
-  // Get any highlight words if they exist
-  const wordsToHighlight = quote.highlightWords?.[languageToUse as 'en' | 'es'] || [];
+  // Get any bad words if they exist
+  const badWordsToHighlight = quote.badWords?.[languageToUse as 'en' | 'es'] || [];
   
-  // Create HTML version with highlighted words
-  const html = highlightWords(text, wordsToHighlight);
+  // Create HTML version with highlighted bad words
+  const html = highlightBadWords(text, badWordsToHighlight);
   
   console.log('Quote Debug:', {
     originalQuote: quote,
@@ -520,4 +519,3 @@ export const getRandomQuote = async (): Promise<{text: string, language: string,
     html
   };
 };
-
