@@ -1,6 +1,6 @@
+
 import { useEffect, useState } from "react";
-import { getRandomQuote } from "@/utils/quoteUtils";
-import { getBrowserLanguage } from "@/utils/quoteUtils";
+import { getRandomQuote, getBrowserLanguage, forceLanguageForTesting } from "@/utils/quoteUtils";
 
 const SplashScreen = ({ onComplete }: { onComplete: () => void }) => {
   const [fadeOut, setFadeOut] = useState(false);
@@ -13,22 +13,41 @@ const SplashScreen = ({ onComplete }: { onComplete: () => void }) => {
   const [debugInfo, setDebugInfo] = useState<{
     browserLanguage: string;
     quoteLanguage: string;
+    forcedLanguage: string | null;
   }>({
     browserLanguage: '',
-    quoteLanguage: ''
+    quoteLanguage: '',
+    forcedLanguage: null
   });
   
-  useEffect(() => {
-    const fetchQuote = async () => {
-      const randomQuote = await getRandomQuote();
-      setQuote(randomQuote);
-      
-      setDebugInfo({
-        browserLanguage: getBrowserLanguage(),
-        quoteLanguage: randomQuote.language
-      });
-    };
+  // For testing: This button will only show in development mode
+  const forceSpanish = () => {
+    forceLanguageForTesting('es');
+    fetchQuote();
+  };
+  
+  const forceEnglish = () => {
+    forceLanguageForTesting('en');
+    fetchQuote();
+  };
+  
+  const resetLanguage = () => {
+    forceLanguageForTesting(null);
+    fetchQuote();
+  };
+  
+  const fetchQuote = async () => {
+    const randomQuote = await getRandomQuote();
+    setQuote(randomQuote);
     
+    setDebugInfo({
+      browserLanguage: getBrowserLanguage(),
+      quoteLanguage: randomQuote.language,
+      forcedLanguage: null // Will be updated in useEffect if set
+    });
+  };
+  
+  useEffect(() => {
     fetchQuote();
   }, []);
   
@@ -91,9 +110,32 @@ const SplashScreen = ({ onComplete }: { onComplete: () => void }) => {
       `}</style>
       
       {process.env.NODE_ENV === 'development' && (
-        <div className="absolute bottom-4 left-4 text-white bg-gray-800 p-2 rounded">
+        <div className="absolute bottom-4 left-4 text-white bg-gray-800/90 p-3 rounded shadow-lg">
+          <p className="font-bold mb-2">Quote Debug Info:</p>
           <p>Browser Language: {debugInfo.browserLanguage}</p>
-          <p>Quote Language: {debugInfo.quoteLanguage}</p>
+          <p>Quote Language: {debugInfo.quoteLanguage || 'Loading...'}</p>
+          <p>Language Class: {quote.language === 'es' ? '🇪🇸 Spanish' : '🇺🇸 English'}</p>
+          
+          <div className="mt-4 flex gap-2">
+            <button 
+              onClick={forceSpanish}
+              className="px-3 py-1 bg-blue-600 text-white rounded hover:bg-blue-700"
+            >
+              🇪🇸 Test Spanish
+            </button>
+            <button 
+              onClick={forceEnglish}
+              className="px-3 py-1 bg-red-600 text-white rounded hover:bg-red-700"
+            >
+              🇺🇸 Test English
+            </button>
+            <button 
+              onClick={resetLanguage}
+              className="px-3 py-1 bg-gray-600 text-white rounded hover:bg-gray-700"
+            >
+              🔄 Reset
+            </button>
+          </div>
         </div>
       )}
     </div>
@@ -101,3 +143,4 @@ const SplashScreen = ({ onComplete }: { onComplete: () => void }) => {
 };
 
 export default SplashScreen;
+

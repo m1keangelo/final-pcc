@@ -1,3 +1,4 @@
+
 interface Quote {
   en: string;
   es: string;
@@ -339,11 +340,29 @@ export const getBrowserLanguage = (): string => {
   return language.split('-')[0].toLowerCase();
 };
 
+// For testing: override language detection behavior
+let forceLanguage: string | null = null;
+
+/**
+ * Forces a specific language for testing purposes
+ * @param lang Language code to force ('en', 'es', or null to reset)
+ */
+export const forceLanguageForTesting = (lang: 'en' | 'es' | null): void => {
+  console.log(`🧪 Testing override: forcing language to ${lang || 'RESET'}`);
+  forceLanguage = lang;
+};
+
 /**
  * Determines which language to use based on location and browser settings
  * @returns Promise<string> - 'en' or 'es'
  */
 const determineLanguageToUse = async (): Promise<string> => {
+  // If we have a forced language for testing, use that
+  if (forceLanguage) {
+    console.log(`🧪 Using forced language: ${forceLanguage}`);
+    return forceLanguage;
+  }
+  
   const browserLanguage = getBrowserLanguage();
   const inLatinAmerica = await isInLatinAmerica();
   
@@ -389,6 +408,79 @@ const highlightWords = (text: string, wordsToHighlight: string[] = []): string =
 };
 
 /**
+ * Validates that a specific quote has both English and Spanish versions
+ * @param quoteIndex Index of the quote in the quotes array
+ * @returns Boolean indicating whether the quote is valid
+ */
+export const validateQuote = (quoteIndex: number): boolean => {
+  if (quoteIndex < 0 || quoteIndex >= quotes.length) {
+    console.error(`❌ Quote validation failed: Index ${quoteIndex} out of bounds`);
+    return false;
+  }
+  
+  const quote = quotes[quoteIndex];
+  const isValid = Boolean(quote.en && quote.es);
+  
+  console.group(`Quote #${quoteIndex} Validation`);
+  console.log('English version:', quote.en ? '✅ Present' : '❌ Missing');
+  console.log('Spanish version:', quote.es ? '✅ Present' : '❌ Missing');
+  console.log('Overall validity:', isValid ? '✅ Valid' : '❌ Invalid');
+  console.groupEnd();
+  
+  return isValid;
+};
+
+/**
+ * Validates all quotes to ensure they have both English and Spanish versions
+ * @returns Number of invalid quotes found
+ */
+export const validateAllQuotes = (): number => {
+  console.group('🔍 Validating All Quotes');
+  
+  let invalidCount = 0;
+  quotes.forEach((quote, index) => {
+    if (!quote.en || !quote.es) {
+      console.error(`❌ Quote #${index} is missing translation`);
+      invalidCount++;
+    }
+  });
+  
+  console.log(`📊 Validation complete: ${quotes.length - invalidCount}/${quotes.length} quotes valid`);
+  console.groupEnd();
+  
+  return invalidCount;
+};
+
+/**
+ * Gets a specific quote by index in the appropriate language
+ * Useful for testing specific quotes
+ * @param index Index of the quote to get
+ * @param forceLang Optional language override
+ * @returns Promise<{text: string, language: string, html: string}>
+ */
+export const getQuoteByIndex = async (
+  index: number, 
+  forceLang?: 'en' | 'es'
+): Promise<{text: string, language: string, html: string}> => {
+  if (index < 0 || index >= quotes.length) {
+    throw new Error(`Quote index ${index} out of bounds`);
+  }
+  
+  const quote = quotes[index];
+  const languageToUse = forceLang || await determineLanguageToUse();
+  
+  const text = quote[languageToUse as keyof Quote] as string;
+  const wordsToHighlight = quote.highlightWords?.[languageToUse as 'en' | 'es'] || [];
+  const html = highlightWords(text, wordsToHighlight);
+  
+  return {
+    text,
+    language: languageToUse,
+    html
+  };
+};
+
+/**
  * Gets a random quote in the appropriate language with highlighted words
  * @returns Promise<{text: string, language: string, html: string}>
  */
@@ -403,7 +495,8 @@ export const getRandomQuote = async (): Promise<{text: string, language: string,
   console.log('Language Detection Debug:', {
     browserLanguage: getBrowserLanguage(),
     isInLatinAmerica: await isInLatinAmerica(),
-    selectedLanguage: languageToUse
+    selectedLanguage: languageToUse,
+    quoteIndex: randomIndex
   });
 
   // Get the appropriate text for the language
@@ -427,3 +520,4 @@ export const getRandomQuote = async (): Promise<{text: string, language: string,
     html
   };
 };
+
