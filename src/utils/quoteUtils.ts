@@ -334,7 +334,7 @@ const isInLatinAmerica = async (): Promise<boolean> => {
  * Gets the user's browser language
  * @returns string - 'en', 'es', or other language code
  */
-const getBrowserLanguage = (): string => {
+export const getBrowserLanguage = (): string => {
   const language = navigator.language || (navigator as any).userLanguage;
   return language.split('-')[0].toLowerCase();
 };
