@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -78,20 +77,16 @@ export const CreditIssuesQuestion = ({
     updatedIssues[issueType] = isChecked;
     
     if (isChecked) {
-      // Create a key for the details object
       const detailsKey = `${issueType}Details` as keyof typeof updatedIssues;
       
-      // Create a properly typed details object
       const details: CreditIssueDetails = {
         amount: null,
         timeframe: null,
         inCollection: null
       };
       
-      // Assign it to the updated issues object using type assertion
       updatedIssues[detailsKey] = details as any;
 
-      // Auto-open the newly selected issue
       setOpenIssues(prev => ({
         ...prev,
         [issueType]: true
@@ -108,19 +103,16 @@ export const CreditIssuesQuestion = ({
   ) => {
     const detailsKey = `${issueType}Details` as keyof typeof creditIssues;
     
-    // Get the current details or create a default if it doesn't exist
     const currentDetails = creditIssues[detailsKey] || { amount: null, timeframe: null, inCollection: null };
     
     const updatedIssues = { ...creditIssues };
     
-    // We need to handle the type compatibility issue
     if (typeof currentDetails === 'object' && currentDetails !== null) {
       const updatedDetails = {
         ...currentDetails,
         [field]: value
       };
       
-      // Use type assertion to avoid TypeScript errors
       updatedIssues[detailsKey] = updatedDetails as any;
     } else {
       const newDetails = {
@@ -130,7 +122,6 @@ export const CreditIssuesQuestion = ({
         [field]: value
       };
       
-      // Use type assertion to avoid TypeScript errors
       updatedIssues[detailsKey] = newDetails as any;
     }
     
@@ -155,7 +146,7 @@ export const CreditIssuesQuestion = ({
     if (!details) return null;
     
     return (
-      <div className="p-4 space-y-4 border-t border-purple-800/30 bg-gray-900 rounded-b-lg">
+      <div className="p-4 space-y-4 border-t border-purple-800/30 bg-[#121826] rounded-b-lg">
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div className="space-y-2">
             <Label htmlFor={`${issueType}-amount`} className="text-sm font-medium text-gray-300">
@@ -232,7 +223,7 @@ export const CreditIssuesQuestion = ({
     return (
       <div className={cn(
         "mb-3 overflow-hidden rounded-lg border transition-all",
-        "border-purple-600 bg-white"
+        "border-purple-600 bg-purple-600"
       )}>
         <Collapsible 
           open={isOpen && isSelected} 
@@ -246,7 +237,7 @@ export const CreditIssuesQuestion = ({
                 onCheckedChange={(checked) => 
                   handleIssueToggle(issueType, checked === true)
                 }
-                className="h-5 w-5 bg-black border-purple-500 data-[state=checked]:bg-purple-600 data-[state=checked]:text-white"
+                className="h-5 w-5 bg-[#121826] border-purple-600 data-[state=checked]:bg-purple-600 data-[state=checked]:text-white"
               />
               <Label htmlFor={`${issueType}-check`} className="font-medium text-base cursor-pointer text-black">
                 {label}
@@ -254,7 +245,7 @@ export const CreditIssuesQuestion = ({
             </div>
             {isSelected && (
               <CollapsibleTrigger asChild>
-                <Button variant="ghost" size="sm" className="p-1 h-auto text-purple-600">
+                <Button variant="ghost" size="sm" className="p-1 h-auto text-[#121826]">
                   {isOpen ? 
                     <ChevronUp className="h-5 w-5" /> : 
                     <ChevronDown className="h-5 w-5" />
