@@ -1,8 +1,8 @@
 
 import { Button } from "@/components/ui/button";
 import QuestionContainer from "@/components/form/QuestionContainer";
-import { FormState, calculateClientRating, getQualificationSummary } from "@/types/form";
-import { getPositiveFactors } from "@/utils/qualificationUtils";
+import { FormState, calculateClientRating } from "@/types/form";
+import { getPositiveFactors, getQualificationSummary } from "@/utils/qualificationUtils";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { ArrowLeft, ArrowRight, Check } from "lucide-react";
 
