@@ -13,6 +13,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { ArrowRight } from "lucide-react";
 import { toast } from "sonner";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 
 const Form = () => {
   const { t, language } = useLanguage();
@@ -21,6 +22,7 @@ const Form = () => {
   const navigate = useNavigate();
 
   const [formStage, setFormStage] = useState<'initialInfo' | 'questions' | 'summary'>('initialInfo');
+  const [selectedAgent, setSelectedAgent] = useState<string>("SoReal Estate");
   const [formData, setFormData] = useState<FormState>({
     timeline: 'exploring',
     firstTimeBuyer: null,
@@ -44,6 +46,15 @@ const Form = () => {
     email: "",
     comments: ""
   });
+
+  // List of agents - can be moved to a separate file or CMS integration later
+  const agents = [
+    { id: "soreal", name: "SoReal Estate" },
+    { id: "tito", name: "Tito Baptista" },
+    { id: "dens", name: "Dens Taveras" },
+    { id: "dennis", name: "Dennis Lopez" },
+    { id: "alvaro", name: "Alvaro Terry" }
+  ];
 
   const handleInitialInfoChange = (field: keyof FormState, value: string) => {
     setFormData({
@@ -71,7 +82,8 @@ const Form = () => {
       ...completedData,
       name: formData.name,
       phone: formData.phone,
-      email: formData.email
+      email: formData.email,
+      agent: selectedAgent // Add the selected agent to the form data
     };
     
     setFormData(finalData);
@@ -97,7 +109,26 @@ const Form = () => {
               <h2 className="text-2xl font-semibold mb-4">
                 {language === 'en' ? 'Contact Information' : 'Información de Contacto'}
               </h2>
+              
               <div className="space-y-4">
+                <div className="space-y-2">
+                  <Label className="text-base font-medium">
+                    {language === 'en' ? 'Select Agent' : 'Seleccionar Agente'}
+                  </Label>
+                  <RadioGroup 
+                    value={selectedAgent} 
+                    onValueChange={setSelectedAgent}
+                    className="flex flex-wrap gap-4 mt-2"
+                  >
+                    {agents.map((agent) => (
+                      <div key={agent.id} className="flex items-center space-x-2">
+                        <RadioGroupItem value={agent.name} id={agent.id} />
+                        <Label htmlFor={agent.id} className="cursor-pointer">{agent.name}</Label>
+                      </div>
+                    ))}
+                  </RadioGroup>
+                </div>
+                
                 <div className="space-y-2">
                   <Label htmlFor="name">{language === 'en' ? 'Full Name' : 'Nombre Completo'}</Label>
                   <Input 
