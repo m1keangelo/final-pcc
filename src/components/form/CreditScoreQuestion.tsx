@@ -40,6 +40,23 @@ export const CreditScoreQuestion = ({
     onChange(numVal);
   };
   
+  // Define feedback message based on credit score range
+  const getFeedbackMessage = (score: number) => {
+    if (score >= 760) {
+      return "You're in VIP territory. Top-tier rates, premium approvals, and choice. We'll make sure the process moves just as smooth.";
+    } else if (score >= 700) {
+      return "Excellent standing. You qualify for most programs with favorable terms. Let's lock the best one before rates move.";
+    } else if (score >= 640) {
+      return "You're mortgage-ready. With a bit of strategy, you could hit even better pricing. Want us to simulate what would push you higher?";
+    } else if (score >= 580) {
+      return "You're in FHA's sweet spot. We'll pull every lever — grants, lender credits, rapid rescore. Let's get you in now, refinance later.";
+    } else if (score >= 500) {
+      return "We've got options — just need a bigger down or co-signer. We'll coach you. This isn't a dead-end — it's a detour. Let's map it.";
+    } else {
+      return "Not now, but not never. Give us 60–90 days and we'll build a step-by-step comeback plan. Real talk, real results.";
+    }
+  };
+  
   return (
     <QuestionContainer
       title={t('q.creditScore.title')}
@@ -73,6 +90,11 @@ export const CreditScoreQuestion = ({
           
           <div className="text-center text-sm text-muted-foreground mt-4">
             {getCreditCategory(sliderValue)}
+          </div>
+          
+          {/* Display feedback message based on credit score */}
+          <div className="mt-4 p-4 border border-amber-200 rounded-md bg-amber-50">
+            <p className="text-[#FFD700] font-medium">{getFeedbackMessage(sliderValue)}</p>
           </div>
         </div>
       </div>

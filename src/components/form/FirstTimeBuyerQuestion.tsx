@@ -22,6 +22,16 @@ export const FirstTimeBuyerQuestion = ({
 }) => {
   const { t } = useLanguage();
   
+  // Define the feedback messages based on selection
+  const getFeedbackMessage = () => {
+    if (value === true) {
+      return "First-time doesn't mean clueless — it means full access to exclusive perks, grants, and programs. We'll make sure you use every tool on the board. Let's unlock them together.";
+    } else if (value === false) {
+      return "Experience is gold. We'll respect your past, fix what didn't work, and sharpen what did. You already know the ropes — let's elevate your next move.";
+    }
+    return "";
+  };
+  
   return (
     <QuestionContainer
       title={t('q.firsttime.title')}
@@ -44,6 +54,13 @@ export const FirstTimeBuyerQuestion = ({
           {t('q.firsttime.no')}
         </Button>
       </div>
+      
+      {/* Display feedback message if an option is selected */}
+      {value !== null && (
+        <div className="mt-4 p-4 border border-amber-200 rounded-md bg-amber-50">
+          <p className="text-[#FFD700] font-medium">{getFeedbackMessage()}</p>
+        </div>
+      )}
       
       {value === true && (
         <div className="mt-4 text-sm text-muted-foreground">

@@ -38,6 +38,17 @@ export const MonthlyDebtsQuestion = ({
     onChange(roundedVal.toString());
   };
   
+  // Define feedback message based on debt amount
+  const getFeedbackMessage = (amount: number) => {
+    if (amount < 1000) {
+      return "That's strong. You've got borrowing power. Let's translate that into more house for the same payment.";
+    } else if (amount < 5000) {
+      return "All good. We'll balance the numbers and could still qualify you comfortably. Want us to check where you land now?";
+    } else {
+      return "Seen it before — and fixed it before. Payoff plans, consolidation, or co-signers can flip your DTI. Let's talk strategy.";
+    }
+  };
+  
   return (
     <QuestionContainer
       title={t('q.monthlyDebts.title')}
@@ -72,6 +83,11 @@ export const MonthlyDebtsQuestion = ({
           
           <div className="text-center text-sm text-muted-foreground mt-4">
             {t('q.monthlyDebts.helper')}
+          </div>
+          
+          {/* Display feedback message */}
+          <div className="mt-4 p-4 border border-amber-200 rounded-md bg-amber-50">
+            <p className="text-[#FFD700] font-medium">{getFeedbackMessage(sliderValue)}</p>
           </div>
         </div>
       </div>

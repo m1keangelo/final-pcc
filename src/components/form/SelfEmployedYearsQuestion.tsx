@@ -32,6 +32,17 @@ export const SelfEmployedYearsQuestion = ({
     onChange(years);
   };
   
+  // Define feedback message based on number of years
+  const getFeedbackMessage = () => {
+    if (sliderValue >= 2) {
+      return "Beautiful. You're established — we'll grab your tax returns and use lender-approved methods to qualify you properly. You're in a strong position.";
+    } else if (sliderValue === 1) {
+      return "If you're in the same field as before, we may only need 1 tax year. We'll write a strong case to underwriting. Let's line everything up to prove your momentum.";
+    } else {
+      return "Might be early for conventional, but there are lenders who will use bank statements or assets. We'll prep you with a 90-day success plan or explore outside-the-box options.";
+    }
+  };
+  
   return (
     <QuestionContainer
       title={t('q.selfyears.title')}
@@ -64,6 +75,11 @@ export const SelfEmployedYearsQuestion = ({
               <span>100 {t('q.selfyears.years')}</span>
             </div>
           </div>
+        </div>
+        
+        {/* Display feedback message */}
+        <div className="mt-4 p-4 border border-amber-200 rounded-md bg-amber-50">
+          <p className="text-[#FFD700] font-medium">{getFeedbackMessage()}</p>
         </div>
         
         {sliderValue < 2 && (

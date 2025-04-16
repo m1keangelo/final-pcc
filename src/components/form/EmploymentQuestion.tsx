@@ -44,6 +44,24 @@ export const EmploymentQuestion = ({
     return !!value;
   };
   
+  // Define feedback messages based on employment type selection
+  const getFeedbackMessage = () => {
+    switch(value) {
+      case 'W-2':
+        return "Simple setup — your consistent income makes underwriting smooth. Send us your latest pay stub and we'll get the wheels moving.";
+      case '1099':
+        return "You're the boss. We'll use tax returns, bank deposits, and smart structuring to show the full picture. If write-offs shrink your income, we'll use lender tricks to show the real story.";
+      case 'retired':
+        return "You've earned it — now we'll put those retirement benefits to work. Pension, Social Security, or assets, we'll leverage every bit.";
+      case 'unemployed':
+        return "That's OK. If you've got savings, a job lined up, or a strong co-borrower, we'll build a workaround. We've helped many in transition — and still closed deals.";
+      case 'other':
+        return "Every path has a paper trail. If it's not standard, we'll make it understandable. Real life isn't always black and white — and neither is lending.";
+      default:
+        return "";
+    }
+  };
+  
   return (
     <QuestionContainer
       title={t('q.employment.title')}
@@ -96,6 +114,13 @@ export const EmploymentQuestion = ({
           </div>
         )}
       </div>
+      
+      {/* Display feedback message if an option is selected */}
+      {value && (
+        <div className="mt-4 p-4 border border-amber-200 rounded-md bg-amber-50">
+          <p className="text-[#FFD700] font-medium">{getFeedbackMessage()}</p>
+        </div>
+      )}
       
       <div className="mt-8 flex justify-between">
         <Button

@@ -47,6 +47,19 @@ export const IncomeQuestion = ({
     onChangeIncome(income);
   };
   
+  // Define feedback messages
+  const getIncomeAmountFeedback = () => {
+    return "Doesn't matter where you start — it's about what we build with it. Some of the strongest approvals came from humble beginnings. We'll tailor programs to match where you're at — and where you're headed.";
+  };
+  
+  const getIncomeTypeFeedback = () => {
+    if (incomeTypeValue === 'annual') {
+      return "Got it — we'll convert it to monthly, match to your DTI, and optimize from there. Solid start.";
+    } else {
+      return "Perfect — you're already thinking how lenders think. Let's plug it in and check what you qualify for today.";
+    }
+  };
+  
   return (
     <QuestionContainer
       title={t('q.income.title')}
@@ -73,6 +86,13 @@ export const IncomeQuestion = ({
               <Label htmlFor="monthly">{t('q.income.monthly')}</Label>
             </div>
           </RadioGroup>
+          
+          {/* Display income type feedback */}
+          {incomeTypeValue && (
+            <div className="mt-4 p-4 border border-amber-200 rounded-md bg-amber-50">
+              <p className="text-[#FFD700] font-medium">{getIncomeTypeFeedback()}</p>
+            </div>
+          )}
         </div>
         
         <div>
@@ -100,6 +120,11 @@ export const IncomeQuestion = ({
                 <span>{formatCurrency(10)}</span>
                 <span>{formatCurrency(1000000)}</span>
               </div>
+            </div>
+            
+            {/* Display income amount feedback */}
+            <div className="mt-4 p-4 border border-amber-200 rounded-md bg-amber-50">
+              <p className="text-[#FFD700] font-medium">{getIncomeAmountFeedback()}</p>
             </div>
           </div>
         </div>

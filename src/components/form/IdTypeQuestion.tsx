@@ -22,6 +22,20 @@ export const IdTypeQuestion = ({
 }) => {
   const { t } = useLanguage();
   
+  // Define feedback messages based on ID type
+  const getFeedbackMessage = () => {
+    switch(value) {
+      case 'SSN':
+        return "You're fully set. No roadblocks ahead — let's get started.";
+      case 'ITIN':
+        return "No SSN? No problem. We've got ITIN-approved lenders. You're not locked out — let's open the door.";
+      case 'none':
+        return "Let's work on getting you an ITIN or pair you with a co-borrower. Everyone starts somewhere. We'll walk you through it.";
+      default:
+        return "";
+    }
+  };
+  
   return (
     <QuestionContainer
       title={t('q.idType.title')}
@@ -50,6 +64,13 @@ export const IdTypeQuestion = ({
           {t('q.idType.none')}
         </Button>
       </div>
+      
+      {/* Display feedback message if an option is selected */}
+      {value && (
+        <div className="mt-4 p-4 border border-amber-200 rounded-md bg-amber-50">
+          <p className="text-[#FFD700] font-medium">{getFeedbackMessage()}</p>
+        </div>
+      )}
       
       {value === 'ITIN' && (
         <div className="mt-4 text-sm text-amber-600 bg-amber-50 p-3 rounded-md border border-amber-200">

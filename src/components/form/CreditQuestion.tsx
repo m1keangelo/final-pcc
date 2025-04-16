@@ -22,6 +22,24 @@ export const CreditQuestion = ({
 }) => {
   const { t } = useLanguage();
   
+  // Define feedback messages based on credit category
+  const getFeedbackMessage = () => {
+    switch(value) {
+      case 'excellent':
+        return "You earned it — now we'll make sure lenders compete for you. Let's use that leverage to reduce costs and maximize perks.";
+      case 'good':
+        return "Very solid. You're in range for great rates and flexibility. A few tweaks and you're premium status. Let's push it.";
+      case 'fair':
+        return "You're on the edge — and that's a good place. We've helped hundreds tip over into better brackets. One or two smart moves could save you thousands.";
+      case 'poor':
+        return "You're not alone — and you're not stuck. FHA still works. We've got credit hacks, piggyback tricks, and legal boosts to raise your score fast. Let's build the ladder out.";
+      case 'unknown':
+        return "No worries. A soft pull gives us a real snapshot — zero impact. Let's check where you stand and build the playbook from there.";
+      default:
+        return "";
+    }
+  };
+  
   return (
     <QuestionContainer
       title={t('q.credit.title')}
@@ -62,6 +80,13 @@ export const CreditQuestion = ({
           {t('q.credit.unknown')}
         </Button>
       </div>
+      
+      {/* Display feedback message if an option is selected */}
+      {value && (
+        <div className="mt-4 p-4 border border-amber-200 rounded-md bg-amber-50">
+          <p className="text-[#FFD700] font-medium">{getFeedbackMessage()}</p>
+        </div>
+      )}
       
       <div className="mt-8 flex justify-between">
         <Button
