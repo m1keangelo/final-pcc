@@ -61,6 +61,15 @@ const FormQuestions = ({
 
   const handleNext = () => {
     if (currentStep < totalSteps) {
+      // Special case for the unemployed selection - skip income questions
+      if (currentStep === 3 && formData.employmentType === 'unemployed') {
+        // Set income to 0 since unemployed
+        setFormData(prev => ({ ...prev, income: 0 }));
+        // Skip to question 6 (credit question)
+        setCurrentStep(6);
+        return;
+      }
+      
       setCurrentStep(currentStep + 1);
     } else {
       onComplete(formData);
@@ -69,6 +78,12 @@ const FormQuestions = ({
 
   const handleBack = () => {
     if (currentStep > 1) {
+      // Special case for going back when unemployed
+      if (currentStep === 6 && formData.employmentType === 'unemployed') {
+        setCurrentStep(3);
+        return;
+      }
+      
       setCurrentStep(currentStep - 1);
     } else if (onBack) {
       onBack();
