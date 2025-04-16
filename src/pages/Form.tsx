@@ -3,18 +3,24 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { useAuth } from "@/contexts/AuthContext";
+import { useData } from "@/contexts/DataContext";
 import FormQuestions from "@/components/form/FormQuestions";
 import SummaryOutcome from "@/components/form/SummaryOutcome";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { FormState } from "@/types/form";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { ArrowRight } from "lucide-react";
+import { toast } from "sonner";
 
 const Form = () => {
-  const { t } = useLanguage();
+  const { t, language } = useLanguage();
   const { user } = useAuth();
+  const { addClient } = useData();
   const navigate = useNavigate();
 
-  const [formStage, setFormStage] = useState<'questions' | 'summary'>('questions');
+  const [formStage, setFormStage] = useState<'initialInfo' | 'questions' | 'summary'>('initialInfo');
   const [formData, setFormData] = useState<FormState>({
     timeline: 'exploring',
     firstTimeBuyer: null,
@@ -39,6 +45,42 @@ const Form = () => {
     comments: ""
   });
 
+  const handleInitialInfoChange = (field: keyof FormState, value: string) => {
+    setFormData({
+      ...formData,
+      [field]: value
+    });
+  };
+
+  const handleNextFromInitialInfo = () => {
+    // Check if all required fields are filled
+    if (formData.name && formData.phone && formData.email) {
+      setFormStage('questions');
+      toast.success(language === 'en' ? 
+        'Contact information saved' : 
+        'Información de contacto guardada');
+    } else {
+      toast.error(language === 'en' ? 
+        'Please fill all contact information fields' : 
+        'Por favor complete todos los campos de información de contacto');
+    }
+  };
+
+  const handleFormComplete = (completedData: FormState) => {
+    const finalData = {
+      ...completedData,
+      name: formData.name,
+      phone: formData.phone,
+      email: formData.email
+    };
+    
+    setFormData(finalData);
+    setFormStage('summary');
+    
+    // Here, we could save the data to our database
+    // addClient({ ...transformFormData(finalData) });
+  };
+
   return (
     <div className="space-y-8 animate-fade-in">
       <div>
@@ -50,19 +92,66 @@ const Form = () => {
 
       <div>
         <Card className="w-full">
+          {formStage === 'initialInfo' && (
+            <div className="p-6 space-y-6">
+              <h2 className="text-2xl font-semibold mb-4">
+                {language === 'en' ? 'Contact Information' : 'Información de Contacto'}
+              </h2>
+              <div className="space-y-4">
+                <div className="space-y-2">
+                  <Label htmlFor="name">{language === 'en' ? 'Full Name' : 'Nombre Completo'}</Label>
+                  <Input 
+                    id="name" 
+                    value={formData.name} 
+                    onChange={(e) => handleInitialInfoChange('name', e.target.value)}
+                    placeholder={language === 'en' ? 'Enter your full name' : 'Ingrese su nombre completo'}
+                  />
+                </div>
+                
+                <div className="space-y-2">
+                  <Label htmlFor="phone">{language === 'en' ? 'Phone Number' : 'Número de Teléfono'}</Label>
+                  <Input 
+                    id="phone" 
+                    value={formData.phone} 
+                    onChange={(e) => handleInitialInfoChange('phone', e.target.value)}
+                    placeholder={language === 'en' ? 'Enter your phone number' : 'Ingrese su número de teléfono'}
+                    type="tel"
+                  />
+                </div>
+                
+                <div className="space-y-2">
+                  <Label htmlFor="email">{language === 'en' ? 'Email Address' : 'Correo Electrónico'}</Label>
+                  <Input 
+                    id="email" 
+                    value={formData.email} 
+                    onChange={(e) => handleInitialInfoChange('email', e.target.value)}
+                    placeholder={language === 'en' ? 'Enter your email address' : 'Ingrese su correo electrónico'}
+                    type="email"
+                  />
+                </div>
+              </div>
+              
+              <div className="flex justify-end mt-6">
+                <Button onClick={handleNextFromInitialInfo}>
+                  {language === 'en' ? 'Next' : 'Siguiente'}
+                  <ArrowRight className="ml-2 h-4 w-4" />
+                </Button>
+              </div>
+            </div>
+          )}
+
           {formStage === 'questions' ? (
             <FormQuestions 
-              onComplete={(data: FormState) => {
-                setFormData(data);
-                setFormStage('summary');
-              }} 
+              initialData={formData}
+              onComplete={handleFormComplete}
+              onBack={() => setFormStage('initialInfo')}
             />
-          ) : (
+          ) : formStage === 'summary' ? (
             <SummaryOutcome 
               formData={formData}
               onProceedToDocuments={() => console.log('Proceeding to documents')} 
             />
-          )}
+          ) : null}
         </Card>
       </div>
     </div>
