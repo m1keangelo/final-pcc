@@ -149,7 +149,11 @@ const Form = () => {
     // Format credit issues details
     const creditIssueComments = [];
     const hasCreditIssues = data.hasCreditIssues === true;
-    let creditIssueDetails = {};
+    
+    // Initialize creditIssueDetails with the required hasCreditIssues property
+    let creditIssueDetails = {
+      hasCreditIssues: hasCreditIssues
+    };
     
     if (hasCreditIssues && data.creditIssues) {
       creditIssueDetails = {
@@ -207,7 +211,7 @@ const Form = () => {
       incomeMonthly,
       creditCategory: creditCategoryMap[data.creditCategory || 'unknown'],
       creditScoreApprox: data.creditScore || undefined,
-      creditIssues: hasCreditIssues ? creditIssueDetails : undefined,
+      creditIssues: creditIssueDetails,  // Now this will always have the hasCreditIssues property
       downPaymentSaved: !!data.downPaymentSaved,
       downPaymentAmount: data.downPaymentAmount || undefined,
       assistanceInterested: data.assistanceOpen !== null ? !!data.assistanceOpen : undefined,
