@@ -148,23 +148,6 @@ export const CreditIssuesQuestion = ({
     return false;
   };
 
-  const getIssueColor = (issueType: CreditIssueType) => {
-    switch (issueType) {
-      case 'bankruptcy':
-        return 'border-red-400 bg-red-50 dark:bg-red-950/30';
-      case 'foreclosure':
-        return 'border-orange-400 bg-orange-50 dark:bg-orange-950/30';
-      case 'collections':
-        return 'border-yellow-400 bg-yellow-50 dark:bg-yellow-950/30';
-      case 'medical':
-        return 'border-blue-400 bg-blue-50 dark:bg-blue-950/30';
-      case 'other':
-        return 'border-purple-400 bg-purple-50 dark:bg-purple-950/30';
-      default:
-        return 'border-gray-300 bg-gray-50 dark:bg-gray-800/30';
-    }
-  };
-  
   const renderIssueDetails = (issueType: CreditIssueType) => {
     const detailsKey = `${issueType}Details` as keyof typeof creditIssues;
     const details = creditIssues[detailsKey] as CreditIssueDetails | undefined;
@@ -172,18 +155,18 @@ export const CreditIssuesQuestion = ({
     if (!details) return null;
     
     return (
-      <div className="p-4 space-y-4 border-t border-t-muted/20 bg-white/50 dark:bg-black/20 rounded-b-lg">
+      <div className="p-4 space-y-4 border-t border-purple-800/30 bg-gray-900 rounded-b-lg">
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div className="space-y-2">
-            <Label htmlFor={`${issueType}-amount`} className="text-sm font-medium">
+            <Label htmlFor={`${issueType}-amount`} className="text-sm font-medium text-gray-300">
               Estimated Amount
             </Label>
             <div className="relative">
-              <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground">$</span>
+              <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400">$</span>
               <Input
                 id={`${issueType}-amount`}
                 type="number"
-                className="pl-7"
+                className="pl-7 bg-black border-purple-500 text-white"
                 placeholder="Amount"
                 value={details.amount || ''}
                 onChange={e => handleIssueDetailChange(
@@ -196,17 +179,17 @@ export const CreditIssuesQuestion = ({
           </div>
           
           <div className="space-y-2">
-            <Label htmlFor={`${issueType}-timeframe`} className="text-sm font-medium">
+            <Label htmlFor={`${issueType}-timeframe`} className="text-sm font-medium text-gray-300">
               How long ago?
             </Label>
             <Select
               value={details.timeframe || ''}
               onValueChange={value => handleIssueDetailChange(issueType, 'timeframe', value)}
             >
-              <SelectTrigger id={`${issueType}-timeframe`}>
+              <SelectTrigger id={`${issueType}-timeframe`} className="bg-black border-purple-500 text-white">
                 <SelectValue placeholder="Select timeframe" />
               </SelectTrigger>
-              <SelectContent>
+              <SelectContent className="bg-black border-purple-500 text-white">
                 {timeframeOptions.map(option => (
                   <SelectItem key={option.value} value={option.value}>
                     {option.label}
@@ -218,7 +201,7 @@ export const CreditIssuesQuestion = ({
         </div>
         
         <div>
-          <Label className="text-sm font-medium mb-2 block">Collection Status</Label>
+          <Label className="text-sm font-medium mb-2 block text-gray-300">Collection Status</Label>
           <RadioGroup
             value={details.inCollection !== null ? details.inCollection.toString() : ''}
             onValueChange={value => handleIssueDetailChange(
@@ -228,13 +211,13 @@ export const CreditIssuesQuestion = ({
             )}
             className="flex flex-col space-y-2 sm:flex-row sm:space-y-0 sm:space-x-4 mt-1"
           >
-            <div className="flex items-center space-x-2 bg-white dark:bg-gray-800 px-4 py-2 rounded-md border">
-              <RadioGroupItem value="true" id={`${issueType}-in-collection`} />
-              <Label htmlFor={`${issueType}-in-collection`} className="text-sm">In Collection</Label>
+            <div className="flex items-center space-x-2 bg-black px-4 py-2 rounded-md border border-purple-500">
+              <RadioGroupItem value="true" id={`${issueType}-in-collection`} className="border-purple-500 text-purple-500" />
+              <Label htmlFor={`${issueType}-in-collection`} className="text-sm text-white">In Collection</Label>
             </div>
-            <div className="flex items-center space-x-2 bg-white dark:bg-gray-800 px-4 py-2 rounded-md border">
-              <RadioGroupItem value="false" id={`${issueType}-not-in-collection`} />
-              <Label htmlFor={`${issueType}-not-in-collection`} className="text-sm">Not in Collection</Label>
+            <div className="flex items-center space-x-2 bg-black px-4 py-2 rounded-md border border-purple-500">
+              <RadioGroupItem value="false" id={`${issueType}-not-in-collection`} className="border-purple-500 text-purple-500" />
+              <Label htmlFor={`${issueType}-not-in-collection`} className="text-sm text-white">Not in Collection</Label>
             </div>
           </RadioGroup>
         </div>
@@ -245,12 +228,11 @@ export const CreditIssuesQuestion = ({
   const renderIssueItem = (issueType: CreditIssueType, label: string) => {
     const isSelected = !!creditIssues[issueType];
     const isOpen = openIssues[issueType];
-    const colorClass = getIssueColor(issueType);
     
     return (
       <div className={cn(
         "mb-3 overflow-hidden rounded-lg border transition-all",
-        isSelected ? colorClass : "border-gray-200 bg-white dark:border-gray-700 dark:bg-gray-800"
+        "border-purple-600 bg-white"
       )}>
         <Collapsible 
           open={isOpen && isSelected} 
@@ -264,15 +246,15 @@ export const CreditIssuesQuestion = ({
                 onCheckedChange={(checked) => 
                   handleIssueToggle(issueType, checked === true)
                 }
-                className="h-5 w-5"
+                className="h-5 w-5 bg-black border-purple-500 data-[state=checked]:bg-purple-600 data-[state=checked]:text-white"
               />
-              <Label htmlFor={`${issueType}-check`} className="font-medium text-base cursor-pointer">
+              <Label htmlFor={`${issueType}-check`} className="font-medium text-base cursor-pointer text-black">
                 {label}
               </Label>
             </div>
             {isSelected && (
               <CollapsibleTrigger asChild>
-                <Button variant="ghost" size="sm" className="p-1 h-auto">
+                <Button variant="ghost" size="sm" className="p-1 h-auto text-purple-600">
                   {isOpen ? 
                     <ChevronUp className="h-5 w-5" /> : 
                     <ChevronDown className="h-5 w-5" />
@@ -305,14 +287,14 @@ export const CreditIssuesQuestion = ({
           <Button
             variant={value === true ? 'default' : 'outline'}
             onClick={() => onChange(true)}
-            className={value === true ? 'bg-purple-600 hover:bg-purple-700' : ''}
+            className={value === true ? 'bg-purple-600 hover:bg-purple-700 text-white' : 'border-purple-600 text-white bg-transparent hover:bg-purple-600/20'}
           >
             {t('q.creditIssues.yes')}
           </Button>
           <Button
             variant={value === false ? 'default' : 'outline'}
             onClick={() => onChange(false)}
-            className={value === false ? 'bg-purple-600 hover:bg-purple-700' : ''}
+            className={value === false ? 'bg-purple-600 hover:bg-purple-700 text-white' : 'border-purple-600 text-white bg-transparent hover:bg-purple-600/20'}
           >
             {t('q.creditIssues.no')}
           </Button>
@@ -320,7 +302,7 @@ export const CreditIssuesQuestion = ({
         
         {value === true && (
           <div className="mt-6">
-            <p className="text-sm text-muted-foreground mb-4">
+            <p className="text-sm text-gray-300 mb-4">
               {t('q.creditIssues.selectAll')}
             </p>
             
@@ -340,7 +322,7 @@ export const CreditIssuesQuestion = ({
           type="button"
           variant="outline"
           onClick={onBack}
-          className="gap-1"
+          className="gap-1 border-purple-600 text-white bg-transparent hover:bg-purple-600/20"
         >
           <ArrowLeft className="h-4 w-4" />
           {t('form.previous')}
@@ -348,7 +330,7 @@ export const CreditIssuesQuestion = ({
         <Button 
           onClick={onNext} 
           disabled={value === null || (value === true && !isAnyIssueComplete())}
-          className="gap-1 bg-purple-600 hover:bg-purple-700"
+          className="gap-1 bg-purple-600 hover:bg-purple-700 text-white"
         >
           {t('form.next')}
           <ArrowRight className="h-4 w-4" />
