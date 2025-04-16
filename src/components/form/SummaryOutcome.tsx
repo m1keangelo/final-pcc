@@ -1,4 +1,3 @@
-
 import { FormState, ClientRating, calculateClientRating } from '@/types/form';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { Button } from '@/components/ui/button';
@@ -73,6 +72,13 @@ const SummaryOutcome = ({ formData, onProceedToDocuments }: SummaryOutcomeProps)
     return language === 'en' ? "Poor" : "Malo";
   };
 
+  // Get text color class based on qualification category
+  const getSummaryTextColorClass = (): string => {
+    if (qualificationCategory === 'ready') return 'text-green-700 dark:text-green-500';
+    if (qualificationCategory === 'fixesNeeded') return 'text-amber-700 dark:text-amber-500';
+    return 'text-red-700 dark:text-red-500';
+  };
+
   return (
     <div className="space-y-6 animate-fade-in">
       {/* Animation Area */}
@@ -97,7 +103,7 @@ const SummaryOutcome = ({ formData, onProceedToDocuments }: SummaryOutcomeProps)
 
       {/* Qualification Summary Banner */}
       <Alert className={`border-l-4 ${qualificationSummary.includes('✅') ? 'border-l-green-500 bg-green-50' : 'border-l-orange-500 bg-orange-50'} dark:bg-opacity-10`}>
-        <AlertTitle className="text-xl font-semibold">
+        <AlertTitle className={`text-xl font-semibold ${getSummaryTextColorClass()}`}>
           {qualificationSummary}
         </AlertTitle>
       </Alert>
