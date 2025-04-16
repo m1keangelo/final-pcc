@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { FormState } from "@/types/form";
@@ -341,15 +342,9 @@ const FormQuestions = ({
                 totalSteps={totalSteps}
               />
             ) : (
-              <ContactInfoQuestion
-                name={formData.name}
-                phone={formData.phone}
-                email={formData.email}
-                comments={formData.comments}
-                onChangeName={(value) => updateFormData('name', value)}
-                onChangePhone={(value) => updateFormData('phone', value)}
-                onChangeEmail={(value) => updateFormData('email', value)}
-                onChangeComments={(value) => updateFormData('comments', value)}
+              <IdTypeQuestion
+                value={formData.idType}
+                onChange={(value) => updateFormData('idType', value)}
                 onNext={handleNext}
                 onBack={handleBack}
                 currentStep={currentStep}
@@ -357,15 +352,9 @@ const FormQuestions = ({
               />
             )
           ) : (
-            <ContactInfoQuestion
-              name={formData.name}
-              phone={formData.phone}
-              email={formData.email}
-              comments={formData.comments}
-              onChangeName={(value) => updateFormData('name', value)}
-              onChangePhone={(value) => updateFormData('phone', value)}
-              onChangeEmail={(value) => updateFormData('email', value)}
-              onChangeComments={(value) => updateFormData('comments', value)}
+            <IdTypeQuestion
+              value={formData.idType}
+              onChange={(value) => updateFormData('idType', value)}
               onNext={handleNext}
               onBack={handleBack}
               currentStep={currentStep}

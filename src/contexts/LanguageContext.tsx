@@ -1,3 +1,4 @@
+
 import React, { createContext, useContext, useState, ReactNode, useEffect } from 'react';
 
 // Language type
@@ -83,7 +84,7 @@ const translations = {
     
     // Income
     'q.income.title': 'Income',
-    'q.income.question': 'How much is your income',
+    'q.income.question': 'How much is your income?',
     'q.income.typeLabel': 'Income Type',
     'q.income.annual': 'Annual Income',
     'q.income.monthly': 'Monthly Income',
@@ -91,34 +92,92 @@ const translations = {
     'q.income.placeholder': 'Enter your income',
 
     // Credit
-    'q3.title': 'Credit Health',
-    'q3.question': 'How would you describe your credit?',
-    'q3.option1': 'Poor',
-    'q3.option2': 'Fair',
-    'q3.option3': 'Good',
-    'q3.option4': 'Excellent',
+    'q.credit.title': 'Credit Health',
+    'q.credit.question': 'How would you describe your credit?',
+    'q.credit.excellent': 'Excellent',
+    'q.credit.good': 'Good',
+    'q.credit.fair': 'Fair',
+    'q.credit.poor': 'Poor',
+    'q.credit.unknown': 'I don\'t know',
     
-    'q3a.title': 'Credit Score',
-    'q3a.question': 'Do you know your approximate credit score?',
-    'q3a.placeholder': 'Enter estimated score',
-    'q3a.unknown': 'I don\'t know',
+    // Credit Score
+    'q.creditScore.title': 'Credit Score',
+    'q.creditScore.question': 'Do you know your approximate credit score?',
+    'q.creditScore.scoreLabel': 'Your Estimated Credit Score',
+    'q.creditScore.placeholder': 'Enter score (300-850)',
+    'q.creditScore.excellent': 'Excellent (750+)',
+    'q.creditScore.good': 'Good (700-749)',
+    'q.creditScore.fair': 'Fair (650-699)',
+    'q.creditScore.needsWork': 'Needs Work (600-649)',
+    'q.creditScore.poor': 'Poor (below 600)',
     
     // Down Payment
-    'q4.title': 'Down Payment',
-    'q4.question': 'Do you have savings set aside for a down payment?',
-    'q4.yes': 'Yes',
-    'q4.no': 'No',
+    'q.downPayment.title': 'Down Payment',
+    'q.downPayment.question': 'Do you have savings set aside for a down payment?',
+    'q.downPayment.yes': 'Yes',
+    'q.downPayment.no': 'No',
     
-    'q4a.title': 'Down Payment Amount',
-    'q4a.question': 'Approximately how much have you saved?',
+    // Down Payment Amount
+    'q.downPaymentAmount.title': 'Down Payment Amount',
+    'q.downPaymentAmount.question': 'Approximately how much have you saved?',
+    'q.downPaymentAmount.amountLabel': 'Amount Saved',
+    'q.downPaymentAmount.placeholder': 'Enter amount',
+    
+    // Down Payment Assistance
+    'q.assistance.title': 'Down Payment Assistance',
+    'q.assistance.question': 'Would you be open to down payment assistance programs?',
+    'q.assistance.yes': 'Yes, I\'m interested',
+    'q.assistance.no': 'No, I prefer to use my own funds',
+    'q.assistance.info': 'There are many programs available that can help with down payment costs, especially for first-time homebuyers.',
+    
+    // Monthly Debts
+    'q.monthlyDebts.title': 'Monthly Debts',
+    'q.monthlyDebts.question': 'What are your approximate monthly debt payments (excluding housing)?',
+    'q.monthlyDebts.amountLabel': 'Monthly Debt Payments',
+    'q.monthlyDebts.placeholder': 'Enter monthly debt amount',
+    'q.monthlyDebts.helper': 'Include car loans, student loans, credit cards, personal loans, etc.',
+    
+    // Credit Issues
+    'q.creditIssues.title': 'Credit Issues',
+    'q.creditIssues.question': 'Have you had any significant credit issues in the past?',
+    'q.creditIssues.yes': 'Yes',
+    'q.creditIssues.no': 'No',
+    'q.creditIssues.followUp': 'We\'ll need some additional details to provide the best assistance.',
+    
+    // Credit Issue Details
+    'q.creditIssueDetails.title': 'Credit Issue Details',
+    'q.creditIssueDetails.question': 'Please provide some details about the credit issue:',
+    'q.creditIssueDetails.typeLabel': 'Type of Issue',
+    'q.creditIssueDetails.typePlaceholder': 'Select issue type',
+    'q.creditIssueDetails.bankruptcy': 'Bankruptcy',
+    'q.creditIssueDetails.foreclosure': 'Foreclosure',
+    'q.creditIssueDetails.collections': 'Collections',
+    'q.creditIssueDetails.other': 'Other',
+    'q.creditIssueDetails.yearLabel': 'Year it Occurred',
+    'q.creditIssueDetails.yearPlaceholder': 'Enter year',
+    'q.creditIssueDetails.amountLabel': 'Amount (if collections)',
+    'q.creditIssueDetails.amountPlaceholder': 'Enter amount',
     
     // ID Type
-    'q5.title': 'Legal Status',
-    'q5.question': 'What is your legal residency/citizenship status in the US?',
-    'q5.option1': 'US Citizen',
-    'q5.option2': 'Permanent Resident (Green Card)',
-    'q5.option3': 'Work Permit (Employment Authorization)',
-    'q5.option4': 'Undocumented',
+    'q.idType.title': 'ID Type',
+    'q.idType.question': 'What type of government-issued ID do you have?',
+    'q.idType.ssn': 'Social Security Number (SSN)',
+    'q.idType.itin': 'Individual Taxpayer ID (ITIN)',
+    'q.idType.none': 'I don\'t have either',
+    'q.idType.itinInfo': 'Having an ITIN means you might qualify for certain loan programs, though options may be more limited than with an SSN.',
+    'q.idType.noneWarning': 'Without an SSN or ITIN, traditional mortgage options are very limited. Alternative financing might be necessary.',
+    
+    // Contact Info
+    'q.contactInfo.title': 'Contact Information',
+    'q.contactInfo.question': 'How can we reach you with more information?',
+    'q.contactInfo.nameLabel': 'Full Name',
+    'q.contactInfo.namePlaceholder': 'Enter your full name',
+    'q.contactInfo.phoneLabel': 'Phone Number',
+    'q.contactInfo.phonePlaceholder': 'Enter your phone number',
+    'q.contactInfo.emailLabel': 'Email Address',
+    'q.contactInfo.emailPlaceholder': 'Enter your email address',
+    'q.contactInfo.commentsLabel': 'Additional Comments',
+    'q.contactInfo.commentsPlaceholder': 'Any additional information you\'d like to share',
     
     'form.result.qualified': 'You may qualify for a home loan! 🎉 Let\'s move forward with collecting your documents.',
     'form.result.fixesNeeded': 'With a few improvements, you should be able to qualify! We\'ll help create a plan.',
@@ -230,7 +289,7 @@ const translations = {
     
     // Income
     'q.income.title': 'Ingresos',
-    'q.income.question': '¿Cuántos son sus ingresos',
+    'q.income.question': '¿Cuántos son sus ingresos?',
     'q.income.typeLabel': 'Tipo de Ingreso',
     'q.income.annual': 'Ingreso Anual',
     'q.income.monthly': 'Ingreso Mensual',
@@ -238,34 +297,92 @@ const translations = {
     'q.income.placeholder': 'Ingrese sus ingresos',
     
     // Credit
-    'q3.title': 'Estado del Crédito',
-    'q3.question': '¿Cómo describirías tu crédito?',
-    'q3.option1': 'Malo',
-    'q3.option2': 'Regular',
-    'q3.option3': 'Bueno',
-    'q3.option4': 'Excelente',
+    'q.credit.title': 'Estado del Crédito',
+    'q.credit.question': '¿Cómo describirías tu crédito?',
+    'q.credit.excellent': 'Excelente',
+    'q.credit.good': 'Bueno',
+    'q.credit.fair': 'Regular',
+    'q.credit.poor': 'Malo',
+    'q.credit.unknown': 'No lo sé',
     
-    'q3a.title': 'Puntaje de Crédito',
-    'q3a.question': '¿Sabes tu puntaje de crédito aproximado?',
-    'q3a.placeholder': 'Ingrese puntaje estimado',
-    'q3a.unknown': 'No lo sé',
+    // Credit Score
+    'q.creditScore.title': 'Puntaje de Crédito',
+    'q.creditScore.question': '¿Sabes tu puntaje de crédito aproximado?',
+    'q.creditScore.scoreLabel': 'Tu Puntaje de Crédito Estimado',
+    'q.creditScore.placeholder': 'Ingrese puntaje (300-850)',
+    'q.creditScore.excellent': 'Excelente (750+)',
+    'q.creditScore.good': 'Bueno (700-749)',
+    'q.creditScore.fair': 'Regular (650-699)',
+    'q.creditScore.needsWork': 'Necesita Mejoras (600-649)',
+    'q.creditScore.poor': 'Bajo (menos de 600)',
     
     // Down Payment
-    'q4.title': 'Enganche',
-    'q4.question': '¿Tienes dinero ahorrado para el enganche?',
-    'q4.yes': 'Sí',
-    'q4.no': 'No',
+    'q.downPayment.title': 'Enganche',
+    'q.downPayment.question': '¿Tienes dinero ahorrado para el enganche?',
+    'q.downPayment.yes': 'Sí',
+    'q.downPayment.no': 'No',
     
-    'q4a.title': 'Cantidad de Enganche',
-    'q4a.question': '¿Aproximadamente cuánto tienes ahorrado?',
+    // Down Payment Amount
+    'q.downPaymentAmount.title': 'Cantidad de Enganche',
+    'q.downPaymentAmount.question': '¿Aproximadamente cuánto tienes ahorrado?',
+    'q.downPaymentAmount.amountLabel': 'Cantidad Ahorrada',
+    'q.downPaymentAmount.placeholder': 'Ingrese cantidad',
+    
+    // Down Payment Assistance
+    'q.assistance.title': 'Asistencia para el Enganche',
+    'q.assistance.question': '¿Estarías interesado en programas de asistencia para el enganche?',
+    'q.assistance.yes': 'Sí, estoy interesado',
+    'q.assistance.no': 'No, prefiero usar mis propios fondos',
+    'q.assistance.info': 'Hay muchos programas disponibles que pueden ayudar con los costos del enganche, especialmente para compradores de primera vivienda.',
+    
+    // Monthly Debts
+    'q.monthlyDebts.title': 'Deudas Mensuales',
+    'q.monthlyDebts.question': '¿Cuáles son sus pagos mensuales aproximados de deudas (excluyendo vivienda)?',
+    'q.monthlyDebts.amountLabel': 'Pagos Mensuales de Deudas',
+    'q.monthlyDebts.placeholder': 'Ingrese monto mensual de deudas',
+    'q.monthlyDebts.helper': 'Incluya préstamos de auto, préstamos estudiantiles, tarjetas de crédito, préstamos personales, etc.',
+    
+    // Credit Issues
+    'q.creditIssues.title': 'Problemas de Crédito',
+    'q.creditIssues.question': '¿Ha tenido algún problema significativo de crédito en el pasado?',
+    'q.creditIssues.yes': 'Sí',
+    'q.creditIssues.no': 'No',
+    'q.creditIssues.followUp': 'Necesitaremos algunos detalles adicionales para brindarle la mejor asistencia.',
+    
+    // Credit Issue Details
+    'q.creditIssueDetails.title': 'Detalles de Problemas de Crédito',
+    'q.creditIssueDetails.question': 'Por favor, proporcione algunos detalles sobre el problema de crédito:',
+    'q.creditIssueDetails.typeLabel': 'Tipo de Problema',
+    'q.creditIssueDetails.typePlaceholder': 'Seleccione tipo de problema',
+    'q.creditIssueDetails.bankruptcy': 'Bancarrota',
+    'q.creditIssueDetails.foreclosure': 'Ejecución Hipotecaria',
+    'q.creditIssueDetails.collections': 'Cobros',
+    'q.creditIssueDetails.other': 'Otro',
+    'q.creditIssueDetails.yearLabel': 'Año en que Ocurrió',
+    'q.creditIssueDetails.yearPlaceholder': 'Ingrese año',
+    'q.creditIssueDetails.amountLabel': 'Cantidad (si es cobros)',
+    'q.creditIssueDetails.amountPlaceholder': 'Ingrese cantidad',
     
     // ID Type
-    'q5.title': 'Estatus Migratorio',
-    'q5.question': '¿Cuál es tu estatus migratorio o legal en EE.UU.?',
-    'q5.option1': 'Ciudadano de EE.UU.',
-    'q5.option2': 'Residente Permanente (Green Card)',
-    'q5.option3': 'Permiso de Trabajo (Autorización de Empleo)',
-    'q5.option4': 'Indocumentado',
+    'q.idType.title': 'Tipo de Identificación',
+    'q.idType.question': '¿Qué tipo de identificación emitida por el gobierno tiene?',
+    'q.idType.ssn': 'Número de Seguro Social (SSN)',
+    'q.idType.itin': 'Número de Identificación Personal del Contribuyente (ITIN)',
+    'q.idType.none': 'No tengo ninguno',
+    'q.idType.itinInfo': 'Tener un ITIN significa que podría calificar para ciertos programas de préstamos, aunque las opciones pueden ser más limitadas que con un SSN.',
+    'q.idType.noneWarning': 'Sin un SSN o ITIN, las opciones tradicionales de hipoteca son muy limitadas. Podría ser necesario un financiamiento alternativo.',
+    
+    // Contact Info
+    'q.contactInfo.title': 'Información de Contacto',
+    'q.contactInfo.question': '¿Cómo podemos comunicarnos con usted para brindarle más información?',
+    'q.contactInfo.nameLabel': 'Nombre Completo',
+    'q.contactInfo.namePlaceholder': 'Ingrese su nombre completo',
+    'q.contactInfo.phoneLabel': 'Número de Teléfono',
+    'q.contactInfo.phonePlaceholder': 'Ingrese su número de teléfono',
+    'q.contactInfo.emailLabel': 'Correo Electrónico',
+    'q.contactInfo.emailPlaceholder': 'Ingrese su correo electrónico',
+    'q.contactInfo.commentsLabel': 'Comentarios Adicionales',
+    'q.contactInfo.commentsPlaceholder': 'Cualquier información adicional que desee compartir',
     
     'form.result.qualified': '¡Es posible que califique para un préstamo! 🎉 Sigamos adelante reuniendo sus documentos.',
     'form.result.fixesNeeded': '¡Con algunas mejoras, debería poder calificar! Le ayudaremos a crear un plan.',

@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useLanguage } from "@/contexts/LanguageContext";
@@ -105,6 +106,17 @@ const Form = () => {
         'Please fill all contact information fields' : 
         'Por favor complete todos los campos de información de contacto');
     }
+  };
+
+  // Add the transformFormData function that was missing
+  const transformFormData = (data: FormState) => {
+    // Transform the form data to the format needed by the data context
+    return {
+      ...data,
+      date: new Date().toISOString(),
+      id: Date.now().toString(),
+      status: 'new'
+    };
   };
 
   const handleFormComplete = (completedData: FormState) => {
