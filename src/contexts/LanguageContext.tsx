@@ -1,4 +1,3 @@
-
 import React, { createContext, useContext, useState, ReactNode, useEffect } from 'react';
 
 // Language type
@@ -81,6 +80,8 @@ const translations = {
     'q.selfyears.yearsLabel': 'How many years self-employed?',
     'q.selfyears.placeholder': 'Enter number of years',
     'q.selfyears.warning': 'It can be harder to get a loan with less than 2 years of self-employment. You might need a co-signer or a special program.',
+    'q.selfyears.year': 'year',
+    'q.selfyears.years': 'years',
     
     // Income
     'q.income.title': 'Income',
@@ -286,6 +287,8 @@ const translations = {
     'q.selfyears.yearsLabel': '¿Cuántos años lleva trabajando por cuenta propia?',
     'q.selfyears.placeholder': 'Ingrese número de años',
     'q.selfyears.warning': 'Con menos de 2 años como autónomo es más difícil calificar. Podría necesitar un co-firmante o un programa especial.',
+    'q.selfyears.year': 'año',
+    'q.selfyears.years': 'años',
     
     // Income
     'q.income.title': 'Ingresos',
