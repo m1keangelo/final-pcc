@@ -82,7 +82,7 @@ export const CreditIssuesQuestion = ({
         timeframe: null,
         inCollection: null
       };
-      updatedIssues[detailsKey] = details as any;
+      updatedIssues[detailsKey] = details;
     }
     
     onCreditIssuesChange(updatedIssues);
@@ -99,7 +99,10 @@ export const CreditIssuesQuestion = ({
     const updatedIssues = { 
       ...creditIssues,
       [detailsKey]: {
-        ...(currentDetails as object),
+        amount: null,
+        timeframe: null,
+        inCollection: null,
+        ...(typeof currentDetails === 'object' && currentDetails !== null ? currentDetails : {}),
         [field]: value
       }
     };
