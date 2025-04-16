@@ -1,9 +1,11 @@
-
 import { useState } from "react";
 import { FormState } from "@/types/form";
 import { useLanguage } from "@/contexts/LanguageContext";
 
-// Import all question components
+// Import the question component directly from its file
+import { CreditHelpQuestion } from './questions/CreditHelpQuestion';
+
+// Import all other question components from the questions.tsx file
 import {
   TimelineQuestion,
   FirstTimeBuyerQuestion,
@@ -12,7 +14,6 @@ import {
   IncomeQuestion,
   CreditQuestion,
   CreditScoreQuestion,
-  CreditHelpQuestion,
   DownPaymentQuestion,
   DownPaymentAmountQuestion,
   DownPaymentAssistanceQuestion,
@@ -78,14 +79,12 @@ const FormQuestions = ({ onComplete }: { onComplete: (data: FormState) => void }
     setFormData({ ...formData, [key]: value });
   };
 
-  // Helper function to determine if we need to show the credit help question
   const shouldShowCreditHelp = () => {
     return formData.creditCategory === 'fair' || 
            formData.creditCategory === 'poor' || 
            formData.creditCategory === 'unknown';
   };
 
-  // Helper function to determine if we need to show the lease end date question
   const shouldShowLeaseEndDate = () => {
     return formData.currentHousing === 'rent' && 
            (formData.timeline === '3to6months' || 
@@ -94,7 +93,6 @@ const FormQuestions = ({ onComplete }: { onComplete: (data: FormState) => void }
   };
 
   const renderCurrentQuestion = () => {
-    // Start with contact info
     if (currentStep === 1) {
       return (
         <ContactInfoQuestion
@@ -113,7 +111,6 @@ const FormQuestions = ({ onComplete }: { onComplete: (data: FormState) => void }
       );
     }
     
-    // Then current housing and timeline
     if (currentStep === 2) {
       return (
         <CurrentHousingQuestion
@@ -140,7 +137,6 @@ const FormQuestions = ({ onComplete }: { onComplete: (data: FormState) => void }
       );
     }
     
-    // Conditional lease end date question
     if (currentStep === 4) {
       if (shouldShowLeaseEndDate()) {
         return (
@@ -154,7 +150,6 @@ const FormQuestions = ({ onComplete }: { onComplete: (data: FormState) => void }
           />
         );
       } else {
-        // Skip to first time buyer question
         return (
           <FirstTimeBuyerQuestion
             value={formData.firstTimeBuyer}
@@ -168,7 +163,6 @@ const FormQuestions = ({ onComplete }: { onComplete: (data: FormState) => void }
       }
     }
     
-    // Continue with first time buyer if we showed lease end date
     if (currentStep === 5) {
       if (shouldShowLeaseEndDate()) {
         return (
@@ -182,7 +176,6 @@ const FormQuestions = ({ onComplete }: { onComplete: (data: FormState) => void }
           />
         );
       } else {
-        // Continue to employment
         return (
           <EmploymentQuestion
             value={formData.employmentType}
@@ -196,10 +189,8 @@ const FormQuestions = ({ onComplete }: { onComplete: (data: FormState) => void }
       }
     }
     
-    // Adjust all steps based on whether lease end date was shown
     const leaseOffset = shouldShowLeaseEndDate() ? 0 : -1;
     
-    // Employment and income
     if (currentStep === 6 + leaseOffset) {
       return (
         <EmploymentQuestion
@@ -252,9 +243,25 @@ const FormQuestions = ({ onComplete }: { onComplete: (data: FormState) => void }
       ) : (
         <CreditQuestion
           value={formData.creditCategory}
-          onChange={(value) => updateFormData('creditCategory', value)}
-          onUpdateScore={(value) => updateFormData('creditRatingScore', value)}
-          onUpdateTier={(value) => updateFormData('creditRatingTier', value)}
+          onChange={(value) => {
+            updateFormData('creditCategory', value);
+            if (value === 'excellent') {
+              updateFormData('creditRatingScore', 10);
+              updateFormData('creditRatingTier', 'Excellent');
+            } else if (value === 'good') {
+              updateFormData('creditRatingScore', 8);
+              updateFormData('creditRatingTier', 'Good');
+            } else if (value === 'fair') {
+              updateFormData('creditRatingScore', 6);
+              updateFormData('creditRatingTier', 'Fair');
+            } else if (value === 'poor') {
+              updateFormData('creditRatingScore', 3);
+              updateFormData('creditRatingTier', 'Poor');
+            } else if (value === 'unknown') {
+              updateFormData('creditRatingScore', 2);
+              updateFormData('creditRatingTier', 'Unknown');
+            }
+          }}
           onNext={handleNext}
           onBack={handleBack}
           currentStep={currentStep}
@@ -263,14 +270,29 @@ const FormQuestions = ({ onComplete }: { onComplete: (data: FormState) => void }
       );
     }
     
-    // Credit questions
     if (currentStep === 9 + leaseOffset) {
       return formData.employmentType === '1099' ? (
         <CreditQuestion
           value={formData.creditCategory}
-          onChange={(value) => updateFormData('creditCategory', value)}
-          onUpdateScore={(value) => updateFormData('creditRatingScore', value)}
-          onUpdateTier={(value) => updateFormData('creditRatingTier', value)}
+          onChange={(value) => {
+            updateFormData('creditCategory', value);
+            if (value === 'excellent') {
+              updateFormData('creditRatingScore', 10);
+              updateFormData('creditRatingTier', 'Excellent');
+            } else if (value === 'good') {
+              updateFormData('creditRatingScore', 8);
+              updateFormData('creditRatingTier', 'Good');
+            } else if (value === 'fair') {
+              updateFormData('creditRatingScore', 6);
+              updateFormData('creditRatingTier', 'Fair');
+            } else if (value === 'poor') {
+              updateFormData('creditRatingScore', 3);
+              updateFormData('creditRatingTier', 'Poor');
+            } else if (value === 'unknown') {
+              updateFormData('creditRatingScore', 2);
+              updateFormData('creditRatingTier', 'Unknown');
+            }
+          }}
           onNext={handleNext}
           onBack={handleBack}
           currentStep={currentStep}
@@ -288,13 +310,30 @@ const FormQuestions = ({ onComplete }: { onComplete: (data: FormState) => void }
       );
     }
     
-    // Credit help question (conditionally shown)
     if (currentStep === 10 + leaseOffset) {
       if (formData.employmentType === '1099') {
         return (
-          <CreditScoreQuestion
-            value={formData.creditScore}
-            onChange={(value) => updateFormData('creditScore', value)}
+          <CreditQuestion
+            value={formData.creditCategory}
+            onChange={(value) => {
+              updateFormData('creditCategory', value);
+              if (value === 'excellent') {
+                updateFormData('creditRatingScore', 10);
+                updateFormData('creditRatingTier', 'Excellent');
+              } else if (value === 'good') {
+                updateFormData('creditRatingScore', 8);
+                updateFormData('creditRatingTier', 'Good');
+              } else if (value === 'fair') {
+                updateFormData('creditRatingScore', 6);
+                updateFormData('creditRatingTier', 'Fair');
+              } else if (value === 'poor') {
+                updateFormData('creditRatingScore', 3);
+                updateFormData('creditRatingTier', 'Poor');
+              } else if (value === 'unknown') {
+                updateFormData('creditRatingScore', 2);
+                updateFormData('creditRatingTier', 'Unknown');
+              }
+            }}
             onNext={handleNext}
             onBack={handleBack}
             currentStep={currentStep}
@@ -313,7 +352,6 @@ const FormQuestions = ({ onComplete }: { onComplete: (data: FormState) => void }
           />
         );
       } else {
-        // Skip credit help question if not needed
         return (
           <DownPaymentQuestion
             value={formData.downPaymentSaved}
@@ -327,10 +365,8 @@ const FormQuestions = ({ onComplete }: { onComplete: (data: FormState) => void }
       }
     }
     
-    // Adjust for credit help question if shown
     const creditHelpOffset = shouldShowCreditHelp() ? 0 : -1;
     
-    // Down payment questions
     if (currentStep === 11 + leaseOffset + creditHelpOffset) {
       if (formData.employmentType === '1099' && shouldShowCreditHelp()) {
         return (
@@ -356,8 +392,7 @@ const FormQuestions = ({ onComplete }: { onComplete: (data: FormState) => void }
         );
       }
     }
-
-    // Continue with down payment amount or assistance
+    
     const selfEmployedCreditHelpOffset = 
       formData.employmentType === '1099' && shouldShowCreditHelp() ? 0 : 
       formData.employmentType === '1099' ? creditHelpOffset : 0;
@@ -397,11 +432,6 @@ const FormQuestions = ({ onComplete }: { onComplete: (data: FormState) => void }
       );
     }
     
-    // Continue with remaining questions
-    // This is a simplified version - in a complete implementation, 
-    // we'd handle all the conditional logic for the remaining steps similarly
-    
-    // For the rest of the steps, redirect to SummaryQuestion
     return (
       <SummaryQuestion
         formData={formData}

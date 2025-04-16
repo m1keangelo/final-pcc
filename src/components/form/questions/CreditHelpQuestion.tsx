@@ -63,3 +63,5 @@ export const CreditHelpQuestion = ({
     </QuestionContainer>
   );
 };
+
+export default CreditHelpQuestion;

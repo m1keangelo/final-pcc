@@ -1,47 +1,52 @@
 
-import { useState } from "react";
 import { useLanguage } from "@/contexts/LanguageContext";
 import QuestionContainer from "@/components/form/QuestionContainer";
 import { Button } from "@/components/ui/button";
-import { FormState, getCreditRatingScore, getCreditRatingTier } from "@/types/form";
-import { Alert } from "@/components/ui/alert";
+import { FormState } from "@/types/form";
 
 interface CreditQuestionProps {
   value: FormState['creditCategory'];
   onChange: (value: FormState['creditCategory']) => void;
-  onUpdateScore: (score: number) => void;
-  onUpdateTier: (tier: string) => void;
   onNext: () => void;
   onBack?: () => void;
   currentStep: number;
   totalSteps: number;
+  onUpdateScore?: (value: number) => void;
+  onUpdateTier?: (value: string) => void;
 }
 
 export const CreditQuestion = ({ 
   value, 
   onChange, 
-  onUpdateScore,
-  onUpdateTier,
   onNext, 
   onBack, 
   currentStep, 
-  totalSteps 
+  totalSteps,
+  onUpdateScore,
+  onUpdateTier
 }: CreditQuestionProps) => {
   const { language } = useLanguage();
   
-  const handleCreditChange = (creditCategory: FormState['creditCategory']) => {
-    onChange(creditCategory);
+  const handleCreditChange = (selectedValue: FormState['creditCategory']) => {
+    onChange(selectedValue);
     
-    // Update the credit rating score and tier
-    if (creditCategory) {
-      const score = getCreditRatingScore(creditCategory);
-      const tier = getCreditRatingTier(creditCategory, language);
-      onUpdateScore(score);
-      onUpdateTier(tier);
+    // Update score and tier if handlers are provided
+    if (onUpdateScore) {
+      if (selectedValue === 'excellent') onUpdateScore(10);
+      else if (selectedValue === 'good') onUpdateScore(8);
+      else if (selectedValue === 'fair') onUpdateScore(6);
+      else if (selectedValue === 'poor') onUpdateScore(3);
+      else if (selectedValue === 'unknown') onUpdateScore(2);
+    }
+    
+    if (onUpdateTier) {
+      if (selectedValue === 'excellent') onUpdateTier('Excellent');
+      else if (selectedValue === 'good') onUpdateTier('Good');
+      else if (selectedValue === 'fair') onUpdateTier('Fair');
+      else if (selectedValue === 'poor') onUpdateTier('Poor');
+      else if (selectedValue === 'unknown') onUpdateTier('Unknown');
     }
   };
-  
-  const showCreditAdvice = value === 'fair' || value === 'poor' || value === 'unknown';
   
   return (
     <QuestionContainer
@@ -72,12 +77,20 @@ export const CreditQuestion = ({
           </Button>
         ))}
         
-        {showCreditAdvice && (
-          <Alert className="mt-2 p-4 bg-yellow-50 rounded-md text-yellow-800 text-base border-yellow-200">
+        {(value === 'poor' || value === 'fair') && (
+          <div className="mt-2 p-4 bg-yellow-50 rounded-md text-yellow-800 text-base">
             {language === 'en' 
-              ? "No worries, many people qualify even with lower scores. Let's explore how to build your credit — like being added as an authorized user on a family member's card, using a secured card, or reporting rent payments. We've worked with credit repair partners in Puerto Rico and our community for over 15 years. We'll guide you step-by-step." 
-              : "No se preocupe, muchas personas califican incluso con puntuaciones más bajas. Veamos cómo construir su crédito — como ser añadido como usuario autorizado en la tarjeta de un familiar, usar una tarjeta asegurada o reportar sus pagos de alquiler. Hemos trabajado con socios de reparación de crédito en Puerto Rico y nuestra comunidad por más de 15 años. Le guiaremos paso a paso."}
-          </Alert>
+              ? "There are ways to improve a low credit score. For example, being added as an authorized user on someone else's credit card can quickly boost your score. Paying down credit balances helps too." 
+              : "Hay formas de mejorar un puntaje bajo. Por ejemplo, ser añadido como usuario autorizado en la tarjeta de crédito de otra persona puede subir su puntaje rápidamente. También ayudaría bajar sus deudas de tarjeta."}
+          </div>
+        )}
+        
+        {value === 'unknown' && (
+          <div className="mt-2 p-4 bg-yellow-50 rounded-md text-yellow-800 text-base">
+            {language === 'en' 
+              ? "We might need to build some credit for you first, for instance by using a secured credit card or reporting your rent payments." 
+              : "Quizá necesitemos que usted genere historial de crédito primero, por ejemplo con una tarjeta asegurada o reportando sus pagos de renta."}
+          </div>
         )}
       </div>
       <div className="mt-6 flex justify-between">
@@ -93,3 +106,5 @@ export const CreditQuestion = ({
     </QuestionContainer>
   );
 };
+
+export default CreditQuestion;
