@@ -16,7 +16,6 @@ import DownPaymentAmountQuestion from "./DownPaymentAmountQuestion";
 import DownPaymentAssistanceQuestion from "./DownPaymentAssistanceQuestion";
 import MonthlyDebtsQuestion from "./MonthlyDebtsQuestion";
 import CreditIssuesQuestion from "./CreditIssuesQuestion";
-import CreditIssueDetailsQuestion from "./CreditIssueDetailsQuestion";
 import IdTypeQuestion from "./IdTypeQuestion";
 import ContactInfoQuestion from "./ContactInfoQuestion";
 import SummaryQuestion from "./SummaryQuestion";
@@ -52,6 +51,7 @@ const FormQuestions = ({
     creditIssueType: null,
     creditIssueYear: null,
     creditIssueAmount: null,
+    creditIssues: {}, // Initialize the new credit issues data structure
     idType: null,
     name: "",
     phone: "",
@@ -295,7 +295,9 @@ const FormQuestions = ({
           ) : (
             <CreditIssuesQuestion
               value={formData.hasCreditIssues}
+              creditIssues={formData.creditIssues}
               onChange={(value) => updateFormData('hasCreditIssues', value)}
+              onCreditIssuesChange={(issues) => updateFormData('creditIssues', issues)}
               onNext={handleNext}
               onBack={handleBack}
               currentStep={currentStep}
@@ -308,64 +310,36 @@ const FormQuestions = ({
           formData.employmentType === '1099' ? (
             <CreditIssuesQuestion
               value={formData.hasCreditIssues}
+              creditIssues={formData.creditIssues}
               onChange={(value) => updateFormData('hasCreditIssues', value)}
+              onCreditIssuesChange={(issues) => updateFormData('creditIssues', issues)}
               onNext={handleNext}
               onBack={handleBack}
               currentStep={currentStep}
               totalSteps={totalSteps}
             />
           ) : (
-            formData.hasCreditIssues ? (
-              <CreditIssueDetailsQuestion
-                type={formData.creditIssueType}
-                year={formData.creditIssueYear}
-                amount={formData.creditIssueAmount}
-                onChangeType={(value) => updateFormData('creditIssueType', value)}
-                onChangeYear={(value) => updateFormData('creditIssueYear', value)}
-                onChangeAmount={(value) => updateFormData('creditIssueAmount', value)}
-                onNext={handleNext}
-                onBack={handleBack}
-                currentStep={currentStep}
-                totalSteps={totalSteps}
-              />
-            ) : (
-              <IdTypeQuestion
-                value={formData.idType}
-                onChange={(value) => updateFormData('idType', value)}
-                onNext={handleNext}
-                onBack={handleBack}
-                currentStep={currentStep}
-                totalSteps={totalSteps}
-              />
-            )
+            <IdTypeQuestion
+              value={formData.idType}
+              onChange={(value) => updateFormData('idType', value)}
+              onNext={handleNext}
+              onBack={handleBack}
+              currentStep={currentStep}
+              totalSteps={totalSteps}
+            />
           )
         );
       case 12:
         return (
           formData.employmentType === '1099' ? (
-            formData.hasCreditIssues ? (
-              <CreditIssueDetailsQuestion
-                type={formData.creditIssueType}
-                year={formData.creditIssueYear}
-                amount={formData.creditIssueAmount}
-                onChangeType={(value) => updateFormData('creditIssueType', value)}
-                onChangeYear={(value) => updateFormData('creditIssueYear', value)}
-                onChangeAmount={(value) => updateFormData('creditIssueAmount', value)}
-                onNext={handleNext}
-                onBack={handleBack}
-                currentStep={currentStep}
-                totalSteps={totalSteps}
-              />
-            ) : (
-              <IdTypeQuestion
-                value={formData.idType}
-                onChange={(value) => updateFormData('idType', value)}
-                onNext={handleNext}
-                onBack={handleBack}
-                currentStep={currentStep}
-                totalSteps={totalSteps}
-              />
-            )
+            <IdTypeQuestion
+              value={formData.idType}
+              onChange={(value) => updateFormData('idType', value)}
+              onNext={handleNext}
+              onBack={handleBack}
+              currentStep={currentStep}
+              totalSteps={totalSteps}
+            />
           ) : (
             <IdTypeQuestion
               value={formData.idType}

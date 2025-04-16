@@ -40,6 +40,7 @@ const Form = () => {
     creditIssueType: null,
     creditIssueYear: null,
     creditIssueAmount: null,
+    creditIssues: {},
     idType: null,
     name: "",
     phone: "",
@@ -139,6 +140,39 @@ const Form = () => {
       'unemployed': 'W-2',
       'other': 'W-2',
     };
+    
+    const creditIssueComments = [];
+    if (data.hasCreditIssues && data.creditIssues) {
+      if (data.creditIssues.bankruptcy) {
+        const details = data.creditIssues.bankruptcyDetails;
+        creditIssueComments.push(`Bankruptcy: $${details?.amount || 'unknown'}, ${details?.timeframe || 'unknown'} ago, ${details?.inCollection ? 'In collection' : 'Not in collection'}`);
+      }
+      
+      if (data.creditIssues.foreclosure) {
+        const details = data.creditIssues.foreclosureDetails;
+        creditIssueComments.push(`Foreclosure: $${details?.amount || 'unknown'}, ${details?.timeframe || 'unknown'} ago, ${details?.inCollection ? 'In collection' : 'Not in collection'}`);
+      }
+      
+      if (data.creditIssues.collections) {
+        const details = data.creditIssues.collectionsDetails;
+        creditIssueComments.push(`Collections: $${details?.amount || 'unknown'}, ${details?.timeframe || 'unknown'} ago, ${details?.inCollection ? 'In collection' : 'Not in collection'}`);
+      }
+      
+      if (data.creditIssues.medical) {
+        const details = data.creditIssues.medicalDetails;
+        creditIssueComments.push(`Medical: $${details?.amount || 'unknown'}, ${details?.timeframe || 'unknown'} ago, ${details?.inCollection ? 'In collection' : 'Not in collection'}`);
+      }
+      
+      if (data.creditIssues.other) {
+        const details = data.creditIssues.otherDetails;
+        creditIssueComments.push(`Other credit issue: $${details?.amount || 'unknown'}, ${details?.timeframe || 'unknown'} ago, ${details?.inCollection ? 'In collection' : 'Not in collection'}`);
+      }
+    }
+    
+    const combinedComments = [
+      data.comments || '',
+      creditIssueComments.length > 0 ? 'Credit Issues: ' + creditIssueComments.join('; ') : ''
+    ].filter(Boolean).join('\n\n');
 
     return {
       name: data.name,
@@ -152,7 +186,7 @@ const Form = () => {
       legalStatus,
       qualified: true,
       consentGiven: true,
-      comments: data.comments || '',
+      comments: combinedComments,
     };
   };
 
