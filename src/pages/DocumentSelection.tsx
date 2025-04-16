@@ -1,6 +1,6 @@
 
 import { useState } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { useLanguage } from "@/contexts/LanguageContext";
@@ -35,7 +35,7 @@ const DocumentSelection = () => {
       ? "All documents submitted successfully. An agent will contact you shortly."
       : "Todos los documentos enviados con éxito. Un agente se pondrá en contacto contigo pronto.");
     
-    navigate('/dashboard');
+    navigate('/');
   };
 
   return (
