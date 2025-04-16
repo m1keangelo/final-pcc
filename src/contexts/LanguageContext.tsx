@@ -82,11 +82,14 @@ const translations = {
     'q.selfyears.warning': 'It can be harder to get a loan with less than 2 years of self-employment. You might need a co-signer or a special program.',
     
     // Income
-    'q2.title': 'Income Level',
-    'q2.question': 'Approximately how much do you earn per year or per month (before taxes)?',
-    'q2.annual': 'Annual Income',
-    'q2.monthly': 'Monthly Income',
-    
+    'q.income.title': 'Income',
+    'q.income.question': 'How much is your income',
+    'q.income.typeLabel': 'Income Type',
+    'q.income.annual': 'Annual Income',
+    'q.income.monthly': 'Monthly Income',
+    'q.income.amountLabel': 'Income Amount',
+    'q.income.placeholder': 'Enter your income',
+
     // Credit
     'q3.title': 'Credit Health',
     'q3.question': 'How would you describe your credit?',
@@ -226,10 +229,13 @@ const translations = {
     'q.selfyears.warning': 'Con menos de 2 años como autónomo es más difícil calificar. Podría necesitar un co-firmante o un programa especial.',
     
     // Income
-    'q2.title': 'Ingresos',
-    'q2.question': '¿Aproximadamente cuánto gana al año o al mes (antes de impuestos)?',
-    'q2.annual': 'Ingreso Anual',
-    'q2.monthly': 'Ingreso Mensual',
+    'q.income.title': 'Ingresos',
+    'q.income.question': '¿Cuántos son sus ingresos',
+    'q.income.typeLabel': 'Tipo de Ingreso',
+    'q.income.annual': 'Ingreso Anual',
+    'q.income.monthly': 'Ingreso Mensual',
+    'q.income.amountLabel': 'Monto de Ingresos',
+    'q.income.placeholder': 'Ingrese sus ingresos',
     
     // Credit
     'q3.title': 'Estado del Crédito',
