@@ -77,6 +77,7 @@ const translations = {
     // Self-Employment Years
     'q.selfyears.title': 'Self-Employment History',
     'q.selfyears.question': 'How long have you been self-employed? Have you been in business at least two years?',
+    'q.selfyears.yearsLabel': 'How many years self-employed?',
     'q.selfyears.placeholder': 'Enter number of years',
     'q.selfyears.warning': 'It can be harder to get a loan with less than 2 years of self-employment. You might need a co-signer or a special program.',
     
@@ -220,6 +221,7 @@ const translations = {
     // Self-Employment Years
     'q.selfyears.title': 'Historial de Autoempleo',
     'q.selfyears.question': '¿Hace cuánto trabaja por cuenta propia? ¿Lleva al menos dos años con su negocio?',
+    'q.selfyears.yearsLabel': '¿Cuántos años lleva trabajando por cuenta propia?',
     'q.selfyears.placeholder': 'Ingrese número de años',
     'q.selfyears.warning': 'Con menos de 2 años como autónomo es más difícil calificar. Podría necesitar un co-firmante o un programa especial.',
     

@@ -40,15 +40,15 @@ export const SelfEmployedYearsQuestion = ({
   
   return (
     <QuestionContainer
-      title={t('q.selfEmployed.title')}
-      questionText={t('q.selfEmployed.question')}
+      title={t('q.selfyears.title')}
+      questionText={t('q.selfyears.question')}
       questionId="selfemployedyears"
       currentStep={currentStep}
       totalSteps={totalSteps}
     >
       <div className="space-y-4">
         <div>
-          <Label htmlFor="selfEmployedYears">{t('q.selfEmployed.yearsLabel')}</Label>
+          <Label htmlFor="selfEmployedYears">{t('q.selfyears.yearsLabel')}</Label>
           <Input
             id="selfEmployedYears"
             type="number"
@@ -57,13 +57,13 @@ export const SelfEmployedYearsQuestion = ({
             value={inputValue}
             onChange={handleChange}
             className="mt-1"
-            placeholder={t('q.selfEmployed.placeholder')}
+            placeholder={t('q.selfyears.placeholder')}
           />
         </div>
         
         {value !== null && value < 2 && (
           <div className="text-sm text-amber-500 bg-amber-50 p-3 rounded-md border border-amber-200">
-            {t('q.selfEmployed.warning')}
+            {t('q.selfyears.warning')}
           </div>
         )}
       </div>
