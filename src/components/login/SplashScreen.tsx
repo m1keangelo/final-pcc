@@ -43,12 +43,12 @@ const SplashScreen = ({ onComplete }: { onComplete: () => void }) => {
         </div>
         
         {/* Tagline */}
-        <h1 className="text-3xl md:text-5xl font-bold leading-tight mb-2 animate-fade-in">
-          <span className="text-[#9b87f5]">Fuck Mediocrity</span>
+        <h1 className="text-5xl md:text-6xl font-bold leading-tight mb-2 animate-fade-in">
+          <span className="text-[#9b87f5]">Fuck Mediocrity,</span>
         </h1>
         
-        <h2 className="text-2xl md:text-4xl font-bold leading-tight mb-6 animate-fade-in" style={{ animationDelay: '1s' }}>
-          Unleashing Bold <span className="text-white">Real Estate</span> Marketing Power!
+        <h2 className="text-5xl md:text-6xl font-bold leading-tight mb-6 animate-fade-in" style={{ animationDelay: '1s' }}>
+          <span className="text-[#9b87f5]">Unleashing</span> <span className="text-white">Real Estate</span> <span className="text-[#9b87f5]">Marketing Power!</span>
         </h2>
         
         {/* Animated loading indicator */}
@@ -63,7 +63,7 @@ const SplashScreen = ({ onComplete }: { onComplete: () => void }) => {
         </div>
       </div>
       
-      <style jsx>{`
+      <style>{`
         @keyframes progressBar {
           0% { width: 0%; }
           100% { width: 100%; }
