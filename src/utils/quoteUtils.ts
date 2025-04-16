@@ -398,9 +398,9 @@ const highlightBadWords = (text: string, badWords: string[] = []): string => {
   
   let processedText = text;
   badWords.forEach(word => {
-    // Case-insensitive replace with HTML span
+    // Case-insensitive replace with HTML span, adding larger font size
     const regex = new RegExp(`(${word})`, 'gi');
-    processedText = processedText.replace(regex, '<span class="text-white font-bold">$1</span>');
+    processedText = processedText.replace(regex, '<span class="text-white font-bold text-[115%]">$1</span>');
   });
   
   return processedText;
