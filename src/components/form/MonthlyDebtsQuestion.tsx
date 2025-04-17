@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -79,14 +80,14 @@ export const MonthlyDebtsQuestion = ({
           </Label>
           <div className="relative mt-2">
             <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
-              <DollarSign className="h-5 w-5 text-muted-foreground" />
+              <DollarSign className="h-5 w-5 text-gallomodern-300" />
             </div>
             <Input
               id="monthlyDebts"
               type="text"
               value={localValue}
               onChange={handleInputChange}
-              className="pl-10"
+              className="pl-10 input-modern"
               placeholder={t('q.monthlyDebts.placeholder')}
             />
           </div>
@@ -96,8 +97,8 @@ export const MonthlyDebtsQuestion = ({
         </div>
         
         {localValue && (
-          <div className="mt-4 p-4 border border-[#fef9be] rounded-md bg-black text-[#fef9be]">
-            <p className="font-medium">{getFeedbackMessage()}</p>
+          <div className="mt-4 p-4 rounded-md glass-card border border-gallomodern-500/30 shadow-inner bg-gradient-to-br from-gallomodern-900/20 to-black/30">
+            <p className="font-medium text-gallomodern-100">{getFeedbackMessage()}</p>
           </div>
         )}
       </div>

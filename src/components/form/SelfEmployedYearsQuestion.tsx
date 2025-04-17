@@ -5,7 +5,7 @@ import { Slider } from "@/components/ui/slider";
 import QuestionContainer from "@/components/form/QuestionContainer";
 import { FormState } from "@/types/form";
 import { useLanguage } from "@/contexts/LanguageContext";
-import { ArrowLeft, ArrowRight } from "lucide-react";
+import { ArrowLeft, ArrowRight, Briefcase } from "lucide-react";
 
 export const SelfEmployedYearsQuestion = ({
   value,
@@ -52,6 +52,18 @@ export const SelfEmployedYearsQuestion = ({
       }
     }
   };
+
+  const getYearMarkers = () => {
+    const markers = [];
+    for (let i = 1; i <= 10; i += 3) {
+      markers.push(
+        <div key={i} className="absolute text-xs text-gallomodern-300" style={{left: `${(i/100)*100}%`}}>
+          {i}
+        </div>
+      );
+    }
+    return markers;
+  };
   
   return (
     <QuestionContainer
@@ -64,14 +76,15 @@ export const SelfEmployedYearsQuestion = ({
       <div className="space-y-4">
         <div className="mt-4 mb-8">
           <div className="flex items-center justify-center mb-6">
-            <div className="flex items-center justify-center bg-muted/30 p-3 rounded-full h-16 w-40 border border-primary/20">
-              <span className="text-2xl font-semibold">
-                {sliderValue} {sliderValue === 1 ? t('q.selfyears.year') : t('q.selfyears.years')}
+            <div className="flex items-center justify-center bg-gallomodern-900/50 p-3 rounded-full h-20 w-44 border border-gallomodern-400/30 shadow-inner bg-gradient-to-b from-black/50 to-transparent">
+              <Briefcase className="mr-2 h-6 w-6 text-gallomodern-300" />
+              <span className="text-3xl font-semibold text-gradient">
+                {sliderValue} <span className="text-lg">{sliderValue === 1 ? t('q.selfyears.year') : t('q.selfyears.years')}</span>
               </span>
             </div>
           </div>
           
-          <div className="pt-4">
+          <div className="pt-8 relative">
             <Slider
               value={[sliderValue]}
               min={1}
@@ -80,7 +93,7 @@ export const SelfEmployedYearsQuestion = ({
               onValueChange={handleSliderChange}
               className="my-6"
             />
-            <div className="flex justify-between text-xs text-muted-foreground mt-2">
+            <div className="flex justify-between text-xs text-muted-foreground mt-8 relative">
               <span>1 {t('q.selfyears.year')}</span>
               <span>100 {t('q.selfyears.years')}</span>
             </div>
@@ -88,12 +101,12 @@ export const SelfEmployedYearsQuestion = ({
         </div>
         
         {/* Display feedback message */}
-        <div className="mt-4 p-4 border border-[#fef9be] rounded-md bg-black text-[#fef9be]">
-          <p className="font-medium">{getFeedbackMessage()}</p>
+        <div className="mt-4 p-4 rounded-md glass-card border border-gallomodern-500/30 shadow-inner bg-gradient-to-br from-gallomodern-900/20 to-black/30">
+          <p className="font-medium text-gallomodern-100">{getFeedbackMessage()}</p>
         </div>
         
         {sliderValue < 2 && (
-          <div className="text-sm text-amber-500 bg-amber-50 p-3 rounded-md border border-amber-200">
+          <div className="text-sm text-amber-400 bg-amber-950/40 p-4 rounded-md border border-amber-500/30 mt-4">
             {t('q.selfyears.warning')}
           </div>
         )}

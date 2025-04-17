@@ -53,7 +53,19 @@ const config = {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
         },
-        gallopurple: "#690dac", // Adding the custom purple
+        gallopurple: "#690dac", // Original purple
+        gallomodern: {
+          50: "#F2E6FD",
+          100: "#E3CCFA",
+          200: "#C79AF5",
+          300: "#AB67EF",
+          400: "#9035EA",
+          500: "#7413D6",
+          600: "#5E10AC",
+          700: "#470C82",
+          800: "#300857",
+          900: "#18042D",
+        },
       },
       borderRadius: {
         lg: "var(--radius)",
@@ -73,11 +85,27 @@ const config = {
           "0%": { opacity: "0" },
           "100%": { opacity: "1" },
         },
+        "pulse-subtle": {
+          "0%, 100%": { opacity: "1" },
+          "50%": { opacity: "0.85" },
+        },
+        "gradient-shift": {
+          "0%": { backgroundPosition: "0% 50%" },
+          "50%": { backgroundPosition: "100% 50%" },
+          "100%": { backgroundPosition: "0% 50%" },
+        },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
         "fade-in": "fade-in 0.5s ease-out",
+        "pulse-subtle": "pulse-subtle 2s ease-in-out infinite",
+        "gradient-shift": "gradient-shift 3s ease infinite",
+      },
+      boxShadow: {
+        'glow-sm': '0 0 10px rgba(147, 51, 234, 0.3)',
+        'glow-md': '0 0 20px rgba(147, 51, 234, 0.4)',
+        'card-hover': '0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05), 0 0 0 1px rgba(255, 255, 255, 0.05)',
       },
     },
   },

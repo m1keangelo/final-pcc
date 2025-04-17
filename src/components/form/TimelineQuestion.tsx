@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 import QuestionContainer from "@/components/form/QuestionContainer";
 import { FormState } from "@/types/form";
 import { useLanguage } from "@/contexts/LanguageContext";
-import { ArrowLeft, ArrowRight } from "lucide-react";
+import { ArrowLeft, ArrowRight, Clock, CalendarDays, CalendarClock, CalendarCheck, HelpCircle } from "lucide-react";
 
 export const TimelineQuestion = ({
   value,
@@ -57,6 +57,17 @@ export const TimelineQuestion = ({
       }
     }
   };
+
+  const getIconForOption = (option: string) => {
+    switch(option) {
+      case 'immediately': return <Clock className="mr-2 h-5 w-5" />;
+      case '3months': return <CalendarDays className="mr-2 h-5 w-5" />;
+      case '3to6months': return <CalendarClock className="mr-2 h-5 w-5" />;
+      case '6to12months': return <CalendarCheck className="mr-2 h-5 w-5" />;
+      case 'exploring': return <HelpCircle className="mr-2 h-5 w-5" />;
+      default: return null;
+    }
+  };
   
   return (
     <QuestionContainer
@@ -66,42 +77,52 @@ export const TimelineQuestion = ({
       currentStep={currentStep}
       totalSteps={totalSteps}
     >
-      <div className="grid gap-4">
+      <div className="grid gap-3">
         <Button
-          variant={value === 'immediately' ? 'default' : 'outline'}
+          variant={value === 'immediately' ? 'glow' : 'outline'}
           onClick={() => onChange('immediately')}
+          className={`flex justify-start text-left transition-all duration-300 ${value === 'immediately' ? '' : 'hover:border-gallomodern-300/40 hover:text-gallomodern-300'}`}
         >
+          {getIconForOption('immediately')}
           {t('q.timeline.immediately')}
         </Button>
         <Button
-          variant={value === '3months' ? 'default' : 'outline'}
+          variant={value === '3months' ? 'glow' : 'outline'}
           onClick={() => onChange('3months')}
+          className={`flex justify-start text-left transition-all duration-300 ${value === '3months' ? '' : 'hover:border-gallomodern-300/40 hover:text-gallomodern-300'}`}
         >
+          {getIconForOption('3months')}
           {t('q.timeline.3months')}
         </Button>
         <Button
-          variant={value === '3to6months' ? 'default' : 'outline'}
+          variant={value === '3to6months' ? 'glow' : 'outline'}
           onClick={() => onChange('3to6months')}
+          className={`flex justify-start text-left transition-all duration-300 ${value === '3to6months' ? '' : 'hover:border-gallomodern-300/40 hover:text-gallomodern-300'}`}
         >
+          {getIconForOption('3to6months')}
           {t('q.timeline.3to6months')}
         </Button>
         <Button
-          variant={value === '6to12months' ? 'default' : 'outline'}
+          variant={value === '6to12months' ? 'glow' : 'outline'}
           onClick={() => onChange('6to12months')}
+          className={`flex justify-start text-left transition-all duration-300 ${value === '6to12months' ? '' : 'hover:border-gallomodern-300/40 hover:text-gallomodern-300'}`}
         >
+          {getIconForOption('6to12months')}
           {t('q.timeline.6to12months')}
         </Button>
         <Button
-          variant={value === 'exploring' ? 'default' : 'outline'}
+          variant={value === 'exploring' ? 'glow' : 'outline'}
           onClick={() => onChange('exploring')}
+          className={`flex justify-start text-left transition-all duration-300 ${value === 'exploring' ? '' : 'hover:border-gallomodern-300/40 hover:text-gallomodern-300'}`}
         >
+          {getIconForOption('exploring')}
           {t('q.timeline.exploring')}
         </Button>
       </div>
       
       {value && (
-        <div className="mt-4 p-4 border border-[#fef9be] rounded-md bg-black text-[#fef9be]">
-          <p className="font-medium">{getFeedbackMessage()}</p>
+        <div className="mt-6 p-4 rounded-md glass-card border border-gallomodern-500/30 shadow-inner bg-gradient-to-br from-gallomodern-900/20 to-black/30">
+          <p className="font-medium text-gallomodern-100">{getFeedbackMessage()}</p>
         </div>
       )}
       

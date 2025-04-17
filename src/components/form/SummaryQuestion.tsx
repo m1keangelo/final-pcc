@@ -4,7 +4,7 @@ import QuestionContainer from "@/components/form/QuestionContainer";
 import { FormState, calculateClientRating } from "@/types/form";
 import { getPositiveFactors, getQualificationSummary } from "@/utils/qualificationUtils";
 import { useLanguage } from "@/contexts/LanguageContext";
-import { ArrowLeft, ArrowRight, Check } from "lucide-react";
+import { ArrowLeft, CheckCircle, ShieldCheck, Home } from "lucide-react";
 
 export const SummaryQuestion = ({
   formData,
@@ -30,25 +30,28 @@ export const SummaryQuestion = ({
       currentStep={currentStep}
       totalSteps={totalSteps}
     >
-      <div className="space-y-6">
+      <div className="space-y-8">
         <div className="text-center">
-          <h3 className="text-2xl font-bold mb-2">{t('q.summary.score')}</h3>
-          <div className="inline-flex items-center justify-center w-24 h-24 rounded-full bg-primary text-primary-foreground text-3xl font-bold">
+          <h3 className="text-2xl font-bold mb-3 text-gradient">{t('q.summary.score')}</h3>
+          <div className="inline-flex items-center justify-center w-28 h-28 rounded-full bg-gradient-to-br from-gallomodern-400 to-gallomodern-600 text-white text-3xl font-bold shadow-glow-sm animate-pulse-subtle">
             {rating.overall}
           </div>
         </div>
         
-        <div className="p-4 border rounded-md bg-background">
-          <p className="font-medium text-lg mb-4">{qualificationSummary}</p>
+        <div className="p-5 rounded-lg glass-card border border-gallomodern-500/20 shadow-lg">
+          <p className="font-medium text-lg mb-6 text-gallomodern-50">{qualificationSummary}</p>
           
           {positiveFactors.length > 0 && (
-            <div className="space-y-2">
-              <h4 className="font-medium">{t('q.summary.positiveFactors')}</h4>
-              <ul className="space-y-1">
+            <div className="space-y-3">
+              <h4 className="font-medium text-gallomodern-200 flex items-center gap-2">
+                <ShieldCheck className="h-5 w-5" />
+                {t('q.summary.positiveFactors')}
+              </h4>
+              <ul className="space-y-2.5 pl-2">
                 {positiveFactors.map((factor, index) => (
-                  <li key={index} className="flex items-start">
-                    <Check className="h-5 w-5 text-green-500 mr-2 mt-0.5 flex-shrink-0" />
-                    <span>{factor}</span>
+                  <li key={index} className="flex items-start gap-2.5 bg-gallomodern-900/20 p-2.5 rounded-md border-l-2 border-gallomodern-300/50">
+                    <CheckCircle className="h-5 w-5 text-gallomodern-300 mt-0.5 flex-shrink-0" />
+                    <span className="text-gallomodern-50">{factor}</span>
                   </li>
                 ))}
               </ul>
@@ -57,7 +60,13 @@ export const SummaryQuestion = ({
         </div>
         
         <div className="grid gap-4">
-          <Button variant="default" size="lg" onClick={() => window.location.href = '/dashboard'}>
+          <Button 
+            variant="glow" 
+            size="lg" 
+            onClick={() => window.location.href = '/dashboard'}
+            className="mt-4 py-6"
+          >
+            <Home className="mr-2 h-5 w-5" />
             {t('q.summary.complete')}
           </Button>
         </div>

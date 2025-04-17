@@ -19,7 +19,7 @@ const Layout = ({ children }: LayoutProps) => {
   return (
     <LanguageProvider>
       <div className="flex h-screen bg-background">
-        <div className="w-72 hidden md:block border-r border-[#3C3C4A] shadow-md transition-all duration-300">
+        <div className="w-72 hidden md:block shadow-xl transition-all duration-300">
           <Navigation />
         </div>
         <div className="flex-1 overflow-auto">
