@@ -16,10 +16,6 @@ const issueTypes = [
   { id: "other", label: "Other" }
 ];
 
-type CreditIssuesMap = {
-  [key: string]: boolean;
-};
-
 export const CreditIssuesQuestion = ({
   value,
   creditIssues = {},
@@ -31,21 +27,30 @@ export const CreditIssuesQuestion = ({
   totalSteps
 }: {
   value: FormState['hasCreditIssues'];
-  creditIssues: Record<string, boolean>;
+  creditIssues: FormState['creditIssues'];
   onChange: (value: FormState['hasCreditIssues']) => void;
-  onCreditIssuesChange: (issues: Record<string, boolean>) => void;
+  onCreditIssuesChange: (issues: FormState['creditIssues']) => void;
   onNext: () => void;
   onBack: () => void;
   currentStep: number;
   totalSteps: number;
 }) => {
   const { t, language } = useLanguage();
-  const [selectedIssues, setSelectedIssues] = useState<CreditIssuesMap>(creditIssues);
+  const [selectedIssues, setSelectedIssues] = useState<Record<string, boolean>>(
+    Object.fromEntries(
+      Object.entries(creditIssues).filter(([key]) => 
+        ['bankruptcy', 'foreclosure', 'collections', 'medical', 'other'].includes(key)
+      )
+    )
+  );
   
   useEffect(() => {
     // Update parent form state when selected issues change
-    onCreditIssuesChange(selectedIssues);
-  }, [selectedIssues, onCreditIssuesChange]);
+    onCreditIssuesChange({
+      ...creditIssues,
+      ...selectedIssues
+    });
+  }, [selectedIssues, onCreditIssuesChange, creditIssues]);
   
   const handleIssueToggle = (issueId: string, checked: boolean) => {
     const updatedIssues = {
