@@ -5,23 +5,65 @@ import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { FileText, Users, BarChart, ExternalLink } from "lucide-react";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { useState, useEffect } from "react";
 
 const Dashboard = () => {
   const { t } = useLanguage();
   const { user } = useAuth();
+  const [selectedCampaign, setSelectedCampaign] = useState<string>("");
+  
+  // Mock user campaigns data (in a real app this would come from user context/API)
+  const userCampaigns = user?.role === 'assistant' 
+    ? ['Dennis', 'Tito', 'Michael'] // Example for assistants with multiple campaigns
+    : ['All'];
+    
+  useEffect(() => {
+    if (userCampaigns && userCampaigns.length > 0) {
+      setSelectedCampaign(userCampaigns[0]);
+    }
+  }, [userCampaigns]);
 
   const currentDate = new Date().toLocaleDateString(
     t('language') === 'es' ? 'es-ES' : 'en-US', 
     { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }
   );
 
+  const handleCampaignChange = (value: string) => {
+    setSelectedCampaign(value);
+    // In a real app, this would trigger data fetching for the selected campaign
+    console.log(`Switched to campaign: ${value}`);
+  };
+
   return (
     <div className="space-y-8 animate-fade-in max-w-[1200px] mx-auto px-4 md:px-6">
-      <div>
-        <h1 className="text-4xl font-bold mb-2 text-shadow-sm">{t('dashboard.welcome')}</h1>
-        <p className="text-xl text-white/80 mb-8">
-          {t('dashboard.subtitle')}
-        </p>
+      <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4">
+        <div>
+          <h1 className="text-4xl font-bold mb-2 text-shadow-sm">{t('dashboard.welcome')}</h1>
+          <p className="text-xl text-white/80">
+            {t('dashboard.subtitle')}
+          </p>
+        </div>
+        
+        {user?.role === 'assistant' && userCampaigns.length > 1 && (
+          <div className="w-full sm:w-64">
+            <Select 
+              value={selectedCampaign} 
+              onValueChange={handleCampaignChange}
+            >
+              <SelectTrigger className="bg-black/50 border-purple-500/30 focus:ring-purple-400">
+                <SelectValue placeholder="Select campaign" />
+              </SelectTrigger>
+              <SelectContent>
+                {userCampaigns.map((campaign) => (
+                  <SelectItem key={campaign} value={campaign}>
+                    {campaign} Campaign
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+        )}
       </div>
       
       <div className="grid md:grid-cols-2 gap-6">
@@ -35,7 +77,9 @@ const Dashboard = () => {
               </span>
             </CardTitle>
             <CardDescription className="text-white/70">
-              {t('dashboard.description')}
+              {selectedCampaign !== 'All' 
+                ? `You are currently viewing the ${selectedCampaign} campaign` 
+                : t('dashboard.description')}
             </CardDescription>
           </CardHeader>
           <CardContent>
@@ -77,7 +121,11 @@ const Dashboard = () => {
                 </div>
                 <div>
                   <p className="text-sm text-white/70">New Clients (This Week)</p>
-                  <p className="text-2xl font-semibold text-high-contrast">12</p>
+                  <p className="text-2xl font-semibold text-high-contrast">
+                    {selectedCampaign === 'Dennis' ? '12' : 
+                     selectedCampaign === 'Tito' ? '8' : 
+                     selectedCampaign === 'Michael' ? '10' : '30'}
+                  </p>
                 </div>
               </div>
               
@@ -87,7 +135,11 @@ const Dashboard = () => {
                 </div>
                 <div>
                   <p className="text-sm text-white/70">Qualified Leads</p>
-                  <p className="text-2xl font-semibold text-high-contrast">68%</p>
+                  <p className="text-2xl font-semibold text-high-contrast">
+                    {selectedCampaign === 'Dennis' ? '68%' : 
+                     selectedCampaign === 'Tito' ? '72%' : 
+                     selectedCampaign === 'Michael' ? '64%' : '68%'}
+                  </p>
                 </div>
               </div>
             </div>

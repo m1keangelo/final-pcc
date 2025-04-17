@@ -13,6 +13,8 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { UserPlus, Edit, Trash2, Search } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { toast } from "@/lib/toast";
+import { Checkbox } from "@/components/ui/checkbox";
+import { Form, FormControl, FormField, FormItem, FormLabel } from "@/components/ui/form";
 
 const AdminDashboard = () => {
   const { t } = useLanguage();
@@ -22,15 +24,15 @@ const AdminDashboard = () => {
   const [showAddCampaignDialog, setShowAddCampaignDialog] = useState(false);
   const [newUsername, setNewUsername] = useState("");
   const [newRole, setNewRole] = useState("assistant");
-  const [newCampaign, setNewCampaign] = useState("Dennis");
+  const [selectedCampaigns, setSelectedCampaigns] = useState<string[]>([]);
   const [campaignName, setCampaignName] = useState("");
   const [searchQuery, setSearchQuery] = useState("");
 
   const mockUsers = [
-    { id: '1', username: 'admin', name: 'Admin User', role: 'admin', campaign: 'All' },
-    { id: '2', username: 'maria', name: 'Maria Rodriguez', role: 'assistant', campaign: 'Dennis' },
-    { id: '3', username: 'juan', name: 'Juan Perez', role: 'assistant', campaign: 'Michael' },
-    { id: '0', username: 'm1keangelo', name: 'Super Admin', role: 'superadmin', campaign: 'All' }
+    { id: '1', username: 'admin', name: 'Admin User', role: 'admin', campaigns: ['All'] },
+    { id: '2', username: 'maria', name: 'Maria Rodriguez', role: 'assistant', campaigns: ['Dennis', 'Tito'] },
+    { id: '3', username: 'juan', name: 'Juan Perez', role: 'assistant', campaigns: ['Michael'] },
+    { id: '0', username: 'm1keangelo', name: 'Super Admin', role: 'superadmin', campaigns: ['All'] }
   ];
 
   const mockCampaigns = [
@@ -46,11 +48,16 @@ const AdminDashboard = () => {
       return;
     }
 
+    if (newRole === 'assistant' && selectedCampaigns.length === 0) {
+      toast.error("Please select at least one campaign");
+      return;
+    }
+
     // In a real app, this would make an API call to create the user
     toast.success(`User ${newUsername} added successfully`);
     setNewUsername("");
     setNewRole("assistant");
-    setNewCampaign("Dennis");
+    setSelectedCampaigns([]);
     setShowAddUserDialog(false);
   };
 
@@ -66,11 +73,19 @@ const AdminDashboard = () => {
     setShowAddCampaignDialog(false);
   };
 
+  const toggleCampaign = (campaign: string) => {
+    setSelectedCampaigns(prev => 
+      prev.includes(campaign) 
+        ? prev.filter(c => c !== campaign) 
+        : [...prev, campaign]
+    );
+  };
+
   // Filter users based on search query
   const filteredUsers = mockUsers.filter(user => 
     user.username.toLowerCase().includes(searchQuery.toLowerCase()) ||
     user.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    user.campaign.toLowerCase().includes(searchQuery.toLowerCase())
+    user.campaigns.some(campaign => campaign.toLowerCase().includes(searchQuery.toLowerCase()))
   );
 
   return (
@@ -149,25 +164,27 @@ const AdminDashboard = () => {
                         </Select>
                       </div>
                       {newRole === 'assistant' && (
-                        <div className="grid grid-cols-4 items-center gap-4">
-                          <Label htmlFor="campaign" className="text-right">
-                            Campaign
+                        <div className="grid grid-cols-4 items-start gap-4">
+                          <Label className="text-right mt-2">
+                            Campaigns
                           </Label>
-                          <Select
-                            value={newCampaign}
-                            onValueChange={setNewCampaign}
-                          >
-                            <SelectTrigger className="col-span-3">
-                              <SelectValue placeholder="Select campaign" />
-                            </SelectTrigger>
-                            <SelectContent>
-                              {mockCampaigns.map(campaign => (
-                                <SelectItem key={campaign.id} value={campaign.name}>
+                          <div className="col-span-3 space-y-3">
+                            {mockCampaigns.map(campaign => (
+                              <div key={campaign.id} className="flex items-center space-x-2">
+                                <Checkbox 
+                                  id={`campaign-${campaign.id}`}
+                                  checked={selectedCampaigns.includes(campaign.name)}
+                                  onCheckedChange={() => toggleCampaign(campaign.name)}
+                                />
+                                <label 
+                                  htmlFor={`campaign-${campaign.id}`}
+                                  className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                                >
                                   {campaign.name}
-                                </SelectItem>
-                              ))}
-                            </SelectContent>
-                          </Select>
+                                </label>
+                              </div>
+                            ))}
+                          </div>
                         </div>
                       )}
                     </div>
@@ -200,7 +217,7 @@ const AdminDashboard = () => {
                     <TableHead>Username</TableHead>
                     <TableHead>Name</TableHead>
                     <TableHead>Role</TableHead>
-                    <TableHead>Campaign</TableHead>
+                    <TableHead>Campaigns</TableHead>
                     <TableHead className="w-[100px]">Actions</TableHead>
                   </TableRow>
                 </TableHeader>
@@ -222,7 +239,15 @@ const AdminDashboard = () => {
                           {user.role}
                         </Badge>
                       </TableCell>
-                      <TableCell>{user.campaign}</TableCell>
+                      <TableCell>
+                        <div className="flex flex-wrap gap-1">
+                          {user.campaigns.map(campaign => (
+                            <Badge key={campaign} variant="outline" className="bg-black/30">
+                              {campaign}
+                            </Badge>
+                          ))}
+                        </div>
+                      </TableCell>
                       <TableCell>
                         <div className="flex items-center gap-2">
                           <Button size="sm" variant="ghost">
