@@ -66,8 +66,8 @@ const LoginForm = () => {
 
   return (
     <div className="flex flex-col items-center justify-center w-full py-8 px-6 md:w-1/2">
-      <div className="w-full max-w-md glass-morphism rounded-xl p-8 shadow-2xl border border-white/10 backdrop-blur-lg transition-all duration-300 hover:shadow-gallomodern-500/10 animate-fade-in">
-        <h2 className="text-3xl font-bold text-center text-white mb-8 font-display">
+      <div className="w-full max-w-md glass-morphism rounded-xl p-8 shadow-2xl border border-white/10 backdrop-blur-lg transition-all duration-300 hover:shadow-glow-purple animate-fade-in">
+        <h2 className="text-3xl font-bold text-center text-white mb-8 font-display text-shadow-sm">
           {t('login.title')}
         </h2>
         
@@ -78,7 +78,7 @@ const LoginForm = () => {
               {t('login.username')}
             </Label>
             <div className="relative">
-              <div className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gallomodern-300">
+              <div className="absolute left-3 top-1/2 transform -translate-y-1/2 text-neon-purple">
                 <User size={18} />
               </div>
               <Input
@@ -87,7 +87,7 @@ const LoginForm = () => {
                 placeholder="admin"
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
-                className="bg-white/5 border-white/10 text-white pl-10 h-12 focus:border-gallomodern-300 focus:ring-1 focus:ring-gallomodern-300 transition-all rounded-lg"
+                className="bg-white/5 border-white/10 text-white pl-10 h-12 focus:border-neon-purple focus:ring-1 focus:ring-neon-purple/70 transition-all rounded-lg"
               />
             </div>
           </div>
@@ -98,7 +98,7 @@ const LoginForm = () => {
               {t('login.password')}
             </Label>
             <div className="relative">
-              <div className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gallomodern-300">
+              <div className="absolute left-3 top-1/2 transform -translate-y-1/2 text-neon-blue">
                 <Lock size={18} />
               </div>
               <Input
@@ -107,7 +107,7 @@ const LoginForm = () => {
                 placeholder="••••••••"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="bg-white/5 border-white/10 text-white pl-10 h-12 focus:border-gallomodern-300 focus:ring-1 focus:ring-gallomodern-300 transition-all rounded-lg"
+                className="bg-white/5 border-white/10 text-white pl-10 h-12 focus:border-neon-blue focus:ring-1 focus:ring-neon-blue/70 transition-all rounded-lg"
               />
               <button
                 type="button"
@@ -128,7 +128,7 @@ const LoginForm = () => {
           
           {/* Forgot Password Link */}
           <div className="flex justify-end">
-            <a href="#" className="text-sm text-gallomodern-300 hover:text-gallomodern-200 transition-colors flex items-center gap-1">
+            <a href="#" className="text-sm text-neon-blue hover:text-neon-purple transition-colors flex items-center gap-1">
               <HelpCircle size={14} />
               {t('login.forgotPassword')}
             </a>
@@ -137,7 +137,7 @@ const LoginForm = () => {
           {/* Login Button */}
           <Button 
             type="submit" 
-            className="w-full h-12 bg-gradient-to-r from-gallomodern-600 to-gallomodern-500 hover:from-gallomodern-500 hover:to-gallomodern-400 text-white text-base font-medium transition-all shadow-lg shadow-gallomodern-700/20 hover:shadow-gallomodern-700/40 rounded-lg"
+            className="w-full h-12 bg-gradient-to-r from-neon-purple to-neon-blue hover:from-neon-blue hover:to-neon-purple text-white text-base font-medium transition-all shadow-lg shadow-neon-purple/20 hover:shadow-neon-blue/30 rounded-lg"
             disabled={isSubmitting}
           >
             {isSubmitting ? (
@@ -155,8 +155,8 @@ const LoginForm = () => {
         </form>
         
         {/* Demo Credentials */}
-        <div className="text-center text-xs text-white/70 mt-8 border-t border-white/10 pt-4">
-          <p className="mb-1 font-medium text-gallomodern-300">Demo Credentials:</p>
+        <div className="text-center text-xs text-white/80 mt-8 border-t border-white/10 pt-4">
+          <p className="mb-1 font-medium text-neon-blue">Demo Credentials:</p>
           <p>Username: admin, maria, or juan</p>
           <p>Password: password123</p>
         </div>

@@ -10,16 +10,16 @@ const buttonVariants = cva(
   {
     variants: {
       variant: {
-        default: "bg-gradient-to-br from-primary to-accent text-primary-foreground hover:bg-primary/90 shadow-md hover:shadow-lg hover:translate-y-[-1px] active:translate-y-[0px]",
+        default: "bg-gradient-to-br from-neon-purple to-neon-blue text-white hover:bg-primary/90 shadow-md hover:shadow-glow-purple hover:translate-y-[-1px] active:translate-y-[0px]",
         destructive:
           "bg-destructive text-destructive-foreground hover:bg-destructive/90 shadow-md",
         outline:
-          "border border-input bg-background/40 backdrop-blur-sm hover:bg-accent/10 hover:text-accent-foreground shadow-sm hover:border-accent/50",
+          "border border-input bg-background/40 backdrop-blur-sm hover:bg-accent/10 hover:text-accent-foreground shadow-sm hover:border-neon-purple/50",
         secondary:
-          "bg-secondary/70 backdrop-blur-sm text-secondary-foreground hover:bg-secondary/80 shadow-sm",
+          "bg-secondary/70 backdrop-blur-sm text-secondary-foreground hover:bg-secondary/80 shadow-sm hover:text-white",
         ghost: "hover:bg-accent/10 hover:text-accent-foreground",
-        link: "text-primary underline-offset-4 hover:underline",
-        glow: "bg-gradient-to-r from-gallomodern-300 to-gallomodern-500 text-white shadow-glow-sm hover:shadow-glow-md transition-all duration-300 hover:scale-[1.02] active:scale-[0.98]",
+        link: "text-neon-blue underline-offset-4 hover:underline hover:text-neon-purple",
+        glow: "bg-gradient-to-r from-neon-purple to-neon-blue text-white shadow-glow-sm hover:shadow-glow-md transition-all duration-300 hover:scale-[1.02] active:scale-[0.98]",
       },
       size: {
         default: "h-10 px-4 py-2",

@@ -19,18 +19,29 @@ const MatrixBackground = () => {
           filter: `blur(${Math.random() < 0.3 ? '1px' : '0px'})`
         }}
       >
-        {Array.from({ length: Math.floor(10 + Math.random() * 15) }).map((_, j) => (
-          <div 
-            key={j}
-            style={{ 
-              color: `rgba(155, 135, 245, ${0.4 + Math.random() * 0.6})`,
-              textShadow: '0 0 8px rgba(105, 13, 172, 0.8)',
-              transform: `scale(${0.8 + Math.random() * 0.5})`
-            }}
-          >
-            {String.fromCharCode(33 + Math.floor(Math.random() * 94))}
-          </div>
-        ))}
+        {Array.from({ length: Math.floor(10 + Math.random() * 15) }).map((_, j) => {
+          // Create a random color from our neon palette for each character
+          const colors = [
+            'rgba(176, 38, 255, 0.8)', // neon-purple
+            'rgba(255, 73, 219, 0.7)', // neon-pink
+            'rgba(54, 219, 255, 0.7)', // neon-blue
+            'rgba(1, 255, 137, 0.6)',  // neon-green
+          ];
+          const randomColor = colors[Math.floor(Math.random() * colors.length)];
+          
+          return (
+            <div 
+              key={j}
+              style={{ 
+                color: randomColor,
+                textShadow: '0 0 8px rgba(176, 38, 255, 0.8)',
+                transform: `scale(${0.8 + Math.random() * 0.5})`
+              }}
+            >
+              {String.fromCharCode(33 + Math.floor(Math.random() * 94))}
+            </div>
+          );
+        })}
       </div>
     ));
     
