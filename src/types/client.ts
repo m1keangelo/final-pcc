@@ -53,6 +53,10 @@ export type ClientData = {
   nextSteps?: string;
   lastContact?: string;
   
+  // Client journey status
+  journeyStatus?: 'docCollection' | 'searching' | 'underContract' | 'closed';
+  anticipatedClosingDate?: string;
+  
   // Trash management
   deletedAt?: string;
 };
@@ -82,6 +86,8 @@ export type ClientColumnId =
   | 'legalStatus'
   | 'qualified'
   | 'urgency'
+  | 'journeyStatus'
+  | 'anticipatedClosingDate'
   | 'nextSteps';
 
 export interface ClientColumn {
@@ -105,5 +111,7 @@ export const CLIENT_COLUMNS: ClientColumn[] = [
   { id: 'legalStatus', label: 'Legal Status' },
   { id: 'qualified', label: 'Qualified' },
   { id: 'urgency', label: 'Urgency', required: true },
+  { id: 'journeyStatus', label: 'Status' },
+  { id: 'anticipatedClosingDate', label: 'Closing Date' },
   { id: 'nextSteps', label: 'Next Steps' }
 ];

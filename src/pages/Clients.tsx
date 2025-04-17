@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { useData } from "@/contexts/DataContext";
@@ -14,7 +13,7 @@ import {
   TableHeader,
   TableRow 
 } from "@/components/ui/table";
-import { Search, FileDown, CheckCircle, XCircle, Clock, AlertTriangle, Phone, ChevronLeft, ChevronRight, Trash2, Check, MoreHorizontal } from "lucide-react";
+import { Search, FileDown, CheckCircle, XCircle, Clock, AlertTriangle, Phone, ChevronLeft, ChevronRight, Trash2, Check, MoreHorizontal, FileCheck, Home, CalendarIcon } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { ClientData, CAMPAIGNS, CLIENT_COLUMNS, ClientColumnId } from "@/types/client";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -57,6 +56,8 @@ import {
 import { toast } from "@/lib/toast";
 import { Checkbox } from "@/components/ui/checkbox";
 import { ColumnManager } from "@/components/ColumnManager";
+import { StatusTracker } from "@/components/StatusTracker";
+import { format } from "date-fns";
 
 const Clients = () => {
   const { t } = useLanguage();
@@ -151,6 +152,12 @@ const Clients = () => {
             {client.nextSteps || '-'}
           </span>
         );
+      case 'journeyStatus':
+        return getJourneyStatusBadge(client.journeyStatus);
+      case 'anticipatedClosingDate':
+        return client.anticipatedClosingDate ? 
+          format(new Date(client.anticipatedClosingDate), "MMM d, yyyy") : 
+          'Not set';
       default:
         return 'N/A';
     }
@@ -240,6 +247,21 @@ const Clients = () => {
       case 'low':
       default:
         return <Badge variant="outline">Low</Badge>;
+    }
+  };
+  
+  const getJourneyStatusBadge = (status?: string) => {
+    switch(status) {
+      case 'docCollection':
+        return <Badge variant="outline" className="flex items-center gap-1"><FileCheck size={12} /> Doc Collection</Badge>;
+      case 'searching':
+        return <Badge variant="secondary" className="flex items-center gap-1"><Search size={12} /> Searching</Badge>;
+      case 'underContract':
+        return <Badge variant="default" className="flex items-center gap-1"><Home size={12} /> Under Contract</Badge>;
+      case 'closed':
+        return <Badge variant="success" className="bg-green-600 text-white flex items-center gap-1"><CheckCircle size={12} /> Closed</Badge>;
+      default:
+        return <Badge variant="outline">Not Started</Badge>;
     }
   };
   
@@ -734,6 +756,10 @@ const ClientDetails = ({ client, onClose, onDelete }: ClientDetailsProps) => {
                 {!client.downPaymentSaved && <p><strong>Assistance Interest:</strong> {client.assistanceInterested ? 'Yes' : 'No'}</p>}
               </div>
             </div>
+          </div>
+          
+          <div className="mt-8">
+            <StatusTracker client={client} />
           </div>
           
           <div className="mt-8 space-y-4">

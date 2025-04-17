@@ -29,7 +29,7 @@ const TRASH_RETENTION_DAYS = 30;
 // Default visible columns
 const DEFAULT_VISIBLE_COLUMNS: ClientColumnId[] = [
   'name', 'phone', 'creditCategory', 'legalStatus', 
-  'campaign', 'timeline', 'urgency', 'nextSteps'
+  'campaign', 'timeline', 'urgency', 'journeyStatus', 'nextSteps'
 ];
 
 // Local storage key for column preferences
