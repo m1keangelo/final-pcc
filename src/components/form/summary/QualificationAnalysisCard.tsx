@@ -12,14 +12,8 @@ interface QualificationAnalysisCardProps {
   isQualified: boolean;
 }
 
-const QualificationAnalysisCard: React.FC<QualificationAnalysisCardProps> = ({ 
-  formData, 
-  clientRating,
-  isQualified 
-}) => {
-  const { language } = useLanguage();
-  const isEnglish = language === 'en';
-
+// Helper to generate analysis based on form data
+const useGenerateAnalysis = (formData: FormState, clientRating: ClientRating, isEnglish: boolean) => {
   // Generate detailed analysis based on form data
   const generateAnalysis = () => {
     const analysis = [];
@@ -128,7 +122,57 @@ const QualificationAnalysisCard: React.FC<QualificationAnalysisCardProps> = ({
     return analysis;
   };
 
-  const analysis = generateAnalysis();
+  return generateAnalysis();
+};
+
+// Analysis Item Component
+const AnalysisItem = ({ item }: { item: string }) => {
+  const needsWarning = item.includes('below') || item.includes('needs improvement');
+  
+  return (
+    <li className="flex items-start gap-3 p-3 bg-muted/10 rounded-md">
+      {needsWarning ? (
+        <AlertTriangle className="h-5 w-5 text-amber-500 mt-1 flex-shrink-0" />
+      ) : (
+        <Check className="h-5 w-5 text-green-500 mt-1 flex-shrink-0" />
+      )}
+      <span className="text-sm">{item}</span>
+    </li>
+  );
+};
+
+// Qualification Checklist Item
+const ChecklistItem = ({ 
+  title,
+  isValid,
+  isEnglish
+}: { 
+  title: string, 
+  isValid: boolean,
+  isEnglish: boolean
+}) => {
+  return (
+    <div className="flex items-center gap-2">
+      {isValid ? (
+        <Check className="h-4 w-4 text-green-500" />
+      ) : (
+        <X className="h-4 w-4 text-red-500" />
+      )}
+      <span className="text-sm">{title}</span>
+    </div>
+  );
+};
+
+const QualificationAnalysisCard: React.FC<QualificationAnalysisCardProps> = ({ 
+  formData, 
+  clientRating,
+  isQualified 
+}) => {
+  const { language } = useLanguage();
+  const isEnglish = language === 'en';
+
+  // Use the helper to generate analysis
+  const analysis = useGenerateAnalysis(formData, clientRating, isEnglish);
 
   console.log("QualificationAnalysisCard rendering with:", {
     isQualified,
@@ -165,14 +209,7 @@ const QualificationAnalysisCard: React.FC<QualificationAnalysisCardProps> = ({
             <h4 className="font-medium">{isEnglish ? 'Analysis Summary' : 'Resumen de Análisis'}</h4>
             <ul className="space-y-3">
               {analysis.map((item, index) => (
-                <li key={index} className="flex items-start gap-3 p-3 bg-muted/10 rounded-md">
-                  {item.includes('below') || item.includes('needs improvement') ? (
-                    <AlertTriangle className="h-5 w-5 text-amber-500 mt-1 flex-shrink-0" />
-                  ) : (
-                    <Check className="h-5 w-5 text-green-500 mt-1 flex-shrink-0" />
-                  )}
-                  <span className="text-sm">{item}</span>
-                </li>
+                <AnalysisItem key={index} item={item} />
               ))}
             </ul>
           </div>
@@ -182,66 +219,36 @@ const QualificationAnalysisCard: React.FC<QualificationAnalysisCardProps> = ({
               {isEnglish ? 'Qualification Checklist' : 'Lista de Verificación de Calificación'}
             </h4>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
-              <div className="flex items-center gap-2">
-                {clientRating.incomeRating >= 6 ? (
-                  <Check className="h-4 w-4 text-green-500" />
-                ) : (
-                  <X className="h-4 w-4 text-red-500" />
-                )}
-                <span className="text-sm">
-                  {isEnglish ? 'Sufficient Income' : 'Ingresos Suficientes'}
-                </span>
-              </div>
-              <div className="flex items-center gap-2">
-                {clientRating.creditRating >= 6 ? (
-                  <Check className="h-4 w-4 text-green-500" />
-                ) : (
-                  <X className="h-4 w-4 text-red-500" />
-                )}
-                <span className="text-sm">
-                  {isEnglish ? 'Acceptable Credit' : 'Crédito Aceptable'}
-                </span>
-              </div>
-              <div className="flex items-center gap-2">
-                {clientRating.downPaymentRating >= 4 ? (
-                  <Check className="h-4 w-4 text-green-500" />
-                ) : (
-                  <X className="h-4 w-4 text-red-500" />
-                )}
-                <span className="text-sm">
-                  {isEnglish ? 'Down Payment/Funds' : 'Pago Inicial/Fondos'}
-                </span>
-              </div>
-              <div className="flex items-center gap-2">
-                {!formData.hasCreditIssues ? (
-                  <Check className="h-4 w-4 text-green-500" />
-                ) : (
-                  <X className="h-4 w-4 text-red-500" />
-                )}
-                <span className="text-sm">
-                  {isEnglish ? 'No Major Credit Issues' : 'Sin Problemas de Crédito Importantes'}
-                </span>
-              </div>
-              <div className="flex items-center gap-2">
-                {formData.idType === 'SSN' ? (
-                  <Check className="h-4 w-4 text-green-500" />
-                ) : (
-                  <X className="h-4 w-4 text-red-500" />
-                )}
-                <span className="text-sm">
-                  {isEnglish ? 'SSN Available' : 'SSN Disponible'}
-                </span>
-              </div>
-              <div className="flex items-center gap-2">
-                {(formData.employmentType !== '1099' || (formData.selfEmployedYears && formData.selfEmployedYears >= 2)) ? (
-                  <Check className="h-4 w-4 text-green-500" />
-                ) : (
-                  <X className="h-4 w-4 text-red-500" />
-                )}
-                <span className="text-sm">
-                  {isEnglish ? 'Employment History' : 'Historial de Empleo'}
-                </span>
-              </div>
+              <ChecklistItem 
+                title={isEnglish ? 'Sufficient Income' : 'Ingresos Suficientes'}
+                isValid={clientRating.incomeRating >= 6}
+                isEnglish={isEnglish}
+              />
+              <ChecklistItem 
+                title={isEnglish ? 'Acceptable Credit' : 'Crédito Aceptable'}
+                isValid={clientRating.creditRating >= 6}
+                isEnglish={isEnglish}
+              />
+              <ChecklistItem 
+                title={isEnglish ? 'Down Payment/Funds' : 'Pago Inicial/Fondos'}
+                isValid={clientRating.downPaymentRating >= 4}
+                isEnglish={isEnglish}
+              />
+              <ChecklistItem 
+                title={isEnglish ? 'No Major Credit Issues' : 'Sin Problemas de Crédito Importantes'}
+                isValid={!formData.hasCreditIssues}
+                isEnglish={isEnglish}
+              />
+              <ChecklistItem 
+                title={isEnglish ? 'SSN Available' : 'SSN Disponible'}
+                isValid={formData.idType === 'SSN'}
+                isEnglish={isEnglish}
+              />
+              <ChecklistItem 
+                title={isEnglish ? 'Employment History' : 'Historial de Empleo'}
+                isValid={(formData.employmentType !== '1099' || (formData.selfEmployedYears && formData.selfEmployedYears >= 2))}
+                isEnglish={isEnglish}
+              />
             </div>
           </div>
         </div>

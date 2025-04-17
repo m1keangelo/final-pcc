@@ -20,7 +20,7 @@ const PrequalificationResultsCard: React.FC<PrequalificationResultsCardProps> = 
   const isEnglish = language === 'en';
 
   const formatCurrency = (amount: number | null) => {
-    if (amount === null) return '--';
+    if (amount === null || amount === undefined) return '--';
     return new Intl.NumberFormat('en-US', {
       style: 'currency',
       currency: 'USD',
@@ -40,9 +40,10 @@ const PrequalificationResultsCard: React.FC<PrequalificationResultsCardProps> = 
   const monthlyRate = interestRate / 12;
   const numberOfPayments = loanTermYears * 12;
   
-  const estimatedMonthlyPayment = estimatedLoanAmount * 
+  const estimatedMonthlyPayment = estimatedLoanAmount > 0 ? 
+    estimatedLoanAmount * 
     (monthlyRate * Math.pow(1 + monthlyRate, numberOfPayments)) / 
-    (Math.pow(1 + monthlyRate, numberOfPayments) - 1);
+    (Math.pow(1 + monthlyRate, numberOfPayments) - 1) : 0;
 
   // Calculate maximum purchase price
   const downPaymentAmount = formData.downPaymentAmount || 0;

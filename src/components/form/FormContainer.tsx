@@ -34,11 +34,6 @@ const FormContainer: React.FC = () => {
   useEffect(() => {
     console.log("FormContainer - Current Stage:", formStage);
     console.log("FormContainer - Current Form Data:", formData);
-    
-    // Debug logs to track what's happening with stage changes
-    if (formStage === 'summary') {
-      console.log("SUMMARY STAGE ACTIVE - formData available:", formData);
-    }
   }, [formStage, formData]);
 
   const handleNextFromInitialInfo = () => {
@@ -49,107 +44,122 @@ const FormContainer: React.FC = () => {
   const handleFormComplete = (completedData: FormState) => {
     console.log('Form completion triggered with data:', completedData);
     
-    const finalData = {
-      ...completedData,
-      name: formData.name,
-      phone: formData.phone,
-      email: formData.email,
-      agent: selectedAgent,
-      campaign: selectedCampaign 
-    };
-    
-    console.log('Setting final data for summary:', finalData);
-    setFormData(finalData);
-    
-    console.log('Changing form stage to summary');
-    setFormStage('summary');
-    
-    console.log('Final Data for Summary:', finalData);
-    const transformedData = transformFormData(finalData, selectedAgent);
-    console.log('Transformed client data:', transformedData);
-    
-    addClient({
-      ...transformedData,
-      campaign: selectedCampaign
-    });
-    
-    toast.success(language === 'en' ? 
-      'Your information has been submitted successfully!' : 
-      '¡Su información ha sido enviada con éxito!');
+    try {
+      // Create a complete data object with all form information
+      const finalData = {
+        ...completedData,
+        name: formData.name,
+        phone: formData.phone,
+        email: formData.email,
+        agent: selectedAgent,
+        campaign: selectedCampaign 
+      };
+      
+      console.log('Final data before setting to state:', finalData);
+      
+      // First save data to state
+      setFormData(finalData);
+      
+      // Send data to backend
+      const transformedData = transformFormData(finalData, selectedAgent);
+      console.log('Transformed client data for backend:', transformedData);
+      
+      addClient({
+        ...transformedData,
+        campaign: selectedCampaign
+      });
+      
+      // Show success message
+      toast.success(language === 'en' ? 
+        'Your information has been submitted successfully!' : 
+        '¡Su información ha sido enviada con éxito!');
+      
+      // Then change stage - this needs to happen AFTER data is set
+      console.log('Changing form stage to summary');
+      setTimeout(() => {
+        setFormStage('summary');
+      }, 100);
+      
+    } catch (error) {
+      console.error("Error during form completion:", error);
+      toast.error(language === 'en' ? 
+        'There was an error submitting your information. Please try again.' : 
+        'Hubo un error al enviar su información. Por favor, inténtelo de nuevo.');
+    }
   };
 
   const handleProceedToDocuments = () => {
     navigate('/documents');
   };
 
-  // Force re-render when form stage changes to ensure proper component mounting
-  const renderContent = () => {
-    console.log("Rendering content for stage:", formStage);
+  const renderForm = () => {
+    console.log("Rendering form content for stage:", formStage);
     
-    if (formStage === 'initialInfo') {
-      return (
-        <>
-          <InitialInfoForm 
-            formData={formData}
-            onFormDataChange={handleFormDataChange}
-            selectedAgent={selectedAgent}
-            setSelectedAgent={setSelectedAgent}
-            onNext={handleNextFromInitialInfo}
+    switch (formStage) {
+      case 'initialInfo':
+        return (
+          <>
+            <InitialInfoForm 
+              formData={formData}
+              onFormDataChange={handleFormDataChange}
+              selectedAgent={selectedAgent}
+              setSelectedAgent={setSelectedAgent}
+              onNext={handleNextFromInitialInfo}
+            />
+            
+            <div className="mt-4">
+              <Label htmlFor="campaign-select" className="text-base font-medium">
+                {language === 'en' ? 'Select Campaign' : 'Seleccionar Campaña'}
+              </Label>
+              <Select
+                value={selectedCampaign}
+                onValueChange={setSelectedCampaign}
+              >
+                <SelectTrigger id="campaign-select" className="w-full mt-2 h-11 bg-popover">
+                  <SelectValue placeholder={language === 'en' ? 'Select campaign' : 'Seleccionar campaña'} />
+                </SelectTrigger>
+                <SelectContent>
+                  {campaigns.map(campaign => (
+                    <SelectItem key={campaign} value={campaign}>
+                      {campaign}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+          </>
+        );
+      
+      case 'questions':
+        return (
+          <FormQuestions 
+            initialData={formData}
+            onComplete={handleFormComplete}
+            onBack={() => setFormStage('initialInfo')}
           />
-          
-          <div className="mt-4">
-            <Label htmlFor="campaign-select" className="text-base font-medium">
-              {language === 'en' ? 'Select Campaign' : 'Seleccionar Campaña'}
-            </Label>
-            <Select
-              value={selectedCampaign}
-              onValueChange={setSelectedCampaign}
-            >
-              <SelectTrigger id="campaign-select" className="w-full mt-2 h-11 bg-popover">
-                <SelectValue placeholder={language === 'en' ? 'Select campaign' : 'Seleccionar campaña'} />
-              </SelectTrigger>
-              <SelectContent>
-                {campaigns.map(campaign => (
-                  <SelectItem key={campaign} value={campaign}>
-                    {campaign}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-          </div>
-        </>
-      );
+        );
+      
+      case 'summary':
+        console.log("Rendering SummaryOutcome with formData:", formData);
+        return (
+          <SummaryOutcome 
+            formData={formData}
+            onProceedToDocuments={handleProceedToDocuments} 
+          />
+        );
+      
+      default:
+        return null;
     }
-    
-    if (formStage === 'questions') {
-      return (
-        <FormQuestions 
-          initialData={formData}
-          onComplete={handleFormComplete}
-          onBack={() => setFormStage('initialInfo')}
-        />
-      );
-    }
-    
-    if (formStage === 'summary') {
-      console.log("Rendering SummaryOutcome component with formData:", formData);
-      return (
-        <SummaryOutcome 
-          formData={formData}
-          onProceedToDocuments={handleProceedToDocuments} 
-        />
-      );
-    }
-    
-    return null;
   };
 
   return (
     <div className="max-w-5xl mx-auto px-4 py-8 md:py-12 space-y-8 animate-fade-in bg-gradient-to-b from-background to-background/95">
       <FormHeader />
 
-      <div key={`form-stage-${formStage}`}>
-        {renderContent()}
+      {/* Using a keyed div to force re-render when form stage changes */}
+      <div key={`form-stage-${formStage}-${Date.now()}`} className="form-container">
+        {renderForm()}
       </div>
     </div>
   );

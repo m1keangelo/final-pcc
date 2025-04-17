@@ -3,13 +3,8 @@ import React, { Suspense } from 'react';
 import { ErrorBoundary } from "@/components/ErrorBoundary";
 import FormContainer from "@/components/form/FormContainer";
 import { Skeleton } from '@/components/ui/skeleton';
-import { toast } from '@/lib/toast';
-
-type ErrorBoundaryProps = {
-  children: React.ReactNode;
-  fallback: React.ReactNode;
-  onError?: (error: Error) => void;
-};
+import { toast } from 'sonner';
+import { Card } from '@/components/ui/card';
 
 const Form: React.FC = () => {
   const handleError = (error: Error) => {
@@ -22,17 +17,19 @@ const Form: React.FC = () => {
       <h1 className="text-3xl font-bold mb-2 text-gallomodern-50">Loan Prequalification Form</h1>
       <p className="text-muted-foreground mb-8">Fill out the form below to prequalify</p>
 
-      <ErrorBoundary 
-        fallback={<div className="p-8 text-center">
-          <h3 className="text-xl font-bold">Something went wrong with the form</h3>
-          <p className="mt-2 text-muted-foreground">Please try refreshing the page.</p>
-        </div>}
-        onError={handleError}
-      >
-        <Suspense fallback={<Skeleton className="w-full h-[500px]" />}>
-          <FormContainer />
-        </Suspense>
-      </ErrorBoundary>
+      <Card className="overflow-hidden border-gallomodern-200/30">
+        <ErrorBoundary 
+          fallback={<div className="p-8 text-center">
+            <h3 className="text-xl font-bold">Something went wrong with the form</h3>
+            <p className="mt-2 text-muted-foreground">Please try refreshing the page.</p>
+          </div>}
+          onError={handleError}
+        >
+          <Suspense fallback={<Skeleton className="w-full h-[500px]" />}>
+            <FormContainer />
+          </Suspense>
+        </ErrorBoundary>
+      </Card>
     </div>
   );
 };

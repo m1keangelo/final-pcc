@@ -1,5 +1,5 @@
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { FormState } from '@/types/form';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { Alert, AlertTitle } from '@/components/ui/alert';
@@ -27,6 +27,11 @@ const SummaryOutcome = ({ formData, onProceedToDocuments }: SummaryOutcomeProps)
   const { language } = useLanguage();
   const [showAnimation, setShowAnimation] = useState(true);
   
+  useEffect(() => {
+    console.log("SummaryOutcome mounted with formData:", formData);
+  }, []);
+  
+  // Calculate all needed data for the summary
   const clientRating = calculateClientRating(formData);
   const qualificationSummary = getQualificationSummary(formData, language === 'en' ? 'en' : 'es');
   const recommendations = getRecommendations(formData, language === 'en' ? 'en' : 'es');
@@ -55,8 +60,20 @@ const SummaryOutcome = ({ formData, onProceedToDocuments }: SummaryOutcomeProps)
     qualificationSummary 
   });
 
+  if (!formData.name) {
+    console.warn("SummaryOutcome received incomplete form data");
+    return (
+      <div className="p-6 text-center">
+        <Alert variant="destructive">
+          <AlertTitle>Error: Incomplete form data</AlertTitle>
+          <p>Please go back and complete the form properly.</p>
+        </Alert>
+      </div>
+    );
+  }
+
   return (
-    <div className="space-y-6 animate-fade-in">
+    <div className="space-y-6 animate-fade-in" data-testid="summary-outcome">
       <h2 className="text-2xl font-bold mb-4 text-center text-gallomodern-50">
         {language === 'en' ? 'Loan Prequalification Results' : 'Resultados de Precalificación de Préstamo'}
       </h2>

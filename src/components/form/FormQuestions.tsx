@@ -1,5 +1,5 @@
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { FormState } from "@/types/form";
 import { useLanguage } from "@/contexts/LanguageContext";
@@ -20,7 +20,7 @@ const FormQuestions = ({
   const [currentStep, setCurrentStep] = useState(1);
   const totalSteps = getTotalSteps();
 
-  const [formData, setFormData] = useState<FormState>(initialData || {
+  const [formData, setFormData] = useState<FormState>({
     timeline: 'exploring',
     firstTimeBuyer: null,
     employmentType: null,
@@ -38,7 +38,7 @@ const FormQuestions = ({
     creditIssueType: null,
     creditIssueYear: null,
     creditIssueAmount: null,
-    creditIssues: {}, // Initialize the new credit issues data structure
+    creditIssues: {}, // Initialize the credit issues data structure
     idType: null,
     name: "",
     phone: "",
@@ -46,7 +46,20 @@ const FormQuestions = ({
     comments: ""
   });
 
+  // Initialize from props if available
+  useEffect(() => {
+    if (initialData) {
+      console.log("FormQuestions initializing with data:", initialData);
+      setFormData(prevData => ({
+        ...prevData,
+        ...initialData
+      }));
+    }
+  }, [initialData]);
+
   const handleNext = () => {
+    console.log("Current step:", currentStep, "of", totalSteps);
+    
     if (currentStep < totalSteps) {
       // Set income to 0 if unemployed before skipping
       if (currentStep === 3 && formData.employmentType === 'unemployed') {
@@ -54,8 +67,11 @@ const FormQuestions = ({
       }
       
       const nextStep = getNextStep(currentStep, formData);
+      console.log("Moving to step:", nextStep);
       setCurrentStep(nextStep);
     } else {
+      // We're at the last step, complete the form
+      console.log("Form completed. Submitting data:", formData);
       onComplete(formData);
     }
   };
@@ -70,7 +86,11 @@ const FormQuestions = ({
   };
 
   const updateFormData = <K extends keyof FormState>(key: K, value: FormState[K]) => {
-    setFormData({ ...formData, [key]: value });
+    setFormData(prev => {
+      const updated = { ...prev, [key]: value };
+      console.log(`Updated ${String(key)}:`, value);
+      return updated;
+    });
   };
 
   return (
