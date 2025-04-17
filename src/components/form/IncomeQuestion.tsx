@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
@@ -33,7 +34,7 @@ export const IncomeQuestion = ({
     if (language === 'es') {
       // Any income
       if (inputValue) {
-        return "No importa dónde empiezas — se trata de lo que construimos juntos. Algunas de las mejores aprobaciones surgieron de inicios humildes. Adaptaremos programas a tu situación actual y futura.";
+        return "No importa cuánto ganas hoy, lo que vale es lo que podemos construir. Muchos que empezaron con poco lograron comprar. Buscamos programas que se ajusten a ti — y a donde vas.";
       }
       return "";
     } else {
@@ -48,9 +49,9 @@ export const IncomeQuestion = ({
   const getIncomeTypeFeedbackMessage = () => {
     if (language === 'es') {
       if (incomeType === 'annual') {
-        return "Lo tenemos. Lo convertiremos a mensual, lo vincularemos a tu DTI y optimizaremos desde ahí. Buen comienzo.";
+        return "Entendido. Lo convertimos a mensual, lo comparamos con tus deudas y lo optimizamos. Es un buen comienzo.";
       } else { // monthly
-        return "Perfecto — ya estás pensando como un prestamista. Vamos a ingresarlo y ver para qué calificas hoy.";
+        return "Perfecto. Estás pensando como los bancos piensan. Vamos a ver con ese ingreso cuánto puedes calificar hoy.";
       }
     } else {
       if (incomeType === 'annual') {

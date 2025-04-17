@@ -59,9 +59,9 @@ export const handleRegularRoute = (
     case 4:
       return (
         <IncomeQuestion
-          incomeValue={formData.income}
-          incomeTypeValue={formData.incomeType}
-          onChangeIncome={(value) => updateFormData("income", value)}
+          value={formData.income}
+          incomeType={formData.incomeType}
+          onChange={(value) => updateFormData("income", value)}
           onChangeIncomeType={(value) => updateFormData("incomeType", value)}
           onNext={handleNext}
           onBack={handleBack}

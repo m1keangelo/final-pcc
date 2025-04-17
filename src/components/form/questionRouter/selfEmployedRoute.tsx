@@ -1,4 +1,3 @@
-
 import React from "react";
 import { QuestionRouterProps } from "./types";
 import SelfEmployedYearsQuestion from "../SelfEmployedYearsQuestion";
@@ -33,9 +32,9 @@ export const handleSelfEmployedRoute = (
     case 5:
       return (
         <IncomeQuestion
-          incomeValue={formData.income}
-          incomeTypeValue={formData.incomeType}
-          onChangeIncome={(value) => updateFormData("income", value)}
+          value={formData.income}
+          incomeType={formData.incomeType}
+          onChange={(value) => updateFormData("income", value)}
           onChangeIncomeType={(value) => updateFormData("incomeType", value)}
           onNext={handleNext}
           onBack={handleBack}

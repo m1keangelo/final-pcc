@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Slider } from "@/components/ui/slider";
@@ -35,11 +36,11 @@ export const SelfEmployedYearsQuestion = ({
   const getFeedbackMessage = () => {
     if (language === 'es') {
       if (sliderValue >= 2) {
-        return "Perfecto. Estás establecido — usaremos tus declaraciones de impuestos y métodos aprobados por prestamistas. Estás en una posición sólida.";
+        return "Perfecto. Ya estás establecido. Usamos tus impuestos y formas aceptadas por los bancos para ayudarte a calificar. Estás en muy buena posición.";
       } else if (sliderValue === 1) {
-        return "Si estás en el mismo campo de antes, podríamos necesitar solo un año fiscal. Presentaremos un caso sólido a la revisión. Alineemos todo para probar tu impulso.";
+        return "Si trabajabas en lo mismo antes, puede que solo necesitemos un año de impuestos. Podemos preparar un buen caso para mostrar tu avance.";
       } else {
-        return "Podría ser temprano para lo convencional, pero hay prestamistas que usarán estados de cuenta bancarios o activos. Te prepararemos con un plan de éxito de 90 días o exploraremos opciones creativas.";
+        return "Puede que sea muy pronto para ciertos préstamos, pero hay bancos que aceptan tus movimientos bancarios o tus ahorros. Podemos hacerte un plan de 90 días o buscar caminos diferentes.";
       }
     } else {
       if (sliderValue >= 2) {

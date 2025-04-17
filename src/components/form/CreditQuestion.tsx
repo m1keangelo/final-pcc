@@ -1,3 +1,4 @@
+
 import { Button } from "@/components/ui/button";
 import QuestionContainer from "@/components/form/QuestionContainer";
 import { FormState } from "@/types/form";
@@ -26,15 +27,15 @@ export const CreditQuestion = ({
     if (language === 'es') {
       switch(value) {
         case 'excellent':
-          return "Lo ganaste — ahora haremos que los prestamistas compitan por ti. Usaremos ese impulso para reducir costos y maximizar beneficios.";
+          return "Te lo ganaste — ahora usamos eso para que los bancos compitan por ti. Así bajamos costos y conseguimos buenos beneficios.";
         case 'good':
-          return "Muy sólido. Estás en rango para tasas y flexibilidad excelentes. Con algunos ajustes, pasas a estatus premium. Vamos a impulsarlo.";
+          return "Muy bien. Estás en buena zona para obtener tasas y condiciones favorables. Con unos ajustes podrías pasar a nivel premium. Vamos a lograrlo.";
         case 'fair':
-          return "Estás en el borde — y eso es bueno. Hemos ayudado a cientos a superar los límites. Uno o dos movimientos inteligentes podrían ahorrarte miles.";
+          return "Estás cerca — y eso es buenísimo. Hemos ayudado a muchas personas a subir de nivel. Uno o dos movimientos inteligentes te pueden ahorrar bastante.";
         case 'poor':
-          return "No estás solo — y no estás atascado. FHA todavía funciona. Tenemos trucos de crédito, estrategias de fianza y aumentos legales para subir rápido tu puntaje. Construyamos la escalera.";
+          return "No estás solo — y no estás estancado. FHA todavía te puede servir. Tenemos ideas y trucos legales para subir tu puntaje rápido. Vamos a subir paso a paso.";
         case 'unknown':
-          return "Sin preocupaciones. Una consulta suave nos da una imagen real — sin impacto. Veamos dónde estás y construyamos el plan desde cero.";
+          return "No pasa nada. Podemos hacer una revisión suave de tu crédito, sin afectar nada. Así sabemos dónde estás y cómo seguir.";
         default:
           return "";
       }
