@@ -64,48 +64,48 @@ const LoginForm = () => {
 
   return (
     <div className="w-full max-w-md bg-[#2a2a3a]/95 rounded-lg p-8 shadow-xl border border-[#9b87f5]/30 backdrop-blur-sm">
-      <h2 className="text-3xl font-bold text-center text-white mb-6">
+      <h2 className="text-3xl font-bold text-center text-white/90 mb-6 font-display">
         {t('login.title')}
       </h2>
       
       <form onSubmit={handleSubmit} className="space-y-6">
         {/* Username Input */}
         <div className="space-y-2">
-          <Label htmlFor="username" className="text-gray-300">
+          <Label htmlFor="username" className="text-white/80">
             {t('login.username')}
           </Label>
           <div className="relative">
-            <User className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={18} />
+            <User className="absolute left-3 top-1/2 transform -translate-y-1/2 text-white/60" size={18} />
             <Input
               id="username"
               type="text"
               placeholder="admin"
               value={username}
               onChange={(e) => setUsername(e.target.value)}
-              className="bg-[#3a3a4a] border-[#4a4a5a] text-gray-200 pl-10 hover:border-[#9b87f5]/70 focus:border-[#9b87f5] transition-colors"
+              className="bg-[#3a3a4a] border-[#4a4a5a] text-white/90 pl-10 hover:border-[#9b87f5]/70 focus:border-[#9b87f5] transition-colors"
             />
           </div>
         </div>
         
         {/* Password Input */}
         <div className="space-y-2">
-          <Label htmlFor="password" className="text-gray-300">
+          <Label htmlFor="password" className="text-white/80">
             {t('login.password')}
           </Label>
           <div className="relative">
-            <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={18} />
+            <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 text-white/60" size={18} />
             <Input
               id="password"
               type={showPassword ? "text" : "password"}
               placeholder="••••••••"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className="bg-[#3a3a4a] border-[#4a4a5a] text-gray-200 pl-10 hover:border-[#9b87f5]/70 focus:border-[#9b87f5] transition-colors"
+              className="bg-[#3a3a4a] border-[#4a4a5a] text-white/90 pl-10 hover:border-[#9b87f5]/70 focus:border-[#9b87f5] transition-colors"
             />
             <button
               type="button"
               onClick={togglePasswordVisibility}
-              className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-200"
+              className="absolute right-3 top-1/2 transform -translate-y-1/2 text-white/60 hover:text-white/90"
             >
               {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
             </button>
@@ -142,7 +142,7 @@ const LoginForm = () => {
       </form>
       
       {/* Demo Credentials */}
-      <div className="text-center text-xs text-gray-400 mt-6 border-t border-gray-700 pt-4">
+      <div className="text-center text-xs text-white/60 mt-6 border-t border-gray-700 pt-4">
         <p className="mb-1">Demo Credentials:</p>
         <p>Username: admin, maria, or juan</p>
         <p>Password: password123</p>

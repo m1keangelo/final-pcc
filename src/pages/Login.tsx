@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import SplashScreen from "@/components/login/SplashScreen";
 import LoginForm from "@/components/login/LoginForm";
@@ -31,21 +30,18 @@ const Login = () => {
   const navigate = useNavigate();
   
   useEffect(() => {
-    // If user is already logged in, navigate to dashboard
     if (user) {
       navigate('/');
       return;
     }
 
-    // Only show splash screen if not logged in
     const timer = setTimeout(() => {
       setShowSplash(false);
-    }, 9000);  // 9 seconds as before
+    }, 9000);
     
     return () => clearTimeout(timer);
   }, [user, navigate]);
   
-  // First-time session start tracking
   useEffect(() => {
     try {
       if (!sessionStorage.getItem('sessionStartTime')) {
@@ -56,7 +52,6 @@ const Login = () => {
     }
   }, []);
   
-  // Show splash screen only if not logged in and it's the first time
   if (showSplash && !user && !isLoading) {
     return (
       <ErrorBoundary fallback={<LoginError />}>
@@ -65,11 +60,10 @@ const Login = () => {
     );
   }
   
-  // If logged in or loading is complete, show login form
   return (
     <ErrorBoundary fallback={<LoginError />}>
       <LanguageProvider>
-        <div className="relative flex h-screen w-full overflow-hidden">
+        <div className="relative flex h-screen w-full overflow-hidden bg-gradient-to-br from-[#1a1a2a] to-[#121220]">
           <MatrixBackground />
           <div className="z-10 flex w-full flex-col md:flex-row">
             <BrandImagery />
@@ -82,4 +76,3 @@ const Login = () => {
 };
 
 export default Login;
-
