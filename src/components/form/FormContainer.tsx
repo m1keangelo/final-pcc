@@ -53,7 +53,12 @@ const FormContainer: React.FC = () => {
     console.log('Submitting form data:', finalData);
     const transformedData = transformFormData(finalData, selectedAgent);
     console.log('Transformed client data for submission:', transformedData);
-    addClient(transformedData);
+    
+    // Add client to the database
+    addClient({
+      ...transformedData,
+      campaign: selectedCampaign // Make sure campaign is set correctly
+    });
     
     toast.success(language === 'en' ? 
       'Your information has been submitted successfully!' : 

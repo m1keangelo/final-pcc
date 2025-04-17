@@ -4,6 +4,13 @@ import { ClientData, CAMPAIGNS, ClientColumnId, CLIENT_COLUMNS } from '@/types/c
 import { MOCK_CLIENTS } from '@/data/mockClients';
 import { determineUrgency, generateNextSteps } from '@/utils/clientUtils';
 
+// Storage keys for local persistence
+const STORAGE_KEYS = {
+  ACTIVE_CLIENTS: 'gallo-avion-clients',
+  TRASHED_CLIENTS: 'gallo-avion-trashed-clients',
+  COLUMN_PREFS: 'gallo-avion-column-prefs'
+};
+
 // Extended Data context type to include trash functionality
 type DataContextType = {
   clients: ClientData[];
@@ -32,16 +39,37 @@ const DEFAULT_VISIBLE_COLUMNS: ClientColumnId[] = [
   'campaign', 'timeline', 'urgency', 'journeyStatus', 'nextSteps'
 ];
 
-// Local storage key for column preferences
-const COLUMN_PREFS_STORAGE_KEY = 'gallo-avion-column-prefs';
-
 // Provider component
 export const DataProvider: React.FC<{children: ReactNode}> = ({ children }) => {
-  const [clients, setClients] = useState<ClientData[]>(MOCK_CLIENTS);
-  const [trashedClients, setTrashedClients] = useState<ClientData[]>([]);
+  const [clients, setClients] = useState<ClientData[]>(() => {
+    // Try to load clients from localStorage first
+    const savedClients = localStorage.getItem(STORAGE_KEYS.ACTIVE_CLIENTS);
+    if (savedClients) {
+      try {
+        return JSON.parse(savedClients);
+      } catch (e) {
+        console.error("Error parsing saved clients", e);
+      }
+    }
+    return MOCK_CLIENTS;
+  });
+
+  const [trashedClients, setTrashedClients] = useState<ClientData[]>(() => {
+    // Try to load trashed clients from localStorage
+    const savedTrashedClients = localStorage.getItem(STORAGE_KEYS.TRASHED_CLIENTS);
+    if (savedTrashedClients) {
+      try {
+        return JSON.parse(savedTrashedClients);
+      } catch (e) {
+        console.error("Error parsing saved trashed clients", e);
+      }
+    }
+    return [];
+  });
+
   const [visibleColumns, setVisibleColumns] = useState<ClientColumnId[]>(() => {
     // Try to load from localStorage
-    const savedColumns = localStorage.getItem(COLUMN_PREFS_STORAGE_KEY);
+    const savedColumns = localStorage.getItem(STORAGE_KEYS.COLUMN_PREFS);
     if (savedColumns) {
       try {
         return JSON.parse(savedColumns);
@@ -52,9 +80,19 @@ export const DataProvider: React.FC<{children: ReactNode}> = ({ children }) => {
     return DEFAULT_VISIBLE_COLUMNS;
   });
 
+  // Save clients to localStorage whenever they change
+  useEffect(() => {
+    localStorage.setItem(STORAGE_KEYS.ACTIVE_CLIENTS, JSON.stringify(clients));
+  }, [clients]);
+
+  // Save trashed clients to localStorage whenever they change
+  useEffect(() => {
+    localStorage.setItem(STORAGE_KEYS.TRASHED_CLIENTS, JSON.stringify(trashedClients));
+  }, [trashedClients]);
+
   // Save column preferences to localStorage when they change
   useEffect(() => {
-    localStorage.setItem(COLUMN_PREFS_STORAGE_KEY, JSON.stringify(visibleColumns));
+    localStorage.setItem(STORAGE_KEYS.COLUMN_PREFS, JSON.stringify(visibleColumns));
   }, [visibleColumns]);
 
   // Reset column preferences to default
@@ -74,16 +112,20 @@ export const DataProvider: React.FC<{children: ReactNode}> = ({ children }) => {
       campaign: clientData.campaign || 'Default Campaign'
     };
     
-    setClients(prev => [...prev, newClient]);
+    setClients(prev => {
+      const updated = [...prev, newClient];
+      return updated;
+    });
   };
 
   // Update an existing client
   const updateClient = (id: string, data: Partial<ClientData>) => {
-    setClients(prev => 
-      prev.map(client => 
+    setClients(prev => {
+      const updated = prev.map(client => 
         client.id === id ? { ...client, ...data } : client
-      )
-    );
+      );
+      return updated;
+    });
   };
 
   // Soft delete a client (move to trash)
