@@ -8,17 +8,21 @@ import { FormState } from "@/types/form";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 
+// Define the issue types for better type safety
 const issueTypes = [
   { id: "bankruptcy", label: "Bankruptcy" },
   { id: "foreclosure", label: "Foreclosure" },
   { id: "collections", label: "Collections" },
   { id: "medical", label: "Medical" },
   { id: "other", label: "Other" }
-];
+] as const;
+
+type IssueId = (typeof issueTypes)[number]['id'];
+type IssueFlags = Partial<Record<IssueId, boolean>>;
 
 export const CreditIssuesQuestion = ({
   value,
-  creditIssues = {},
+  creditIssues,
   onChange,
   onCreditIssuesChange,
   onNext,
@@ -37,16 +41,20 @@ export const CreditIssuesQuestion = ({
 }) => {
   const { t, language } = useLanguage();
   
-  // Extract only simple boolean flags from creditIssues
-  const [selectedIssues, setSelectedIssues] = useState<Record<string, boolean>>(
-    Object.fromEntries(
-      Object.entries(creditIssues)
-        .filter(([key, value]) => 
-          typeof value === 'boolean' && 
-          ['bankruptcy', 'foreclosure', 'collections', 'medical', 'other'].includes(key)
-        )
-    )
-  );
+  // Initialize selected issues from creditIssues
+  const [selectedIssues, setSelectedIssues] = useState<IssueFlags>(() => {
+    const issueFlags: IssueFlags = {};
+    
+    // Only extract boolean values for our known issue types
+    issueTypes.forEach(({ id }) => {
+      const value = creditIssues[id as keyof typeof creditIssues];
+      if (typeof value === 'boolean') {
+        issueFlags[id as IssueId] = value;
+      }
+    });
+    
+    return issueFlags;
+  });
   
   useEffect(() => {
     // Update parent form state while preserving details
@@ -54,18 +62,19 @@ export const CreditIssuesQuestion = ({
     
     // Update boolean flags
     Object.entries(selectedIssues).forEach(([key, value]) => {
-      newCreditIssues[key] = value;
+      if (value !== undefined) {
+        newCreditIssues[key] = value;
+      }
     });
     
     onCreditIssuesChange(newCreditIssues);
   }, [selectedIssues, onCreditIssuesChange, creditIssues]);
   
-  const handleIssueToggle = (issueId: string, checked: boolean) => {
-    const updatedIssues = {
-      ...selectedIssues,
+  const handleIssueToggle = (issueId: IssueId, checked: boolean) => {
+    setSelectedIssues(prev => ({
+      ...prev,
       [issueId]: checked
-    };
-    setSelectedIssues(updatedIssues);
+    }));
   };
   
   const getFeedbackMessage = (type: string) => {
@@ -133,7 +142,7 @@ export const CreditIssuesQuestion = ({
             </p>
             <div className="grid gap-3">
               {issueTypes.map((issue) => {
-                const isSelected = selectedIssues[issue.id] || false;
+                const isSelected = selectedIssues[issue.id as IssueId] || false;
                 return (
                   <div key={issue.id}>
                     <div className="flex items-center space-x-2">
@@ -141,7 +150,7 @@ export const CreditIssuesQuestion = ({
                         id={`issue-${issue.id}`} 
                         checked={isSelected}
                         onCheckedChange={(checked) => 
-                          handleIssueToggle(issue.id, checked === true)
+                          handleIssueToggle(issue.id as IssueId, checked === true)
                         }
                       />
                       <Label htmlFor={`issue-${issue.id}`}>{issue.label}</Label>

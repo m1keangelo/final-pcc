@@ -61,7 +61,11 @@ export const handleRegularRoute = (
         <IncomeQuestion
           value={formData.income}
           incomeType={formData.incomeType}
-          onChange={(value) => updateFormData("income", value)}
+          onChange={(value) => {
+            // Convert string to number or null
+            const numValue = value ? Number(value) : null;
+            updateFormData("income", numValue);
+          }}
           onChangeIncomeType={(value) => updateFormData("incomeType", value)}
           onNext={handleNext}
           onBack={handleBack}

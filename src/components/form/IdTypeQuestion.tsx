@@ -7,6 +7,8 @@ import { FormState } from "@/types/form";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 
+type IdType = 'SSN' | 'ITIN' | 'none';
+
 export const IdTypeQuestion = ({
   value,
   onChange,
@@ -50,6 +52,12 @@ export const IdTypeQuestion = ({
     }
   };
   
+  const handleValueChange = (newValue: string) => {
+    // Ensure the value matches one of our allowed IdType values
+    const typedValue = newValue as IdType;
+    onChange(typedValue);
+  };
+  
   return (
     <QuestionContainer
       title={t('q.idType.title')}
@@ -61,7 +69,7 @@ export const IdTypeQuestion = ({
       <div className="space-y-6">
         <RadioGroup
           value={value || ""}
-          onValueChange={(val) => onChange(val as FormState['idType'])}
+          onValueChange={handleValueChange}
         >
           <div className="flex items-center space-x-2 mb-4">
             <RadioGroupItem value="SSN" id="idType-ssn" />
