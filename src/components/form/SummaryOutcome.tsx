@@ -48,6 +48,13 @@ const SummaryOutcome = ({ formData, onProceedToDocuments }: SummaryOutcomeProps)
 
   const isQualified = qualificationSummary.includes('✅');
 
+  console.log("SummaryOutcome rendering with data:", { 
+    formData, 
+    clientRating, 
+    isQualified,
+    qualificationSummary 
+  });
+
   return (
     <div className="space-y-6 animate-fade-in">
       <h2 className="text-2xl font-bold mb-4 text-center text-gallomodern-50">
@@ -59,7 +66,7 @@ const SummaryOutcome = ({ formData, onProceedToDocuments }: SummaryOutcomeProps)
         <div className="flex justify-center mb-6">
           <div className="relative w-64 h-64 rounded-lg overflow-hidden border-2 border-gallopurple">
             <img 
-              src={`/animations/${isQualified ? 'qualified' : 'fixes-needed'}.gif`}
+              src={isQualified ? '/animations/qualified.gif' : '/animations/fixes-needed.gif'}
               alt="Qualification Status"
               className="w-full h-full object-cover"
               onError={() => setShowAnimation(false)}

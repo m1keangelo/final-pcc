@@ -47,6 +47,14 @@ const PrequalificationResultsCard: React.FC<PrequalificationResultsCardProps> = 
   // Calculate maximum purchase price
   const downPaymentAmount = formData.downPaymentAmount || 0;
   const maxPurchasePrice = estimatedLoanAmount + downPaymentAmount;
+
+  console.log("PrequalificationResultsCard rendering with:", {
+    annualIncome,
+    estimatedLoanAmount,
+    estimatedMonthlyPayment,
+    maxPurchasePrice,
+    clientRating
+  });
   
   return (
     <Card className="border-2 border-primary/20">

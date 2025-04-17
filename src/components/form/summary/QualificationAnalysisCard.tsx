@@ -130,6 +130,11 @@ const QualificationAnalysisCard: React.FC<QualificationAnalysisCardProps> = ({
 
   const analysis = generateAnalysis();
 
+  console.log("QualificationAnalysisCard rendering with:", {
+    isQualified,
+    analysis
+  });
+
   return (
     <Card>
       <CardHeader className="bg-muted/10">

@@ -107,18 +107,20 @@ const FormContainer: React.FC = () => {
           </>
         )}
 
-        {formStage === 'questions' ? (
+        {formStage === 'questions' && (
           <FormQuestions 
             initialData={formData}
             onComplete={handleFormComplete}
             onBack={() => setFormStage('initialInfo')}
           />
-        ) : formStage === 'summary' ? (
+        )}
+        
+        {formStage === 'summary' && (
           <SummaryOutcome 
             formData={formData}
             onProceedToDocuments={handleProceedToDocuments} 
           />
-        ) : null}
+        )}
       </div>
     </div>
   );
