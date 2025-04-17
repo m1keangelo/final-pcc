@@ -19,13 +19,13 @@ const PositiveFactorsCard = ({ positiveFactors }: PositiveFactorsCardProps) => {
           <CheckCircle2 className="mr-2 h-5 w-5 text-green-500" />
           {language === 'en' ? 'Positive Factors' : 'Factores Positivos'}
         </h3>
-        <ul className="space-y-2">
+        <ul className="space-y-3">
           {positiveFactors.map((factor, index) => (
-            <li key={index} className="flex items-start gap-2">
+            <li key={index} className="flex items-start gap-3 p-2 rounded-md hover:bg-green-50 transition-colors duration-200">
               <div className="min-w-[20px] pt-1">
-                <ShieldCheck className="h-4 w-4 text-green-500" />
+                <ShieldCheck className="h-5 w-5 text-green-500" />
               </div>
-              <span>{factor}</span>
+              <span className="text-sm md:text-base">{factor}</span>
             </li>
           ))}
         </ul>
