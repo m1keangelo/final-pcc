@@ -12,7 +12,7 @@ import {
   TableHeader,
   TableRow 
 } from "@/components/ui/table";
-import { Search, FileDown, CheckCircle, XCircle, Clock, AlertTriangle, Phone, ChevronLeft, ChevronRight, Trash2 } from "lucide-react";
+import { Search, FileDown, CheckCircle, XCircle, Clock, AlertTriangle, Phone, ChevronLeft, ChevronRight, Trash2, Check, MoreHorizontal } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { ClientData, CAMPAIGNS } from "@/types/client";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -38,7 +38,7 @@ import {
 import {
   DropdownMenu,
   DropdownMenuContent,
-  DropdownMenuCheckboxItem,
+  DropdownMenuItem,
   DropdownMenuTrigger
 } from "@/components/ui/dropdown-menu";
 import {
@@ -53,16 +53,20 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import { toast } from "@/lib/toast";
+import { Checkbox } from "@/components/ui/checkbox";
 
 const Clients = () => {
   const { t } = useLanguage();
   const { clients, campaigns, deleteClient } = useData();
-  const { hasPermission } = useAuth();
+  const { hasPermission, isAdmin, isSuperAdmin } = useAuth();
   const [search, setSearch] = useState("");
   const [selectedCampaign, setSelectedCampaign] = useState<string>("all");
   const [selectedClient, setSelectedClient] = useState<ClientData | null>(null);
   const [currentPage, setCurrentPage] = useState(1);
+  const [selectedClients, setSelectedClients] = useState<string[]>([]);
   const itemsPerPage = 10;
+  
+  const canDeleteClients = hasPermission('DELETE_CLIENTS') || isAdmin || isSuperAdmin;
   
   const filteredClients = clients.filter(client => {
     const searchTerm = search.toLowerCase();
@@ -173,6 +177,30 @@ const Clients = () => {
     }
   };
   
+  const handleSelectClient = (clientId: string) => {
+    setSelectedClients(prev => {
+      if (prev.includes(clientId)) {
+        return prev.filter(id => id !== clientId);
+      } else {
+        return [...prev, clientId];
+      }
+    });
+  };
+  
+  const handleSelectAllInPage = () => {
+    if (selectedClients.length === paginatedClients.length) {
+      setSelectedClients([]);
+    } else {
+      setSelectedClients(paginatedClients.map(client => client.id));
+    }
+  };
+  
+  const handleDeleteSelected = () => {
+    selectedClients.forEach(id => deleteClient(id));
+    toast(`${selectedClients.length} clients were deleted`);
+    setSelectedClients([]);
+  };
+  
   const renderPageNumbers = () => {
     const pages = [];
     const maxVisiblePages = 5;
@@ -256,6 +284,37 @@ const Clients = () => {
               </Select>
             </div>
           </div>
+          
+          {canDeleteClients && selectedClients.length > 0 && (
+            <div className="flex justify-between items-center bg-slate-800 p-3 rounded-md">
+              <span className="text-white">{selectedClients.length} clients selected</span>
+              <AlertDialog>
+                <AlertDialogTrigger asChild>
+                  <Button variant="destructive" size="sm" className="flex items-center gap-2">
+                    <Trash2 size={16} />
+                    Delete Selected
+                  </Button>
+                </AlertDialogTrigger>
+                <AlertDialogContent>
+                  <AlertDialogHeader>
+                    <AlertDialogTitle>Delete Multiple Clients</AlertDialogTitle>
+                    <AlertDialogDescription>
+                      Are you sure you want to delete {selectedClients.length} clients? This action cannot be undone.
+                    </AlertDialogDescription>
+                  </AlertDialogHeader>
+                  <AlertDialogFooter>
+                    <AlertDialogCancel>Cancel</AlertDialogCancel>
+                    <AlertDialogAction 
+                      onClick={handleDeleteSelected}
+                      className="bg-red-600 hover:bg-red-700 text-white"
+                    >
+                      Delete
+                    </AlertDialogAction>
+                  </AlertDialogFooter>
+                </AlertDialogContent>
+              </AlertDialog>
+            </div>
+          )}
           
           <Tabs defaultValue="all">
             <TabsList className="mb-4">
@@ -373,6 +432,18 @@ const Clients = () => {
           <Table>
             <TableHeader>
               <TableRow>
+                {canDeleteClients && (
+                  <TableHead className="w-12">
+                    <Checkbox 
+                      checked={
+                        clients.length > 0 && 
+                        clients.every(client => selectedClients.includes(client.id))
+                      }
+                      onCheckedChange={handleSelectAllInPage}
+                      aria-label="Select all clients"
+                    />
+                  </TableHead>
+                )}
                 <TableHead>{t('clients.column.name')}</TableHead>
                 <TableHead>{t('clients.column.phone')}</TableHead>
                 <TableHead>{t('clients.column.credit')}</TableHead>
@@ -381,24 +452,45 @@ const Clients = () => {
                 <TableHead>{t('clients.column.timeline')}</TableHead>
                 <TableHead>{t('clients.column.urgency')}</TableHead>
                 <TableHead className="w-1/6">{t('clients.column.nextSteps')}</TableHead>
+                {canDeleteClients && <TableHead className="w-12">Actions</TableHead>}
               </TableRow>
             </TableHeader>
             <TableBody>
               {clients.map((client) => (
                 <TableRow 
                   key={client.id} 
-                  className="cursor-pointer hover:bg-muted/50"
-                  onClick={() => setSelectedClient(client)}
+                  className={`hover:bg-muted/50 ${selectedClients.includes(client.id) ? 'bg-muted' : ''}`}
                 >
-                  <TableCell className="font-medium flex items-center gap-2">
+                  {canDeleteClients && (
+                    <TableCell>
+                      <Checkbox 
+                        checked={selectedClients.includes(client.id)}
+                        onCheckedChange={() => handleSelectClient(client.id)}
+                        aria-label={`Select ${client.name}`}
+                        onClick={(e) => e.stopPropagation()}
+                      />
+                    </TableCell>
+                  )}
+                  <TableCell 
+                    className="font-medium flex items-center gap-2 cursor-pointer"
+                    onClick={() => setSelectedClient(client)}
+                  >
                     {client.qualified ? 
                       <CheckCircle size={16} className="text-green-500 flex-shrink-0" /> : 
                       <XCircle size={16} className="text-red-500 flex-shrink-0" />
                     }
                     {client.name}
                   </TableCell>
-                  <TableCell>{client.phone}</TableCell>
-                  <TableCell>
+                  <TableCell 
+                    className="cursor-pointer"
+                    onClick={() => setSelectedClient(client)}
+                  >
+                    {client.phone}
+                  </TableCell>
+                  <TableCell 
+                    className="cursor-pointer"
+                    onClick={() => setSelectedClient(client)}
+                  >
                     <Badge variant={
                       client.creditCategory === 'Excellent' ? 'default' :
                       client.creditCategory === 'Good' ? 'outline' :
@@ -408,21 +500,76 @@ const Clients = () => {
                       {client.creditScoreApprox && ` (${client.creditScoreApprox})`}
                     </Badge>
                   </TableCell>
-                  <TableCell>{client.legalStatus}</TableCell>
-                  <TableCell>{client.campaign || "Default Campaign"}</TableCell>
-                  <TableCell>
+                  <TableCell 
+                    className="cursor-pointer"
+                    onClick={() => setSelectedClient(client)}
+                  >
+                    {client.legalStatus}
+                  </TableCell>
+                  <TableCell 
+                    className="cursor-pointer"
+                    onClick={() => setSelectedClient(client)}
+                  >
+                    {client.campaign || "Default Campaign"}
+                  </TableCell>
+                  <TableCell 
+                    className="cursor-pointer"
+                    onClick={() => setSelectedClient(client)}
+                  >
                     {client.timeline === 'immediately' ? 'Immediately' :
                      client.timeline === '3months' ? '< 3 months' :
                      client.timeline === '3to6months' ? '3-6 months' :
                      client.timeline === '6to12months' ? '6-12 months' :
                      client.timeline === 'exploring' ? 'Exploring' : 'Unknown'}
                   </TableCell>
-                  <TableCell>
+                  <TableCell 
+                    className="cursor-pointer"
+                    onClick={() => setSelectedClient(client)}
+                  >
                     {getUrgencyBadge(client.urgency)}
                   </TableCell>
-                  <TableCell className="max-w-xs truncate">
+                  <TableCell 
+                    className="max-w-xs truncate cursor-pointer"
+                    onClick={() => setSelectedClient(client)}
+                  >
                     {client.nextSteps || '-'}
                   </TableCell>
+                  {canDeleteClients && (
+                    <TableCell>
+                      <AlertDialog>
+                        <AlertDialogTrigger asChild>
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            className="h-8 w-8 text-red-500 hover:text-red-600 hover:bg-red-50"
+                            onClick={(e) => e.stopPropagation()}
+                          >
+                            <Trash2 size={16} />
+                          </Button>
+                        </AlertDialogTrigger>
+                        <AlertDialogContent>
+                          <AlertDialogHeader>
+                            <AlertDialogTitle>Delete Client</AlertDialogTitle>
+                            <AlertDialogDescription>
+                              Are you sure you want to delete {client.name}? This action cannot be undone.
+                            </AlertDialogDescription>
+                          </AlertDialogHeader>
+                          <AlertDialogFooter>
+                            <AlertDialogCancel>Cancel</AlertDialogCancel>
+                            <AlertDialogAction 
+                              onClick={() => {
+                                deleteClient(client.id);
+                                toast(`Client ${client.name} was deleted.`);
+                              }}
+                              className="bg-red-600 hover:bg-red-700 text-white"
+                            >
+                              Delete
+                            </AlertDialogAction>
+                          </AlertDialogFooter>
+                        </AlertDialogContent>
+                      </AlertDialog>
+                    </TableCell>
+                  )}
                 </TableRow>
               ))}
             </TableBody>
