@@ -30,19 +30,24 @@ const queryClient = new QueryClient({
       staleTime: 1000 * 60 * 5, // 5 minutes
       refetchOnWindowFocus: false,
       refetchOnMount: true,
-      onError: (error) => {
-        console.error('Query error:', error);
-        toast("There was a problem with the data request. Please try again.");
-      },
     },
     mutations: {
       retry: 1,
-      onError: (error) => {
-        console.error('Mutation error:', error);
-        toast("Your changes could not be saved. Please try again.");
-      },
     },
   },
+  // Use global error handlers
+  queryCache: {
+    onError: (error) => {
+      console.error('Query error:', error);
+      toast("There was a problem with the data request. Please try again.");
+    }
+  },
+  mutationCache: {
+    onError: (error) => {
+      console.error('Mutation error:', error);
+      toast("Your changes could not be saved. Please try again.");
+    }
+  }
 });
 
 // Fallback UI for the entire app
