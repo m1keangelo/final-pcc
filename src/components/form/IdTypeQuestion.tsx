@@ -27,9 +27,9 @@ export const IdTypeQuestion = ({
   const getFeedbackMessage = () => {
     if (language === 'es') {
       switch (value) {
-        case 'ssn':
+        case 'SSN':
           return "Todo en orden. Estás listo para comenzar. Vamos al paso siguiente.";
-        case 'itin':
+        case 'ITIN':
           return "¿No tienes SSN? No pasa nada. Trabajamos con bancos que aceptan ITIN. Vamos a abrir esa puerta contigo.";
         case 'none':
           return "Podemos ayudarte a sacar un ITIN o a conseguir un codeudor. Todos comienzan en algún punto. Te guiamos en cada paso.";
@@ -38,9 +38,9 @@ export const IdTypeQuestion = ({
       }
     } else {
       switch (value) {
-        case 'ssn':
+        case 'SSN':
           return "You're fully set. No roadblocks ahead — let's get started.";
-        case 'itin':
+        case 'ITIN':
           return "No SSN? No problem. We've got ITIN-approved lenders. You're not locked out — let's open the door.";
         case 'none':
           return "Let's work on getting you an ITIN or pair you with a co-borrower. Everyone starts somewhere. We'll walk you through it.";
@@ -64,11 +64,11 @@ export const IdTypeQuestion = ({
           onValueChange={onChange}
         >
           <div className="flex items-center space-x-2 mb-4">
-            <RadioGroupItem value="ssn" id="idType-ssn" />
+            <RadioGroupItem value="SSN" id="idType-ssn" />
             <Label htmlFor="idType-ssn">{t('q.idType.ssn')}</Label>
           </div>
           <div className="flex items-center space-x-2 mb-4">
-            <RadioGroupItem value="itin" id="idType-itin" />
+            <RadioGroupItem value="ITIN" id="idType-itin" />
             <Label htmlFor="idType-itin">{t('q.idType.itin')}</Label>
           </div>
           <div className="flex items-center space-x-2">
@@ -83,7 +83,7 @@ export const IdTypeQuestion = ({
           </div>
         )}
         
-        {value === 'itin' && (
+        {value === 'ITIN' && (
           <div className="text-sm p-3 bg-blue-50 text-blue-800 border border-blue-200 rounded-md">
             {t('q.idType.itinInfo')}
           </div>
