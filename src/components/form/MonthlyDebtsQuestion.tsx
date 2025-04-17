@@ -1,7 +1,7 @@
-
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { Slider } from "@/components/ui/slider";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import QuestionContainer from "@/components/form/QuestionContainer";
 import { FormState } from "@/types/form";
 import { useLanguage } from "@/contexts/LanguageContext";
@@ -22,30 +22,45 @@ export const MonthlyDebtsQuestion = ({
   currentStep: number;
   totalSteps: number;
 }) => {
-  const { t } = useLanguage();
-  const [sliderValue, setSliderValue] = useState(value ? parseInt(value) : 0);
+  const { t, language } = useLanguage();
+  const [localValue, setLocalValue] = useState(value || "");
   
-  // Format currency with commas
-  const formatCurrency = (amount: number): string => {
-    return amount.toLocaleString('en-US');
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const val = e.target.value;
+    // Keep only numbers, $ sign, commas and periods
+    const cleanVal = val.replace(/[^0-9$,.]/g, '');
+    setLocalValue(cleanVal);
+    onChange(cleanVal);
   };
   
-  // Handle slider change in multiples of 20
-  const handleSliderChange = (val: number[]) => {
-    // Round to nearest multiple of 20
-    const roundedVal = Math.round(val[0] / 20) * 20;
-    setSliderValue(roundedVal);
-    onChange(roundedVal.toString());
+  const getDebtLevel = (): 'low' | 'moderate' | 'high' => {
+    const numericValue = parseFloat(localValue.replace(/[$,]/g, '')) || 0;
+    if (numericValue < 500) return 'low';
+    if (numericValue < 2000) return 'moderate';
+    return 'high';
   };
   
-  // Define feedback message based on debt amount
-  const getFeedbackMessage = (amount: number) => {
-    if (amount < 1000) {
-      return "That's strong. You've got borrowing power. Let's translate that into more house for the same payment.";
-    } else if (amount < 5000) {
-      return "All good. We'll balance the numbers and could still qualify you comfortably. Want us to check where you land now?";
+  const getFeedbackMessage = () => {
+    const debtLevel = getDebtLevel();
+    
+    if (language === 'es') {
+      switch(debtLevel) {
+        case 'low':
+          return "Eso es muy bueno. Tienes más capacidad para préstamo. Podemos buscarte una casa más grande sin pagar más al mes.";
+        case 'moderate':
+          return "Todo bien. Hacemos el cálculo para que igual puedas calificar. ¿Quieres que revisemos cuánto podrías obtener?";
+        case 'high':
+          return "Lo hemos visto antes — y lo hemos solucionado. Hay planes para pagar, unir deudas o usar un codeudor. Miremos opciones.";
+      }
     } else {
-      return "Seen it before — and fixed it before. Payoff plans, consolidation, or co-signers can flip your DTI. Let's talk strategy.";
+      switch(debtLevel) {
+        case 'low':
+          return "That's strong. You've got borrowing power. Let's translate that into more house for the same payment.";
+        case 'moderate':
+          return "All good. We'll balance the numbers and could still qualify you comfortably. Want us to check where you land now?";
+        case 'high':
+          return "Seen it before — and fixed it before. Payoff plans, consolidation, or co-signers can flip your DTI. Let's talk strategy.";
+      }
     }
   };
   
@@ -53,43 +68,38 @@ export const MonthlyDebtsQuestion = ({
     <QuestionContainer
       title={t('q.monthlyDebts.title')}
       questionText={t('q.monthlyDebts.question')}
-      questionId="monthlydebts"
+      questionId="monthlyDebts"
       currentStep={currentStep}
       totalSteps={totalSteps}
     >
       <div className="space-y-6">
-        <div className="mt-4 mb-8">
-          <div className="flex items-center justify-center mb-6">
-            <div className="flex items-center justify-center bg-muted/30 p-3 rounded-full h-16 w-40 border border-primary/20">
-              <DollarSign className="h-5 w-5 text-muted-foreground mr-1" />
-              <span className="text-2xl font-semibold">{formatCurrency(sliderValue)}</span>
+        <div>
+          <Label htmlFor="monthlyDebts" className="text-base">
+            {t('q.monthlyDebts.amountLabel')}
+          </Label>
+          <div className="relative mt-2">
+            <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+              <DollarSign className="h-5 w-5 text-muted-foreground" />
             </div>
-          </div>
-          
-          <div className="pt-4">
-            <Slider
-              value={[sliderValue]}
-              min={0}
-              max={1000000}
-              step={20}
-              onValueChange={handleSliderChange}
-              className="my-6"
+            <Input
+              id="monthlyDebts"
+              type="text"
+              value={localValue}
+              onChange={handleInputChange}
+              className="pl-10"
+              placeholder={t('q.monthlyDebts.placeholder')}
             />
-            <div className="flex justify-between text-xs text-muted-foreground mt-2">
-              <span>$0</span>
-              <span>$1,000,000</span>
-            </div>
           </div>
-          
-          <div className="text-center text-sm text-muted-foreground mt-4">
+          <p className="text-sm text-muted-foreground mt-2">
             {t('q.monthlyDebts.helper')}
-          </div>
-          
-          {/* Display feedback message */}
-          <div className="mt-4 p-4 border border-amber-200 rounded-md bg-amber-50">
-            <p className="text-[#FFD700] font-medium">{getFeedbackMessage(sliderValue)}</p>
-          </div>
+          </p>
         </div>
+        
+        {localValue && (
+          <div className="mt-4 p-4 border border-[#fef9be] rounded-md bg-black text-[#fef9be]">
+            <p className="font-medium">{getFeedbackMessage()}</p>
+          </div>
+        )}
       </div>
       
       <div className="mt-8 flex justify-between">

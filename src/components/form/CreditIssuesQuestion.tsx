@@ -1,45 +1,28 @@
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
-import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import QuestionContainer from "@/components/form/QuestionContainer";
 import { FormState } from "@/types/form";
 import { useLanguage } from "@/contexts/LanguageContext";
-import { ArrowLeft, ArrowRight, ChevronDown, ChevronUp } from "lucide-react";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
-import { cn } from "@/lib/utils";
+import { ArrowLeft, ArrowRight } from "lucide-react";
 
-const timeframeOptions = [
-  { value: "1-3months", label: "1-3 months" },
-  { value: "4-6months", label: "4-6 months" },
-  { value: "7-9months", label: "7-9 months" },
-  { value: "1year", label: "1 year" },
-  { value: "2years", label: "2 years" },
-  { value: "3years", label: "3 years" },
-  { value: "4years", label: "4 years" },
-  { value: "5years", label: "5 years" },
-  { value: "6years", label: "6 years" },
-  { value: "7years", label: "7 years" },
-  { value: "8years", label: "8 years" },
-  { value: "9years", label: "9 years" },
-  { value: "10years", label: "10 years" },
+const issueTypes = [
+  { id: "bankruptcy", label: "Bankruptcy" },
+  { id: "foreclosure", label: "Foreclosure" },
+  { id: "collections", label: "Collections" },
+  { id: "medical", label: "Medical" },
+  { id: "other", label: "Other" }
 ];
 
-type CreditIssueType = 'bankruptcy' | 'foreclosure' | 'collections' | 'medical' | 'other';
-
-interface CreditIssueDetails {
-  amount: number | null;
-  timeframe: string | null;
-  inCollection: boolean | null;
-}
+type CreditIssuesMap = {
+  [key: string]: boolean;
+};
 
 export const CreditIssuesQuestion = ({
   value,
-  creditIssues,
+  creditIssues = {},
   onChange,
   onCreditIssuesChange,
   onNext,
@@ -48,227 +31,64 @@ export const CreditIssuesQuestion = ({
   totalSteps
 }: {
   value: FormState['hasCreditIssues'];
-  creditIssues: FormState['creditIssues'];
+  creditIssues: Record<string, boolean>;
   onChange: (value: FormState['hasCreditIssues']) => void;
-  onCreditIssuesChange: (issues: FormState['creditIssues']) => void;
+  onCreditIssuesChange: (issues: Record<string, boolean>) => void;
   onNext: () => void;
   onBack: () => void;
   currentStep: number;
   totalSteps: number;
 }) => {
-  const { t } = useLanguage();
-  const [openIssues, setOpenIssues] = useState<Record<CreditIssueType, boolean>>({
-    bankruptcy: false,
-    foreclosure: false,
-    collections: false,
-    medical: false,
-    other: false
-  });
+  const { t, language } = useLanguage();
+  const [selectedIssues, setSelectedIssues] = useState<CreditIssuesMap>(creditIssues);
   
-  const toggleIssue = (issueType: CreditIssueType) => {
-    setOpenIssues(prev => ({
-      ...prev,
-      [issueType]: !prev[issueType]
-    }));
+  useEffect(() => {
+    // Update parent form state when selected issues change
+    onCreditIssuesChange(selectedIssues);
+  }, [selectedIssues, onCreditIssuesChange]);
+  
+  const handleIssueToggle = (issueId: string, checked: boolean) => {
+    const updatedIssues = {
+      ...selectedIssues,
+      [issueId]: checked
+    };
+    setSelectedIssues(updatedIssues);
   };
-
-  const handleIssueToggle = (issueType: CreditIssueType, isChecked: boolean) => {
-    const updatedIssues = { ...creditIssues };
-    
-    updatedIssues[issueType] = isChecked;
-    
-    if (isChecked) {
-      const detailsKey = `${issueType}Details` as keyof typeof updatedIssues;
-      
-      const details: CreditIssueDetails = {
-        amount: null,
-        timeframe: null,
-        inCollection: null
-      };
-      
-      updatedIssues[detailsKey] = details as any;
-
-      setOpenIssues(prev => ({
-        ...prev,
-        [issueType]: true
-      }));
-    }
-    
-    onCreditIssuesChange(updatedIssues);
-  };
-
-  const handleIssueDetailChange = (
-    issueType: CreditIssueType,
-    field: 'amount' | 'timeframe' | 'inCollection',
-    value: any
-  ) => {
-    const detailsKey = `${issueType}Details` as keyof typeof creditIssues;
-    
-    const currentDetails = creditIssues[detailsKey] || { amount: null, timeframe: null, inCollection: null };
-    
-    const updatedIssues = { ...creditIssues };
-    
-    if (typeof currentDetails === 'object' && currentDetails !== null) {
-      const updatedDetails = {
-        ...currentDetails,
-        [field]: value
-      };
-      
-      updatedIssues[detailsKey] = updatedDetails as any;
+  
+  const getFeedbackMessage = (type: string) => {
+    if (language === 'es') {
+      switch(type) {
+        case 'bankruptcy':
+          return "Ya pasó. FHA, VA y otros bancos aceptan después de 2 o 3 años. Usamos tu recuperación como un punto a favor.";
+        case 'foreclosure':
+          return "Pasa. Tú no eres tu pasado. Muchos han vuelto a comprar después de 3 años. Veamos lo que ha mejorado desde entonces.";
+        case 'collections':
+          return "Nos encargamos de eso. Las deudas médicas casi no cuentan y otras se pueden negociar. Tenemos formas de ayudarte.";
+        case 'medical':
+          return "Las reglas nuevas te ayudan — la mayoría de deudas médicas menores a $500 ni se toman en cuenta. Podemos revisar y limpiarlo.";
+        case 'other':
+          return "Cuéntanos lo que pasó — sin juicios. Todo tiene solución. Buscamos ideas legales y creativas para ayudarte.";
+        default:
+          return "";
+      }
     } else {
-      const newDetails = {
-        amount: null,
-        timeframe: null,
-        inCollection: null,
-        [field]: value
-      };
-      
-      updatedIssues[detailsKey] = newDetails as any;
+      switch(type) {
+        case 'bankruptcy':
+          return "You're past it. FHA, VA, and even some conventional lenders are open after 2–3 years. Let's use your bounce back to your advantage.";
+        case 'foreclosure':
+          return "It happens. You're not your past. We've helped buyers get approved again after 3 years. Let's focus on what's changed.";
+        case 'collections':
+          return "We'll tackle them — medical debts are often ignored now, and others can be settled or removed. We've got scripts and pros.";
+        case 'medical':
+          return "New rules protect you — most medical collections under $500 don't even count. Let's verify and clean it up fast.";
+        case 'other':
+          return "Share what happened — no judgment. Everything has a fix. We'll get creative, legal, and aggressive where needed.";
+        default:
+          return "";
+      }
     }
-    
-    onCreditIssuesChange(updatedIssues);
   };
   
-  const isAnyIssueComplete = () => {
-    if (value === false) return true;
-    
-    if (value === true) {
-      const issueTypes: CreditIssueType[] = ['bankruptcy', 'foreclosure', 'collections', 'medical', 'other'];
-      return issueTypes.some(type => creditIssues[type]);
-    }
-    
-    return false;
-  };
-
-  const renderIssueDetails = (issueType: CreditIssueType) => {
-    const detailsKey = `${issueType}Details` as keyof typeof creditIssues;
-    const details = creditIssues[detailsKey] as CreditIssueDetails | undefined;
-    
-    if (!details) return null;
-    
-    return (
-      <div className="p-4 space-y-4 border-t border-purple-800/30 bg-[#121826] rounded-b-lg">
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          <div className="space-y-2">
-            <Label htmlFor={`${issueType}-amount`} className="text-sm font-medium text-gray-300">
-              Estimated Amount
-            </Label>
-            <div className="relative">
-              <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400">$</span>
-              <Input
-                id={`${issueType}-amount`}
-                type="number"
-                className="pl-7 bg-black border-purple-500 text-white"
-                placeholder="Amount"
-                value={details.amount || ''}
-                onChange={e => handleIssueDetailChange(
-                  issueType, 
-                  'amount', 
-                  e.target.value ? Number(e.target.value) : null
-                )}
-              />
-            </div>
-          </div>
-          
-          <div className="space-y-2">
-            <Label htmlFor={`${issueType}-timeframe`} className="text-sm font-medium text-gray-300">
-              How long ago?
-            </Label>
-            <Select
-              value={details.timeframe || ''}
-              onValueChange={value => handleIssueDetailChange(issueType, 'timeframe', value)}
-            >
-              <SelectTrigger id={`${issueType}-timeframe`} className="bg-black border-purple-500 text-white">
-                <SelectValue placeholder="Select timeframe" />
-              </SelectTrigger>
-              <SelectContent className="bg-black border-purple-500 text-white">
-                {timeframeOptions.map(option => (
-                  <SelectItem key={option.value} value={option.value}>
-                    {option.label}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-          </div>
-        </div>
-        
-        <div>
-          <Label className="text-sm font-medium mb-2 block text-gray-300">Collection Status</Label>
-          <RadioGroup
-            value={details.inCollection !== null ? details.inCollection.toString() : ''}
-            onValueChange={value => handleIssueDetailChange(
-              issueType, 
-              'inCollection', 
-              value === 'true'
-            )}
-            className="flex flex-col space-y-2 sm:flex-row sm:space-y-0 sm:space-x-4 mt-1"
-          >
-            <div className="flex items-center space-x-2 bg-black px-4 py-2 rounded-md border border-purple-500">
-              <RadioGroupItem value="true" id={`${issueType}-in-collection`} className="border-purple-500 text-purple-500" />
-              <Label htmlFor={`${issueType}-in-collection`} className="text-sm text-white">In Collection</Label>
-            </div>
-            <div className="flex items-center space-x-2 bg-black px-4 py-2 rounded-md border border-purple-500">
-              <RadioGroupItem value="false" id={`${issueType}-not-in-collection`} className="border-purple-500 text-purple-500" />
-              <Label htmlFor={`${issueType}-not-in-collection`} className="text-sm text-white">Not in Collection</Label>
-            </div>
-          </RadioGroup>
-        </div>
-      </div>
-    );
-  };
-
-  const renderIssueItem = (issueType: CreditIssueType, label: string) => {
-    const isSelected = !!creditIssues[issueType];
-    const isOpen = openIssues[issueType];
-    
-    return (
-      <div className={cn(
-        "mb-3 overflow-hidden rounded-lg border transition-all",
-        "border-purple-600 bg-purple-600"
-      )}>
-        <Collapsible 
-          open={isOpen && isSelected} 
-          onOpenChange={() => isSelected && toggleIssue(issueType)}
-        >
-          <div className="flex items-center p-4">
-            <div className="flex items-center space-x-3 flex-1">
-              <Checkbox
-                id={`${issueType}-check`} 
-                checked={isSelected}
-                onCheckedChange={(checked) => 
-                  handleIssueToggle(issueType, checked === true)
-                }
-                className="h-5 w-5 bg-[#121826] border-purple-600 data-[state=checked]:bg-purple-600 data-[state=checked]:text-white"
-              />
-              <Label 
-                htmlFor={`${issueType}-check`} 
-                className="font-medium text-base cursor-pointer text-white"
-              >
-                {label}
-              </Label>
-            </div>
-            {isSelected && (
-              <CollapsibleTrigger asChild>
-                <Button variant="ghost" size="sm" className="p-1 h-auto text-[#121826]">
-                  {isOpen ? 
-                    <ChevronUp className="h-5 w-5" /> : 
-                    <ChevronDown className="h-5 w-5" />
-                  }
-                </Button>
-              </CollapsibleTrigger>
-            )}
-          </div>
-          
-          {isSelected && (
-            <CollapsibleContent>
-              {renderIssueDetails(issueType)}
-            </CollapsibleContent>
-          )}
-        </Collapsible>
-      </div>
-    );
-  };
-
   return (
     <QuestionContainer
       title={t('q.creditIssues.title')}
@@ -278,18 +98,16 @@ export const CreditIssuesQuestion = ({
       totalSteps={totalSteps}
     >
       <div className="space-y-6">
-        <div className="grid gap-3 sm:grid-cols-2">
+        <div className="grid gap-4">
           <Button
             variant={value === true ? 'default' : 'outline'}
             onClick={() => onChange(true)}
-            className={value === true ? 'bg-purple-600 hover:bg-purple-700 text-white' : 'border-purple-600 text-white bg-transparent hover:bg-purple-600/20'}
           >
             {t('q.creditIssues.yes')}
           </Button>
           <Button
             variant={value === false ? 'default' : 'outline'}
             onClick={() => onChange(false)}
-            className={value === false ? 'bg-purple-600 hover:bg-purple-700 text-white' : 'border-purple-600 text-white bg-transparent hover:bg-purple-600/20'}
           >
             {t('q.creditIssues.no')}
           </Button>
@@ -297,16 +115,33 @@ export const CreditIssuesQuestion = ({
         
         {value === true && (
           <div className="mt-6">
-            <p className="text-sm text-gray-300 mb-4">
-              {t('q.creditIssues.selectAll')}
+            <p className="text-base mb-4">
+              {t('q.creditIssues.followUp')}
             </p>
-            
-            <div className="max-h-[500px] overflow-y-auto pr-1 space-y-1 rounded-md">
-              {renderIssueItem('bankruptcy', 'Bankruptcy')}
-              {renderIssueItem('foreclosure', 'Foreclosure')}
-              {renderIssueItem('collections', 'Collections')}
-              {renderIssueItem('medical', 'Medical')}
-              {renderIssueItem('other', 'Other')}
+            <div className="grid gap-3">
+              {issueTypes.map((issue) => {
+                const isSelected = selectedIssues[issue.id] || false;
+                return (
+                  <div key={issue.id}>
+                    <div className="flex items-center space-x-2">
+                      <Checkbox 
+                        id={`issue-${issue.id}`} 
+                        checked={isSelected}
+                        onCheckedChange={(checked) => 
+                          handleIssueToggle(issue.id, checked === true)
+                        }
+                      />
+                      <Label htmlFor={`issue-${issue.id}`}>{issue.label}</Label>
+                    </div>
+                    
+                    {isSelected && (
+                      <div className="mt-2 ml-6 p-3 border border-[#fef9be] rounded-md bg-black text-[#fef9be]">
+                        <p className="text-sm">{getFeedbackMessage(issue.id)}</p>
+                      </div>
+                    )}
+                  </div>
+                );
+              })}
             </div>
           </div>
         )}
@@ -317,18 +152,13 @@ export const CreditIssuesQuestion = ({
           type="button"
           variant="outline"
           onClick={onBack}
-          className="gap-1 border-purple-600 text-white bg-transparent hover:bg-purple-600/20"
         >
-          <ArrowLeft className="h-4 w-4" />
+          <ArrowLeft className="mr-2 h-4 w-4" />
           {t('form.previous')}
         </Button>
-        <Button 
-          onClick={onNext} 
-          disabled={value === null || (value === true && !isAnyIssueComplete())}
-          className="gap-1 bg-purple-600 hover:bg-purple-700 text-white"
-        >
+        <Button onClick={onNext} disabled={value === null}>
           {t('form.next')}
-          <ArrowRight className="h-4 w-4" />
+          <ArrowRight className="ml-2 h-4 w-4" />
         </Button>
       </div>
     </QuestionContainer>

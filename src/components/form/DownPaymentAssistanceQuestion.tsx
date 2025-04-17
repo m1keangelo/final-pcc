@@ -22,11 +22,24 @@ export const DownPaymentAssistanceQuestion = ({
 }) => {
   const { t, language } = useLanguage();
   
+  const getFeedbackMessage = () => {
+    if (value === true) {
+      return language === 'es' 
+        ? "Excelente. Hay cientos de programas locales y nacionales. Vamos a ver cuáles aplican para ti y combinarlos."
+        : "Love that. There are hundreds of programs — local, state, and federal — that you could tap into. Let's stack the ones you qualify for.";
+    } else if (value === false) {
+      return language === 'es'
+        ? "Está perfecto. Usar tu propio dinero te da más control. ¿Quieres que te mostremos cómo sería ese tipo de préstamo?"
+        : "Totally fine. Using your own funds gives you more flexibility. Want us to show what full-control financing would look like?";
+    }
+    return "";
+  };
+  
   return (
     <QuestionContainer
-      title={language === 'en' ? 'Down Payment Assistance' : 'Asistencia para el Enganche'}
-      questionText={language === 'en' ? 'Would you be open to down payment assistance programs?' : '¿Estarías interesado en programas de asistencia para el enganche?'}
-      questionId="downpaymentassistance"
+      title={t('q.assistance.title')}
+      questionText={t('q.assistance.question')}
+      questionId="assistance"
       currentStep={currentStep}
       totalSteps={totalSteps}
     >
@@ -35,24 +48,21 @@ export const DownPaymentAssistanceQuestion = ({
           variant={value === true ? 'default' : 'outline'}
           onClick={() => onChange(true)}
         >
-          {language === 'en' ? 'Yes, I\'m interested' : 'Sí, estoy interesado'}
+          {t('q.assistance.yes')}
         </Button>
         <Button
           variant={value === false ? 'default' : 'outline'}
           onClick={() => onChange(false)}
         >
-          {language === 'en' ? 'No, I prefer to use my own funds' : 'No, prefiero usar mis propios fondos'}
+          {t('q.assistance.no')}
         </Button>
+        
+        {value !== null && (
+          <div className="mt-4 p-4 border border-[#fef9be] rounded-md bg-black text-[#fef9be]">
+            <p className="font-medium">{getFeedbackMessage()}</p>
+          </div>
+        )}
       </div>
-      
-      {value === true && (
-        <div className="mt-4 text-sm text-muted-foreground bg-secondary/50 p-3 rounded-md">
-          {language === 'en' 
-            ? 'There are many programs available that can help with down payment costs, especially for first-time homebuyers.'
-            : 'Hay muchos programas disponibles que pueden ayudar con los costos del enganche, especialmente para compradores de primera vivienda.'
-          }
-        </div>
-      )}
       
       <div className="mt-8 flex justify-between">
         <Button
@@ -61,10 +71,10 @@ export const DownPaymentAssistanceQuestion = ({
           onClick={onBack}
         >
           <ArrowLeft className="mr-2 h-4 w-4" />
-          {language === 'en' ? 'Back' : 'Atrás'}
+          {t('form.previous')}
         </Button>
         <Button onClick={onNext} disabled={value === null}>
-          {language === 'en' ? 'Next' : 'Siguiente'}
+          {t('form.next')}
           <ArrowRight className="ml-2 h-4 w-4" />
         </Button>
       </div>

@@ -23,7 +23,7 @@ export const DownPaymentAmountQuestion = ({
   currentStep: number;
   totalSteps: number;
 }) => {
-  const { language } = useLanguage();
+  const { t, language } = useLanguage();
   const [sliderValue, setSliderValue] = useState(value || 0);
   
   // Format currency with commas
@@ -37,6 +37,13 @@ export const DownPaymentAmountQuestion = ({
     const roundedVal = Math.round(val[0] / 20) * 20;
     setSliderValue(roundedVal);
     onChange(roundedVal);
+  };
+  
+  // Feedback message
+  const getFeedbackMessage = () => {
+    return language === 'es'
+      ? "Grande o pequeña, cada peso cuenta. Lo hacemos rendir más con programas que igualan y opciones para cubrir costos de cierre."
+      : "Big or small — every dollar counts. We'll stretch it by using matching programs or structuring closing costs smartly.";
   };
   
   return (
@@ -74,6 +81,10 @@ export const DownPaymentAmountQuestion = ({
           <div className="text-center text-sm text-muted-foreground mt-4">
             {language === 'en' ? 'Slide to adjust your down payment amount' : 'Desliza para ajustar el monto de tu pago inicial'}
           </div>
+          
+          <div className="mt-4 p-4 border border-[#fef9be] rounded-md bg-black text-[#fef9be]">
+            <p className="font-medium">{getFeedbackMessage()}</p>
+          </div>
         </div>
       </div>
       
@@ -84,13 +95,13 @@ export const DownPaymentAmountQuestion = ({
           onClick={onBack}
         >
           <ArrowLeft className="mr-2 h-4 w-4" />
-          {language === 'en' ? 'Back' : 'Atrás'}
+          {t('form.previous')}
         </Button>
         <Button 
           onClick={onNext} 
           disabled={value === null}
         >
-          {language === 'en' ? 'Next' : 'Siguiente'}
+          {t('form.next')}
           <ArrowRight className="ml-2 h-4 w-4" />
         </Button>
       </div>

@@ -1,5 +1,7 @@
 
 import { Button } from "@/components/ui/button";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { Label } from "@/components/ui/label";
 import QuestionContainer from "@/components/form/QuestionContainer";
 import { FormState } from "@/types/form";
 import { useLanguage } from "@/contexts/LanguageContext";
@@ -20,19 +22,31 @@ export const IdTypeQuestion = ({
   currentStep: number;
   totalSteps: number;
 }) => {
-  const { t } = useLanguage();
+  const { t, language } = useLanguage();
   
-  // Define feedback messages based on ID type
   const getFeedbackMessage = () => {
-    switch(value) {
-      case 'SSN':
-        return "You're fully set. No roadblocks ahead — let's get started.";
-      case 'ITIN':
-        return "No SSN? No problem. We've got ITIN-approved lenders. You're not locked out — let's open the door.";
-      case 'none':
-        return "Let's work on getting you an ITIN or pair you with a co-borrower. Everyone starts somewhere. We'll walk you through it.";
-      default:
-        return "";
+    if (language === 'es') {
+      switch (value) {
+        case 'ssn':
+          return "Todo en orden. Estás listo para comenzar. Vamos al paso siguiente.";
+        case 'itin':
+          return "¿No tienes SSN? No pasa nada. Trabajamos con bancos que aceptan ITIN. Vamos a abrir esa puerta contigo.";
+        case 'none':
+          return "Podemos ayudarte a sacar un ITIN o a conseguir un codeudor. Todos comienzan en algún punto. Te guiamos en cada paso.";
+        default:
+          return "";
+      }
+    } else {
+      switch (value) {
+        case 'ssn':
+          return "You're fully set. No roadblocks ahead — let's get started.";
+        case 'itin':
+          return "No SSN? No problem. We've got ITIN-approved lenders. You're not locked out — let's open the door.";
+        case 'none':
+          return "Let's work on getting you an ITIN or pair you with a co-borrower. Everyone starts somewhere. We'll walk you through it.";
+        default:
+          return "";
+      }
     }
   };
   
@@ -44,45 +58,43 @@ export const IdTypeQuestion = ({
       currentStep={currentStep}
       totalSteps={totalSteps}
     >
-      <div className="grid gap-4">
-        <Button
-          variant={value === 'SSN' ? 'default' : 'outline'}
-          onClick={() => onChange('SSN')}
+      <div className="space-y-6">
+        <RadioGroup
+          value={value || ""}
+          onValueChange={onChange}
         >
-          {t('q.idType.ssn')}
-        </Button>
-        <Button
-          variant={value === 'ITIN' ? 'default' : 'outline'}
-          onClick={() => onChange('ITIN')}
-        >
-          {t('q.idType.itin')}
-        </Button>
-        <Button
-          variant={value === 'none' ? 'default' : 'outline'}
-          onClick={() => onChange('none')}
-        >
-          {t('q.idType.none')}
-        </Button>
+          <div className="flex items-center space-x-2 mb-4">
+            <RadioGroupItem value="ssn" id="idType-ssn" />
+            <Label htmlFor="idType-ssn">{t('q.idType.ssn')}</Label>
+          </div>
+          <div className="flex items-center space-x-2 mb-4">
+            <RadioGroupItem value="itin" id="idType-itin" />
+            <Label htmlFor="idType-itin">{t('q.idType.itin')}</Label>
+          </div>
+          <div className="flex items-center space-x-2">
+            <RadioGroupItem value="none" id="idType-none" />
+            <Label htmlFor="idType-none">{t('q.idType.none')}</Label>
+          </div>
+        </RadioGroup>
+        
+        {value && (
+          <div className="mt-4 p-4 border border-[#fef9be] rounded-md bg-black text-[#fef9be]">
+            <p className="font-medium">{getFeedbackMessage()}</p>
+          </div>
+        )}
+        
+        {value === 'itin' && (
+          <div className="text-sm p-3 bg-blue-50 text-blue-800 border border-blue-200 rounded-md">
+            {t('q.idType.itinInfo')}
+          </div>
+        )}
+        
+        {value === 'none' && (
+          <div className="text-sm p-3 bg-red-50 text-red-800 border border-red-200 rounded-md">
+            {t('q.idType.noneWarning')}
+          </div>
+        )}
       </div>
-      
-      {/* Display feedback message if an option is selected */}
-      {value && (
-        <div className="mt-4 p-4 border border-amber-200 rounded-md bg-amber-50">
-          <p className="text-[#FFD700] font-medium">{getFeedbackMessage()}</p>
-        </div>
-      )}
-      
-      {value === 'ITIN' && (
-        <div className="mt-4 text-sm text-amber-600 bg-amber-50 p-3 rounded-md border border-amber-200">
-          {t('q.idType.itinInfo')}
-        </div>
-      )}
-      
-      {value === 'none' && (
-        <div className="mt-4 text-sm text-red-600 bg-red-50 p-3 rounded-md border border-red-200">
-          {t('q.idType.noneWarning')}
-        </div>
-      )}
       
       <div className="mt-8 flex justify-between">
         <Button
@@ -93,7 +105,7 @@ export const IdTypeQuestion = ({
           <ArrowLeft className="mr-2 h-4 w-4" />
           {t('form.previous')}
         </Button>
-        <Button onClick={onNext} disabled={!value}>
+        <Button onClick={onNext} disabled={value === null}>
           {t('form.next')}
           <ArrowRight className="ml-2 h-4 w-4" />
         </Button>

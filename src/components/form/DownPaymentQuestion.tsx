@@ -20,7 +20,20 @@ export const DownPaymentQuestion = ({
   currentStep: number;
   totalSteps: number;
 }) => {
-  const { t } = useLanguage();
+  const { t, language } = useLanguage();
+  
+  const getFeedbackMessage = () => {
+    if (value === true) {
+      return language === 'es' 
+        ? "Excelente. Eso muestra compromiso al banco. Podemos combinarlo con ayudas para que te rinda más."
+        : "Beautiful — let's show the lender you've got skin in the game. We'll pair it with assistance to multiply your power.";
+    } else if (value === false) {
+      return language === 'es'
+        ? "Tranquilo. Hay ayudas, fondos regalo y hasta opciones sin cuota inicial. Busquemos la que te sirva mejor."
+        : "No stress. We've got grant programs, gift funds, and even zero-down options in some cases. Let's find what fits.";
+    }
+    return "";
+  };
   
   return (
     <QuestionContainer
@@ -44,6 +57,12 @@ export const DownPaymentQuestion = ({
           {t('q.downPayment.no')}
         </Button>
       </div>
+      
+      {value !== null && (
+        <div className="mt-4 p-4 border border-[#fef9be] rounded-md bg-black text-[#fef9be]">
+          <p className="font-medium">{getFeedbackMessage()}</p>
+        </div>
+      )}
       
       <div className="mt-8 flex justify-between">
         <Button
