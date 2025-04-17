@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 
 // The array of available mascot images
