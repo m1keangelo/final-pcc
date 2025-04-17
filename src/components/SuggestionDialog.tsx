@@ -1,5 +1,6 @@
+
 import React, { useState } from "react";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter, DialogDescription } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { useLanguage } from "@/contexts/LanguageContext";
@@ -64,29 +65,34 @@ const SuggestionDialog = ({ isOpen, onClose }: SuggestionDialogProps) => {
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="sm:max-w-md">
+      <DialogContent className="sm:max-w-md bg-card border-border text-foreground">
         <DialogHeader>
-          <DialogTitle className="text-xl font-bold">{t('suggestion.title')}</DialogTitle>
+          <DialogTitle className="text-xl font-bold text-foreground">
+            {t('nav.suggestions')}
+          </DialogTitle>
+          <DialogDescription className="text-muted-foreground">
+            {t('suggestion.description') || "Share your suggestions to help us improve the application."}
+          </DialogDescription>
         </DialogHeader>
         
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="space-y-2">
-            <label htmlFor="suggestion" className="text-sm font-medium">
-              {t('suggestion.description')}
+            <label htmlFor="suggestion" className="text-sm font-medium text-foreground">
+              {t('suggestion.description') || "Your Suggestion"}
             </label>
             <Textarea
               id="suggestion"
               value={suggestion}
               onChange={(e) => setSuggestion(e.target.value)}
-              placeholder={t('suggestion.descriptionPlaceholder')}
-              className="min-h-[120px]"
+              placeholder={t('suggestion.descriptionPlaceholder') || "Describe your suggestion..."}
+              className="min-h-[120px] bg-background text-foreground border-border"
               required
             />
           </div>
           
           <div className="space-y-2">
-            <label htmlFor="screenshot" className="text-sm font-medium">
-              {t('suggestion.screenshot')}
+            <label htmlFor="screenshot" className="text-sm font-medium text-foreground">
+              {t('suggestion.screenshot') || "Screenshot"}
             </label>
             <div className="flex items-center gap-2">
               <Button
@@ -103,10 +109,10 @@ const SuggestionDialog = ({ isOpen, onClose }: SuggestionDialogProps) => {
                   onChange={handleImageChange}
                 />
                 <ImagePlus className="mr-2 h-4 w-4" />
-                {t('suggestion.uploadImage')}
+                {t('suggestion.uploadImage') || "Upload Image"}
               </Button>
               {selectedImage && (
-                <span className="text-sm text-gray-500">
+                <span className="text-sm text-muted-foreground">
                   {selectedImage.name}
                 </span>
               )}

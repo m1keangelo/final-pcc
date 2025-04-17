@@ -1,5 +1,6 @@
+
 import React, { useState } from "react";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter, DialogDescription } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { useLanguage } from "@/contexts/LanguageContext";
@@ -64,29 +65,34 @@ const BugReportDialog = ({ isOpen, onClose }: BugReportDialogProps) => {
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="sm:max-w-md">
+      <DialogContent className="sm:max-w-md bg-card border-border text-foreground">
         <DialogHeader>
-          <DialogTitle className="text-xl font-bold">{t('bugReport.title')}</DialogTitle>
+          <DialogTitle className="text-xl font-bold text-foreground">
+            {t('nav.reportBug')}
+          </DialogTitle>
+          <DialogDescription className="text-muted-foreground">
+            {t('bugReport.description') || "Report any issues you've encountered while using the application."}
+          </DialogDescription>
         </DialogHeader>
         
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="space-y-2">
-            <label htmlFor="description" className="text-sm font-medium">
+            <label htmlFor="description" className="text-sm font-medium text-foreground">
               {t('bugReport.description')}
             </label>
             <Textarea
               id="description"
               value={description}
               onChange={(e) => setDescription(e.target.value)}
-              placeholder={t('bugReport.descriptionPlaceholder')}
-              className="min-h-[120px]"
+              placeholder={t('bugReport.descriptionPlaceholder') || "Describe the issue you encountered..."}
+              className="min-h-[120px] bg-background text-foreground border-border"
               required
             />
           </div>
           
           <div className="space-y-2">
-            <label htmlFor="screenshot" className="text-sm font-medium">
-              {t('bugReport.screenshot')}
+            <label htmlFor="screenshot" className="text-sm font-medium text-foreground">
+              {t('bugReport.screenshot') || "Screenshot"}
             </label>
             <div className="flex items-center gap-2">
               <Button
@@ -103,10 +109,10 @@ const BugReportDialog = ({ isOpen, onClose }: BugReportDialogProps) => {
                   onChange={handleImageChange}
                 />
                 <ImagePlus className="mr-2 h-4 w-4" />
-                {t('bugReport.uploadImage')}
+                {t('bugReport.uploadImage') || "Upload Image"}
               </Button>
               {selectedImage && (
-                <span className="text-sm text-gray-500">
+                <span className="text-sm text-muted-foreground">
                   {selectedImage.name}
                 </span>
               )}
