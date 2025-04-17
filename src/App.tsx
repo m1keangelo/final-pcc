@@ -37,20 +37,30 @@ const queryClient = new QueryClient({
   },
 });
 
-// Configure global error handlers
-queryClient.getQueryCache().subscribe({
-  onError: (error) => {
-    console.error('Query error:', error);
+// Configure global error handlers using the proper event listener approach
+const unsubscribeQuery = queryClient.getQueryCache().subscribe(() => {
+  const queryError = queryClient.getQueryCache().find()?.state.error;
+  if (queryError) {
+    console.error('Query error:', queryError);
     toast("There was a problem with the data request. Please try again.");
   }
 });
 
-queryClient.getMutationCache().subscribe({
-  onError: (error) => {
-    console.error('Mutation error:', error);
+const unsubscribeMutation = queryClient.getMutationCache().subscribe(() => {
+  const mutationError = queryClient.getMutationCache().find()?.state.error;
+  if (mutationError) {
+    console.error('Mutation error:', mutationError);
     toast("Your changes could not be saved. Please try again.");
   }
 });
+
+// Cleanup function (not used here but good practice in components)
+// useEffect(() => {
+//   return () => {
+//     unsubscribeQuery();
+//     unsubscribeMutation();
+//   };
+// }, []);
 
 // Fallback UI for the entire app
 const AppError = () => (
@@ -142,4 +152,3 @@ const App = () => (
 );
 
 export default App;
-
