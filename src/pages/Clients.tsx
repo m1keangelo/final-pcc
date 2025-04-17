@@ -4,6 +4,7 @@ import { useData } from "@/contexts/DataContext";
 import { useAuth } from "@/contexts/AuthContext";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { Link } from "react-router-dom";
 import { 
   Table, 
   TableBody,
@@ -57,7 +58,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 
 const Clients = () => {
   const { t } = useLanguage();
-  const { clients, campaigns, deleteClient } = useData();
+  const { clients, campaigns, deleteClient, trashedClients } = useData();
   const { hasPermission, isAdmin, isSuperAdmin } = useAuth();
   const [search, setSearch] = useState("");
   const [selectedCampaign, setSelectedCampaign] = useState<string>("all");
@@ -240,6 +241,17 @@ const Clients = () => {
             >
               Back to Client List
             </Button>
+          )}
+          {canDeleteClients && (
+            <Link to="/trash">
+              <Button 
+                variant="outline" 
+                className="flex items-center gap-2"
+              >
+                <Trash2 size={16} />
+                Trash ({trashedClients.length})
+              </Button>
+            </Link>
           )}
           <Button 
             variant="outline" 

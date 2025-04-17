@@ -1,3 +1,4 @@
+
 // Client data type with expanded fields
 export type ClientData = {
   id: string;
@@ -51,6 +52,9 @@ export type ClientData = {
   urgency?: 'low' | 'medium' | 'high';
   nextSteps?: string;
   lastContact?: string;
+  
+  // Trash management
+  deletedAt?: string;
 };
 
 // Available campaigns
