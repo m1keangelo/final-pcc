@@ -4,6 +4,7 @@ import React, { Component, ErrorInfo, ReactNode } from "react";
 interface Props {
   children: ReactNode;
   fallback: ReactNode;
+  onError?: (error: Error) => void;
 }
 
 interface State {
@@ -22,6 +23,9 @@ export class ErrorBoundary extends Component<Props, State> {
 
   componentDidCatch(error: Error, errorInfo: ErrorInfo) {
     console.error("Error caught by ErrorBoundary:", error, errorInfo);
+    if (this.props.onError) {
+      this.props.onError(error);
+    }
   }
 
   render() {
