@@ -2,7 +2,11 @@
 import React from 'react';
 import RotatingMascot from './RotatingMascot';
 
-const BrandImagery: React.FC = () => {
+interface BrandImageryProps {
+  key?: React.Key;
+}
+
+const BrandImagery: React.FC<BrandImageryProps> = ({ key }) => {
   return (
     <div className="flex-1 bg-black p-6 flex flex-col justify-center items-center">
       <div className="w-full flex justify-center mb-6">
@@ -14,7 +18,7 @@ const BrandImagery: React.FC = () => {
       </div>
 
       <div className="w-full flex items-center justify-center py-4">
-        <RotatingMascot />
+        <RotatingMascot key={key} />
       </div>
     </div>
   );

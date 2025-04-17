@@ -10,8 +10,14 @@ import { useAuth } from "@/contexts/AuthContext";
 const Login = () => {
   const { isLoading } = useAuth();
   const [showSplash, setShowSplash] = useState(true);
-  // Add a key to force RotatingMascot component to remount and get a new random image
+  // Force remount of RotatingMascot component to get a new random image
   const [mascotKey, setMascotKey] = useState(Date.now());
+  
+  // Refresh the mascot key on mount and whenever the component rerenders
+  useEffect(() => {
+    setMascotKey(Date.now());
+    console.log("Login page rendered, new mascot key:", Date.now());
+  }, []);
   
   useEffect(() => {
     // If not loading, we still want to show splash for full 9 seconds
