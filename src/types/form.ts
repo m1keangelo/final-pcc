@@ -1,4 +1,3 @@
-
 export type FormState = {
   timeline: 'immediately' | '3months' | '3to6months' | '6to12months' | 'exploring' | null;
   firstTimeBuyer: boolean | null;
@@ -14,9 +13,6 @@ export type FormState = {
   assistanceOpen: boolean | null;
   monthlyDebts: string;
   hasCreditIssues: boolean | null;
-  creditIssueType: 'bankruptcy' | 'foreclosure' | 'collections' | 'other' | null;
-  creditIssueYear: number | null;
-  creditIssueAmount: number | null;
   creditIssues: {
     bankruptcy?: boolean;
     foreclosure?: boolean;
@@ -50,6 +46,9 @@ export type FormState = {
       inCollection: boolean | null;
     };
   };
+  creditIssueType: 'bankruptcy' | 'foreclosure' | 'collections' | 'other' | null;
+  creditIssueYear: number | null;
+  creditIssueAmount: number | null;
   idType: 'SSN' | 'ITIN' | 'none' | null;
   name: string;
   phone: string;

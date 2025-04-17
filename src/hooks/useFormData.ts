@@ -40,20 +40,25 @@ export const useFormData = () => {
     }
   }, [formData.phone]);
 
-  const handleFormDataChange = (field: keyof FormState, value: any) => {
-    setFormData(prev => ({
-      ...prev,
-      [field]: value
-    }));
+  const handleFormDataChange = (field: keyof FormState, value: string) => {
+    if (field === 'phone') {
+      const onlyDigits = value.replace(/\D/g, '');
+      setFormData({
+        ...formData,
+        [field]: onlyDigits
+      });
+    } else {
+      setFormData({
+        ...formData,
+        [field]: value
+      });
+    }
   };
 
-  const updateFormData = <K extends keyof FormState>(
-    key: K, 
-    value: FormState[K]
-  ) => {
+  const updateFormData = (newData: Partial<FormState>) => {
     setFormData(prev => ({
       ...prev,
-      [key]: value
+      ...newData
     }));
   };
 

@@ -16,7 +16,6 @@ import DocumentSelection from "./pages/DocumentSelection";
 import Clients from "./pages/Clients";
 import Analytics from "./pages/Analytics";
 import AdminDashboard from "./pages/AdminDashboard";
-import ImageAdmin from "./pages/ImageAdmin";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -41,11 +40,6 @@ const App = () => (
                 <Route path="/admin" element={
                   <ProtectedRoute requiresAdmin={true}>
                     <AdminDashboard />
-                  </ProtectedRoute>
-                } />
-                <Route path="/admin/images" element={
-                  <ProtectedRoute requiresAdmin={true}>
-                    <ImageAdmin />
                   </ProtectedRoute>
                 } />
                 
