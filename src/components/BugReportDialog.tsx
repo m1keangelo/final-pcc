@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter, DialogDescription } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
@@ -24,9 +23,7 @@ const BugReportDialog = ({ isOpen, onClose }: BugReportDialogProps) => {
     e.preventDefault();
     
     if (!description.trim()) {
-      toast(`${t('common.error')} - ${t('bugReport.descriptionRequired')}`, {
-        variant: "destructive"
-      });
+      toast(`${t('common.error')} - ${t('bugReport.descriptionRequired')}`);
       return;
     }
 
@@ -52,9 +49,7 @@ const BugReportDialog = ({ isOpen, onClose }: BugReportDialogProps) => {
       setSelectedImage(null);
       onClose();
     } catch (error) {
-      toast(`${t('common.error')} - ${t('bugReport.submitError')}`, {
-        variant: "destructive"
-      });
+      toast(`${t('common.error')} - ${t('bugReport.submitError')}`);
     } finally {
       setIsSubmitting(false);
     }

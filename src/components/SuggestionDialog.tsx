@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter, DialogDescription } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
@@ -24,9 +23,7 @@ const SuggestionDialog = ({ isOpen, onClose }: SuggestionDialogProps) => {
     e.preventDefault();
     
     if (!suggestion.trim()) {
-      toast(`${t('common.error')} - ${t('suggestion.descriptionRequired')}`, {
-        variant: "destructive"
-      });
+      toast(`${t('common.error')} - ${t('suggestion.descriptionRequired')}`);
       return;
     }
 
@@ -52,9 +49,7 @@ const SuggestionDialog = ({ isOpen, onClose }: SuggestionDialogProps) => {
       setSelectedImage(null);
       onClose();
     } catch (error) {
-      toast(`${t('common.error')} - ${t('suggestion.submitError')}`, {
-        variant: "destructive"
-      });
+      toast(`${t('common.error')} - ${t('suggestion.submitError')}`);
     } finally {
       setIsSubmitting(false);
     }
