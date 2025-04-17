@@ -1,4 +1,3 @@
-
 import React, { createContext, useContext, useState, ReactNode, useEffect } from 'react';
 
 // Language type
@@ -221,35 +220,6 @@ const translations = {
     'help.q3': 'Credit scores typically range from 300-850. Most mortgage loans require at least 620.',
     'help.q4': 'Down payments are typically 3.5% to 20% of the home purchase price.',
     'help.q5': 'Legal status affects loan eligibility. Most traditional loans require citizenship or permanent residency.',
-
-    // Common UI elements
-    'common.submit': 'Submit',
-    'common.cancel': 'Cancel',
-    'common.submitting': 'Submitting...',
-    'common.error': 'Error',
-    'common.success': 'Success',
-    
-    // Bug Report Dialog
-    'bugReport.title': 'Report a Bug',
-    'bugReport.description': 'Report any issues you\'ve encountered while using the application.',
-    'bugReport.descriptionPlaceholder': 'Describe the issue you encountered...',
-    'bugReport.screenshot': 'Screenshot (optional)',
-    'bugReport.uploadImage': 'Upload Image',
-    'bugReport.descriptionRequired': 'Please provide a description of the bug.',
-    'bugReport.submitted': 'Bug Report Submitted',
-    'bugReport.thankYou': 'Thank you for your feedback! We\'ll look into this issue.',
-    'bugReport.submitError': 'Failed to submit the bug report. Please try again.',
-    
-    // Suggestion Dialog
-    'suggestion.title': 'Suggestion',
-    'suggestion.description': 'Share your suggestions to help us improve the application.',
-    'suggestion.descriptionPlaceholder': 'Describe your suggestion...',
-    'suggestion.screenshot': 'Screenshot (optional)',
-    'suggestion.uploadImage': 'Upload Image',
-    'suggestion.descriptionRequired': 'Please provide a description for your suggestion.',
-    'suggestion.submitted': 'Suggestion Submitted',
-    'suggestion.thankYou': 'Thank you for your feedback! We appreciate your input.',
-    'suggestion.submitError': 'Failed to submit your suggestion. Please try again.',
   },
   
   es: {
@@ -457,35 +427,6 @@ const translations = {
     'help.q3': 'Los puntajes de crédito típicamente varían de 300-850. La mayoría de los préstamos hipotecarios requieren al menos 620.',
     'help.q4': 'Los enganches son típicamente del 3.5% al 20% del precio de compra de la vivienda.',
     'help.q5': 'El estatus legal afecta la elegibilidad para préstamos. La mayoría de los préstamos tradicionales requieren ciudadanía o residencia permanente.',
-    
-    // Common UI elements
-    'common.submit': 'Enviar',
-    'common.cancel': 'Cancelar',
-    'common.submitting': 'Enviando...',
-    'common.error': 'Error',
-    'common.success': 'Éxito',
-    
-    // Bug Report Dialog
-    'bugReport.title': 'Reportar un Error',
-    'bugReport.description': 'Reporte cualquier problema que haya encontrado mientras usaba la aplicación.',
-    'bugReport.descriptionPlaceholder': 'Describa el problema que encontró...',
-    'bugReport.screenshot': 'Captura de pantalla (opcional)',
-    'bugReport.uploadImage': 'Subir imagen',
-    'bugReport.descriptionRequired': 'Por favor proporcione una descripción del error.',
-    'bugReport.submitted': 'Reporte de Error Enviado',
-    'bugReport.thankYou': '¡Gracias por sus comentarios! Investigaremos este problema.',
-    'bugReport.submitError': 'No se pudo enviar el reporte de error. Por favor, inténtelo de nuevo.',
-    
-    // Suggestion Dialog
-    'suggestion.title': 'Sugerencia',
-    'suggestion.description': 'Comparta sus sugerencias para ayudarnos a mejorar la aplicación.',
-    'suggestion.descriptionPlaceholder': 'Describa su sugerencia...',
-    'suggestion.screenshot': 'Captura de pantalla (opcional)',
-    'suggestion.uploadImage': 'Subir imagen',
-    'suggestion.descriptionRequired': 'Por favor proporcione una descripción para su sugerencia.',
-    'suggestion.submitted': 'Sugerencia Enviada',
-    'suggestion.thankYou': '¡Gracias por sus comentarios! Apreciamos su aportación.',
-    'suggestion.submitError': 'No se pudo enviar su sugerencia. Por favor, inténtelo de nuevo.',
   }
 };
 

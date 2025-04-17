@@ -1,5 +1,4 @@
 
-import React from 'react';
 import { useLanguage } from "@/contexts/LanguageContext";
 import { useAuth } from "@/contexts/AuthContext";
 import { Link } from "react-router-dom";
@@ -19,8 +18,8 @@ const Dashboard = () => {
   return (
     <div className="space-y-8 animate-fade-in max-w-[1200px] mx-auto px-4 md:px-6">
       <div>
-        <h1 className="text-5xl font-bold mb-3 text-balance">{t('dashboard.welcome')}</h1>
-        <p className="text-xl text-muted-foreground leading-relaxed tracking-wide">
+        <h1 className="text-4xl font-bold mb-2">{t('dashboard.welcome')}</h1>
+        <p className="text-xl text-muted-foreground">
           {t('dashboard.subtitle')}
         </p>
       </div>
