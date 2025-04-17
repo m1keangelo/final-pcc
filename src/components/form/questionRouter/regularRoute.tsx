@@ -1,4 +1,3 @@
-
 import React from "react";
 import { QuestionRouterProps } from "./types";
 import TimelineQuestion from "../TimelineQuestion";
@@ -130,7 +129,7 @@ export const handleRegularRoute = (
       return (
         <MonthlyDebtsQuestion
           value={formData.monthlyDebts}
-          onChange={(value) => updateFormData("monthlyDebts", value)}
+          onChange={(value) => updateFormData("monthlyDebts", Number(value))}
           onNext={handleNext}
           onBack={handleBack}
           currentStep={currentStep}
