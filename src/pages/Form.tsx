@@ -12,17 +12,22 @@ const Form: React.FC = () => {
   };
 
   return (
-    <ErrorBoundary 
-      fallback={<div className="p-8 text-center">
-        <h3 className="text-xl font-bold">Something went wrong with the form</h3>
-        <p className="mt-2 text-muted-foreground">Please try refreshing the page.</p>
-      </div>}
-      onError={handleError}
-    >
-      <Suspense fallback={<Skeleton className="w-full h-[500px]" />}>
-        <FormContainer />
-      </Suspense>
-    </ErrorBoundary>
+    <div className="container mx-auto px-4 py-8">
+      <h1 className="text-3xl font-bold mb-2 text-gallomodern-50">Loan Prequalification Form</h1>
+      <p className="text-muted-foreground mb-8">Fill out the form below to prequalify</p>
+
+      <ErrorBoundary 
+        fallback={<div className="p-8 text-center">
+          <h3 className="text-xl font-bold">Something went wrong with the form</h3>
+          <p className="mt-2 text-muted-foreground">Please try refreshing the page.</p>
+        </div>}
+        onError={handleError}
+      >
+        <Suspense fallback={<Skeleton className="w-full h-[500px]" />}>
+          <FormContainer />
+        </Suspense>
+      </ErrorBoundary>
+    </div>
   );
 };
 

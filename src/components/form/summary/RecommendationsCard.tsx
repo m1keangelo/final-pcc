@@ -1,5 +1,5 @@
 
-import { Card, CardContent } from '@/components/ui/card';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { AlertTriangle } from 'lucide-react';
 import { useLanguage } from '@/contexts/LanguageContext';
@@ -36,19 +36,21 @@ const RecommendationsCard = ({ recommendations }: RecommendationsCardProps) => {
 
   return (
     <Card>
-      <CardContent className="pt-6">
-        <h3 className="text-lg font-medium mb-4 flex items-center">
-          <AlertTriangle className="mr-2 h-5 w-5 text-yellow-500" />
+      <CardHeader className="pb-2">
+        <CardTitle className="flex items-center gap-2">
+          <AlertTriangle className="h-5 w-5 text-yellow-500" />
           {language === 'en' ? 'Recommendations' : 'Recomendaciones'}
-        </h3>
+        </CardTitle>
+      </CardHeader>
+      <CardContent className="pt-4">
         <div className="space-y-4">
           {recommendations.map((rec, index) => (
-            <div key={index} className="bg-muted/50 p-4 rounded-lg">
+            <div key={index} className="bg-muted/50 p-4 rounded-lg border border-muted">
               <div className="flex items-start gap-3">
                 <div className="mt-0.5">{getRecommendationIcon(rec.type)}</div>
                 <div>
                   <h4 className="font-medium">{rec.title}</h4>
-                  <p className="text-muted-foreground mt-1">{rec.description}</p>
+                  <p className="text-muted-foreground mt-1 text-sm">{rec.description}</p>
                   {rec.priority && (
                     <Badge 
                       className="mt-2"

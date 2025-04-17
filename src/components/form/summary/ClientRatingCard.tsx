@@ -1,8 +1,9 @@
 
 import { ClientRating } from '@/types/clientRating';
-import { Card, CardContent } from '@/components/ui/card';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Progress } from '@/components/ui/progress';
 import { useLanguage } from '@/contexts/LanguageContext';
+import { Award } from 'lucide-react';
 
 interface ClientRatingCardProps {
   clientRating: ClientRating;
@@ -27,14 +28,16 @@ const ClientRatingCard = ({ clientRating }: ClientRatingCardProps) => {
 
   return (
     <Card>
-      <CardContent className="pt-6">
-        <h3 className="text-lg font-medium mb-4">
+      <CardHeader className="pb-2">
+        <CardTitle className="flex items-center gap-2">
+          <Award className="h-5 w-5 text-primary" />
           {language === 'en' ? 'Client Rating' : 'Calificación del Cliente'}
-        </h3>
-        
-        <div className="mb-4 text-center">
+        </CardTitle>
+      </CardHeader>
+      <CardContent className="pt-4">
+        <div className="mb-6 text-center">
           <div className="relative inline-block">
-            <div className={`w-24 h-24 rounded-full flex items-center justify-center text-3xl font-bold text-white ${getRatingColor(clientRating.overall)}`}>
+            <div className={`w-24 h-24 rounded-full flex items-center justify-center text-3xl font-bold text-white shadow-lg ${getRatingColor(clientRating.overall)}`}>
               {clientRating.overall}/10
             </div>
             <div className="mt-2 text-sm font-medium">

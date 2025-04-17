@@ -9,6 +9,8 @@ import PositiveFactorsCard from './summary/PositiveFactorsCard';
 import RecommendationsCard from './summary/RecommendationsCard';
 import NextStepsCard from './summary/NextStepsCard';
 import { useState } from 'react';
+import PrequalificationResultsCard from './summary/PrequalificationResultsCard';
+import QualificationAnalysisCard from './summary/QualificationAnalysisCard';
 
 interface SummaryOutcomeProps {
   formData: FormState;
@@ -38,14 +40,20 @@ const SummaryOutcome = ({ formData, onProceedToDocuments }: SummaryOutcomeProps)
     return 'text-amber-700 dark:text-amber-500';
   };
 
+  const isQualified = qualificationSummary.includes('✅');
+
   return (
     <div className="space-y-6 animate-fade-in">
+      <h2 className="text-2xl font-bold mb-4 text-center text-gallomodern-50">
+        {language === 'en' ? 'Loan Prequalification Results' : 'Resultados de Precalificación de Préstamo'}
+      </h2>
+
       {/* Animation Area */}
       {showAnimation && (
         <div className="flex justify-center mb-6">
           <div className="relative w-64 h-64 rounded-lg overflow-hidden border-2 border-gallopurple">
             <img 
-              src={`/animations/${qualificationSummary.includes('✅') ? 'qualified' : 'fixes-needed'}.gif`}
+              src={`/animations/${isQualified ? 'qualified' : 'fixes-needed'}.gif`}
               alt="Qualification Status"
               className="w-full h-full object-cover"
               onError={() => setShowAnimation(false)}
@@ -61,11 +69,24 @@ const SummaryOutcome = ({ formData, onProceedToDocuments }: SummaryOutcomeProps)
       )}
 
       {/* Qualification Summary Banner */}
-      <Alert className={`border-l-4 ${qualificationSummary.includes('✅') ? 'border-l-green-500 bg-green-50' : 'border-l-orange-500 bg-orange-50'} dark:bg-opacity-10`}>
+      <Alert className={`border-l-4 ${isQualified ? 'border-l-green-500 bg-green-50' : 'border-l-orange-500 bg-orange-50'} dark:bg-opacity-10`}>
         <AlertTitle className={`text-xl font-semibold ${getSummaryTextColorClass(qualificationSummary)}`}>
           {qualificationSummary}
         </AlertTitle>
       </Alert>
+
+      {/* Prequalification Results - NEW CARD */}
+      <PrequalificationResultsCard 
+        formData={formData} 
+        clientRating={clientRating} 
+      />
+
+      {/* Qualification Analysis - NEW CARD */}
+      <QualificationAnalysisCard 
+        formData={formData} 
+        clientRating={clientRating}
+        isQualified={isQualified}
+      />
 
       {/* Client Rating */}
       <ClientRatingCard clientRating={clientRating} />

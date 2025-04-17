@@ -1,7 +1,7 @@
 
-import { Card, CardContent } from '@/components/ui/card';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { ArrowRight } from 'lucide-react';
+import { ArrowRight, Share, FileText } from 'lucide-react';
 import { useLanguage } from '@/contexts/LanguageContext';
 
 interface NextStepsCardProps {
@@ -15,25 +15,31 @@ const NextStepsCard = ({ onProceedToDocuments, onSendSummary, nextStepsPrompt }:
 
   return (
     <Card className="border-2 border-accent">
-      <CardContent className="pt-6">
-        <h3 className="text-lg font-medium mb-4 flex items-center">
-          <ArrowRight className="mr-2 h-5 w-5 text-primary" />
+      <CardHeader className="pb-2 bg-accent/5">
+        <CardTitle className="flex items-center gap-2">
+          <ArrowRight className="h-5 w-5 text-accent" />
           {language === 'en' ? 'Next Steps' : 'Próximos Pasos'}
-        </h3>
-        <p className="mb-6">{nextStepsPrompt}</p>
+        </CardTitle>
+      </CardHeader>
+      <CardContent className="pt-6">
+        <p className="mb-6 text-base">{nextStepsPrompt}</p>
         <div className="flex flex-col sm:flex-row gap-3">
           <Button 
             onClick={onProceedToDocuments} 
             className="flex-1 bg-primary hover:bg-primary/90"
+            size="lg"
           >
-            {language === 'en' ? 'Yes, Proceed to Documents' : 'Sí, Proceder a Documentos'}
+            <FileText className="mr-2 h-5 w-5" />
+            {language === 'en' ? 'Proceed to Documents' : 'Proceder a Documentos'}
           </Button>
           <Button 
             variant="outline" 
             className="flex-1"
+            size="lg"
             onClick={onSendSummary}
           >
-            {language === 'en' ? 'Send Summary via Email/WhatsApp' : 'Enviar Resumen por Email/WhatsApp'}
+            <Share className="mr-2 h-5 w-5" />
+            {language === 'en' ? 'Send Summary' : 'Enviar Resumen'}
           </Button>
         </div>
       </CardContent>
