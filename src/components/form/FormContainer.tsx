@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useLanguage } from "@/contexts/LanguageContext";
@@ -27,7 +26,7 @@ const FormContainer: React.FC = () => {
 
   const [formStage, setFormStage] = useState<'initialInfo' | 'questions' | 'summary'>('initialInfo');
   const [selectedAgent, setSelectedAgent] = useState<string>("SoReal Estate");
-  const [selectedCampaign, setSelectedCampaign] = useState<string>("Default Campaign");
+  const [selectedCampaign, setSelectedCampaign] = useState<string>("Dennis Lopez Campaign");
   
   const { formData, updateFormData, handleFormDataChange, setFormData } = useFormData();
 
@@ -50,8 +49,6 @@ const FormContainer: React.FC = () => {
     
     console.log('Submitting form data:', finalData);
     const transformedData = transformFormData(finalData, selectedAgent);
-    // We don't need to set the campaign here anymore as it's already included in the transformFormData function
-    
     console.log('Transformed client data for submission:', transformedData);
     addClient(transformedData);
     
@@ -80,14 +77,14 @@ const FormContainer: React.FC = () => {
             />
             
             <div className="mt-4">
-              <Label htmlFor="campaign-select">
+              <Label htmlFor="campaign-select" className="text-base font-medium">
                 {language === 'en' ? 'Select Campaign' : 'Seleccionar Campaña'}
               </Label>
               <Select
                 value={selectedCampaign}
                 onValueChange={setSelectedCampaign}
               >
-                <SelectTrigger id="campaign-select" className="w-full">
+                <SelectTrigger id="campaign-select" className="w-full mt-2 h-11 bg-popover">
                   <SelectValue placeholder={language === 'en' ? 'Select campaign' : 'Seleccionar campaña'} />
                 </SelectTrigger>
                 <SelectContent>

@@ -1,4 +1,3 @@
-
 // Client data type with expanded fields
 export type ClientData = {
   id: string;
@@ -63,11 +62,10 @@ export type ClientData = {
 
 // Available campaigns
 export const CAMPAIGNS = [
-  'Default Campaign',
-  'Spring Home Buyer',
-  'First-Time Homeowner',
-  'Refinance Special', 
-  'Investor Program'
+  'Dennis Lopez Campaign',
+  'Michael Campaign', 
+  'Tito Baptista Campaign',
+  'Alvaro Terry Campaign'
 ];
 
 // Available client table columns
