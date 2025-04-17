@@ -1,3 +1,4 @@
+
 export type FormState = {
   timeline: 'immediately' | '3months' | '3to6months' | '6to12months' | 'exploring' | null;
   firstTimeBuyer: boolean | null;
@@ -45,6 +46,7 @@ export type FormState = {
       timeframe: string | null;
       inCollection: boolean | null;
     };
+    [key: string]: boolean | { amount: number | null; timeframe: string | null; inCollection: boolean | null; } | undefined;
   };
   creditIssueType: 'bankruptcy' | 'foreclosure' | 'collections' | 'other' | null;
   creditIssueYear: number | null;

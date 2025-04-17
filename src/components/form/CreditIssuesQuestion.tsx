@@ -36,20 +36,28 @@ export const CreditIssuesQuestion = ({
   totalSteps: number;
 }) => {
   const { t, language } = useLanguage();
+  
+  // Extract only simple boolean flags from creditIssues
   const [selectedIssues, setSelectedIssues] = useState<Record<string, boolean>>(
     Object.fromEntries(
-      Object.entries(creditIssues).filter(([key]) => 
-        ['bankruptcy', 'foreclosure', 'collections', 'medical', 'other'].includes(key)
-      )
+      Object.entries(creditIssues)
+        .filter(([key, value]) => 
+          typeof value === 'boolean' && 
+          ['bankruptcy', 'foreclosure', 'collections', 'medical', 'other'].includes(key)
+        )
     )
   );
   
   useEffect(() => {
-    // Update parent form state when selected issues change
-    onCreditIssuesChange({
-      ...creditIssues,
-      ...selectedIssues
+    // Update parent form state while preserving details
+    const newCreditIssues = { ...creditIssues };
+    
+    // Update boolean flags
+    Object.entries(selectedIssues).forEach(([key, value]) => {
+      newCreditIssues[key] = value;
     });
+    
+    onCreditIssuesChange(newCreditIssues);
   }, [selectedIssues, onCreditIssuesChange, creditIssues]);
   
   const handleIssueToggle = (issueId: string, checked: boolean) => {

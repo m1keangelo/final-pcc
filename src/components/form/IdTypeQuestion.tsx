@@ -61,7 +61,7 @@ export const IdTypeQuestion = ({
       <div className="space-y-6">
         <RadioGroup
           value={value || ""}
-          onValueChange={onChange}
+          onValueChange={(val) => onChange(val as FormState['idType'])}
         >
           <div className="flex items-center space-x-2 mb-4">
             <RadioGroupItem value="SSN" id="idType-ssn" />
