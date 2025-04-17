@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from "react";
 import SplashScreen from "@/components/login/SplashScreen";
 import LoginForm from "@/components/login/LoginForm";
@@ -10,13 +11,13 @@ import { toast } from "@/lib/toast";
 import { useNavigate } from "react-router-dom";
 
 const LoginError = () => (
-  <div className="fixed inset-0 flex items-center justify-center bg-black p-6">
-    <div className="bg-gray-900 border border-red-500 p-6 rounded-lg max-w-md text-center">
-      <h2 className="text-xl text-red-500 mb-4">Something went wrong</h2>
+  <div className="fixed inset-0 flex items-center justify-center bg-black/95 p-6">
+    <div className="glass-card border border-red-500 p-8 rounded-xl max-w-md text-center">
+      <h2 className="text-xl text-red-400 mb-4 font-display">Something went wrong</h2>
       <p className="text-gray-300 mb-6">We encountered an error while loading the login page. Please try again.</p>
       <button 
         onClick={() => window.location.reload()}
-        className="px-4 py-2 bg-[#690dac] text-white rounded hover:bg-[#7a2dac] transition-all"
+        className="px-5 py-2.5 bg-gradient-to-r from-gallomodern-500 to-gallomodern-600 text-white rounded-lg hover:from-gallomodern-400 hover:to-gallomodern-500 transition-all shadow-xl shadow-gallomodern-700/20"
       >
         Reload Page
       </button>
@@ -37,7 +38,7 @@ const Login = () => {
 
     const timer = setTimeout(() => {
       setShowSplash(false);
-    }, 9000);
+    }, 6000); // Reduced from 9000 to 6000 for better UX
     
     return () => clearTimeout(timer);
   }, [user, navigate]);
@@ -63,9 +64,10 @@ const Login = () => {
   return (
     <ErrorBoundary fallback={<LoginError />}>
       <LanguageProvider>
-        <div className="relative flex h-screen w-full overflow-hidden bg-gradient-to-br from-[#1a1a2a] to-[#121220]">
+        <div className="relative flex h-screen w-full overflow-hidden bg-gradient-to-br from-[#12121e] via-[#1a1a2a] to-[#121220]">
           <MatrixBackground />
-          <div className="z-10 flex w-full flex-col md:flex-row">
+          <div className="absolute inset-0 bg-gradient-radial from-transparent via-transparent to-black opacity-60"></div>
+          <div className="z-10 flex w-full flex-col md:flex-row h-full items-center">
             <BrandImagery />
             <LoginForm />
           </div>

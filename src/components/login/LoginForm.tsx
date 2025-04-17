@@ -6,7 +6,15 @@ import { useLanguage } from "@/contexts/LanguageContext";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
-import { Loader2, Eye, EyeOff, User, Lock } from "lucide-react";
+import { 
+  Loader2,
+  Eye, 
+  EyeOff, 
+  User, 
+  Lock, 
+  LogIn,
+  HelpCircle
+} from "lucide-react";
 
 const LoginForm = () => {
   const [username, setUsername] = useState("");
@@ -23,8 +31,6 @@ const LoginForm = () => {
     e.preventDefault();
     setError("");
     
-    console.log("Login attempt with:", { username, password });
-    
     if (!username || !password) {
       setError(t('login.error'));
       return;
@@ -32,14 +38,10 @@ const LoginForm = () => {
     
     setIsSubmitting(true);
     try {
-      console.log("Calling login function...");
       const success = await login(username, password);
-      console.log("Login result:", success);
       if (success) {
-        console.log("Login successful, navigating to /");
         navigate("/");
       } else {
-        console.log("Login failed");
         setError(t('login.error'));
       }
     } catch (error) {
@@ -57,95 +59,107 @@ const LoginForm = () => {
   // Dynamic login button text based on language
   const getLoginButtonText = () => {
     if (isSubmitting) {
-      return language === 'en' ? 'Login...' : 'Iniciando...';
+      return language === 'en' ? 'Logging in...' : 'Iniciando...';
     }
-    return language === 'en' ? 'Login' : 'Iniciar';
+    return language === 'en' ? 'Login' : 'Iniciar Sesión';
   };
 
   return (
-    <div className="w-full max-w-md bg-[#2a2a3a]/95 rounded-lg p-8 shadow-xl border border-[#9b87f5]/30 backdrop-blur-sm">
-      <h2 className="text-3xl font-bold text-center text-white/90 mb-6 font-display">
-        {t('login.title')}
-      </h2>
-      
-      <form onSubmit={handleSubmit} className="space-y-6">
-        {/* Username Input */}
-        <div className="space-y-2">
-          <Label htmlFor="username" className="text-white/80">
-            {t('login.username')}
-          </Label>
-          <div className="relative">
-            <User className="absolute left-3 top-1/2 transform -translate-y-1/2 text-white/60" size={18} />
-            <Input
-              id="username"
-              type="text"
-              placeholder="admin"
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
-              className="bg-[#3a3a4a] border-[#4a4a5a] text-white/90 pl-10 hover:border-[#9b87f5]/70 focus:border-[#9b87f5] transition-colors"
-            />
+    <div className="flex flex-col items-center justify-center w-full py-8 px-6 md:w-1/2">
+      <div className="w-full max-w-md glass-morphism rounded-xl p-8 shadow-2xl border border-white/10 backdrop-blur-lg transition-all duration-300 hover:shadow-gallomodern-500/10 animate-fade-in">
+        <h2 className="text-3xl font-bold text-center text-white mb-8 font-display">
+          {t('login.title')}
+        </h2>
+        
+        <form onSubmit={handleSubmit} className="space-y-6">
+          {/* Username Input */}
+          <div className="space-y-2">
+            <Label htmlFor="username" className="text-white/90 font-medium text-base">
+              {t('login.username')}
+            </Label>
+            <div className="relative">
+              <div className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gallomodern-300">
+                <User size={18} />
+              </div>
+              <Input
+                id="username"
+                type="text"
+                placeholder="admin"
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
+                className="bg-white/5 border-white/10 text-white pl-10 h-12 focus:border-gallomodern-300 focus:ring-1 focus:ring-gallomodern-300 transition-all rounded-lg"
+              />
+            </div>
           </div>
-        </div>
-        
-        {/* Password Input */}
-        <div className="space-y-2">
-          <Label htmlFor="password" className="text-white/80">
-            {t('login.password')}
-          </Label>
-          <div className="relative">
-            <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 text-white/60" size={18} />
-            <Input
-              id="password"
-              type={showPassword ? "text" : "password"}
-              placeholder="••••••••"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              className="bg-[#3a3a4a] border-[#4a4a5a] text-white/90 pl-10 hover:border-[#9b87f5]/70 focus:border-[#9b87f5] transition-colors"
-            />
-            <button
-              type="button"
-              onClick={togglePasswordVisibility}
-              className="absolute right-3 top-1/2 transform -translate-y-1/2 text-white/60 hover:text-white/90"
-            >
-              {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
-            </button>
+          
+          {/* Password Input */}
+          <div className="space-y-2">
+            <Label htmlFor="password" className="text-white/90 font-medium text-base">
+              {t('login.password')}
+            </Label>
+            <div className="relative">
+              <div className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gallomodern-300">
+                <Lock size={18} />
+              </div>
+              <Input
+                id="password"
+                type={showPassword ? "text" : "password"}
+                placeholder="••••••••"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                className="bg-white/5 border-white/10 text-white pl-10 h-12 focus:border-gallomodern-300 focus:ring-1 focus:ring-gallomodern-300 transition-all rounded-lg"
+              />
+              <button
+                type="button"
+                onClick={togglePasswordVisibility}
+                className="absolute right-3 top-1/2 transform -translate-y-1/2 text-white/60 hover:text-white transition-colors"
+              >
+                {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+              </button>
+            </div>
           </div>
-        </div>
-        
-        {/* Error Message */}
-        {error && (
-          <div className="text-sm text-red-400 text-center bg-red-400/10 py-2 px-3 rounded-md border border-red-400/20">
-            {error}
+          
+          {/* Error Message */}
+          {error && (
+            <div className="text-sm text-red-300 text-center bg-red-500/10 py-2 px-3 rounded-lg border border-red-500/20 animate-fade-in">
+              {error}
+            </div>
+          )}
+          
+          {/* Forgot Password Link */}
+          <div className="flex justify-end">
+            <a href="#" className="text-sm text-gallomodern-300 hover:text-gallomodern-200 transition-colors flex items-center gap-1">
+              <HelpCircle size={14} />
+              {t('login.forgotPassword')}
+            </a>
           </div>
-        )}
+          
+          {/* Login Button */}
+          <Button 
+            type="submit" 
+            className="w-full h-12 bg-gradient-to-r from-gallomodern-600 to-gallomodern-500 hover:from-gallomodern-500 hover:to-gallomodern-400 text-white text-base font-medium transition-all shadow-lg shadow-gallomodern-700/20 hover:shadow-gallomodern-700/40 rounded-lg"
+            disabled={isSubmitting}
+          >
+            {isSubmitting ? (
+              <>
+                <Loader2 size={18} className="mr-2 animate-spin" />
+                {getLoginButtonText()}
+              </>
+            ) : (
+              <>
+                <LogIn size={18} className="mr-2" />
+                {getLoginButtonText()}
+              </>
+            )}
+          </Button>
+        </form>
         
-        {/* Forgot Password Link */}
-        <div className="flex justify-end">
-          <a href="#" className="text-sm text-[#9b87f5] hover:text-[#b29df9] transition-colors">
-            {t('login.forgotPassword')}
-          </a>
+        {/* Demo Credentials */}
+        <div className="text-center text-xs text-white/70 mt-8 border-t border-white/10 pt-4">
+          <p className="mb-1 font-medium text-gallomodern-300">Demo Credentials:</p>
+          <p>Username: admin, maria, or juan</p>
+          <p>Password: password123</p>
         </div>
-        
-        {/* Login Button */}
-        <Button 
-          type="submit" 
-          className="w-full bg-[#690dac] hover:bg-[#7a2dac] text-white transition-colors shadow-lg shadow-[#690dac]/20 hover:shadow-[#690dac]/40 transform hover:scale-[1.02] active:scale-[0.98]"
-          disabled={isSubmitting}
-        >
-          {isSubmitting ? (
-            <>
-              <Loader2 size={16} className="mr-2 animate-spin" />
-              {getLoginButtonText()}
-            </>
-          ) : getLoginButtonText()}
-        </Button>
-      </form>
-      
-      {/* Demo Credentials */}
-      <div className="text-center text-xs text-white/60 mt-6 border-t border-gray-700 pt-4">
-        <p className="mb-1">Demo Credentials:</p>
-        <p>Username: admin, maria, or juan</p>
-        <p>Password: password123</p>
       </div>
     </div>
   );
