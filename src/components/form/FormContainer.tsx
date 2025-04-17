@@ -38,7 +38,9 @@ const FormContainer: React.FC = () => {
     setFormData(finalData);
     setFormStage('summary');
     
+    console.log('Submitting form data:', finalData);
     const transformedData = transformFormData(finalData, selectedAgent);
+    console.log('Transformed client data for submission:', transformedData);
     addClient(transformedData);
     
     toast.success(language === 'en' ? 

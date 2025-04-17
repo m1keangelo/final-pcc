@@ -1,6 +1,7 @@
 
 import { useLanguage } from "@/contexts/LanguageContext";
 import { useAuth } from "@/contexts/AuthContext";
+import { useData } from "@/contexts/DataContext";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -11,6 +12,7 @@ import { useState, useEffect } from "react";
 const Dashboard = () => {
   const { t } = useLanguage();
   const { user } = useAuth();
+  const { clients } = useData();
   const [selectedCampaign, setSelectedCampaign] = useState<string>("");
   
   // Mock user campaigns data (in a real app this would come from user context/API)
@@ -34,6 +36,29 @@ const Dashboard = () => {
     // In a real app, this would trigger data fetching for the selected campaign
     console.log(`Switched to campaign: ${value}`);
   };
+
+  // Get client statistics based on the selected campaign
+  const getClientStats = () => {
+    if (selectedCampaign === 'Dennis') {
+      return { newClients: 12, qualifiedLeads: '68%' };
+    } else if (selectedCampaign === 'Tito') {
+      return { newClients: 8, qualifiedLeads: '72%' };
+    } else if (selectedCampaign === 'Michael') {
+      return { newClients: 10, qualifiedLeads: '64%' };
+    } else {
+      // For 'All' or default case
+      return { 
+        newClients: clients.filter(c => {
+          const oneWeekAgo = new Date();
+          oneWeekAgo.setDate(oneWeekAgo.getDate() - 7);
+          return new Date(c.createdDate) >= oneWeekAgo;
+        }).length,
+        qualifiedLeads: `${Math.round((clients.filter(c => c.qualified).length / Math.max(clients.length, 1)) * 100)}%`
+      };
+    }
+  };
+
+  const stats = getClientStats();
 
   return (
     <div className="space-y-8 animate-fade-in max-w-[1200px] mx-auto px-4 md:px-6">
@@ -122,9 +147,7 @@ const Dashboard = () => {
                 <div>
                   <p className="text-sm text-white/70">New Clients (This Week)</p>
                   <p className="text-2xl font-semibold text-high-contrast">
-                    {selectedCampaign === 'Dennis' ? '12' : 
-                     selectedCampaign === 'Tito' ? '8' : 
-                     selectedCampaign === 'Michael' ? '10' : '30'}
+                    {stats.newClients}
                   </p>
                 </div>
               </div>
@@ -136,9 +159,7 @@ const Dashboard = () => {
                 <div>
                   <p className="text-sm text-white/70">Qualified Leads</p>
                   <p className="text-2xl font-semibold text-high-contrast">
-                    {selectedCampaign === 'Dennis' ? '68%' : 
-                     selectedCampaign === 'Tito' ? '72%' : 
-                     selectedCampaign === 'Michael' ? '64%' : '68%'}
+                    {stats.qualifiedLeads}
                   </p>
                 </div>
               </div>

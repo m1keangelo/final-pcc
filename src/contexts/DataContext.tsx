@@ -1,3 +1,4 @@
+
 import React, { createContext, useContext, useState, ReactNode } from 'react';
 import { FormState } from '@/types/form';
 
@@ -185,6 +186,7 @@ export const DataProvider: React.FC<{children: ReactNode}> = ({ children }) => {
 
   // Add a new client with expanded form data
   const addClient = (clientData: Omit<ClientData, 'id' | 'createdDate'>) => {
+    console.log('Adding new client:', clientData);
     const newClient: ClientData = {
       ...clientData,
       id: Date.now().toString(),

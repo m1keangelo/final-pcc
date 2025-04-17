@@ -17,12 +17,21 @@ import { Badge } from "@/components/ui/badge";
 import { ClientData } from "@/contexts/DataContext";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { 
+  Pagination,
+  PaginationContent,
+  PaginationItem,
+  PaginationNext,
+  PaginationPrevious
+} from "@/components/ui/pagination";
 
 const Clients = () => {
   const { t } = useLanguage();
   const { clients } = useData();
   const [search, setSearch] = useState("");
   const [selectedClient, setSelectedClient] = useState<ClientData | null>(null);
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 10;
   
   // Filter clients by search term
   const filteredClients = clients.filter(client => {
@@ -32,6 +41,13 @@ const Clients = () => {
            (client.email?.toLowerCase().includes(searchTerm) || false) ||
            (client.comments?.toLowerCase().includes(searchTerm) || false);
   });
+  
+  // Pagination logic
+  const totalPages = Math.max(1, Math.ceil(filteredClients.length / itemsPerPage));
+  const paginatedClients = filteredClients.slice(
+    (currentPage - 1) * itemsPerPage,
+    currentPage * itemsPerPage
+  );
   
   // Group clients by urgency
   const highUrgencyClients = filteredClients.filter(c => c.urgency === 'high');
@@ -172,7 +188,30 @@ const Clients = () => {
             </TabsList>
             
             <TabsContent value="all">
-              {renderClientTable(filteredClients)}
+              {renderClientTable(paginatedClients)}
+              {totalPages > 1 && (
+                <Pagination className="mt-4">
+                  <PaginationContent>
+                    <PaginationItem>
+                      <PaginationPrevious 
+                        onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
+                        className={currentPage === 1 ? "pointer-events-none opacity-50" : ""}
+                      />
+                    </PaginationItem>
+                    <PaginationItem>
+                      <span className="px-4 py-2">
+                        Page {currentPage} of {totalPages}
+                      </span>
+                    </PaginationItem>
+                    <PaginationItem>
+                      <PaginationNext 
+                        onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
+                        className={currentPage === totalPages ? "pointer-events-none opacity-50" : ""}
+                      />
+                    </PaginationItem>
+                  </PaginationContent>
+                </Pagination>
+              )}
             </TabsContent>
             <TabsContent value="high">
               {renderClientTable(highUrgencyClients)}
