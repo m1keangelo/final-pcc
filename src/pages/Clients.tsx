@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { useData } from "@/contexts/DataContext";
@@ -47,7 +46,6 @@ const Clients = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10;
   
-  // Filter clients by search term and campaign
   const filteredClients = clients.filter(client => {
     const searchTerm = search.toLowerCase();
     const matchesSearch = client.name.toLowerCase().includes(searchTerm) || 
@@ -60,19 +58,16 @@ const Clients = () => {
     return matchesSearch && matchesCampaign;
   });
   
-  // Pagination logic
   const totalPages = Math.max(1, Math.ceil(filteredClients.length / itemsPerPage));
   const paginatedClients = filteredClients.slice(
     (currentPage - 1) * itemsPerPage,
     currentPage * itemsPerPage
   );
   
-  // Group clients by urgency
   const highUrgencyClients = filteredClients.filter(c => c.urgency === 'high');
   const mediumUrgencyClients = filteredClients.filter(c => c.urgency === 'medium');
   const lowUrgencyClients = filteredClients.filter(c => c.urgency === 'low');
   
-  // Export to CSV function
   const exportToCSV = () => {
     const headers = [
       "Name", 
@@ -144,7 +139,6 @@ const Clients = () => {
     document.body.removeChild(link);
   };
   
-  // Format date
   const formatDate = (dateString: string) => {
     return new Date(dateString).toLocaleDateString();
   };
