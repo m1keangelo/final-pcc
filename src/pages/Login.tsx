@@ -10,12 +10,15 @@ import { useAuth } from "@/contexts/AuthContext";
 const Login = () => {
   const { isLoading } = useAuth();
   const [showSplash, setShowSplash] = useState(true);
+  const [key, setKey] = useState(Date.now());
   
   useEffect(() => {
     // If not loading, we still want to show splash for full 9 seconds
     if (!isLoading) {
       const timer = setTimeout(() => {
         setShowSplash(false);
+        // Force re-render of BrandImagery when splash screen ends
+        setKey(Date.now());
       }, 9000);  // Explicitly set to 9000 milliseconds
       
       return () => clearTimeout(timer);
@@ -31,7 +34,7 @@ const Login = () => {
       <div className="relative flex h-screen w-full overflow-hidden">
         <MatrixBackground />
         <div className="z-10 flex w-full flex-col md:flex-row">
-          <BrandImagery />
+          <BrandImagery key={key} />
           <LoginForm />
         </div>
       </div>
@@ -40,4 +43,3 @@ const Login = () => {
 };
 
 export default Login;
-
