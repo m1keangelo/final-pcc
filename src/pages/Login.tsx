@@ -7,31 +7,29 @@ import MatrixBackground from "@/components/login/MatrixBackground";
 import { LanguageProvider } from "@/contexts/LanguageContext";
 import { useAuth } from "@/contexts/AuthContext";
 
-// Utility function to get a random image index - defined outside component to ensure clean randomness
+// Utility function to get a truly random image index
 const getRandomImageIndex = (max: number) => {
-  // Use current timestamp to ensure uniqueness
-  const timestamp = Date.now().toString();
-  // Get last few digits of timestamp for extra randomness
-  const lastDigits = parseInt(timestamp.slice(-5));
-  // Use modulo to get within range of our images
-  return lastDigits % max;
+  // Create a more random selection by using timestamp + Math.random
+  const randomValue = Math.floor(Math.random() * 100000) + Date.now();
+  console.log("Generated random value:", randomValue);
+  return randomValue % max;
 };
 
 const Login = () => {
   const { isLoading } = useAuth();
   const [showSplash, setShowSplash] = useState(true);
   
-  // Set a random image index on initial load - this will never be the same on refresh
+  // Set a random image index on initial load with a key to force re-render
   const [imageIndex, setImageIndex] = useState(() => {
-    const randomIndex = getRandomImageIndex(11); // 11 is the number of images we have
-    console.log("Login initialized with random image index:", randomIndex);
+    const randomIndex = getRandomImageIndex(10); // We have 10 rooster images
+    console.log("Initial login image index:", randomIndex);
     return randomIndex;
   });
   
   // Force a new image if user has been on the page for more than 30 seconds
   useEffect(() => {
     const refreshTimer = setTimeout(() => {
-      const newIndex = getRandomImageIndex(11);
+      const newIndex = getRandomImageIndex(10);
       console.log("Timer-based image refresh, new index:", newIndex);
       setImageIndex(newIndex);
     }, 30000);
@@ -46,7 +44,7 @@ const Login = () => {
         setShowSplash(false);
         
         // Change image after splash screen
-        const newIndex = getRandomImageIndex(11);
+        const newIndex = getRandomImageIndex(10);
         console.log("Splash screen complete, new image index:", newIndex);
         setImageIndex(newIndex);
       }, 9000);
@@ -60,7 +58,7 @@ const Login = () => {
       setShowSplash(false);
       
       // Change image after splash screen completion via callback
-      const newIndex = getRandomImageIndex(11);
+      const newIndex = getRandomImageIndex(10);
       console.log("SplashScreen callback, new image index:", newIndex);
       setImageIndex(newIndex);
     }} />;
@@ -71,7 +69,11 @@ const Login = () => {
       <div className="relative flex h-screen w-full overflow-hidden">
         <MatrixBackground />
         <div className="z-10 flex w-full flex-col md:flex-row">
-          <BrandImagery imageIndex={imageIndex} />
+          {/* Force component re-render with key prop */}
+          <BrandImagery 
+            key={`mascot-${imageIndex}`} 
+            imageIndex={imageIndex} 
+          />
           <LoginForm />
         </div>
       </div>

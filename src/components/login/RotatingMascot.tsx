@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 
 // The array of available mascot images
@@ -24,32 +25,26 @@ const MAX_HEIGHT = 380; // pixels
 
 const randomAngle = () => Math.floor(Math.random() * 10) - 5; // Random angle between -5 and 5 degrees
 
-// Function to get a random image from the array
-const getRandomImage = () => {
-  // Force a truly random selection each time
-  const randomIndex = Math.floor(Math.random() * roosterImages.length);
-  console.log("Selected random image index:", randomIndex);
-  return roosterImages[randomIndex];
-};
+interface RotatingMascotProps {
+  imageIndex: number;
+}
 
-const RotatingMascot: React.FC = () => {
-  // Force a random image on component creation - no need for useState initialization
-  const [currentImage, setCurrentImage] = useState(() => {
-    const img = getRandomImage();
-    console.log("Initial random image selected:", img);
-    return img;
-  });
-  
+const RotatingMascot: React.FC<RotatingMascotProps> = ({ imageIndex }) => {
+  // Use the imageIndex prop directly to determine which image to display
+  const [currentImage, setCurrentImage] = useState('');
   const [rotation, setRotation] = useState(() => randomAngle());
   const [imageDimensions, setImageDimensions] = useState({ width: 0, height: 0 });
   
-  // Use useEffect to set a random image when the component mounts
+  // Use useEffect to set the image based on the passed imageIndex
   useEffect(() => {
-    console.log("RotatingMascot mounted or remounted, selecting new random image");
-    // This ensures a fresh image on mount/remount
-    setCurrentImage(getRandomImage());
+    // Make sure the index is valid for our array
+    const safeIndex = Math.abs(imageIndex) % roosterImages.length;
+    const selectedImage = roosterImages[safeIndex];
+    
+    console.log(`Using image index ${safeIndex}, image path: ${selectedImage}`);
+    setCurrentImage(selectedImage);
     setRotation(randomAngle());
-  }, []);
+  }, [imageIndex]); // Re-run this effect whenever imageIndex changes
   
   // Handle image loading to apply size constraints
   const handleImageLoad = (e: React.SyntheticEvent<HTMLImageElement>) => {
