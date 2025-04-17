@@ -10,7 +10,20 @@ type User = {
   email?: string;
   role?: 'admin' | 'superadmin' | 'assistant';
   campaign?: string;
+  campaigns?: string[]; // Added for multiple campaigns
   permissions?: string[]; // Added permissions array
+};
+
+// New user input type
+type NewUserInput = {
+  username: string;
+  password: string;
+  name: string;
+  role: 'admin' | 'superadmin' | 'assistant';
+  campaign?: string;
+  campaigns?: string[];
+  permissions?: string[];
+  email?: string;
 };
 
 // Auth context type
@@ -22,7 +35,10 @@ type AuthContextType = {
   isSuperAdmin: boolean;
   isAdmin: boolean;
   hasPermission: (permission: string) => boolean;
-  updateUserPermissions: (userId: string, permissions: string[]) => void; // New function
+  updateUserPermissions: (userId: string, permissions: string[]) => void;
+  addUser: (userData: NewUserInput) => boolean;
+  deleteUser: (userId: string) => boolean;
+  getAllUsers: () => User[];
 };
 
 // Expanded mock users for demo with proper role definitions
@@ -35,6 +51,7 @@ const MOCK_USERS: Record<string, { password: string, user: User }> = {
       username: 'admin', 
       role: 'admin', 
       email: 'admin@galloavion.com',
+      campaigns: ['All'],
       permissions: ['MANAGE_USERS', 'MANAGE_FORMS', 'ACCESS_ANALYTICS', 'DELETE_CLIENTS']
     }
   },
@@ -46,6 +63,7 @@ const MOCK_USERS: Record<string, { password: string, user: User }> = {
       username: 'maria', 
       role: 'assistant',
       campaign: 'Dennis',
+      campaigns: ['Dennis', 'Tito'],
       permissions: []
     }
   },
@@ -57,6 +75,7 @@ const MOCK_USERS: Record<string, { password: string, user: User }> = {
       username: 'juan', 
       role: 'assistant',
       campaign: 'Michael',
+      campaigns: ['Michael'],
       permissions: []
     }
   },
@@ -68,6 +87,7 @@ const MOCK_USERS: Record<string, { password: string, user: User }> = {
       username: 'm1keangelo', 
       role: 'superadmin', 
       email: 'm1keangelo@icloud.com',
+      campaigns: ['All'],
       permissions: ['MANAGE_USERS', 'MANAGE_FORMS', 'ACCESS_ANALYTICS', 'DELETE_CLIENTS', 'VIEW_ALL_CAMPAIGNS', 'MANAGE_TRAINING', 'MANAGE_ANIMATIONS']
     }
   }
@@ -110,6 +130,71 @@ export const AuthProvider: React.FC<{children: ReactNode}> = ({ children }) => {
     
     // Then check if user has explicit permission
     return user.permissions?.includes(permission) || false;
+  };
+
+  // Get all users (for admin dashboard)
+  const getAllUsers = (): User[] => {
+    return Object.values(users).map(entry => entry.user);
+  };
+
+  // Add a new user
+  const addUser = (userData: NewUserInput): boolean => {
+    const { username, password, name, role, campaign, campaigns, permissions = [] } = userData;
+    
+    // Check if username is already taken
+    if (users[username.toLowerCase()]) {
+      return false;
+    }
+    
+    // Create new user ID
+    const newUserId = Date.now().toString();
+    
+    // Create the new user object
+    const newUser = {
+      id: newUserId,
+      name,
+      username,
+      role,
+      campaign,
+      campaigns: campaigns || (campaign ? [campaign] : []),
+      permissions
+    };
+    
+    // Add to users state
+    setUsers(prev => ({
+      ...prev,
+      [username.toLowerCase()]: {
+        password,
+        user: newUser
+      }
+    }));
+    
+    console.log("Added user:", newUser);
+    console.log("Current users:", getAllUsers());
+    
+    return true;
+  };
+
+  // Delete a user
+  const deleteUser = (userId: string): boolean => {
+    let deleted = false;
+    
+    setUsers(prev => {
+      const newUsers = { ...prev };
+      
+      // Find and remove user with the matching ID
+      for (const key in newUsers) {
+        if (newUsers[key].user.id === userId) {
+          delete newUsers[key];
+          deleted = true;
+          break;
+        }
+      }
+      
+      return deleted ? newUsers : prev;
+    });
+    
+    return deleted;
   };
 
   // Update user permissions
@@ -200,7 +285,10 @@ export const AuthProvider: React.FC<{children: ReactNode}> = ({ children }) => {
       isSuperAdmin,
       isAdmin,
       hasPermission,
-      updateUserPermissions
+      updateUserPermissions,
+      addUser,
+      deleteUser,
+      getAllUsers
     }}>
       {children}
     </AuthContext.Provider>

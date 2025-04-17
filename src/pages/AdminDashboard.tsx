@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
@@ -18,25 +17,26 @@ import { Form, FormControl, FormField, FormItem, FormLabel } from "@/components/
 
 const AdminDashboard = () => {
   const { t } = useLanguage();
-  const { user, isSuperAdmin, updateUserPermissions } = useAuth();
+  const { user, isSuperAdmin, updateUserPermissions, addUser, deleteUser, getAllUsers } = useAuth();
   const [activeTab, setActiveTab] = useState("users");
   const [showAddUserDialog, setShowAddUserDialog] = useState(false);
   const [showAddCampaignDialog, setShowAddCampaignDialog] = useState(false);
   const [showPermissionsDialog, setShowPermissionsDialog] = useState(false);
   const [newUsername, setNewUsername] = useState("");
+  const [newPassword, setNewPassword] = useState("");
+  const [newName, setNewName] = useState("");
   const [newRole, setNewRole] = useState("assistant");
   const [selectedCampaigns, setSelectedCampaigns] = useState<string[]>([]);
   const [campaignName, setCampaignName] = useState("");
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedUserId, setSelectedUserId] = useState<string>("");
   const [selectedUserPermissions, setSelectedUserPermissions] = useState<string[]>([]);
+  const [users, setUsers] = useState<any[]>([]);
 
-  const mockUsers = [
-    { id: '1', username: 'admin', name: 'Admin User', role: 'admin', campaigns: ['All'], permissions: ['MANAGE_USERS', 'MANAGE_FORMS', 'ACCESS_ANALYTICS', 'DELETE_CLIENTS'] },
-    { id: '2', username: 'maria', name: 'Maria Rodriguez', role: 'assistant', campaigns: ['Dennis', 'Tito'], permissions: [] },
-    { id: '3', username: 'juan', name: 'Juan Perez', role: 'assistant', campaigns: ['Michael'], permissions: [] },
-    { id: '0', username: 'm1keangelo', name: 'Super Admin', role: 'superadmin', campaigns: ['All'], permissions: ['MANAGE_USERS', 'MANAGE_FORMS', 'ACCESS_ANALYTICS', 'DELETE_CLIENTS', 'VIEW_ALL_CAMPAIGNS', 'MANAGE_TRAINING', 'MANAGE_ANIMATIONS'] }
-  ];
+  useEffect(() => {
+    const allUsers = getAllUsers();
+    setUsers(allUsers);
+  }, [getAllUsers]);
 
   const mockCampaigns = [
     { id: '1', name: 'Dennis', activeLeads: 42, qualifiedLeads: 18 },
@@ -52,8 +52,8 @@ const AdminDashboard = () => {
   ];
 
   const handleAddUser = () => {
-    if (!newUsername) {
-      toast.error("Username is required");
+    if (!newUsername || !newPassword || !newName) {
+      toast.error("Username, password, and name are required");
       return;
     }
 
@@ -62,12 +62,40 @@ const AdminDashboard = () => {
       return;
     }
 
-    // In a real app, this would make an API call to create the user
-    toast.success(`User ${newUsername} added successfully`);
-    setNewUsername("");
-    setNewRole("assistant");
-    setSelectedCampaigns([]);
-    setShowAddUserDialog(false);
+    const result = addUser({
+      username: newUsername,
+      password: newPassword,
+      name: newName,
+      role: newRole as 'admin' | 'superadmin' | 'assistant',
+      campaign: selectedCampaigns.length === 1 ? selectedCampaigns[0] : undefined,
+      campaigns: selectedCampaigns
+    });
+
+    if (result) {
+      toast.success(`User ${newUsername} added successfully`);
+      
+      const updatedUsers = getAllUsers();
+      setUsers(updatedUsers);
+      
+      setNewUsername("");
+      setNewPassword("");
+      setNewName("");
+      setNewRole("assistant");
+      setSelectedCampaigns([]);
+      setShowAddUserDialog(false);
+    } else {
+      toast.error("Failed to add user. Username may already exist.");
+    }
+  };
+
+  const handleDeleteUser = (userId: string) => {
+    if (deleteUser(userId)) {
+      toast.success("User deleted successfully");
+      const updatedUsers = getAllUsers();
+      setUsers(updatedUsers);
+    } else {
+      toast.error("Failed to delete user");
+    }
   };
 
   const handleAddCampaign = () => {
@@ -76,7 +104,6 @@ const AdminDashboard = () => {
       return;
     }
 
-    // In a real app, this would make an API call to create the campaign
     toast.success(`Campaign ${campaignName} added successfully`);
     setCampaignName("");
     setShowAddCampaignDialog(false);
@@ -100,6 +127,10 @@ const AdminDashboard = () => {
     if (selectedUserId) {
       updateUserPermissions(selectedUserId, selectedUserPermissions);
       toast.success("User permissions updated successfully");
+      
+      const updatedUsers = getAllUsers();
+      setUsers(updatedUsers);
+      
       setShowPermissionsDialog(false);
     }
   };
@@ -112,11 +143,10 @@ const AdminDashboard = () => {
     );
   };
 
-  // Filter users based on search query
-  const filteredUsers = mockUsers.filter(user => 
+  const filteredUsers = users.filter(user => 
     user.username.toLowerCase().includes(searchQuery.toLowerCase()) ||
     user.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    user.campaigns.some(campaign => campaign.toLowerCase().includes(searchQuery.toLowerCase()))
+    (user.campaigns && user.campaigns.some((campaign: string) => campaign.toLowerCase().includes(searchQuery.toLowerCase())))
   );
 
   return (
@@ -142,7 +172,6 @@ const AdminDashboard = () => {
           <TabsTrigger value="settings">Settings</TabsTrigger>
         </TabsList>
 
-        {/* USERS TAB */}
         <TabsContent value="users" className="space-y-4">
           <Card>
             <CardHeader className="pb-3">
@@ -171,6 +200,29 @@ const AdminDashboard = () => {
                           id="username"
                           value={newUsername}
                           onChange={(e) => setNewUsername(e.target.value)}
+                          className="col-span-3"
+                        />
+                      </div>
+                      <div className="grid grid-cols-4 items-center gap-4">
+                        <Label htmlFor="password" className="text-right">
+                          Password
+                        </Label>
+                        <Input
+                          id="password"
+                          type="password"
+                          value={newPassword}
+                          onChange={(e) => setNewPassword(e.target.value)}
+                          className="col-span-3"
+                        />
+                      </div>
+                      <div className="grid grid-cols-4 items-center gap-4">
+                        <Label htmlFor="name" className="text-right">
+                          Full Name
+                        </Label>
+                        <Input
+                          id="name"
+                          value={newName}
+                          onChange={(e) => setNewName(e.target.value)}
                           className="col-span-3"
                         />
                       </div>
@@ -272,7 +324,7 @@ const AdminDashboard = () => {
                       </TableCell>
                       <TableCell>
                         <div className="flex flex-wrap gap-1">
-                          {user.campaigns.map(campaign => (
+                          {user.campaigns && user.campaigns.map((campaign: string) => (
                             <Badge key={campaign} variant="outline" className="bg-black/30">
                               {campaign}
                             </Badge>
@@ -301,6 +353,7 @@ const AdminDashboard = () => {
                               size="sm" 
                               variant="ghost"
                               title="Delete User"
+                              onClick={() => handleDeleteUser(user.id)}
                             >
                               <Trash2 className="h-4 w-4" />
                             </Button>
@@ -315,7 +368,6 @@ const AdminDashboard = () => {
           </Card>
         </TabsContent>
 
-        {/* CAMPAIGNS TAB */}
         <TabsContent value="campaigns" className="space-y-4">
           <Card>
             <CardHeader className="pb-3">
@@ -392,7 +444,6 @@ const AdminDashboard = () => {
           </Card>
         </TabsContent>
 
-        {/* SETTINGS TAB */}
         <TabsContent value="settings" className="space-y-4">
           <Card>
             <CardHeader>
@@ -423,7 +474,6 @@ const AdminDashboard = () => {
         </TabsContent>
       </Tabs>
 
-      {/* Permissions Dialog */}
       <Dialog open={showPermissionsDialog} onOpenChange={setShowPermissionsDialog}>
         <DialogContent>
           <DialogHeader>
