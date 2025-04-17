@@ -1,4 +1,3 @@
-
 import { Button } from "@/components/ui/button";
 import QuestionContainer from "@/components/form/QuestionContainer";
 import { FormState } from "@/types/form";
@@ -22,7 +21,6 @@ export const TimelineQuestion = ({
 }) => {
   const { t } = useLanguage();
   
-  // Define the feedback messages for each timeline option
   const getFeedbackMessage = () => {
     switch(value) {
       case 'immediately':
@@ -81,7 +79,6 @@ export const TimelineQuestion = ({
         </Button>
       </div>
       
-      {/* Display feedback message if an option is selected */}
       {value && (
         <div className="mt-4 p-4 border border-yellow-500 rounded-md bg-black text-yellow-500">
           <p className="font-medium">{getFeedbackMessage()}</p>
