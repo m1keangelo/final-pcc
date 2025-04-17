@@ -34,6 +34,11 @@ const FormContainer: React.FC = () => {
   useEffect(() => {
     console.log("FormContainer - Current Stage:", formStage);
     console.log("FormContainer - Current Form Data:", formData);
+    
+    // Debug logs to track what's happening with stage changes
+    if (formStage === 'summary') {
+      console.log("SUMMARY STAGE ACTIVE - formData available:", formData);
+    }
   }, [formStage, formData]);
 
   const handleNextFromInitialInfo = () => {
@@ -53,7 +58,10 @@ const FormContainer: React.FC = () => {
       campaign: selectedCampaign 
     };
     
+    console.log('Setting final data for summary:', finalData);
     setFormData(finalData);
+    
+    console.log('Changing form stage to summary');
     setFormStage('summary');
     
     console.log('Final Data for Summary:', finalData);
@@ -74,62 +82,77 @@ const FormContainer: React.FC = () => {
     navigate('/documents');
   };
 
+  // Force re-render when form stage changes to ensure proper component mounting
+  const renderContent = () => {
+    console.log("Rendering content for stage:", formStage);
+    
+    if (formStage === 'initialInfo') {
+      return (
+        <>
+          <InitialInfoForm 
+            formData={formData}
+            onFormDataChange={handleFormDataChange}
+            selectedAgent={selectedAgent}
+            setSelectedAgent={setSelectedAgent}
+            onNext={handleNextFromInitialInfo}
+          />
+          
+          <div className="mt-4">
+            <Label htmlFor="campaign-select" className="text-base font-medium">
+              {language === 'en' ? 'Select Campaign' : 'Seleccionar Campaña'}
+            </Label>
+            <Select
+              value={selectedCampaign}
+              onValueChange={setSelectedCampaign}
+            >
+              <SelectTrigger id="campaign-select" className="w-full mt-2 h-11 bg-popover">
+                <SelectValue placeholder={language === 'en' ? 'Select campaign' : 'Seleccionar campaña'} />
+              </SelectTrigger>
+              <SelectContent>
+                {campaigns.map(campaign => (
+                  <SelectItem key={campaign} value={campaign}>
+                    {campaign}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+        </>
+      );
+    }
+    
+    if (formStage === 'questions') {
+      return (
+        <FormQuestions 
+          initialData={formData}
+          onComplete={handleFormComplete}
+          onBack={() => setFormStage('initialInfo')}
+        />
+      );
+    }
+    
+    if (formStage === 'summary') {
+      console.log("Rendering SummaryOutcome component with formData:", formData);
+      return (
+        <SummaryOutcome 
+          formData={formData}
+          onProceedToDocuments={handleProceedToDocuments} 
+        />
+      );
+    }
+    
+    return null;
+  };
+
   return (
     <div className="max-w-5xl mx-auto px-4 py-8 md:py-12 space-y-8 animate-fade-in bg-gradient-to-b from-background to-background/95">
       <FormHeader />
 
-      <div>
-        {formStage === 'initialInfo' && (
-          <>
-            <InitialInfoForm 
-              formData={formData}
-              onFormDataChange={handleFormDataChange}
-              selectedAgent={selectedAgent}
-              setSelectedAgent={setSelectedAgent}
-              onNext={handleNextFromInitialInfo}
-            />
-            
-            <div className="mt-4">
-              <Label htmlFor="campaign-select" className="text-base font-medium">
-                {language === 'en' ? 'Select Campaign' : 'Seleccionar Campaña'}
-              </Label>
-              <Select
-                value={selectedCampaign}
-                onValueChange={setSelectedCampaign}
-              >
-                <SelectTrigger id="campaign-select" className="w-full mt-2 h-11 bg-popover">
-                  <SelectValue placeholder={language === 'en' ? 'Select campaign' : 'Seleccionar campaña'} />
-                </SelectTrigger>
-                <SelectContent>
-                  {campaigns.map(campaign => (
-                    <SelectItem key={campaign} value={campaign}>
-                      {campaign}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </div>
-          </>
-        )}
-
-        {formStage === 'questions' && (
-          <FormQuestions 
-            initialData={formData}
-            onComplete={handleFormComplete}
-            onBack={() => setFormStage('initialInfo')}
-          />
-        )}
-        
-        {formStage === 'summary' && (
-          <SummaryOutcome 
-            formData={formData}
-            onProceedToDocuments={handleProceedToDocuments} 
-          />
-        )}
+      <div key={`form-stage-${formStage}`}>
+        {renderContent()}
       </div>
     </div>
   );
 };
 
 export default FormContainer;
-
