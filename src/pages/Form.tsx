@@ -1,6 +1,6 @@
 
 import React, { Suspense } from 'react';
-import { ErrorBoundary } from '@/components/ErrorBoundary';
+import { ErrorBoundary } from "@/components/ErrorBoundary";
 import FormContainer from "@/components/form/FormContainer";
 import { Skeleton } from '@/components/ui/skeleton';
 
@@ -15,3 +15,4 @@ const Form: React.FC = () => {
 };
 
 export default Form;
+
