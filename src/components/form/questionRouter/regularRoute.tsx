@@ -130,7 +130,7 @@ export const handleRegularRoute = (
       return (
         <MonthlyDebtsQuestion
           value={formData.monthlyDebts}
-          onChange={(value: string) => updateFormData("monthlyDebts", value)}
+          onChange={(value) => updateFormData("monthlyDebts", value)}
           onNext={handleNext}
           onBack={handleBack}
           currentStep={currentStep}
