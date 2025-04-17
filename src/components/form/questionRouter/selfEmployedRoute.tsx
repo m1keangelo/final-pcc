@@ -104,7 +104,7 @@ export const handleSelfEmployedRoute = (
       return (
         <MonthlyDebtsQuestion
           value={formData.monthlyDebts}
-          onChange={(value) => updateFormData("monthlyDebts", value)}
+          onChange={(value: string) => updateFormData("monthlyDebts", value)}
           onNext={handleNext}
           onBack={handleBack}
           currentStep={currentStep}
