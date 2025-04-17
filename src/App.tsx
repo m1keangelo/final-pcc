@@ -39,17 +39,19 @@ const queryClient = new QueryClient({
 
 // Configure global error handlers using the proper event listener approach
 const unsubscribeQuery = queryClient.getQueryCache().subscribe(() => {
-  const queryError = queryClient.getQueryCache().find()?.state.error;
-  if (queryError) {
-    console.error('Query error:', queryError);
+  // Find any query with an error state
+  const errorQuery = queryClient.getQueryCache().find((query) => query.state.status === 'error');
+  if (errorQuery && errorQuery.state.error) {
+    console.error('Query error:', errorQuery.state.error);
     toast("There was a problem with the data request. Please try again.");
   }
 });
 
 const unsubscribeMutation = queryClient.getMutationCache().subscribe(() => {
-  const mutationError = queryClient.getMutationCache().find()?.state.error;
-  if (mutationError) {
-    console.error('Mutation error:', mutationError);
+  // Find any mutation with an error state
+  const errorMutation = queryClient.getMutationCache().find((mutation) => mutation.state.status === 'error');
+  if (errorMutation && errorMutation.state.error) {
+    console.error('Mutation error:', errorMutation.state.error);
     toast("Your changes could not be saved. Please try again.");
   }
 });
