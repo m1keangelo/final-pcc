@@ -1,4 +1,3 @@
-
 import type { Config } from "tailwindcss"
 
 const config = {
@@ -106,6 +105,24 @@ const config = {
         'glow-sm': '0 0 10px rgba(147, 51, 234, 0.3)',
         'glow-md': '0 0 20px rgba(147, 51, 234, 0.4)',
         'card-hover': '0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05), 0 0 0 1px rgba(255, 255, 255, 0.05)',
+      },
+      fontFamily: {
+        sans: ['Inter', 'system-ui', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'Helvetica Neue', 'Arial', 'Noto Sans', 'sans-serif'],
+        display: ['Sora', 'Inter', 'system-ui', 'sans-serif'],
+      },
+      fontSize: {
+        '2xs': '0.675rem',
+        '3xl': '1.953rem',
+        '4xl': '2.441rem',
+        '5xl': '3.052rem',
+      },
+      letterSpacing: {
+        tight: '-0.02em',
+        wide: '0.02em',
+      },
+      lineHeight: {
+        'extra-tight': '1.1',
+        'relaxed': '1.75',
       },
     },
   },

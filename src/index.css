@@ -1,3 +1,4 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Sora:wght@400;600;700&display=swap');
 
 @tailwind base;
 @tailwind components;
@@ -15,7 +16,7 @@
     --popover-foreground: 210 40% 98%;
     
     --primary: 267 88% 70%;
-    --primary-foreground: 222 47% 5%;
+    --primary-foreground: 210 47% 5%;
     
     --secondary: 217 19% 27%;
     --secondary-foreground: 210 40% 98%;
@@ -42,15 +43,9 @@
     --sidebar-click: 267 84% 32%;
     --sidebar-highlight: 0 0% 100%;
   }
-}
 
-@layer base {
-  * {
-    @apply border-border;
-  }
-  
   body {
-    @apply bg-background text-foreground;
+    @apply font-sans text-base leading-relaxed tracking-tight;
     font-feature-settings: "ss01", "ss02", "cv01", "cv02", "cv03";
     background-image: radial-gradient(
       circle at top right,
@@ -65,7 +60,7 @@
     background-size: 100% 100%;
     background-attachment: fixed;
   }
-  
+
   html {
     @apply scroll-smooth;
   }
@@ -101,6 +96,10 @@
 
   .text-gradient {
     @apply bg-gradient-to-r from-gallomodern-300 via-gallomodern-200 to-indigo-300 bg-clip-text text-transparent;
+  }
+
+  .text-balance {
+    text-wrap: balance;
   }
 }
 
