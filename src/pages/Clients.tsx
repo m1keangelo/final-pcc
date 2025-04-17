@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { useData } from "@/contexts/DataContext";
@@ -167,7 +168,7 @@ const Clients = () => {
         <div className="flex gap-3">
           {selectedClient && (
             <Button 
-              variant="outline" 
+              variant="default"
               onClick={() => setSelectedClient(null)}
             >
               Back to Client List
