@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { useData } from "@/contexts/DataContext";
+import { useAuth } from "@/contexts/AuthContext";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { 
@@ -11,7 +12,7 @@ import {
   TableHeader,
   TableRow 
 } from "@/components/ui/table";
-import { Search, FileDown, CheckCircle, XCircle, Clock, AlertTriangle, Phone, ChevronLeft, ChevronRight } from "lucide-react";
+import { Search, FileDown, CheckCircle, XCircle, Clock, AlertTriangle, Phone, ChevronLeft, ChevronRight, Trash2 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { ClientData, CAMPAIGNS } from "@/contexts/DataContext";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -40,10 +41,23 @@ import {
   DropdownMenuCheckboxItem,
   DropdownMenuTrigger
 } from "@/components/ui/dropdown-menu";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
+import { toast } from "@/lib/toast";
 
 const Clients = () => {
   const { t } = useLanguage();
-  const { clients, campaigns } = useData();
+  const { clients, campaigns, deleteClient } = useData();
+  const { hasPermission } = useAuth();
   const [search, setSearch] = useState("");
   const [selectedCampaign, setSelectedCampaign] = useState<string>("all");
   const [selectedClient, setSelectedClient] = useState<ClientData | null>(null);
@@ -335,7 +349,11 @@ const Clients = () => {
           </Tabs>
         </>
       ) : (
-        <ClientDetails client={selectedClient} />
+        <ClientDetails 
+          client={selectedClient} 
+          onClose={() => setSelectedClient(null)}
+          onDelete={deleteClient}
+        />
       )}
     </div>
   );
@@ -415,7 +433,22 @@ const Clients = () => {
   }
 };
 
-const ClientDetails = ({ client }: { client: ClientData }) => {
+interface ClientDetailsProps {
+  client: ClientData;
+  onClose: () => void;
+  onDelete: (id: string) => void;
+}
+
+const ClientDetails = ({ client, onClose, onDelete }: ClientDetailsProps) => {
+  const { hasPermission } = useAuth();
+  const canDelete = hasPermission('DELETE_CLIENTS');
+  
+  const handleDelete = () => {
+    onDelete(client.id);
+    toast.success(`Client ${client.name} was deleted.`);
+    onClose();
+  };
+  
   return (
     <div className="space-y-6">
       <Card>
@@ -437,6 +470,37 @@ const ClientDetails = ({ client }: { client: ClientData }) => {
               <Badge variant="outline" className="bg-green-600/10 text-green-600 border-green-600">Qualified</Badge> :
               <Badge variant="outline" className="bg-red-600/10 text-red-600 border-red-600">Not Qualified</Badge>
             }
+            
+            {canDelete && (
+              <AlertDialog>
+                <AlertDialogTrigger asChild>
+                  <Button
+                    variant="outline"
+                    size="icon"
+                    className="ml-2 h-9 w-9 text-red-500 hover:text-red-600 hover:bg-red-50"
+                  >
+                    <Trash2 size={16} />
+                  </Button>
+                </AlertDialogTrigger>
+                <AlertDialogContent>
+                  <AlertDialogHeader>
+                    <AlertDialogTitle>Delete Client</AlertDialogTitle>
+                    <AlertDialogDescription>
+                      Are you sure you want to delete {client.name}? This action cannot be undone.
+                    </AlertDialogDescription>
+                  </AlertDialogHeader>
+                  <AlertDialogFooter>
+                    <AlertDialogCancel>Cancel</AlertDialogCancel>
+                    <AlertDialogAction 
+                      onClick={handleDelete}
+                      className="bg-red-600 hover:bg-red-700 text-white"
+                    >
+                      Delete
+                    </AlertDialogAction>
+                  </AlertDialogFooter>
+                </AlertDialogContent>
+              </AlertDialog>
+            )}
           </div>
         </CardHeader>
         <CardContent className="pt-6">

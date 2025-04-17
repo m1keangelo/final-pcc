@@ -1,5 +1,5 @@
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { useAuth } from "@/contexts/AuthContext";
@@ -10,7 +10,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { UserPlus, Edit, Trash2, Search } from "lucide-react";
+import { UserPlus, Edit, Trash2, Search, Shield } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { toast } from "@/lib/toast";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -18,21 +18,24 @@ import { Form, FormControl, FormField, FormItem, FormLabel } from "@/components/
 
 const AdminDashboard = () => {
   const { t } = useLanguage();
-  const { user, isSuperAdmin } = useAuth();
+  const { user, isSuperAdmin, updateUserPermissions } = useAuth();
   const [activeTab, setActiveTab] = useState("users");
   const [showAddUserDialog, setShowAddUserDialog] = useState(false);
   const [showAddCampaignDialog, setShowAddCampaignDialog] = useState(false);
+  const [showPermissionsDialog, setShowPermissionsDialog] = useState(false);
   const [newUsername, setNewUsername] = useState("");
   const [newRole, setNewRole] = useState("assistant");
   const [selectedCampaigns, setSelectedCampaigns] = useState<string[]>([]);
   const [campaignName, setCampaignName] = useState("");
   const [searchQuery, setSearchQuery] = useState("");
+  const [selectedUserId, setSelectedUserId] = useState<string>("");
+  const [selectedUserPermissions, setSelectedUserPermissions] = useState<string[]>([]);
 
   const mockUsers = [
-    { id: '1', username: 'admin', name: 'Admin User', role: 'admin', campaigns: ['All'] },
-    { id: '2', username: 'maria', name: 'Maria Rodriguez', role: 'assistant', campaigns: ['Dennis', 'Tito'] },
-    { id: '3', username: 'juan', name: 'Juan Perez', role: 'assistant', campaigns: ['Michael'] },
-    { id: '0', username: 'm1keangelo', name: 'Super Admin', role: 'superadmin', campaigns: ['All'] }
+    { id: '1', username: 'admin', name: 'Admin User', role: 'admin', campaigns: ['All'], permissions: ['MANAGE_USERS', 'MANAGE_FORMS', 'ACCESS_ANALYTICS', 'DELETE_CLIENTS'] },
+    { id: '2', username: 'maria', name: 'Maria Rodriguez', role: 'assistant', campaigns: ['Dennis', 'Tito'], permissions: [] },
+    { id: '3', username: 'juan', name: 'Juan Perez', role: 'assistant', campaigns: ['Michael'], permissions: [] },
+    { id: '0', username: 'm1keangelo', name: 'Super Admin', role: 'superadmin', campaigns: ['All'], permissions: ['MANAGE_USERS', 'MANAGE_FORMS', 'ACCESS_ANALYTICS', 'DELETE_CLIENTS', 'VIEW_ALL_CAMPAIGNS', 'MANAGE_TRAINING', 'MANAGE_ANIMATIONS'] }
   ];
 
   const mockCampaigns = [
@@ -40,6 +43,12 @@ const AdminDashboard = () => {
     { id: '2', name: 'Michael', activeLeads: 36, qualifiedLeads: 15 },
     { id: '3', name: 'Tito', activeLeads: 29, qualifiedLeads: 12 },
     { id: '4', name: 'Alvaro', activeLeads: 33, qualifiedLeads: 14 }
+  ];
+
+  const availablePermissions = [
+    { id: 'DELETE_CLIENTS', label: 'Delete Clients', description: 'Can permanently delete client records' },
+    { id: 'MANAGE_FORMS', label: 'Manage Forms', description: 'Can configure and edit client intake forms' },
+    { id: 'ACCESS_ANALYTICS', label: 'Access Analytics', description: 'Can view analytics and reports' }
   ];
 
   const handleAddUser = () => {
@@ -78,6 +87,28 @@ const AdminDashboard = () => {
       prev.includes(campaign) 
         ? prev.filter(c => c !== campaign) 
         : [...prev, campaign]
+    );
+  };
+
+  const openPermissionsDialog = (user: any) => {
+    setSelectedUserId(user.id);
+    setSelectedUserPermissions(user.permissions || []);
+    setShowPermissionsDialog(true);
+  };
+
+  const handleSavePermissions = () => {
+    if (selectedUserId) {
+      updateUserPermissions(selectedUserId, selectedUserPermissions);
+      toast.success("User permissions updated successfully");
+      setShowPermissionsDialog(false);
+    }
+  };
+
+  const togglePermission = (permission: string) => {
+    setSelectedUserPermissions(prev => 
+      prev.includes(permission)
+        ? prev.filter(p => p !== permission)
+        : [...prev, permission]
     );
   };
 
@@ -250,11 +281,27 @@ const AdminDashboard = () => {
                       </TableCell>
                       <TableCell>
                         <div className="flex items-center gap-2">
-                          <Button size="sm" variant="ghost">
+                          <Button 
+                            size="sm" 
+                            variant="ghost"
+                            onClick={() => openPermissionsDialog(user)}
+                            title="Edit Permissions"
+                          >
+                            <Shield className="h-4 w-4" />
+                          </Button>
+                          <Button 
+                            size="sm" 
+                            variant="ghost"
+                            title="Edit User"
+                          >
                             <Edit className="h-4 w-4" />
                           </Button>
                           {user.username !== 'm1keangelo' && (
-                            <Button size="sm" variant="ghost">
+                            <Button 
+                              size="sm" 
+                              variant="ghost"
+                              title="Delete User"
+                            >
                               <Trash2 className="h-4 w-4" />
                             </Button>
                           )}
@@ -375,6 +422,46 @@ const AdminDashboard = () => {
           </Card>
         </TabsContent>
       </Tabs>
+
+      {/* Permissions Dialog */}
+      <Dialog open={showPermissionsDialog} onOpenChange={setShowPermissionsDialog}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Edit User Permissions</DialogTitle>
+            <DialogDescription>
+              Select the permissions you want to grant to this user.
+            </DialogDescription>
+          </DialogHeader>
+          <div className="space-y-4 py-2">
+            {availablePermissions.map(permission => (
+              <div key={permission.id} className="flex items-start space-x-2">
+                <Checkbox 
+                  id={`perm-${permission.id}`}
+                  checked={selectedUserPermissions.includes(permission.id)}
+                  onCheckedChange={() => togglePermission(permission.id)}
+                />
+                <div className="grid gap-0.5">
+                  <label 
+                    htmlFor={`perm-${permission.id}`}
+                    className="text-sm font-medium leading-none"
+                  >
+                    {permission.label}
+                  </label>
+                  <p className="text-xs text-muted-foreground">
+                    {permission.description}
+                  </p>
+                </div>
+              </div>
+            ))}
+          </div>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setShowPermissionsDialog(false)}>
+              Cancel
+            </Button>
+            <Button onClick={handleSavePermissions}>Save Permissions</Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };

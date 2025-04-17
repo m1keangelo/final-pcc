@@ -10,6 +10,7 @@ type User = {
   email?: string;
   role?: 'admin' | 'superadmin' | 'assistant';
   campaign?: string;
+  permissions?: string[]; // Added permissions array
 };
 
 // Auth context type
@@ -21,6 +22,7 @@ type AuthContextType = {
   isSuperAdmin: boolean;
   isAdmin: boolean;
   hasPermission: (permission: string) => boolean;
+  updateUserPermissions: (userId: string, permissions: string[]) => void; // New function
 };
 
 // Expanded mock users for demo with proper role definitions
@@ -32,7 +34,8 @@ const MOCK_USERS: Record<string, { password: string, user: User }> = {
       name: 'Admin User', 
       username: 'admin', 
       role: 'admin', 
-      email: 'admin@galloavion.com' 
+      email: 'admin@galloavion.com',
+      permissions: ['MANAGE_USERS', 'MANAGE_FORMS', 'ACCESS_ANALYTICS', 'DELETE_CLIENTS']
     }
   },
   'maria': {
@@ -42,7 +45,8 @@ const MOCK_USERS: Record<string, { password: string, user: User }> = {
       name: 'Maria Rodriguez', 
       username: 'maria', 
       role: 'assistant',
-      campaign: 'Dennis'
+      campaign: 'Dennis',
+      permissions: []
     }
   },
   'juan': {
@@ -52,7 +56,8 @@ const MOCK_USERS: Record<string, { password: string, user: User }> = {
       name: 'Juan Perez', 
       username: 'juan', 
       role: 'assistant',
-      campaign: 'Michael'
+      campaign: 'Michael',
+      permissions: []
     }
   },
   'm1keangelo@icloud.com': {
@@ -63,6 +68,7 @@ const MOCK_USERS: Record<string, { password: string, user: User }> = {
       username: 'm1keangelo', 
       role: 'superadmin', 
       email: 'm1keangelo@icloud.com',
+      permissions: ['MANAGE_USERS', 'MANAGE_FORMS', 'ACCESS_ANALYTICS', 'DELETE_CLIENTS', 'VIEW_ALL_CAMPAIGNS', 'MANAGE_TRAINING', 'MANAGE_ANIMATIONS']
     }
   }
 };
@@ -79,10 +85,12 @@ const PERMISSIONS = {
   MANAGE_TRAINING: ['admin', 'superadmin'],
   MANAGE_ANIMATIONS: ['admin', 'superadmin'],
   VIEW_ALL_CAMPAIGNS: ['superadmin'],
+  DELETE_CLIENTS: [], // This is now controlled by the user permissions array
 };
 
 // Provider component
 export const AuthProvider: React.FC<{children: ReactNode}> = ({ children }) => {
+  const [users, setUsers] = useState<Record<string, { password: string, user: User }>>(MOCK_USERS);
   const [user, setUser] = useState<User | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -92,10 +100,49 @@ export const AuthProvider: React.FC<{children: ReactNode}> = ({ children }) => {
 
   // Permission checker function
   const hasPermission = (permission: string): boolean => {
-    if (!user || !user.role) return false;
+    if (!user) return false;
     
+    // First check if permission is role-based
     const allowedRoles = PERMISSIONS[permission as keyof typeof PERMISSIONS] || [];
-    return allowedRoles.includes(user.role);
+    if (allowedRoles.length > 0 && user.role && allowedRoles.includes(user.role)) {
+      return true;
+    }
+    
+    // Then check if user has explicit permission
+    return user.permissions?.includes(permission) || false;
+  };
+
+  // Update user permissions
+  const updateUserPermissions = (userId: string, permissions: string[]) => {
+    setUsers(prevUsers => {
+      const updatedUsers = { ...prevUsers };
+      
+      // Find the user to update
+      const userKey = Object.keys(updatedUsers).find(
+        key => updatedUsers[key].user.id === userId
+      );
+      
+      if (userKey) {
+        // Update permissions for this user
+        updatedUsers[userKey] = {
+          ...updatedUsers[userKey],
+          user: {
+            ...updatedUsers[userKey].user,
+            permissions
+          }
+        };
+        
+        // If this is the current logged in user, update that too
+        if (user && user.id === userId) {
+          setUser({
+            ...user,
+            permissions
+          });
+        }
+      }
+      
+      return updatedUsers;
+    });
   };
 
   useEffect(() => {
@@ -122,7 +169,7 @@ export const AuthProvider: React.FC<{children: ReactNode}> = ({ children }) => {
     
     // Check if username is an email or username
     const userKey = username.toLowerCase();
-    const userRecord = MOCK_USERS[userKey];
+    const userRecord = users[userKey];
     
     if (userRecord && userRecord.password === password) {
       setUser(userRecord.user);
@@ -152,7 +199,8 @@ export const AuthProvider: React.FC<{children: ReactNode}> = ({ children }) => {
       isLoading,
       isSuperAdmin,
       isAdmin,
-      hasPermission
+      hasPermission,
+      updateUserPermissions
     }}>
       {children}
     </AuthContext.Provider>

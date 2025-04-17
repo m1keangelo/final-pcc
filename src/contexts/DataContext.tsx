@@ -501,6 +501,7 @@ type DataContextType = {
   campaigns: string[];
   addClient: (client: Omit<ClientData, 'id' | 'createdDate'>) => void;
   updateClient: (id: string, data: Partial<ClientData>) => void;
+  deleteClient: (id: string) => void; // New delete client function
 };
 
 // Create the context
@@ -566,8 +567,13 @@ export const DataProvider: React.FC<{children: ReactNode}> = ({ children }) => {
     );
   };
 
+  // Delete a client
+  const deleteClient = (id: string) => {
+    setClients(prev => prev.filter(client => client.id !== id));
+  };
+
   return (
-    <DataContext.Provider value={{ clients, campaigns: CAMPAIGNS, addClient, updateClient }}>
+    <DataContext.Provider value={{ clients, campaigns: CAMPAIGNS, addClient, updateClient, deleteClient }}>
       {children}
     </DataContext.Provider>
   );
