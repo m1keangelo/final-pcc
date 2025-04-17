@@ -1,3 +1,4 @@
+
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -29,19 +30,26 @@ const queryClient = new QueryClient({
       staleTime: 1000 * 60 * 5, // 5 minutes
       refetchOnWindowFocus: false,
       refetchOnMount: true,
-      onError: (error) => {
-        console.error('Query error:', error);
-        toast("There was a problem with the data request. Please try again.");
-      },
     },
     mutations: {
       retry: 1,
-      onError: (error) => {
-        console.error('Mutation error:', error);
-        toast("Your changes could not be saved. Please try again.");
-      },
     },
   },
+});
+
+// Configure global error handlers
+queryClient.getQueryCache().subscribe({
+  onError: (error) => {
+    console.error('Query error:', error);
+    toast("There was a problem with the data request. Please try again.");
+  }
+});
+
+queryClient.getMutationCache().subscribe({
+  onError: (error) => {
+    console.error('Mutation error:', error);
+    toast("Your changes could not be saved. Please try again.");
+  }
 });
 
 // Fallback UI for the entire app
@@ -134,3 +142,4 @@ const App = () => (
 );
 
 export default App;
+
