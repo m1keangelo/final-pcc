@@ -55,6 +55,7 @@ export type FormState = {
   phone: string;
   email: string;
   comments: string;
+  campaign?: string; // Added campaign field to FormState
 };
 
 export type FormStep = 

@@ -42,7 +42,7 @@ const FormContainer: React.FC = () => {
       phone: formData.phone,
       email: formData.email,
       agent: selectedAgent,
-      campaign: selectedCampaign // This is where the error was occurring
+      campaign: selectedCampaign 
     };
     
     setFormData(finalData);
@@ -50,7 +50,7 @@ const FormContainer: React.FC = () => {
     
     console.log('Submitting form data:', finalData);
     const transformedData = transformFormData(finalData, selectedAgent);
-    transformedData.campaign = selectedCampaign; // Add campaign to transformed data
+    // We don't need to set the campaign here anymore as it's already included in the transformFormData function
     
     console.log('Transformed client data for submission:', transformedData);
     addClient(transformedData);

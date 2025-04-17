@@ -113,6 +113,7 @@ export const transformFormData = (data: FormState, selectedAgent: string) => {
     phone: data.phone,
     email: data.email,
     agent: selectedAgent,
+    campaign: data.campaign || 'Default Campaign', // Added campaign field to the returned object
     employmentType: employmentTypeMap[data.employmentType || 'W-2'],
     selfEmployedYears: data.selfEmployedYears || undefined,
     incomeAnnual,
