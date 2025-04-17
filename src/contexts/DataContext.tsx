@@ -1,5 +1,6 @@
+
 import React, { createContext, useContext, useState, ReactNode, useEffect } from 'react';
-import { ClientData, CAMPAIGNS } from '@/types/client';
+import { ClientData, CAMPAIGNS, ClientColumnId, CLIENT_COLUMNS } from '@/types/client';
 import { MOCK_CLIENTS } from '@/data/mockClients';
 import { determineUrgency, generateNextSteps } from '@/utils/clientUtils';
 
@@ -8,6 +9,9 @@ type DataContextType = {
   clients: ClientData[];
   trashedClients: ClientData[];
   campaigns: string[];
+  visibleColumns: ClientColumnId[];
+  setVisibleColumns: (columns: ClientColumnId[]) => void;
+  resetColumnPreferences: () => void;
   addClient: (client: Omit<ClientData, 'id' | 'createdDate'>) => void;
   updateClient: (id: string, data: Partial<ClientData>) => void;
   deleteClient: (id: string) => void;
@@ -22,10 +26,41 @@ const DataContext = createContext<DataContextType | undefined>(undefined);
 // Number of days to keep clients in trash before auto-deletion
 const TRASH_RETENTION_DAYS = 30;
 
+// Default visible columns
+const DEFAULT_VISIBLE_COLUMNS: ClientColumnId[] = [
+  'name', 'phone', 'creditCategory', 'legalStatus', 
+  'campaign', 'timeline', 'urgency', 'nextSteps'
+];
+
+// Local storage key for column preferences
+const COLUMN_PREFS_STORAGE_KEY = 'gallo-avion-column-prefs';
+
 // Provider component
 export const DataProvider: React.FC<{children: ReactNode}> = ({ children }) => {
   const [clients, setClients] = useState<ClientData[]>(MOCK_CLIENTS);
   const [trashedClients, setTrashedClients] = useState<ClientData[]>([]);
+  const [visibleColumns, setVisibleColumns] = useState<ClientColumnId[]>(() => {
+    // Try to load from localStorage
+    const savedColumns = localStorage.getItem(COLUMN_PREFS_STORAGE_KEY);
+    if (savedColumns) {
+      try {
+        return JSON.parse(savedColumns);
+      } catch (e) {
+        console.error("Error parsing saved column preferences", e);
+      }
+    }
+    return DEFAULT_VISIBLE_COLUMNS;
+  });
+
+  // Save column preferences to localStorage when they change
+  useEffect(() => {
+    localStorage.setItem(COLUMN_PREFS_STORAGE_KEY, JSON.stringify(visibleColumns));
+  }, [visibleColumns]);
+
+  // Reset column preferences to default
+  const resetColumnPreferences = () => {
+    setVisibleColumns(DEFAULT_VISIBLE_COLUMNS);
+  };
 
   // Add a new client with expanded form data
   const addClient = (clientData: Omit<ClientData, 'id' | 'createdDate'>) => {
@@ -126,6 +161,9 @@ export const DataProvider: React.FC<{children: ReactNode}> = ({ children }) => {
       clients, 
       trashedClients, 
       campaigns: CAMPAIGNS, 
+      visibleColumns,
+      setVisibleColumns,
+      resetColumnPreferences,
       addClient, 
       updateClient, 
       deleteClient,

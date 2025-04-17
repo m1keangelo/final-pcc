@@ -65,3 +65,45 @@ export const CAMPAIGNS = [
   'Refinance Special', 
   'Investor Program'
 ];
+
+// Available client table columns
+export type ClientColumnId = 
+  | 'name'
+  | 'phone'
+  | 'email'
+  | 'agent'
+  | 'campaign'
+  | 'employmentType'
+  | 'incomeAnnual'
+  | 'creditCategory'
+  | 'downPaymentSaved'
+  | 'timeline'
+  | 'firstTimeBuyer'
+  | 'legalStatus'
+  | 'qualified'
+  | 'urgency'
+  | 'nextSteps';
+
+export interface ClientColumn {
+  id: ClientColumnId;
+  label: string;
+  required?: boolean;
+}
+
+export const CLIENT_COLUMNS: ClientColumn[] = [
+  { id: 'name', label: 'Name', required: true },
+  { id: 'phone', label: 'Phone' },
+  { id: 'email', label: 'Email' },
+  { id: 'agent', label: 'Agent' },
+  { id: 'campaign', label: 'Campaign' },
+  { id: 'employmentType', label: 'Employment' },
+  { id: 'incomeAnnual', label: 'Annual Income' },
+  { id: 'creditCategory', label: 'Credit' },
+  { id: 'downPaymentSaved', label: 'Down Payment' },
+  { id: 'timeline', label: 'Timeline' },
+  { id: 'firstTimeBuyer', label: 'First Time Buyer' },
+  { id: 'legalStatus', label: 'Legal Status' },
+  { id: 'qualified', label: 'Qualified' },
+  { id: 'urgency', label: 'Urgency', required: true },
+  { id: 'nextSteps', label: 'Next Steps' }
+];
