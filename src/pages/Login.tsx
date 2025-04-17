@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from "react";
 import SplashScreen from "@/components/login/SplashScreen";
 import LoginForm from "@/components/login/LoginForm";
@@ -67,7 +68,7 @@ const Login = () => {
           <div className="absolute inset-0 bg-gradient-radial from-transparent via-transparent to-black opacity-60"></div>
           <div className="z-10 flex w-full flex-col md:flex-row h-full items-center justify-center md:justify-start">
             <BrandImagery />
-            <LoginForm className="md:ml-[-5%] lg:ml-[-10%] xl:ml-[-15%]" />
+            <LoginForm className="md:ml-[-5%] lg:ml-[-10%] xl:ml-[-15%] pt-16 md:pt-8" />
           </div>
         </div>
       </LanguageProvider>
