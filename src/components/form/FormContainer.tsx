@@ -11,14 +11,23 @@ import FormQuestions from "./FormQuestions";
 import SummaryOutcome from "./SummaryOutcome";
 import useFormData from "@/hooks/useFormData";
 import { transformFormData } from "@/utils/formDataTransformer";
+import { 
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue
+} from "@/components/ui/select";
+import { Label } from "@/components/ui/label";
 
 const FormContainer: React.FC = () => {
   const { language } = useLanguage();
-  const { addClient } = useData();
+  const { addClient, campaigns } = useData();
   const navigate = useNavigate();
 
   const [formStage, setFormStage] = useState<'initialInfo' | 'questions' | 'summary'>('initialInfo');
   const [selectedAgent, setSelectedAgent] = useState<string>("SoReal Estate");
+  const [selectedCampaign, setSelectedCampaign] = useState<string>("Default Campaign");
   
   const { formData, updateFormData, handleFormDataChange, setFormData } = useFormData();
 
@@ -32,7 +41,8 @@ const FormContainer: React.FC = () => {
       name: formData.name,
       phone: formData.phone,
       email: formData.email,
-      agent: selectedAgent
+      agent: selectedAgent,
+      campaign: selectedCampaign
     };
     
     setFormData(finalData);
@@ -40,6 +50,8 @@ const FormContainer: React.FC = () => {
     
     console.log('Submitting form data:', finalData);
     const transformedData = transformFormData(finalData, selectedAgent);
+    transformedData.campaign = selectedCampaign; // Add campaign to transformed data
+    
     console.log('Transformed client data for submission:', transformedData);
     addClient(transformedData);
     
@@ -58,13 +70,36 @@ const FormContainer: React.FC = () => {
 
       <div>
         {formStage === 'initialInfo' && (
-          <InitialInfoForm 
-            formData={formData}
-            onFormDataChange={handleFormDataChange}
-            selectedAgent={selectedAgent}
-            setSelectedAgent={setSelectedAgent}
-            onNext={handleNextFromInitialInfo}
-          />
+          <>
+            <InitialInfoForm 
+              formData={formData}
+              onFormDataChange={handleFormDataChange}
+              selectedAgent={selectedAgent}
+              setSelectedAgent={setSelectedAgent}
+              onNext={handleNextFromInitialInfo}
+            />
+            
+            <div className="mt-4">
+              <Label htmlFor="campaign-select">
+                {language === 'en' ? 'Select Campaign' : 'Seleccionar Campaña'}
+              </Label>
+              <Select
+                value={selectedCampaign}
+                onValueChange={setSelectedCampaign}
+              >
+                <SelectTrigger id="campaign-select" className="w-full">
+                  <SelectValue placeholder={language === 'en' ? 'Select campaign' : 'Seleccionar campaña'} />
+                </SelectTrigger>
+                <SelectContent>
+                  {campaigns.map(campaign => (
+                    <SelectItem key={campaign} value={campaign}>
+                      {campaign}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+          </>
         )}
 
         {formStage === 'questions' ? (

@@ -9,6 +9,7 @@ export type ClientData = {
   phone: string;
   email: string;
   agent: string;
+  campaign?: string; // Added campaign field
   
   // Employment & Income
   employmentType: 'W-2' | '1099';
@@ -56,6 +57,15 @@ export type ClientData = {
   lastContact?: string;
 };
 
+// Available campaigns
+export const CAMPAIGNS = [
+  'Default Campaign',
+  'Spring Home Buyer',
+  'First-Time Homeowner',
+  'Refinance Special', 
+  'Investor Program'
+];
+
 // Sample mock data
 const MOCK_CLIENTS: ClientData[] = [
   {
@@ -64,6 +74,7 @@ const MOCK_CLIENTS: ClientData[] = [
     phone: '555-123-4567',
     email: 'juan@example.com',
     agent: 'SoReal Estate',
+    campaign: 'Spring Home Buyer',
     employmentType: 'W-2',
     incomeAnnual: 52000,
     creditCategory: 'Good',
@@ -85,6 +96,7 @@ const MOCK_CLIENTS: ClientData[] = [
     phone: '555-987-6543',
     email: 'maria@example.com',
     agent: 'Tito Baptista',
+    campaign: 'First-Time Homeowner',
     employmentType: '1099',
     selfEmployedYears: 3,
     incomeAnnual: 65000,
@@ -107,6 +119,7 @@ const MOCK_CLIENTS: ClientData[] = [
     phone: '555-555-1212',
     email: 'luis@example.com',
     agent: 'Dennis Lopez',
+    campaign: 'Default Campaign',
     employmentType: '1099',
     selfEmployedYears: 1,
     incomeAnnual: 45000,
@@ -134,6 +147,7 @@ const MOCK_CLIENTS: ClientData[] = [
     phone: '555-777-8888',
     email: 'ana@example.com',
     agent: 'Dens Taveras',
+    campaign: 'Refinance Special',
     employmentType: 'W-2',
     incomeAnnual: 48000,
     creditCategory: 'Good',
@@ -153,6 +167,7 @@ const MOCK_CLIENTS: ClientData[] = [
     phone: '555-444-3333',
     email: 'carlos@example.com',
     agent: 'Alvaro Terry',
+    campaign: 'Investor Program',
     employmentType: 'W-2',
     incomeAnnual: 59000,
     creditCategory: 'Excellent',
@@ -173,6 +188,7 @@ const MOCK_CLIENTS: ClientData[] = [
 // Data context type
 type DataContextType = {
   clients: ClientData[];
+  campaigns: string[];
   addClient: (client: Omit<ClientData, 'id' | 'createdDate'>) => void;
   updateClient: (id: string, data: Partial<ClientData>) => void;
 };
@@ -192,7 +208,8 @@ export const DataProvider: React.FC<{children: ReactNode}> = ({ children }) => {
       id: Date.now().toString(),
       createdDate: new Date().toISOString(),
       urgency: determineUrgency(clientData),
-      nextSteps: generateNextSteps(clientData)
+      nextSteps: generateNextSteps(clientData),
+      campaign: clientData.campaign || 'Default Campaign'
     };
     
     setClients(prev => [...prev, newClient]);
@@ -240,7 +257,7 @@ export const DataProvider: React.FC<{children: ReactNode}> = ({ children }) => {
   };
 
   return (
-    <DataContext.Provider value={{ clients, addClient, updateClient }}>
+    <DataContext.Provider value={{ clients, campaigns: CAMPAIGNS, addClient, updateClient }}>
       {children}
     </DataContext.Provider>
   );
