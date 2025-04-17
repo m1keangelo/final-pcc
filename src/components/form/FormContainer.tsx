@@ -42,7 +42,7 @@ const FormContainer: React.FC = () => {
       phone: formData.phone,
       email: formData.email,
       agent: selectedAgent,
-      campaign: selectedCampaign
+      campaign: selectedCampaign // This is where the error was occurring
     };
     
     setFormData(finalData);

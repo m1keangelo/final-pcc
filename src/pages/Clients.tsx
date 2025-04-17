@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { useData } from "@/contexts/DataContext";
@@ -79,7 +78,7 @@ const Clients = () => {
       "Email",
       "Phone", 
       "Agent",
-      "Campaign", // Added campaign to CSV export
+      "Campaign",
       "Employment Type",
       "Self Employed Years",
       "Income (Annual)",
@@ -106,7 +105,7 @@ const Clients = () => {
       c.email || 'N/A',
       c.phone,
       c.agent || 'N/A',
-      c.campaign || 'Default Campaign', // Added campaign to CSV export
+      c.campaign || 'Default Campaign',
       c.employmentType,
       c.selfEmployedYears || 'N/A',
       `$${c.incomeAnnual.toLocaleString()}`,
@@ -158,23 +157,6 @@ const Clients = () => {
       case 'low':
       default:
         return <Badge variant="outline">Low</Badge>;
-    }
-  };
-  
-  // Get campaign badge color based on campaign name
-  const getCampaignBadge = (campaign?: string) => {
-    switch(campaign) {
-      case 'Spring Home Buyer':
-        return <Badge variant="outline" className="bg-green-100 text-green-800 border-green-300">Spring Home Buyer</Badge>;
-      case 'First-Time Homeowner':
-        return <Badge variant="outline" className="bg-blue-100 text-blue-800 border-blue-300">First-Time Homeowner</Badge>;
-      case 'Refinance Special':
-        return <Badge variant="outline" className="bg-purple-100 text-purple-800 border-purple-300">Refinance Special</Badge>;
-      case 'Investor Program':
-        return <Badge variant="outline" className="bg-amber-100 text-amber-800 border-amber-300">Investor Program</Badge>;
-      case 'Default Campaign':
-      default:
-        return <Badge variant="outline">Default Campaign</Badge>;
     }
   };
   
@@ -339,7 +321,7 @@ const Clients = () => {
                     </Badge>
                   </TableCell>
                   <TableCell>{client.legalStatus}</TableCell>
-                  <TableCell>{getCampaignBadge(client.campaign)}</TableCell>
+                  <TableCell>{client.campaign || "Default Campaign"}</TableCell>
                   <TableCell>
                     {client.timeline === 'immediately' ? 'Immediately' :
                      client.timeline === '3months' ? '< 3 months' :
@@ -465,7 +447,6 @@ const ClientDetails = ({ client }: { client: ClientData }) => {
               </div>
             </div>
           )}
-          
         </CardContent>
       </Card>
     </div>
