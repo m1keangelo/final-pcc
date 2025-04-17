@@ -1,14 +1,20 @@
 
-import { FormState, calculateClientRating } from '@/types/form';
+import { useState } from 'react';
+import { FormState } from '@/types/form';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { Alert, AlertTitle } from '@/components/ui/alert';
-import { getRecommendations, getQualificationSummary, getPositiveFactors, getNextStepsPrompt } from '@/utils/qualificationUtils';
+import { 
+  calculateClientRating,
+  getRecommendations, 
+  getQualificationSummary, 
+  getPositiveFactors, 
+  getNextStepsPrompt
+} from '@/utils/qualificationUtils';
 import { toast } from 'sonner';
 import ClientRatingCard from './summary/ClientRatingCard';
 import PositiveFactorsCard from './summary/PositiveFactorsCard';
 import RecommendationsCard from './summary/RecommendationsCard';
 import NextStepsCard from './summary/NextStepsCard';
-import { useState } from 'react';
 import PrequalificationResultsCard from './summary/PrequalificationResultsCard';
 import QualificationAnalysisCard from './summary/QualificationAnalysisCard';
 
@@ -75,13 +81,13 @@ const SummaryOutcome = ({ formData, onProceedToDocuments }: SummaryOutcomeProps)
         </AlertTitle>
       </Alert>
 
-      {/* Prequalification Results - NEW CARD */}
+      {/* Prequalification Results */}
       <PrequalificationResultsCard 
         formData={formData} 
         clientRating={clientRating} 
       />
 
-      {/* Qualification Analysis - NEW CARD */}
+      {/* Qualification Analysis */}
       <QualificationAnalysisCard 
         formData={formData} 
         clientRating={clientRating}
