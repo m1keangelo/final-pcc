@@ -20,8 +20,12 @@ import {
   Pagination,
   PaginationContent,
   PaginationItem,
+  PaginationLink,
   PaginationNext,
-  PaginationPrevious
+  PaginationPrevious,
+  PaginationFirst,
+  PaginationLast,
+  PaginationEllipsis
 } from "@/components/ui/pagination";
 import { 
   Select, 
@@ -166,55 +170,15 @@ const Clients = () => {
       startPage = Math.max(1, endPage - maxVisiblePages + 1);
     }
     
-    if (startPage > 1) {
-      pages.push(
-        <PaginationItem key="1">
-          <Button 
-            variant="outline"
-            size="sm"
-            className="h-8 w-8"
-            onClick={() => setCurrentPage(1)}
-          >
-            1
-          </Button>
-        </PaginationItem>
-      );
-      
-      if (startPage > 2) {
-        pages.push(<PaginationItem key="ellipsis1">...</PaginationItem>);
-      }
-    }
-    
     for (let i = startPage; i <= endPage; i++) {
       pages.push(
         <PaginationItem key={i}>
-          <Button 
-            variant={i === currentPage ? "default" : "outline"}
-            size="sm"
-            className="h-8 w-8"
+          <PaginationLink 
+            isActive={i === currentPage}
             onClick={() => setCurrentPage(i)}
           >
             {i}
-          </Button>
-        </PaginationItem>
-      );
-    }
-    
-    if (endPage < totalPages) {
-      if (endPage < totalPages - 1) {
-        pages.push(<PaginationItem key="ellipsis2">...</PaginationItem>);
-      }
-      
-      pages.push(
-        <PaginationItem key={totalPages}>
-          <Button 
-            variant="outline"
-            size="sm"
-            className="h-8 w-8"
-            onClick={() => setCurrentPage(totalPages)}
-          >
-            {totalPages}
-          </Button>
+          </PaginationLink>
         </PaginationItem>
       );
     }
@@ -295,29 +259,65 @@ const Clients = () => {
                 <Pagination className="mt-4">
                   <PaginationContent>
                     <PaginationItem>
-                      <Button
-                        variant="outline" 
-                        size="icon"
-                        onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
-                        disabled={currentPage === 1}
-                      >
-                        <ChevronLeft className="h-4 w-4" />
-                        <span className="sr-only">Previous</span>
-                      </Button>
+                      <PaginationFirst
+                        onClick={() => setCurrentPage(1)}
+                        className={currentPage === 1 ? "opacity-50 cursor-not-allowed" : ""}
+                      />
                     </PaginationItem>
+                    
+                    <PaginationItem>
+                      <PaginationPrevious
+                        onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
+                        className={currentPage === 1 ? "opacity-50 cursor-not-allowed" : ""}
+                      />
+                    </PaginationItem>
+                    
+                    {currentPage > 3 && (
+                      <>
+                        <PaginationItem>
+                          <PaginationLink onClick={() => setCurrentPage(1)}>
+                            1
+                          </PaginationLink>
+                        </PaginationItem>
+                        
+                        {currentPage > 4 && (
+                          <PaginationItem>
+                            <PaginationEllipsis />
+                          </PaginationItem>
+                        )}
+                      </>
+                    )}
                     
                     {renderPageNumbers()}
                     
+                    {currentPage < totalPages - 2 && (
+                      <>
+                        {currentPage < totalPages - 3 && (
+                          <PaginationItem>
+                            <PaginationEllipsis />
+                          </PaginationItem>
+                        )}
+                        
+                        <PaginationItem>
+                          <PaginationLink onClick={() => setCurrentPage(totalPages)}>
+                            {totalPages}
+                          </PaginationLink>
+                        </PaginationItem>
+                      </>
+                    )}
+                    
                     <PaginationItem>
-                      <Button
-                        variant="outline" 
-                        size="icon"
+                      <PaginationNext
                         onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
-                        disabled={currentPage === totalPages}
-                      >
-                        <ChevronRight className="h-4 w-4" />
-                        <span className="sr-only">Next</span>
-                      </Button>
+                        className={currentPage === totalPages ? "opacity-50 cursor-not-allowed" : ""}
+                      />
+                    </PaginationItem>
+                    
+                    <PaginationItem>
+                      <PaginationLast
+                        onClick={() => setCurrentPage(totalPages)}
+                        className={currentPage === totalPages ? "opacity-50 cursor-not-allowed" : ""}
+                      />
                     </PaginationItem>
                   </PaginationContent>
                 </Pagination>
