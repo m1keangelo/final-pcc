@@ -2,8 +2,8 @@
 import React from "react";
 import { FormState } from "@/types/form";
 import { QuestionRouterProps } from "./types";
-import { handleSelfEmployedRoute } from "./selfEmployedRoute";
-import { handleRegularRoute } from "./regularRoute";
+import { regularRoute } from "./regularRoute";
+import { selfEmployedRoute } from "./selfEmployedRoute";
 import { renderSummaryComponent } from "./summaryComponent";
 
 const QuestionRouter: React.FC<QuestionRouterProps> = (props) => {
@@ -19,10 +19,24 @@ const QuestionRouter: React.FC<QuestionRouterProps> = (props) => {
   
   // Handle different question flows based on employment type
   if (isSelfEmployed && currentStep >= 4) {
-    return handleSelfEmployedRoute(currentStep, props);
+    const route = selfEmployedRoute.questions;
+    const questionId = Object.keys(route)[currentStep - 4] || 'start';
+    const questionConfig = route[questionId];
+    
+    if (questionConfig) {
+      return questionConfig.component(props);
+    }
   } else {
-    return handleRegularRoute(currentStep, props);
+    const route = regularRoute.questions;
+    const questionId = Object.keys(route)[currentStep - 1] || 'idType';
+    const questionConfig = route[questionId];
+    
+    if (questionConfig) {
+      return questionConfig.component(props);
+    }
   }
+  
+  return null;
 };
 
 export default QuestionRouter;

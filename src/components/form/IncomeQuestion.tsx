@@ -8,7 +8,7 @@ import { FormState } from "@/types/form";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 
-export const IncomeQuestion = ({
+const IncomeQuestion = ({
   value,
   incomeType,
   onChange,
