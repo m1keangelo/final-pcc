@@ -1,3 +1,4 @@
+
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useLanguage } from "@/contexts/LanguageContext";
@@ -35,6 +36,7 @@ const FormContainer: React.FC = () => {
   };
 
   const handleFormComplete = (completedData: FormState) => {
+    // Merge all form data together
     const finalData = {
       ...completedData,
       name: formData.name,
@@ -44,6 +46,7 @@ const FormContainer: React.FC = () => {
       campaign: selectedCampaign 
     };
     
+    // Update the form data state with all information for the summary
     setFormData(finalData);
     setFormStage('summary');
     
