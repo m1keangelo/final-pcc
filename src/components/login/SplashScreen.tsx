@@ -37,18 +37,36 @@ const SplashScreen = ({ onComplete }: { onComplete: () => void }) => {
   };
   
   const fetchQuote = async () => {
-    const randomQuote = await getRandomQuote();
-    setQuote(randomQuote);
-    
-    setDebugInfo({
-      browserLanguage: getBrowserLanguage(),
-      quoteLanguage: randomQuote.language,
-      forcedLanguage: null // Will be updated in useEffect if set
-    });
+    try {
+      const randomQuote = await getRandomQuote();
+      setQuote(randomQuote);
+      
+      setDebugInfo({
+        browserLanguage: getBrowserLanguage(),
+        quoteLanguage: randomQuote.language,
+        forcedLanguage: null // Will be updated if set
+      });
+    } catch (error) {
+      console.error("Error fetching quote:", error);
+      // Fallback quote in case of error
+      setQuote({
+        text: "Control your mind or it'll make you its bitch.",
+        language: "en",
+        html: "Control your mind or it'll make you its <span class=\"text-white font-bold text-[115%]\">bitch</span>."
+      });
+    }
   };
   
   useEffect(() => {
     fetchQuote();
+    
+    // Update debug info with forced language if set
+    if (process.env.NODE_ENV === 'development') {
+      setDebugInfo(prev => ({
+        ...prev,
+        forcedLanguage: forceLanguage || null
+      }));
+    }
   }, []);
   
   useEffect(() => {
@@ -85,10 +103,16 @@ const SplashScreen = ({ onComplete }: { onComplete: () => void }) => {
         </div>
         
         <div className="mb-12 animate-fade-in">
-          <h2 
-            className="text-4xl md:text-5xl font-bold leading-tight mb-8 text-[#9b87f5]"
-            dangerouslySetInnerHTML={{ __html: quote.html }}
-          />
+          {quote.html ? (
+            <h2 
+              className="text-4xl md:text-5xl font-bold leading-tight mb-8 text-[#9b87f5]"
+              dangerouslySetInnerHTML={{ __html: quote.html }}
+            />
+          ) : (
+            <h2 className="text-4xl md:text-5xl font-bold leading-tight mb-8 text-[#9b87f5]">
+              Loading awesome quote...
+            </h2>
+          )}
         </div>
         
         <div className="mt-8 w-full max-w-xs h-1 bg-gray-800 rounded-full overflow-hidden">
@@ -115,6 +139,7 @@ const SplashScreen = ({ onComplete }: { onComplete: () => void }) => {
           <p>Browser Language: {debugInfo.browserLanguage}</p>
           <p>Quote Language: {debugInfo.quoteLanguage || 'Loading...'}</p>
           <p>Language Class: {quote.language === 'es' ? '🇪🇸 Spanish' : '🇺🇸 English'}</p>
+          <p>Forced Language: {debugInfo.forcedLanguage || 'None'}</p>
           
           <div className="mt-4 flex gap-2">
             <button 

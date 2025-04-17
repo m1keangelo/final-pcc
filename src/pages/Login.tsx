@@ -1,4 +1,5 @@
 
+import { useState, useEffect } from "react";
 import SplashScreen from "@/components/login/SplashScreen";
 import LoginForm from "@/components/login/LoginForm";
 import BrandImagery from "@/components/login/BrandImagery";
@@ -8,9 +9,21 @@ import { useAuth } from "@/contexts/AuthContext";
 
 const Login = () => {
   const { isLoading } = useAuth();
+  const [showSplash, setShowSplash] = useState(true);
   
-  if (isLoading) {
-    return <SplashScreen onComplete={() => {}} />;
+  useEffect(() => {
+    // If not loading, we still want to show splash for a bit
+    if (!isLoading) {
+      const timer = setTimeout(() => {
+        setShowSplash(false);
+      }, 1000);
+      
+      return () => clearTimeout(timer);
+    }
+  }, [isLoading]);
+  
+  if (showSplash || isLoading) {
+    return <SplashScreen onComplete={() => setShowSplash(false)} />;
   }
   
   return (
