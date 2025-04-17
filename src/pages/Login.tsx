@@ -10,25 +10,20 @@ import { useAuth } from "@/contexts/AuthContext";
 const Login = () => {
   const { isLoading } = useAuth();
   const [showSplash, setShowSplash] = useState(true);
-  const [imageKey, setImageKey] = useState(Date.now()); // Force re-render with timestamp
   
-  // Force a new image when splash screen completes
   useEffect(() => {
+    // If not loading, we still want to show splash for full 9 seconds
     if (!isLoading) {
       const timer = setTimeout(() => {
         setShowSplash(false);
-        setImageKey(Date.now()); // Generate new key after splash screen
-      }, 9000);
+      }, 9000);  // Explicitly set to 9000 milliseconds
       
       return () => clearTimeout(timer);
     }
   }, [isLoading]);
   
   if (showSplash || isLoading) {
-    return <SplashScreen onComplete={() => {
-      setShowSplash(false);
-      setImageKey(Date.now()); // Generate new key when splash completes via callback
-    }} />;
+    return <SplashScreen onComplete={() => setShowSplash(false)} />;
   }
   
   return (
@@ -36,7 +31,7 @@ const Login = () => {
       <div className="relative flex h-screen w-full overflow-hidden">
         <MatrixBackground />
         <div className="z-10 flex w-full flex-col md:flex-row">
-          <BrandImagery key={`mascot-${imageKey}`} />
+          <BrandImagery />
           <LoginForm />
         </div>
       </div>
@@ -45,3 +40,4 @@ const Login = () => {
 };
 
 export default Login;
+

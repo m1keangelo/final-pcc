@@ -1,109 +1,140 @@
+import React from "react";
+import { QuestionRouterProps } from "./types";
+import SelfEmployedYearsQuestion from "../SelfEmployedYearsQuestion";
+import IncomeQuestion from "../IncomeQuestion";
+import CreditQuestion from "../CreditQuestion";
+import CreditScoreQuestion from "../CreditScoreQuestion";
+import DownPaymentQuestion from "../DownPaymentQuestion";
+import DownPaymentAmountQuestion from "../DownPaymentAmountQuestion";
+import DownPaymentAssistanceQuestion from "../DownPaymentAssistanceQuestion";
+import MonthlyDebtsQuestion from "../MonthlyDebtsQuestion";
+import CreditIssuesQuestion from "../CreditIssuesQuestion";
+import IdTypeQuestion from "../IdTypeQuestion";
 
-import { QuestionRouteConfig } from "@/types/questionRouter";
-import { FormState } from "@/types/form";
-import TimelineQuestion from "@/components/form/TimelineQuestion";
-import IncomeQuestion from "@/components/form/IncomeQuestion";
-import CreditIssuesQuestion from "@/components/form/CreditIssuesQuestion";
-import DownPaymentQuestion from "@/components/form/DownPaymentQuestion";
-import IdTypeQuestion from "@/components/form/IdTypeQuestion";
+export const handleSelfEmployedRoute = (
+  step: number,
+  props: QuestionRouterProps
+) => {
+  const { formData, updateFormData, handleNext, handleBack, currentStep, totalSteps } = props;
 
-export const selfEmployedRoute: QuestionRouteConfig = {
-  initial: 'idType',
-  questions: {
-    idType: {
-      id: 'idType',
-      component: (props) => (
-        <IdTypeQuestion
-          value={props.formData.idType}
-          onChange={(newValue) => props.updateField('idType', newValue)}
-          onNext={props.onNext}
-          onBack={props.onBack}
-          currentStep={props.currentStep}
-          totalSteps={props.totalSteps}
+  switch (step) {
+    case 4:
+      return (
+        <SelfEmployedYearsQuestion
+          value={formData.selfEmployedYears}
+          onChange={(value) => updateFormData("selfEmployedYears", value)}
+          onNext={handleNext}
+          onBack={handleBack}
+          currentStep={currentStep}
+          totalSteps={totalSteps}
         />
-      ),
-      nextQuestion: () => 'timeline',
-      skipLogic: () => null,
-    },
-    timeline: {
-      id: 'timeline',
-      component: (props) => (
-        <TimelineQuestion
-          value={props.formData.timeline}
-          onChange={(newValue) => props.updateField('timeline', newValue)}
-          onNext={props.onNext}
-          onBack={props.onBack}
-          currentStep={props.currentStep}
-          totalSteps={props.totalSteps}
-        />
-      ),
-      nextQuestion: (formData: FormState) => {
-        if (formData.timeline === 'immediately') {
-          return 'income';
-        } else {
-          return 'income';
-        }
-      },
-      skipLogic: () => null,
-    },
-    income: {
-      id: 'income',
-      component: (props) => (
+      );
+    case 5:
+      return (
         <IncomeQuestion
-          value={props.formData.income}
-          incomeType={props.formData.incomeType || 'annual'}
-          onChange={(newValue) => props.updateField('income', newValue)}
-          onChangeIncomeType={(value) => props.updateField('incomeType', value)}
-          onNext={props.onNext}
-          onBack={props.onBack}
-          currentStep={props.currentStep}
-          totalSteps={props.totalSteps}
+          value={formData.income}
+          incomeType={formData.incomeType}
+          onChange={(value) => updateFormData("income", value)}
+          onChangeIncomeType={(value) => updateFormData("incomeType", value)}
+          onNext={handleNext}
+          onBack={handleBack}
+          currentStep={currentStep}
+          totalSteps={totalSteps}
         />
-      ),
-      nextQuestion: () => 'downPayment',
-      skipLogic: () => null,
-    },
-    downPayment: {
-      id: 'downPayment',
-      component: (props) => (
+      );
+    case 6:
+      return (
+        <CreditQuestion
+          value={formData.creditCategory}
+          onChange={(value) => updateFormData("creditCategory", value)}
+          onNext={handleNext}
+          onBack={handleBack}
+          currentStep={currentStep}
+          totalSteps={totalSteps}
+        />
+      );
+    case 7:
+      return (
+        <CreditScoreQuestion
+          value={formData.creditScore}
+          onChange={(value) => updateFormData("creditScore", value)}
+          onNext={handleNext}
+          onBack={handleBack}
+          currentStep={currentStep}
+          totalSteps={totalSteps}
+        />
+      );
+    case 8:
+      return (
         <DownPaymentQuestion
-          value={props.formData.downPaymentSaved}
-          onChange={(newValue) => props.updateField('downPaymentSaved', newValue)}
-          onNext={props.onNext}
-          onBack={props.onBack}
-          currentStep={props.currentStep}
-          totalSteps={props.totalSteps}
+          value={formData.downPaymentSaved}
+          onChange={(value) => updateFormData("downPaymentSaved", value)}
+          onNext={handleNext}
+          onBack={handleBack}
+          currentStep={currentStep}
+          totalSteps={totalSteps}
         />
-      ),
-      nextQuestion: () => 'creditIssues',
-      skipLogic: () => null,
-    },
-    creditIssues: {
-      id: 'creditIssues',
-      component: (props) => (
+      );
+    case 9:
+      if (formData.downPaymentSaved) {
+        return (
+          <DownPaymentAmountQuestion
+            value={formData.downPaymentAmount}
+            onChange={(value) => updateFormData("downPaymentAmount", value)}
+            onNext={handleNext}
+            onBack={handleBack}
+            currentStep={currentStep}
+            totalSteps={totalSteps}
+          />
+        );
+      } else {
+        return (
+          <DownPaymentAssistanceQuestion
+            value={formData.assistanceOpen}
+            onChange={(value) => updateFormData("assistanceOpen", value)}
+            onNext={handleNext}
+            onBack={handleBack}
+            currentStep={currentStep}
+            totalSteps={totalSteps}
+          />
+        );
+      }
+    case 10:
+      return (
+        <MonthlyDebtsQuestion
+          value={formData.monthlyDebts}
+          onChange={(value) => updateFormData("monthlyDebts", value)}
+          onNext={handleNext}
+          onBack={handleBack}
+          currentStep={currentStep}
+          totalSteps={totalSteps}
+        />
+      );
+    case 11:
+      return (
         <CreditIssuesQuestion
-          value={props.formData.hasCreditIssues}
-          creditIssues={props.formData.creditIssues || {
-            bankruptcy: false,
-            foreclosure: false,
-            collections: false,
-            medical: false,
-            other: false
-          }}
-          onChange={(newValue) => props.updateField('hasCreditIssues', newValue)}
-          onCreditIssuesChange={(issues) => props.updateField('creditIssues', issues)}
-          onNext={props.onNext}
-          onBack={props.onBack}
-          currentStep={props.currentStep}
-          totalSteps={props.totalSteps}
+          value={formData.hasCreditIssues}
+          creditIssues={formData.creditIssues}
+          onChange={(value) => updateFormData("hasCreditIssues", value)}
+          onCreditIssuesChange={(issues) => updateFormData("creditIssues", issues)}
+          onNext={handleNext}
+          onBack={handleBack}
+          currentStep={currentStep}
+          totalSteps={totalSteps}
         />
-      ),
-      nextQuestion: (formData: FormState) => {
-        return null;
-      },
-      skipLogic: () => null,
-    }
-  },
+      );
+    case 12:
+      return (
+        <IdTypeQuestion
+          value={formData.idType}
+          onChange={(value) => updateFormData("idType", value)}
+          onNext={handleNext}
+          onBack={handleBack}
+          currentStep={currentStep}
+          totalSteps={totalSteps}
+        />
+      );
+    default:
+      return null;
+  }
 };
-
-export default selfEmployedRoute;
