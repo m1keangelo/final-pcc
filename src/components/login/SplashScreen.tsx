@@ -1,5 +1,7 @@
+
 import React, { useEffect, useState } from "react";
 import { getRandomQuote, getBrowserLanguage, forceLanguageForTesting } from "@/utils/quoteUtils";
+import { useToast } from "@/hooks/use-toast";
 
 const SplashScreen = ({ onComplete }: { onComplete: () => void }) => {
   const [fadeOut, setFadeOut] = useState(false);
@@ -8,6 +10,8 @@ const SplashScreen = ({ onComplete }: { onComplete: () => void }) => {
     language: "",
     html: ""
   });
+  
+  const { toast } = useToast();
   
   const [debugInfo, setDebugInfo] = useState<{
     browserLanguage: string;
@@ -51,6 +55,12 @@ const SplashScreen = ({ onComplete }: { onComplete: () => void }) => {
         text: "Control your mind or it'll make you its bitch.",
         language: "en",
         html: "Control your mind or it'll make you its <span class=\"text-white font-bold text-[115%]\">bitch</span>."
+      });
+      
+      toast({
+        title: "Error",
+        description: "Failed to load inspirational quote. Using default.",
+        variant: "destructive",
       });
     }
   };

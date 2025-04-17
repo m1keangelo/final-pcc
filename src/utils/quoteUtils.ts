@@ -1,4 +1,25 @@
+
 import { useLocationDetection } from './locationUtils';
+import { useState, useEffect } from 'react';
+
+// Add a state to force language for testing purposes
+let forcedLanguage: 'en' | 'es' | null = null;
+
+// Helper to get browser language
+export const getBrowserLanguage = (): string => {
+  try {
+    return navigator.language.substring(0, 2).toLowerCase();
+  } catch (error) {
+    console.error('Error detecting browser language:', error);
+    return 'en'; // Default to English
+  }
+};
+
+// For testing purposes
+export const forceLanguageForTesting = (language: 'en' | 'es' | null) => {
+  console.info(`🌐 Setting forced language to: ${language || 'none (auto)'}`);
+  forcedLanguage = language;
+};
 
 export const getRandomQuote = async (language?: 'en' | 'es') => {
   const { isInLatinAmerica } = useLocationDetection();
@@ -6,16 +27,21 @@ export const getRandomQuote = async (language?: 'en' | 'es') => {
   // If language is explicitly provided, use it
   let selectedLanguage = language;
   
-  // If no language is provided, try to detect based on location
-  if (!selectedLanguage) {
+  // Check if a language is being forced for testing
+  if (forcedLanguage !== null) {
+    console.info(`🧪 Using forced language: ${forcedLanguage}`);
+    selectedLanguage = forcedLanguage;
+  } 
+  // If no language is provided and not forced, try to detect based on location and browser
+  else if (!selectedLanguage) {
     try {
       // Check browser language first
-      const browserLang = navigator.language.substring(0, 2).toLowerCase();
+      const browserLang = getBrowserLanguage();
       if (browserLang === 'es') {
-        console.info('🇪🇸 Forcing Spanish due to browser setting');
+        console.info('🇪🇸 Using Spanish due to browser setting');
         selectedLanguage = 'es';
       } else if (browserLang === 'en') {
-        console.info('🇺🇸 Forcing English due to browser setting');
+        console.info('🇺🇸 Using English due to browser setting');
         selectedLanguage = 'en';
       } else if (isInLatinAmerica) {
         // If in Latin America and browser isn't explicitly set to English, default to Spanish
@@ -67,7 +93,14 @@ export const getRandomQuote = async (language?: 'en' | 'es') => {
   
   // Get a random quote
   const randomIndex = Math.floor(Math.random() * quotes.length);
-  return quotes[randomIndex];
+  const randomQuote = quotes[randomIndex];
+  
+  // Return a more robust quote object with language info and HTML version
+  return {
+    text: randomQuote,
+    language: selectedLanguage,
+    html: randomQuote.replace(/(casa|home|house|hogar)/gi, '<span class="text-white font-bold text-[115%]">$1</span>')
+  };
 };
 
 export const isInLatinAmerica = async (): Promise<boolean> => {
