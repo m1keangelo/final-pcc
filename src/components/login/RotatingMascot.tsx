@@ -3,6 +3,9 @@ import React, { useEffect, useState } from 'react';
 
 // The array of available mascot images
 const roosterImages = [
+  '/lovable-uploads/c9f77875-7ae2-48a9-a691-e44f5d39747f.png', // First uploaded rooster
+  '/lovable-uploads/8c370aa8-ff4f-4e64-8faf-ecc4a1081402.png', // Second uploaded rooster 
+  '/lovable-uploads/d53b68ce-4019-46c4-91c9-e82e34d344da.png', // Third uploaded rooster
   '/lovable-uploads/524015be-1f70-4615-8439-30dadb0fad2e.png',
   '/lovable-uploads/136b55d2-1bd5-4f8e-8fb3-4d0bbf8f0b34.png',
   '/lovable-uploads/02deb32f-a4e2-4cdc-9fcc-be416e1a6523.png',
@@ -12,11 +15,11 @@ const roosterImages = [
 
 // Define container dimensions
 const CONTAINER_WIDTH = 400;  // pixels
-const CONTAINER_HEIGHT = 300; // pixels
+const CONTAINER_HEIGHT = 400; // pixels
 
 // Define max dimensions for the actual image
 const MAX_WIDTH = 380;  // pixels
-const MAX_HEIGHT = 280; // pixels
+const MAX_HEIGHT = 380; // pixels
 
 const randomAngle = () => Math.floor(Math.random() * 10) - 5; // Random angle between -5 and 5 degrees
 
