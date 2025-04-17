@@ -2,11 +2,7 @@
 import React from 'react';
 import RotatingMascot from './RotatingMascot';
 
-interface BrandImageryProps {
-  imageIndex: number;
-}
-
-const BrandImagery: React.FC<BrandImageryProps> = ({ imageIndex }) => {
+const BrandImagery: React.FC = () => {
   return (
     <div className="flex-1 bg-black p-6 flex flex-col justify-center items-center">
       <div className="w-full flex justify-center mb-6">
@@ -18,7 +14,7 @@ const BrandImagery: React.FC<BrandImageryProps> = ({ imageIndex }) => {
       </div>
 
       <div className="w-full flex items-center justify-center py-4">
-        <RotatingMascot imageIndex={imageIndex} />
+        <RotatingMascot />
       </div>
     </div>
   );

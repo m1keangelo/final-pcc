@@ -3,9 +3,9 @@ import React, { useState, useEffect } from 'react';
 
 // The array of available mascot images
 const roosterImages = [
-  '/lovable-uploads/c9f77875-7ae2-48a9-a691-e44f5d39747f.png', // First uploaded rooster
-  '/lovable-uploads/8c370aa8-ff4f-4e64-8faf-ecc4a1081402.png', // Second uploaded rooster 
-  '/lovable-uploads/d53b68ce-4019-46c4-91c9-e82e34d344da.png', // Third uploaded rooster
+  '/lovable-uploads/c9f77875-7ae2-48a9-a691-e44f5d39747f.png', 
+  '/lovable-uploads/8c370aa8-ff4f-4e64-8faf-ecc4a1081402.png',  
+  '/lovable-uploads/d53b68ce-4019-46c4-91c9-e82e34d344da.png', 
   '/lovable-uploads/524015be-1f70-4615-8439-30dadb0fad2e.png',
   '/lovable-uploads/136b55d2-1bd5-4f8e-8fb3-4d0bbf8f0b34.png',
   '/lovable-uploads/02deb32f-a4e2-4cdc-9fcc-be416e1a6523.png',
@@ -16,35 +16,30 @@ const roosterImages = [
 ];
 
 // Define container dimensions
-const CONTAINER_WIDTH = 400;  // pixels
-const CONTAINER_HEIGHT = 400; // pixels
+const CONTAINER_WIDTH = 400;
+const CONTAINER_HEIGHT = 400;
 
 // Define max dimensions for the actual image
-const MAX_WIDTH = 380;  // pixels
-const MAX_HEIGHT = 380; // pixels
+const MAX_WIDTH = 380;
+const MAX_HEIGHT = 380;
 
-const randomAngle = () => Math.floor(Math.random() * 10) - 5; // Random angle between -5 and 5 degrees
-
-interface RotatingMascotProps {
-  imageIndex: number;
-}
-
-const RotatingMascot: React.FC<RotatingMascotProps> = ({ imageIndex }) => {
-  // Use the imageIndex prop directly to determine which image to display
-  const [currentImage, setCurrentImage] = useState('');
-  const [rotation, setRotation] = useState(() => randomAngle());
+const RotatingMascot: React.FC = () => {
+  const [imageSrc, setImageSrc] = useState('');
+  const [rotation, setRotation] = useState(0);
   const [imageDimensions, setImageDimensions] = useState({ width: 0, height: 0 });
   
-  // Use useEffect to set the image based on the passed imageIndex
+  // Pick a random image on mount and whenever the component key changes
   useEffect(() => {
-    // Make sure the index is valid for our array
-    const safeIndex = Math.abs(imageIndex) % roosterImages.length;
-    const selectedImage = roosterImages[safeIndex];
+    const randomIndex = Math.floor(Math.random() * roosterImages.length);
+    const selectedImage = roosterImages[randomIndex];
     
-    console.log(`Using image index ${safeIndex}, image path: ${selectedImage}`);
-    setCurrentImage(selectedImage);
-    setRotation(randomAngle());
-  }, [imageIndex]); // Re-run this effect whenever imageIndex changes
+    console.log(`MASCOT: Selected image ${randomIndex} at ${new Date().toISOString()}`);
+    setImageSrc(selectedImage);
+    
+    // Random slight rotation between -5 and 5 degrees
+    const randomAngle = Math.floor(Math.random() * 10) - 5;
+    setRotation(randomAngle);
+  }, []);
   
   // Handle image loading to apply size constraints
   const handleImageLoad = (e: React.SyntheticEvent<HTMLImageElement>) => {
@@ -73,6 +68,7 @@ const RotatingMascot: React.FC<RotatingMascotProps> = ({ imageIndex }) => {
     }
     
     setImageDimensions({ width, height });
+    console.log(`MASCOT: Image loaded and sized to ${width}x${height}`);
   };
 
   return (
@@ -91,9 +87,9 @@ const RotatingMascot: React.FC<RotatingMascotProps> = ({ imageIndex }) => {
           maxHeight: `${MAX_HEIGHT}px`,
         }}
       >
-        {currentImage && (
+        {imageSrc && (
           <img 
-            src={currentImage} 
+            src={imageSrc} 
             alt="Gallo Avión Mascot" 
             className="w-auto h-auto object-contain rounded-xl shadow-2xl transform hover:scale-[1.02] transition-all duration-500 animate-fade-in"
             onLoad={handleImageLoad}
