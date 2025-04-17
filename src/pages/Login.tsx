@@ -10,13 +10,14 @@ import { useAuth } from "@/contexts/AuthContext";
 const Login = () => {
   const { isLoading } = useAuth();
   const [showSplash, setShowSplash] = useState(true);
-  // Force remount of RotatingMascot component to get a new random image
-  const [mascotKey, setMascotKey] = useState(Date.now());
+  // Generate a unique key for the mascot on each render
+  const [mascotKey, setMascotKey] = useState(() => Date.now());
   
-  // Refresh the mascot key on mount and whenever the component rerenders
+  // Force a new mascot on each page load/refresh
   useEffect(() => {
-    setMascotKey(Date.now());
-    console.log("Login page rendered, new mascot key:", Date.now());
+    const newKey = Date.now();
+    setMascotKey(newKey);
+    console.log("Login page rendered, new mascot key:", newKey);
   }, []);
   
   useEffect(() => {
@@ -25,7 +26,9 @@ const Login = () => {
       const timer = setTimeout(() => {
         setShowSplash(false);
         // Generate a new key to force RotatingMascot remount
-        setMascotKey(Date.now());
+        const newKey = Date.now();
+        setMascotKey(newKey);
+        console.log("Splash screen complete, new mascot key:", newKey);
       }, 9000);  // Explicitly set to 9000 milliseconds
       
       return () => clearTimeout(timer);
@@ -36,7 +39,9 @@ const Login = () => {
     return <SplashScreen onComplete={() => {
       setShowSplash(false);
       // Generate a new key to force RotatingMascot remount
-      setMascotKey(Date.now());
+      const newKey = Date.now(); 
+      setMascotKey(newKey);
+      console.log("SplashScreen callback, new mascot key:", newKey);
     }} />;
   }
   
@@ -45,7 +50,7 @@ const Login = () => {
       <div className="relative flex h-screen w-full overflow-hidden">
         <MatrixBackground />
         <div className="z-10 flex w-full flex-col md:flex-row">
-          <BrandImagery key={mascotKey} />
+          <BrandImagery rotationKey={mascotKey} />
           <LoginForm />
         </div>
       </div>

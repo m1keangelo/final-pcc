@@ -25,20 +25,29 @@ const MAX_HEIGHT = 380; // pixels
 
 const randomAngle = () => Math.floor(Math.random() * 10) - 5; // Random angle between -5 and 5 degrees
 
-// Function to get a random image from the array - moved outside the component
+// Function to get a random image from the array
 const getRandomImage = () => {
+  // Force a truly random selection each time
   const randomIndex = Math.floor(Math.random() * roosterImages.length);
+  console.log("Selected random image index:", randomIndex);
   return roosterImages[randomIndex];
 };
 
 const RotatingMascot: React.FC = () => {
-  const [currentImage, setCurrentImage] = useState('');
-  const [rotation, setRotation] = useState(randomAngle());
+  // Force a random image on component creation - no need for useState initialization
+  const [currentImage, setCurrentImage] = useState(() => {
+    const img = getRandomImage();
+    console.log("Initial random image selected:", img);
+    return img;
+  });
+  
+  const [rotation, setRotation] = useState(() => randomAngle());
   const [imageDimensions, setImageDimensions] = useState({ width: 0, height: 0 });
   
   // Use useEffect to set a random image when the component mounts
   useEffect(() => {
-    console.log("RotatingMascot mounted, selecting new random image");
+    console.log("RotatingMascot mounted or remounted, selecting new random image");
+    // This ensures a fresh image on mount/remount
     setCurrentImage(getRandomImage());
     setRotation(randomAngle());
   }, []);

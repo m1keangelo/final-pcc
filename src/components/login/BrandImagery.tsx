@@ -3,10 +3,10 @@ import React from 'react';
 import RotatingMascot from './RotatingMascot';
 
 interface BrandImageryProps {
-  key?: React.Key;
+  rotationKey?: number;
 }
 
-const BrandImagery: React.FC<BrandImageryProps> = ({ key }) => {
+const BrandImagery: React.FC<BrandImageryProps> = ({ rotationKey }) => {
   return (
     <div className="flex-1 bg-black p-6 flex flex-col justify-center items-center">
       <div className="w-full flex justify-center mb-6">
@@ -18,7 +18,8 @@ const BrandImagery: React.FC<BrandImageryProps> = ({ key }) => {
       </div>
 
       <div className="w-full flex items-center justify-center py-4">
-        <RotatingMascot key={key} />
+        {/* Pass the key directly to the component, not as a prop */}
+        <RotatingMascot key={rotationKey} />
       </div>
     </div>
   );
