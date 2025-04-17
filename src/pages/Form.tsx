@@ -1,9 +1,14 @@
-
 import React, { Suspense } from 'react';
 import { ErrorBoundary } from "@/components/ErrorBoundary";
 import FormContainer from "@/components/form/FormContainer";
 import { Skeleton } from '@/components/ui/skeleton';
 import { toast } from '@/lib/toast';
+
+type ErrorBoundaryProps = {
+  children: React.ReactNode;
+  fallback: React.ReactNode;
+  onError?: (error: Error) => void;
+};
 
 const Form: React.FC = () => {
   const handleError = (error: Error) => {
