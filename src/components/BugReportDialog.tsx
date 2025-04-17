@@ -4,8 +4,9 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter, DialogD
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { useLanguage } from "@/contexts/LanguageContext";
-import { toast } from "@/hooks/use-toast";
+import { toast } from "@/lib/toast";
 import { ImagePlus } from "lucide-react";
+import { useAuth } from "@/contexts/AuthContext";
 
 interface BugReportDialogProps {
   isOpen: boolean;
@@ -14,6 +15,7 @@ interface BugReportDialogProps {
 
 const BugReportDialog = ({ isOpen, onClose }: BugReportDialogProps) => {
   const { t } = useLanguage();
+  const { addFeedbackItem } = useAuth();
   const [description, setDescription] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [selectedImage, setSelectedImage] = useState<File | null>(null);
@@ -33,9 +35,17 @@ const BugReportDialog = ({ isOpen, onClose }: BugReportDialogProps) => {
     try {
       setIsSubmitting(true);
       
-      // Here would be the code to submit to a database
-      // For now we'll just simulate a submission
-      await new Promise(resolve => setTimeout(resolve, 1000));
+      // Handle image if present
+      let imageUrl = undefined;
+      if (selectedImage) {
+        // In a real app, this would upload the image to storage
+        // For now, we'll just store a placeholder
+        imageUrl = URL.createObjectURL(selectedImage);
+        console.log("Image would be uploaded:", imageUrl);
+      }
+      
+      // Add bug report to the system
+      await addFeedbackItem('bug', description, imageUrl);
       
       toast({
         title: t('bugReport.submitted'),

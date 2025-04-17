@@ -9,15 +9,26 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { UserPlus, Edit, Trash2, Search, Shield } from "lucide-react";
+import { UserPlus, Edit, Trash2, Search, Shield, MessageSquare } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { toast } from "@/lib/toast";
 import { Checkbox } from "@/components/ui/checkbox";
-import { Form, FormControl, FormField, FormItem, FormLabel } from "@/components/ui/form";
+import FeedbackManagement from "@/components/admin/FeedbackManagement";
 
 const AdminDashboard = () => {
   const { t } = useLanguage();
-  const { user, isSuperAdmin, updateUserPermissions, addUser, deleteUser, getAllUsers } = useAuth();
+  const { 
+    user, 
+    isSuperAdmin, 
+    updateUserPermissions, 
+    addUser, 
+    deleteUser, 
+    getAllUsers,
+    feedbackItems,
+    updateFeedbackStatus,
+    deleteFeedbackItem
+  } = useAuth();
+  
   const [activeTab, setActiveTab] = useState("users");
   const [showAddUserDialog, setShowAddUserDialog] = useState(false);
   const [showAddCampaignDialog, setShowAddCampaignDialog] = useState(false);
@@ -37,6 +48,15 @@ const AdminDashboard = () => {
     const allUsers = getAllUsers();
     setUsers(allUsers);
   }, [getAllUsers]);
+
+  useEffect(() => {
+    const newFeedbackCount = feedbackItems.filter(item => item.status === 'new').length;
+    if (newFeedbackCount > 0) {
+      document.title = `(${newFeedbackCount}) Admin Dashboard`;
+    } else {
+      document.title = 'Admin Dashboard';
+    }
+  }, [feedbackItems]);
 
   const mockCampaigns = [
     { id: '1', name: 'Dennis', activeLeads: 42, qualifiedLeads: 18 },
@@ -143,6 +163,21 @@ const AdminDashboard = () => {
     );
   };
 
+  const handleMarkAsRead = (id: string) => {
+    updateFeedbackStatus(id, 'read');
+    toast.success("Item marked as read");
+  };
+
+  const handleResolve = (id: string) => {
+    updateFeedbackStatus(id, 'resolved');
+    toast.success("Item marked as resolved");
+  };
+
+  const handleDeleteFeedback = (id: string) => {
+    deleteFeedbackItem(id);
+    toast.success("Feedback item deleted");
+  };
+
   const filteredUsers = users.filter(user => 
     user.username.toLowerCase().includes(searchQuery.toLowerCase()) ||
     user.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -166,9 +201,17 @@ const AdminDashboard = () => {
       </div>
 
       <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-        <TabsList className="grid grid-cols-3 w-full max-w-md mb-4">
+        <TabsList className="grid grid-cols-4 w-full max-w-md mb-4">
           <TabsTrigger value="users">Users</TabsTrigger>
           <TabsTrigger value="campaigns">Campaigns</TabsTrigger>
+          <TabsTrigger value="feedback" className="relative">
+            Feedback
+            {feedbackItems.filter(item => item.status === 'new').length > 0 && (
+              <Badge variant="destructive" className="ml-2">
+                {feedbackItems.filter(item => item.status === 'new').length}
+              </Badge>
+            )}
+          </TabsTrigger>
           <TabsTrigger value="settings">Settings</TabsTrigger>
         </TabsList>
 
@@ -442,6 +485,15 @@ const AdminDashboard = () => {
               </Table>
             </CardContent>
           </Card>
+        </TabsContent>
+
+        <TabsContent value="feedback" className="space-y-4">
+          <FeedbackManagement 
+            feedbackItems={feedbackItems}
+            onMarkAsRead={handleMarkAsRead}
+            onResolve={handleResolve}
+            onDelete={handleDeleteFeedback}
+          />
         </TabsContent>
 
         <TabsContent value="settings" className="space-y-4">

@@ -1,4 +1,3 @@
-
 import React, { createContext, useContext, useState, ReactNode, useEffect } from 'react';
 import { toast } from "../lib/toast";
 
@@ -26,6 +25,16 @@ type NewUserInput = {
   email?: string;
 };
 
+// Feedback item type for bugs and suggestions
+export interface FeedbackItem {
+  id: string;
+  type: 'bug' | 'suggestion';
+  description: string;
+  timestamp: string;
+  status: 'new' | 'read' | 'resolved';
+  imageUrl?: string;
+}
+
 // Auth context type
 type AuthContextType = {
   user: User | null;
@@ -39,6 +48,11 @@ type AuthContextType = {
   addUser: (userData: NewUserInput) => boolean;
   deleteUser: (userId: string) => boolean;
   getAllUsers: () => User[];
+  // Feedback management
+  feedbackItems: FeedbackItem[];
+  addFeedbackItem: (type: 'bug' | 'suggestion', description: string, imageUrl?: string) => void;
+  updateFeedbackStatus: (id: string, status: 'new' | 'read' | 'resolved') => void;
+  deleteFeedbackItem: (id: string) => void;
 };
 
 // Expanded mock users for demo with proper role definitions
@@ -113,6 +127,7 @@ export const AuthProvider: React.FC<{children: ReactNode}> = ({ children }) => {
   const [users, setUsers] = useState<Record<string, { password: string, user: User }>>(MOCK_USERS);
   const [user, setUser] = useState<User | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [feedbackItems, setFeedbackItems] = useState<FeedbackItem[]>([]);
 
   // Computed properties for roles
   const isSuperAdmin = user?.role === 'superadmin';
@@ -230,6 +245,72 @@ export const AuthProvider: React.FC<{children: ReactNode}> = ({ children }) => {
     });
   };
 
+  // Add feedback item (bug or suggestion)
+  const addFeedbackItem = async (type: 'bug' | 'suggestion', description: string, imageUrl?: string) => {
+    const newItem: FeedbackItem = {
+      id: Date.now().toString(),
+      type,
+      description,
+      timestamp: new Date().toISOString(),
+      status: 'new',
+      imageUrl
+    };
+    
+    setFeedbackItems(prev => [newItem, ...prev]);
+    
+    // Send email notification
+    try {
+      await sendEmailNotification(newItem);
+      console.log(`Email notification sent for new ${type}`);
+    } catch (error) {
+      console.error('Failed to send email notification:', error);
+    }
+  };
+
+  // Update feedback status
+  const updateFeedbackStatus = (id: string, status: 'new' | 'read' | 'resolved') => {
+    setFeedbackItems(prevItems => 
+      prevItems.map(item => 
+        item.id === id ? { ...item, status } : item
+      )
+    );
+  };
+
+  // Delete feedback item
+  const deleteFeedbackItem = (id: string) => {
+    setFeedbackItems(prevItems => prevItems.filter(item => item.id !== id));
+  };
+  
+  // Email notification function
+  const sendEmailNotification = async (item: FeedbackItem) => {
+    const subject = item.type === 'bug' 
+      ? ':::: Mucho Dinero BUG ::::' 
+      : ':::: Mucho Dinero SUGGESTION ::::';
+      
+    const emailData = {
+      to: 'm1keangelo@icloud.com',
+      subject,
+      body: `
+        Type: ${item.type.toUpperCase()}
+        
+        Description:
+        ${item.description}
+        
+        Timestamp: ${new Date(item.timestamp).toLocaleString()}
+        ${item.imageUrl ? `\nScreenshot: ${item.imageUrl}` : ''}
+      `
+    };
+    
+    // In a real application, this would send an actual email
+    // For demo purposes, we'll just log it
+    console.log('Email notification data:', emailData);
+    
+    // Simulating email API call
+    return new Promise((resolve) => {
+      setTimeout(resolve, 500);
+    });
+  };
+
   useEffect(() => {
     // Check if user is already logged in (from localStorage)
     const savedUser = localStorage.getItem('galloavion_user');
@@ -288,7 +369,11 @@ export const AuthProvider: React.FC<{children: ReactNode}> = ({ children }) => {
       updateUserPermissions,
       addUser,
       deleteUser,
-      getAllUsers
+      getAllUsers,
+      feedbackItems,
+      addFeedbackItem,
+      updateFeedbackStatus,
+      deleteFeedbackItem
     }}>
       {children}
     </AuthContext.Provider>
