@@ -1,3 +1,4 @@
+
 import { Button } from "@/components/ui/button";
 import QuestionContainer from "@/components/form/QuestionContainer";
 import { FormState } from "@/types/form";
@@ -80,7 +81,7 @@ export const TimelineQuestion = ({
       </div>
       
       {value && (
-        <div className="mt-4 p-4 border border-yellow-500 rounded-md bg-black text-yellow-500">
+        <div className="mt-4 p-4 border border-[#fef9be] rounded-md bg-black text-[#fef9be]">
           <p className="font-medium">{getFeedbackMessage()}</p>
         </div>
       )}
@@ -104,3 +105,4 @@ export const TimelineQuestion = ({
 };
 
 export default TimelineQuestion;
+
