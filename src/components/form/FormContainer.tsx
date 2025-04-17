@@ -1,5 +1,5 @@
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { useData } from "@/contexts/DataContext";
@@ -31,12 +31,19 @@ const FormContainer: React.FC = () => {
   
   const { formData, updateFormData, handleFormDataChange, setFormData } = useFormData();
 
+  useEffect(() => {
+    console.log("FormContainer - Current Stage:", formStage);
+    console.log("FormContainer - Current Form Data:", formData);
+  }, [formStage, formData]);
+
   const handleNextFromInitialInfo = () => {
+    console.log("Moving to questions stage");
     setFormStage('questions');
   };
 
   const handleFormComplete = (completedData: FormState) => {
-    // Merge all form data together
+    console.log('Form completion triggered with data:', completedData);
+    
     const finalData = {
       ...completedData,
       name: formData.name,
@@ -46,18 +53,16 @@ const FormContainer: React.FC = () => {
       campaign: selectedCampaign 
     };
     
-    // Update the form data state with all information for the summary
     setFormData(finalData);
     setFormStage('summary');
     
-    console.log('Submitting form data:', finalData);
+    console.log('Final Data for Summary:', finalData);
     const transformedData = transformFormData(finalData, selectedAgent);
-    console.log('Transformed client data for submission:', transformedData);
+    console.log('Transformed client data:', transformedData);
     
-    // Add client to the database
     addClient({
       ...transformedData,
-      campaign: selectedCampaign // Make sure campaign is set correctly
+      campaign: selectedCampaign
     });
     
     toast.success(language === 'en' ? 
@@ -127,3 +132,4 @@ const FormContainer: React.FC = () => {
 };
 
 export default FormContainer;
+
