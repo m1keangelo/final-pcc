@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState } from "react";
 import { getRandomQuote, getBrowserLanguage, forceLanguageForTesting } from "@/utils/quoteUtils";
 import { useToast } from "@/hooks/use-toast";
@@ -85,10 +84,6 @@ const SplashScreen = ({ onComplete }: { onComplete: () => void }) => {
     >
       <div className="relative flex flex-col items-center text-center max-w-4xl px-6">
         <div className="mb-4">
-          <h3 className="text-gallomodern-400 font-display tracking-wider text-sm uppercase mb-3">
-            Mob Mentality with Class
-          </h3>
-          <div className="h-[1px] w-16 bg-gallomodern-500/50 mx-auto"></div>
         </div>
         
         <div className="mb-10">
