@@ -20,14 +20,24 @@ export const FirstTimeBuyerQuestion = ({
   currentStep: number;
   totalSteps: number;
 }) => {
-  const { t } = useLanguage();
+  const { t, language } = useLanguage();
   
   // Define the feedback messages based on selection
   const getFeedbackMessage = () => {
-    if (value === true) {
-      return "First-time doesn't mean clueless — it means full access to exclusive perks, grants, and programs. We'll make sure you use every tool on the board. Let's unlock them together.";
-    } else if (value === false) {
-      return "Experience is gold. We'll respect your past, fix what didn't work, and sharpen what did. You already know the ropes — let's elevate your next move.";
+    if (language === 'es') {
+      // Spanish feedback messages
+      if (value === true) {
+        return "Ser primerizo no es malo. De hecho, hay beneficios especiales, ayudas y programas solo para ti. Nosotros te ayudamos a aprovechar todo eso. Lo hacemos juntos, paso a paso.";
+      } else if (value === false) {
+        return "La experiencia vale oro. Aprendemos de lo que ya viviste, mejoramos lo que falló y usamos lo que funcionó. Ya sabes cómo se mueve esto. Vamos a llevarlo al siguiente nivel.";
+      }
+    } else {
+      // English feedback messages
+      if (value === true) {
+        return "First-time doesn't mean clueless — it means full access to exclusive perks, grants, and programs. We'll make sure you use every tool on the board. Let's unlock them together.";
+      } else if (value === false) {
+        return "Experience is gold. We'll respect your past, fix what didn't work, and sharpen what did. You already know the ropes — let's elevate your next move.";
+      }
     }
     return "";
   };
@@ -57,8 +67,8 @@ export const FirstTimeBuyerQuestion = ({
       
       {/* Display feedback message if an option is selected */}
       {value !== null && (
-        <div className="mt-4 p-4 border border-amber-200 rounded-md bg-amber-50">
-          <p className="text-[#FFD700] font-medium">{getFeedbackMessage()}</p>
+        <div className="mt-4 p-4 border border-[#fef9be] rounded-md bg-black text-[#fef9be]">
+          <p className="font-medium">{getFeedbackMessage()}</p>
         </div>
       )}
       

@@ -20,22 +20,41 @@ export const TimelineQuestion = ({
   currentStep: number;
   totalSteps: number;
 }) => {
-  const { t } = useLanguage();
+  const { t, language } = useLanguage();
   
   const getFeedbackMessage = () => {
-    switch(value) {
-      case 'immediately':
-        return "Love the urgency. Let's lock in your pre-approval this week and line up properties so you're ready to move with confidence. Quick action = leverage. Let's make it count.";
-      case '3months':
-        return "Perfect window. We'll fine-tune your credit, docs, and buying power so when the time comes, you're bulletproof. If you're in a lease, keep in mind most apartments only require 60 days to break — and in some cases, we can help cover that.";
-      case '3to6months':
-        return "This is your prep season. We'll get strategic — clear old debts, boost savings, and tune your credit. If you're currently leasing, we can start working on exit strategies — most leases only ask for 2 months, and we may be able to assist.";
-      case '6to12months':
-        return "You're thinking ahead — and that's powerful. We'll craft a no-stress game plan that gets you lender-ready early so you can pounce on the right deal when it's time. Locked into a lease? Let's explore options now — some landlords accept buyouts, and we might help with that.";
-      case 'exploring':
-        return "No pressure here — just guidance. We'll give you the real numbers and facts so when you're ready, there's no guessing. Want us to build a 'what if' scenario just for you?";
-      default:
-        return "";
+    if (language === 'es') {
+      // Spanish feedback messages
+      switch(value) {
+        case 'immediately':
+          return "Nos encanta que tengas esa urgencia. Esta misma semana podemos ayudarte con tu preaprobación y empezar a buscar casa. Moverte rápido te da más ventaja. ¡Aprovechemos el momento!";
+        case '3months':
+          return "Es el momento ideal. Podemos mejorar tu crédito, revisar papeles y aumentar tu capacidad de compra. Si estás arrendando, la mayoría de apartamentos solo piden 60 días para cancelar. A veces, hasta podemos ayudarte con eso.";
+        case '3to6months':
+          return "Es tiempo de prepararte bien. Vamos paso a paso: salimos de deudas, ahorras más y subimos tu puntaje de crédito. Si tienes arriendo, la mayoría permiten salir con solo 2 meses de aviso. Podemos ayudarte con eso si es necesario.";
+        case '6to12months':
+          return "Te estás adelantando, y eso es muy bueno. Hacemos un plan tranquilo para que estés listo con tiempo. Si tienes contrato de arriendo, algunos caseros aceptan que uno pague para salir antes. Podemos mirar si te ayudamos con eso.";
+        case 'exploring':
+          return "Tranquilo, no hay presión. Solo queremos darte buena información y números reales para cuando te decidas. ¿Quieres que armemos un plan \"¿y si sí?\" solo para ti?";
+        default:
+          return "";
+      }
+    } else {
+      // English feedback messages
+      switch(value) {
+        case 'immediately':
+          return "Love the urgency. Let's lock in your pre-approval this week and line up properties so you're ready to move with confidence. Quick action = leverage. Let's make it count.";
+        case '3months':
+          return "Perfect window. We'll fine-tune your credit, docs, and buying power so when the time comes, you're bulletproof. If you're in a lease, keep in mind most apartments only require 60 days to break — and in some cases, we can help cover that.";
+        case '3to6months':
+          return "This is your prep season. We'll get strategic — clear old debts, boost savings, and tune your credit. If you're currently leasing, we can start working on exit strategies — most leases only ask for 2 months, and we may be able to assist.";
+        case '6to12months':
+          return "You're thinking ahead — and that's powerful. We'll craft a no-stress game plan that gets you lender-ready early so you can pounce on the right deal when it's time. Locked into a lease? Let's explore options now — some landlords accept buyouts, and we might help with that.";
+        case 'exploring':
+          return "No pressure here — just guidance. We'll give you the real numbers and facts so when you're ready, there's no guessing. Want us to build a 'what if' scenario just for you?";
+        default:
+          return "";
+      }
     }
   };
   
@@ -105,4 +124,3 @@ export const TimelineQuestion = ({
 };
 
 export default TimelineQuestion;
-
