@@ -6,6 +6,9 @@ interface LocationInfo {
   isInLatinAmerica: boolean;
   fromCache?: boolean;
   lastUpdated?: number;
+  stale?: boolean; // Added stale property
+  error?: string; // Added error property
+  isMock?: boolean; // Added isMock property
 }
 
 // In-memory cache for location data

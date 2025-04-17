@@ -1,17 +1,18 @@
 
 import React, { useEffect, useState } from "react";
-import { getRandomQuote, getBrowserLanguage, forceLanguageForTesting } from "@/utils/quoteUtils";
+import { getRandomQuote, getBrowserLanguage, forceLanguageForTesting, useQuote } from "@/utils/quoteUtils";
 import { useToast } from "@/hooks/use-toast";
 
 const SplashScreen = ({ onComplete }: { onComplete: () => void }) => {
   const [fadeOut, setFadeOut] = useState(false);
+  const { toast } = useToast();
+  
+  // Use the new hook that handles quotes
   const [quote, setQuote] = useState<{text: string, language: string, html: string}>({
     text: "", 
     language: "",
     html: ""
   });
-  
-  const { toast } = useToast();
   
   const [debugInfo, setDebugInfo] = useState<{
     browserLanguage: string;
@@ -58,7 +59,6 @@ const SplashScreen = ({ onComplete }: { onComplete: () => void }) => {
       });
       
       toast({
-        title: "Error",
         description: "Failed to load inspirational quote. Using default.",
         variant: "destructive",
       });

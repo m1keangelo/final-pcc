@@ -21,8 +21,50 @@ export const forceLanguageForTesting = (language: 'en' | 'es' | null) => {
   forcedLanguage = language;
 };
 
-export const getRandomQuote = async (language?: 'en' | 'es') => {
+// Custom hook for getting language-based quote
+export const useQuote = () => {
   const { isInLatinAmerica } = useLocationDetection();
+  const [quote, setQuote] = useState<{
+    text: string;
+    language: string;
+    html: string;
+  }>({
+    text: "",
+    language: "",
+    html: ""
+  });
+  
+  useEffect(() => {
+    const fetchQuote = async () => {
+      try {
+        const randomQuote = await getRandomQuote();
+        setQuote(randomQuote);
+      } catch (error) {
+        console.error("Error fetching quote:", error);
+        // Fallback quote in case of error
+        setQuote({
+          text: "Control your mind or it'll make you its bitch.",
+          language: "en",
+          html: "Control your mind or it'll make you its <span class=\"text-white font-bold text-[115%]\">bitch</span>."
+        });
+      }
+    };
+    
+    fetchQuote();
+  }, [isInLatinAmerica]);
+  
+  return quote;
+};
+
+export const getRandomQuote = async (language?: 'en' | 'es') => {
+  // Get location information without the hook for server-side compatibility
+  let isLatinAmerican = false;
+  
+  try {
+    isLatinAmerican = await isInLatinAmerica();
+  } catch (error) {
+    console.warn("Could not detect location, defaulting to non-Latin America");
+  }
   
   // If language is explicitly provided, use it
   let selectedLanguage = language;
@@ -43,7 +85,7 @@ export const getRandomQuote = async (language?: 'en' | 'es') => {
       } else if (browserLang === 'en') {
         console.info('🇺🇸 Using English due to browser setting');
         selectedLanguage = 'en';
-      } else if (isInLatinAmerica) {
+      } else if (isLatinAmerican) {
         // If in Latin America and browser isn't explicitly set to English, default to Spanish
         console.info('🌎 Detected Latin American location, using Spanish');
         selectedLanguage = 'es';
