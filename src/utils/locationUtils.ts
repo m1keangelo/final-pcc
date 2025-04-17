@@ -59,7 +59,7 @@ export const useLocationDetection = () => {
           'BO', 'CL', 'AR', 'UY', 'PY', 'BR'
         ];
 
-        const newLocationInfo = {
+        const newLocationInfo: LocationInfo = {
           country: data.country_code,
           isInLatinAmerica: latinAmericanCountries.includes(data.country_code),
           lastUpdated: now

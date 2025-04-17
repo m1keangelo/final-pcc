@@ -30,26 +30,16 @@ const queryClient = new QueryClient({
       staleTime: 1000 * 60 * 5, // 5 minutes
       refetchOnWindowFocus: false,
       refetchOnMount: true,
-      meta: {
-        onError: (error) => {
-          console.error('Query error:', error);
-          toast({
-            description: "There was a problem with the data request. Please try again.",
-            variant: "destructive",
-          });
-        },
+      onError: (error) => {
+        console.error('Query error:', error);
+        toast("There was a problem with the data request. Please try again.");
       },
     },
     mutations: {
       retry: 1,
-      meta: {
-        onError: (error) => {
-          console.error('Mutation error:', error);
-          toast({
-            description: "Your changes could not be saved. Please try again.",
-            variant: "destructive",
-          });
-        },
+      onError: (error) => {
+        console.error('Mutation error:', error);
+        toast("Your changes could not be saved. Please try again.");
       },
     },
   },
@@ -80,17 +70,12 @@ const OfflineDetector = () => {
   useEffect(() => {
     const handleOnline = () => {
       setIsOffline(false);
-      toast({
-        description: "Your internet connection has been restored.",
-      });
+      toast("Your internet connection has been restored.");
     };
     
     const handleOffline = () => {
       setIsOffline(true);
-      toast({
-        description: "Please check your internet connection.",
-        variant: "destructive",
-      });
+      toast("Please check your internet connection.");
     };
     
     window.addEventListener('online', handleOnline);
