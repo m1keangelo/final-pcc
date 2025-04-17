@@ -24,9 +24,7 @@ const BugReportDialog = ({ isOpen, onClose }: BugReportDialogProps) => {
     e.preventDefault();
     
     if (!description.trim()) {
-      toast({
-        title: t('common.error'),
-        description: t('bugReport.descriptionRequired'),
+      toast(`${t('common.error')} - ${t('bugReport.descriptionRequired')}`, {
         variant: "destructive"
       });
       return;
@@ -47,19 +45,14 @@ const BugReportDialog = ({ isOpen, onClose }: BugReportDialogProps) => {
       // Add bug report to the system
       await addFeedbackItem('bug', description, imageUrl);
       
-      toast({
-        title: t('bugReport.submitted'),
-        description: t('bugReport.thankYou'),
-      });
+      toast(`${t('bugReport.submitted')} - ${t('bugReport.thankYou')}`);
       
       // Reset form
       setDescription("");
       setSelectedImage(null);
       onClose();
     } catch (error) {
-      toast({
-        title: t('common.error'),
-        description: t('bugReport.submitError'),
+      toast(`${t('common.error')} - ${t('bugReport.submitError')}`, {
         variant: "destructive"
       });
     } finally {

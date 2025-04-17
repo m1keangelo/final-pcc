@@ -24,9 +24,7 @@ const SuggestionDialog = ({ isOpen, onClose }: SuggestionDialogProps) => {
     e.preventDefault();
     
     if (!suggestion.trim()) {
-      toast({
-        title: t('common.error'),
-        description: t('suggestion.descriptionRequired'),
+      toast(`${t('common.error')} - ${t('suggestion.descriptionRequired')}`, {
         variant: "destructive"
       });
       return;
@@ -47,19 +45,14 @@ const SuggestionDialog = ({ isOpen, onClose }: SuggestionDialogProps) => {
       // Add suggestion to the system
       await addFeedbackItem('suggestion', suggestion, imageUrl);
       
-      toast({
-        title: t('suggestion.submitted'),
-        description: t('suggestion.thankYou'),
-      });
+      toast(`${t('suggestion.submitted')} - ${t('suggestion.thankYou')}`);
       
       // Reset form
       setSuggestion("");
       setSelectedImage(null);
       onClose();
     } catch (error) {
-      toast({
-        title: t('common.error'),
-        description: t('suggestion.submitError'),
+      toast(`${t('common.error')} - ${t('suggestion.submitError')}`, {
         variant: "destructive"
       });
     } finally {
