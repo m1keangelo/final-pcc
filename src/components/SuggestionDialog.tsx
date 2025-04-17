@@ -1,5 +1,6 @@
+
 import React, { useState } from "react";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter, DialogDescription } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { useLanguage } from "@/contexts/LanguageContext";
@@ -67,19 +68,19 @@ const SuggestionDialog = ({ isOpen, onClose }: SuggestionDialogProps) => {
       <DialogContent className="sm:max-w-md">
         <DialogHeader>
           <DialogTitle className="text-xl font-bold">{t('suggestion.title')}</DialogTitle>
+          <DialogDescription className="text-gray-400">
+            {t('suggestion.description')}
+          </DialogDescription>
         </DialogHeader>
         
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="space-y-2">
-            <label htmlFor="suggestion" className="text-sm font-medium">
-              {t('suggestion.description')}
-            </label>
             <Textarea
               id="suggestion"
               value={suggestion}
               onChange={(e) => setSuggestion(e.target.value)}
               placeholder={t('suggestion.descriptionPlaceholder')}
-              className="min-h-[120px]"
+              className="min-h-[120px] bg-black/50 border-purple-500/30 focus:border-purple-400"
               required
             />
           </div>
@@ -92,11 +93,11 @@ const SuggestionDialog = ({ isOpen, onClose }: SuggestionDialogProps) => {
               <Button
                 type="button"
                 variant="outline"
-                className="relative overflow-hidden"
-                onClick={() => document.getElementById('screenshot')?.click()}
+                className="relative overflow-hidden bg-black/30 border-purple-500/30 hover:bg-purple-900/20"
+                onClick={() => document.getElementById('screenshot-suggestion')?.click()}
               >
                 <input
-                  id="screenshot"
+                  id="screenshot-suggestion"
                   type="file"
                   accept="image/*"
                   className="absolute inset-0 opacity-0 cursor-pointer"
@@ -106,7 +107,7 @@ const SuggestionDialog = ({ isOpen, onClose }: SuggestionDialogProps) => {
                 {t('suggestion.uploadImage')}
               </Button>
               {selectedImage && (
-                <span className="text-sm text-gray-500">
+                <span className="text-sm text-gray-300">
                   {selectedImage.name}
                 </span>
               )}
@@ -114,10 +115,19 @@ const SuggestionDialog = ({ isOpen, onClose }: SuggestionDialogProps) => {
           </div>
           
           <DialogFooter>
-            <Button type="button" variant="outline" onClick={onClose}>
+            <Button 
+              type="button" 
+              variant="outline" 
+              onClick={onClose}
+              className="bg-black/30 border-purple-500/30 hover:bg-purple-900/20"
+            >
               {t('common.cancel')}
             </Button>
-            <Button type="submit" disabled={isSubmitting}>
+            <Button 
+              type="submit" 
+              disabled={isSubmitting}
+              className="bg-gradient-to-r from-purple-700 to-blue-500 hover:from-purple-600 hover:to-blue-400"
+            >
               {isSubmitting ? t('common.submitting') : t('common.submit')}
             </Button>
           </DialogFooter>

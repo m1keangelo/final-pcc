@@ -220,6 +220,34 @@ const translations = {
     'help.q3': 'Credit scores typically range from 300-850. Most mortgage loans require at least 620.',
     'help.q4': 'Down payments are typically 3.5% to 20% of the home purchase price.',
     'help.q5': 'Legal status affects loan eligibility. Most traditional loans require citizenship or permanent residency.',
+    
+    // Suggestion Dialog
+    'suggestion.title': 'Submit Suggestion',
+    'suggestion.description': 'Share your ideas for improving the application',
+    'suggestion.descriptionPlaceholder': 'Describe your suggestion in detail...',
+    'suggestion.screenshot': 'Screenshot (Optional)',
+    'suggestion.uploadImage': 'Upload Image',
+    'suggestion.submitted': 'Suggestion Submitted',
+    'suggestion.thankYou': 'Thank you for your suggestion!',
+    'suggestion.submitError': 'There was an error submitting your suggestion. Please try again.',
+    'suggestion.descriptionRequired': 'Please provide a description for your suggestion.',
+    
+    // Bug Report Dialog
+    'bugReport.title': 'Report a Bug',
+    'bugReport.description': 'Help us improve by reporting any issues you encounter',
+    'bugReport.descriptionPlaceholder': 'Describe the bug and steps to reproduce it...',
+    'bugReport.screenshot': 'Screenshot (Optional)',
+    'bugReport.uploadImage': 'Upload Image',
+    'bugReport.submitted': 'Bug Report Submitted',
+    'bugReport.thankYou': 'Thank you for helping us improve!',
+    'bugReport.submitError': 'There was an error submitting your bug report. Please try again.',
+    'bugReport.descriptionRequired': 'Please provide a description of the bug.',
+    
+    // Common
+    'common.cancel': 'Cancel',
+    'common.submit': 'Submit',
+    'common.submitting': 'Submitting...',
+    'common.error': 'Error',
   },
   
   es: {
@@ -427,6 +455,34 @@ const translations = {
     'help.q3': 'Los puntajes de crédito típicamente varían de 300-850. La mayoría de los préstamos hipotecarios requieren al menos 620.',
     'help.q4': 'Los enganches son típicamente del 3.5% al 20% del precio de compra de la vivienda.',
     'help.q5': 'El estatus legal afecta la elegibilidad para préstamos. La mayoría de los préstamos tradicionales requieren ciudadanía o residencia permanente.',
+    
+    // Suggestion Dialog
+    'suggestion.title': 'Enviar Sugerencia',
+    'suggestion.description': 'Comparta sus ideas para mejorar la aplicación',
+    'suggestion.descriptionPlaceholder': 'Describa su sugerencia en detalle...',
+    'suggestion.screenshot': 'Captura de Pantalla (Opcional)',
+    'suggestion.uploadImage': 'Subir Imagen',
+    'suggestion.submitted': 'Sugerencia Enviada',
+    'suggestion.thankYou': '¡Gracias por su sugerencia!',
+    'suggestion.submitError': 'Hubo un error al enviar su sugerencia. Por favor intente de nuevo.',
+    'suggestion.descriptionRequired': 'Por favor proporcione una descripción para su sugerencia.',
+    
+    // Bug Report Dialog
+    'bugReport.title': 'Reportar un Error',
+    'bugReport.description': 'Ayúdenos a mejorar reportando cualquier problema que encuentre',
+    'bugReport.descriptionPlaceholder': 'Describa el error y los pasos para reproducirlo...',
+    'bugReport.screenshot': 'Captura de Pantalla (Opcional)',
+    'bugReport.uploadImage': 'Subir Imagen',
+    'bugReport.submitted': 'Reporte de Error Enviado',
+    'bugReport.thankYou': '¡Gracias por ayudarnos a mejorar!',
+    'bugReport.submitError': 'Hubo un error al enviar su reporte. Por favor intente de nuevo.',
+    'bugReport.descriptionRequired': 'Por favor proporcione una descripción del error.',
+    
+    // Common
+    'common.cancel': 'Cancelar',
+    'common.submit': 'Enviar',
+    'common.submitting': 'Enviando...',
+    'common.error': 'Error',
   }
 };
 
