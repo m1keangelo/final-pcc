@@ -83,8 +83,8 @@ export const TimelineQuestion = ({
       
       {/* Display feedback message if an option is selected */}
       {value && (
-        <div className="mt-4 p-4 border border-amber-200 rounded-md bg-amber-50">
-          <p className="text-[#FFD700] font-medium">{getFeedbackMessage()}</p>
+        <div className="mt-4 p-4 border border-yellow-500 rounded-md bg-black text-yellow-500">
+          <p className="font-medium">{getFeedbackMessage()}</p>
         </div>
       )}
       
