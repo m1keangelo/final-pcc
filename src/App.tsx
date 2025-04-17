@@ -1,3 +1,4 @@
+
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -37,17 +38,17 @@ const queryClient = new QueryClient({
 });
 
 // Configure global error handlers using the proper event listener approach
-const unsubscribeQuery = queryClient.getQueryCache().subscribe(event => {
-  // Only handle error events
-  if (event.type === 'error' && event.query.state.error) {
+const unsubscribeQuery = queryClient.getQueryCache().subscribe((event) => {
+  // Check if it's an updated event and the query has error state
+  if (event.type === 'updated' && event.query.state.status === 'error') {
     console.error('Query error:', event.query.state.error);
     toast("There was a problem with the data request. Please try again.");
   }
 });
 
-const unsubscribeMutation = queryClient.getMutationCache().subscribe(event => {
-  // Only handle error events
-  if (event.type === 'error' && event.mutation.state.error) {
+const unsubscribeMutation = queryClient.getMutationCache().subscribe((event) => {
+  // Check if it's an updated event and the mutation has error state
+  if (event.type === 'updated' && event.mutation.state.status === 'error') {
     console.error('Mutation error:', event.mutation.state.error);
     toast("Your changes could not be saved. Please try again.");
   }
