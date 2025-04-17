@@ -14,7 +14,7 @@ import {
 } from "@/components/ui/table";
 import { Search, FileDown, CheckCircle, XCircle, Clock, AlertTriangle, Phone, ChevronLeft, ChevronRight, Trash2 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
-import { ClientData, CAMPAIGNS } from "@/contexts/DataContext";
+import { ClientData, CAMPAIGNS } from "@/types/client";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { 
