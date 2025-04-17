@@ -11,7 +11,7 @@ import {
   TableHeader,
   TableRow 
 } from "@/components/ui/table";
-import { Search, FileDown, CheckCircle, XCircle, Clock, AlertTriangle, Phone } from "lucide-react";
+import { Search, FileDown, CheckCircle, XCircle, Clock, AlertTriangle, Phone, ChevronLeft, ChevronRight } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { ClientData, CAMPAIGNS } from "@/contexts/DataContext";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -155,6 +155,73 @@ const Clients = () => {
     }
   };
   
+  const renderPageNumbers = () => {
+    const pages = [];
+    const maxVisiblePages = 5;
+    
+    let startPage = Math.max(1, currentPage - Math.floor(maxVisiblePages / 2));
+    let endPage = Math.min(totalPages, startPage + maxVisiblePages - 1);
+    
+    if (endPage - startPage + 1 < maxVisiblePages) {
+      startPage = Math.max(1, endPage - maxVisiblePages + 1);
+    }
+    
+    if (startPage > 1) {
+      pages.push(
+        <PaginationItem key="1">
+          <Button 
+            variant="outline"
+            size="sm"
+            className="h-8 w-8"
+            onClick={() => setCurrentPage(1)}
+          >
+            1
+          </Button>
+        </PaginationItem>
+      );
+      
+      if (startPage > 2) {
+        pages.push(<PaginationItem key="ellipsis1">...</PaginationItem>);
+      }
+    }
+    
+    for (let i = startPage; i <= endPage; i++) {
+      pages.push(
+        <PaginationItem key={i}>
+          <Button 
+            variant={i === currentPage ? "default" : "outline"}
+            size="sm"
+            className="h-8 w-8"
+            onClick={() => setCurrentPage(i)}
+          >
+            {i}
+          </Button>
+        </PaginationItem>
+      );
+    }
+    
+    if (endPage < totalPages) {
+      if (endPage < totalPages - 1) {
+        pages.push(<PaginationItem key="ellipsis2">...</PaginationItem>);
+      }
+      
+      pages.push(
+        <PaginationItem key={totalPages}>
+          <Button 
+            variant="outline"
+            size="sm"
+            className="h-8 w-8"
+            onClick={() => setCurrentPage(totalPages)}
+          >
+            {totalPages}
+          </Button>
+        </PaginationItem>
+      );
+    }
+    
+    return pages;
+  };
+  
   return (
     <div className="space-y-8 animate-fade-in">
       <div className="flex justify-between items-center">
@@ -162,7 +229,7 @@ const Clients = () => {
         <div className="flex gap-3">
           {selectedClient && (
             <Button 
-              variant="default"
+              variant="outline"
               onClick={() => setSelectedClient(null)}
             >
               Back to Client List
@@ -228,21 +295,29 @@ const Clients = () => {
                 <Pagination className="mt-4">
                   <PaginationContent>
                     <PaginationItem>
-                      <PaginationPrevious 
+                      <Button
+                        variant="outline" 
+                        size="icon"
                         onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
-                        className={currentPage === 1 ? "pointer-events-none opacity-50" : ""}
-                      />
+                        disabled={currentPage === 1}
+                      >
+                        <ChevronLeft className="h-4 w-4" />
+                        <span className="sr-only">Previous</span>
+                      </Button>
                     </PaginationItem>
+                    
+                    {renderPageNumbers()}
+                    
                     <PaginationItem>
-                      <span className="px-4 py-2">
-                        Page {currentPage} of {totalPages}
-                      </span>
-                    </PaginationItem>
-                    <PaginationItem>
-                      <PaginationNext 
+                      <Button
+                        variant="outline" 
+                        size="icon"
                         onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
-                        className={currentPage === totalPages ? "pointer-events-none opacity-50" : ""}
-                      />
+                        disabled={currentPage === totalPages}
+                      >
+                        <ChevronRight className="h-4 w-4" />
+                        <span className="sr-only">Next</span>
+                      </Button>
                     </PaginationItem>
                   </PaginationContent>
                 </Pagination>
