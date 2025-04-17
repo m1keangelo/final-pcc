@@ -1,65 +1,66 @@
-
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { Label } from "@/components/ui/label";
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { Slider } from "@/components/ui/slider";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Input } from "@/components/ui/input";
 import QuestionContainer from "@/components/form/QuestionContainer";
 import { FormState } from "@/types/form";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 
 export const IncomeQuestion = ({
-  incomeValue,
-  incomeTypeValue,
-  onChangeIncome,
+  value,
+  incomeType,
+  onChange,
   onChangeIncomeType,
   onNext,
   onBack,
   currentStep,
   totalSteps
 }: {
-  incomeValue: FormState['income'];
-  incomeTypeValue: FormState['incomeType'];
-  onChangeIncome: (value: FormState['income']) => void;
-  onChangeIncomeType: (value: FormState['incomeType']) => void;
+  value: FormState['income'];
+  incomeType: FormState['incomeType'];
+  onChange: (value: string) => void;
+  onChangeIncomeType: (value: 'annual' | 'monthly') => void;
   onNext: () => void;
   onBack: () => void;
   currentStep: number;
   totalSteps: number;
 }) => {
-  const { t } = useLanguage();
-  const [sliderValue, setSliderValue] = useState(incomeValue || 10);
-  
-  // Format currency
-  const formatCurrency = (value: number) => {
-    return new Intl.NumberFormat('en-US', {
-      style: 'currency',
-      currency: 'USD',
-      maximumFractionDigits: 0
-    }).format(value);
-  };
-  
-  // Handle slider change
-  const handleSliderChange = (val: number[]) => {
-    const income = val[0];
-    setSliderValue(income);
-    onChangeIncome(income);
-  };
-  
-  // Define feedback messages
-  const getIncomeAmountFeedback = () => {
-    return "Doesn't matter where you start — it's about what we build with it. Some of the strongest approvals came from humble beginnings. We'll tailor programs to match where you're at — and where you're headed.";
-  };
-  
-  const getIncomeTypeFeedback = () => {
-    if (incomeTypeValue === 'annual') {
-      return "Got it — we'll convert it to monthly, match to your DTI, and optimize from there. Solid start.";
+  const { t, language } = useLanguage();
+  const [inputValue, setInputValue] = useState(value?.toString() || "");
+
+  const getFeedbackMessage = () => {
+    if (language === 'es') {
+      // Any income
+      if (inputValue) {
+        return "No importa dónde empiezas — se trata de lo que construimos juntos. Algunas de las mejores aprobaciones surgieron de inicios humildes. Adaptaremos programas a tu situación actual y futura.";
+      }
+      return "";
     } else {
-      return "Perfect — you're already thinking how lenders think. Let's plug it in and check what you qualify for today.";
+      // Any income
+      if (inputValue) {
+        return "Doesn't matter where you start — it's about what we build with it. Some of the strongest approvals came from humble beginnings. We'll tailor programs to match where you're at — and where you're headed.";
+      }
+      return "";
     }
   };
-  
+
+  const getIncomeTypeFeedbackMessage = () => {
+    if (language === 'es') {
+      if (incomeType === 'annual') {
+        return "Lo tenemos. Lo convertiremos a mensual, lo vincularemos a tu DTI y optimizaremos desde ahí. Buen comienzo.";
+      } else { // monthly
+        return "Perfecto — ya estás pensando como un prestamista. Vamos a ingresarlo y ver para qué calificas hoy.";
+      }
+    } else {
+      if (incomeType === 'annual') {
+        return "Got it — we'll convert it to monthly, match to your DTI, and optimize from there. Solid start.";
+      } else { // monthly
+        return "Perfect — you're already thinking how lenders think. Let's plug it in and check what you qualify for today.";
+      }
+    }
+  };
+
   return (
     <QuestionContainer
       title={t('q.income.title')}
@@ -68,81 +69,65 @@ export const IncomeQuestion = ({
       currentStep={currentStep}
       totalSteps={totalSteps}
     >
-      <div className="space-y-6">
-        <div>
-          <Label htmlFor="incomeType" className="mb-2 block">{t('q.income.typeLabel')}</Label>
-          <RadioGroup 
-            id="incomeType" 
-            value={incomeTypeValue} 
-            onValueChange={(val) => onChangeIncomeType(val as 'annual' | 'monthly')}
-            className="flex space-x-4"
-          >
-            <div className="flex items-center space-x-2">
-              <RadioGroupItem value="annual" id="annual" />
-              <Label htmlFor="annual">{t('q.income.annual')}</Label>
-            </div>
-            <div className="flex items-center space-x-2">
-              <RadioGroupItem value="monthly" id="monthly" />
-              <Label htmlFor="monthly">{t('q.income.monthly')}</Label>
-            </div>
-          </RadioGroup>
-          
-          {/* Display income type feedback */}
-          {incomeTypeValue && (
-            <div className="mt-4 p-4 border border-amber-200 rounded-md bg-amber-50">
-              <p className="text-[#FFD700] font-medium">{getIncomeTypeFeedback()}</p>
-            </div>
-          )}
-        </div>
-        
-        <div>
-          <Label htmlFor="income">{t('q.income.amountLabel')}</Label>
-          <div className="mt-4 mb-8">
-            <div className="flex items-center justify-center mb-6">
-              <div className="flex items-center justify-center bg-muted/30 p-3 rounded-full h-16 w-56 border border-primary/20">
-                <span className="text-2xl font-semibold">
-                  {formatCurrency(sliderValue)}
-                </span>
-              </div>
-            </div>
-            
-            <div className="pt-4">
-              <Slider
+      <div className="space-y-4">
+        <div className="flex items-center space-x-4">
+          <div className="w-1/2">
+            <label htmlFor="income" className="block text-sm font-medium leading-6 text-white">{t('q.income.amountLabel')}</label>
+            <div className="relative mt-2 rounded-md shadow-sm">
+              <Input
+                type="number"
+                name="income"
                 id="income"
-                value={[sliderValue]}
-                min={10}
-                max={1000000}
-                step={10}
-                onValueChange={handleSliderChange}
-                className="my-6"
+                className="text-black"
+                placeholder={t('q.income.placeholder')}
+                value={inputValue}
+                onChange={(e) => {
+                  setInputValue(e.target.value);
+                  onChange(e.target.value);
+                }}
               />
-              <div className="flex justify-between text-xs text-muted-foreground mt-2">
-                <span>{formatCurrency(10)}</span>
-                <span>{formatCurrency(1000000)}</span>
-              </div>
-            </div>
-            
-            {/* Display income amount feedback */}
-            <div className="mt-4 p-4 border border-amber-200 rounded-md bg-amber-50">
-              <p className="text-[#FFD700] font-medium">{getIncomeAmountFeedback()}</p>
             </div>
           </div>
+
+          <div className="w-1/2">
+            <Select onValueChange={onChangeIncomeType} defaultValue={incomeType}>
+              <SelectTrigger className="w-full">
+                <SelectValue placeholder={t('q.income.typeLabel')} />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="annual">{t('q.income.annual')}</SelectItem>
+                <SelectItem value="monthly">{t('q.income.monthly')}</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
         </div>
-      </div>
-      
-      <div className="mt-8 flex justify-between">
-        <Button
-          type="button"
-          variant="outline"
-          onClick={onBack}
-        >
-          <ArrowLeft className="mr-2 h-4 w-4" />
-          {t('form.previous')}
-        </Button>
-        <Button onClick={onNext}>
-          {t('form.next')}
-          <ArrowRight className="ml-2 h-4 w-4" />
-        </Button>
+
+        {inputValue && (
+          <div className="mt-4 p-4 border border-[#fef9be] rounded-md bg-black text-[#fef9be]">
+            <p className="font-medium">{getFeedbackMessage()}</p>
+          </div>
+        )}
+
+        {incomeType && (
+          <div className="mt-4 p-4 border border-[#fef9be] rounded-md bg-black text-[#fef9be]">
+            <p className="font-medium">{getIncomeTypeFeedbackMessage()}</p>
+          </div>
+        )}
+
+        <div className="mt-8 flex justify-between">
+          <Button
+            type="button"
+            variant="outline"
+            onClick={onBack}
+          >
+            <ArrowLeft className="mr-2 h-4 w-4" />
+            {t('form.previous')}
+          </Button>
+          <Button onClick={onNext}>
+            {t('form.next')}
+            <ArrowRight className="ml-2 h-4 w-4" />
+          </Button>
+        </div>
       </div>
     </QuestionContainer>
   );

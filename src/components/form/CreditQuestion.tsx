@@ -1,4 +1,3 @@
-
 import { Button } from "@/components/ui/button";
 import QuestionContainer from "@/components/form/QuestionContainer";
 import { FormState } from "@/types/form";
@@ -20,23 +19,40 @@ export const CreditQuestion = ({
   currentStep: number;
   totalSteps: number;
 }) => {
-  const { t } = useLanguage();
+  const { t, language } = useLanguage();
   
   // Define feedback messages based on credit category
   const getFeedbackMessage = () => {
-    switch(value) {
-      case 'excellent':
-        return "You earned it — now we'll make sure lenders compete for you. Let's use that leverage to reduce costs and maximize perks.";
-      case 'good':
-        return "Very solid. You're in range for great rates and flexibility. A few tweaks and you're premium status. Let's push it.";
-      case 'fair':
-        return "You're on the edge — and that's a good place. We've helped hundreds tip over into better brackets. One or two smart moves could save you thousands.";
-      case 'poor':
-        return "You're not alone — and you're not stuck. FHA still works. We've got credit hacks, piggyback tricks, and legal boosts to raise your score fast. Let's build the ladder out.";
-      case 'unknown':
-        return "No worries. A soft pull gives us a real snapshot — zero impact. Let's check where you stand and build the playbook from there.";
-      default:
-        return "";
+    if (language === 'es') {
+      switch(value) {
+        case 'excellent':
+          return "Lo ganaste — ahora haremos que los prestamistas compitan por ti. Usaremos ese impulso para reducir costos y maximizar beneficios.";
+        case 'good':
+          return "Muy sólido. Estás en rango para tasas y flexibilidad excelentes. Con algunos ajustes, pasas a estatus premium. Vamos a impulsarlo.";
+        case 'fair':
+          return "Estás en el borde — y eso es bueno. Hemos ayudado a cientos a superar los límites. Uno o dos movimientos inteligentes podrían ahorrarte miles.";
+        case 'poor':
+          return "No estás solo — y no estás atascado. FHA todavía funciona. Tenemos trucos de crédito, estrategias de fianza y aumentos legales para subir rápido tu puntaje. Construyamos la escalera.";
+        case 'unknown':
+          return "Sin preocupaciones. Una consulta suave nos da una imagen real — sin impacto. Veamos dónde estás y construyamos el plan desde cero.";
+        default:
+          return "";
+      }
+    } else {
+      switch(value) {
+        case 'excellent':
+          return "You earned it — now we'll make sure lenders compete for you. Let's use that leverage to reduce costs and maximize perks.";
+        case 'good':
+          return "Very solid. You're in range for great rates and flexibility. A few tweaks and you're premium status. Let's push it.";
+        case 'fair':
+          return "You're on the edge — and that's a good place. We've helped hundreds tip over into better brackets. One or two smart moves could save you thousands.";
+        case 'poor':
+          return "You're not alone — and you're not stuck. FHA still works. We've got credit hacks, piggyback tricks, and legal boosts to raise your score fast. Let's build the ladder out.";
+        case 'unknown':
+          return "No worries. A soft pull gives us a real snapshot — zero impact. Let's check where you stand and build the playbook from there.";
+        default:
+          return "";
+      }
     }
   };
   
@@ -83,8 +99,8 @@ export const CreditQuestion = ({
       
       {/* Display feedback message if an option is selected */}
       {value && (
-        <div className="mt-4 p-4 border border-amber-200 rounded-md bg-amber-50">
-          <p className="text-[#FFD700] font-medium">{getFeedbackMessage()}</p>
+        <div className="mt-4 p-4 border border-[#fef9be] rounded-md bg-black text-[#fef9be]">
+          <p className="font-medium">{getFeedbackMessage()}</p>
         </div>
       )}
       

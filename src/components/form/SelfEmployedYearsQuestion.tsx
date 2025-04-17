@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Slider } from "@/components/ui/slider";
@@ -22,7 +21,7 @@ export const SelfEmployedYearsQuestion = ({
   currentStep: number;
   totalSteps: number;
 }) => {
-  const { t } = useLanguage();
+  const { t, language } = useLanguage();
   const [sliderValue, setSliderValue] = useState(value || 1);
   
   // Handle slider change
@@ -34,12 +33,22 @@ export const SelfEmployedYearsQuestion = ({
   
   // Define feedback message based on number of years
   const getFeedbackMessage = () => {
-    if (sliderValue >= 2) {
-      return "Beautiful. You're established — we'll grab your tax returns and use lender-approved methods to qualify you properly. You're in a strong position.";
-    } else if (sliderValue === 1) {
-      return "If you're in the same field as before, we may only need 1 tax year. We'll write a strong case to underwriting. Let's line everything up to prove your momentum.";
+    if (language === 'es') {
+      if (sliderValue >= 2) {
+        return "Perfecto. Estás establecido — usaremos tus declaraciones de impuestos y métodos aprobados por prestamistas. Estás en una posición sólida.";
+      } else if (sliderValue === 1) {
+        return "Si estás en el mismo campo de antes, podríamos necesitar solo un año fiscal. Presentaremos un caso sólido a la revisión. Alineemos todo para probar tu impulso.";
+      } else {
+        return "Podría ser temprano para lo convencional, pero hay prestamistas que usarán estados de cuenta bancarios o activos. Te prepararemos con un plan de éxito de 90 días o exploraremos opciones creativas.";
+      }
     } else {
-      return "Might be early for conventional, but there are lenders who will use bank statements or assets. We'll prep you with a 90-day success plan or explore outside-the-box options.";
+      if (sliderValue >= 2) {
+        return "Beautiful. You're established — we'll grab your tax returns and use lender-approved methods to qualify you properly. You're in a strong position.";
+      } else if (sliderValue === 1) {
+        return "If you're in the same field as before, we may only need 1 tax year. We'll write a strong case to underwriting. Let's line everything up to prove your momentum.";
+      } else {
+        return "Might be early for conventional, but there are lenders who will use bank statements or assets. We'll prep you with a 90-day success plan or explore outside-the-box options.";
+      }
     }
   };
   
@@ -78,8 +87,8 @@ export const SelfEmployedYearsQuestion = ({
         </div>
         
         {/* Display feedback message */}
-        <div className="mt-4 p-4 border border-amber-200 rounded-md bg-amber-50">
-          <p className="text-[#FFD700] font-medium">{getFeedbackMessage()}</p>
+        <div className="mt-4 p-4 border border-[#fef9be] rounded-md bg-black text-[#fef9be]">
+          <p className="font-medium">{getFeedbackMessage()}</p>
         </div>
         
         {sliderValue < 2 && (
