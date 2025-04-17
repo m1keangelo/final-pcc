@@ -8,6 +8,7 @@ import { LanguageProvider } from "@/contexts/LanguageContext";
 import { useAuth } from "@/contexts/AuthContext";
 import { ErrorBoundary } from "@/components/ErrorBoundary";
 import { toast } from "@/lib/toast";
+import { useNavigate } from "react-router-dom";
 
 const LoginError = () => (
   <div className="fixed inset-0 flex items-center justify-center bg-black p-6">
@@ -25,28 +26,38 @@ const LoginError = () => (
 );
 
 const Login = () => {
-  const { isLoading } = useAuth();
+  const { isLoading, user } = useAuth();
   const [showSplash, setShowSplash] = useState(true);
+  const navigate = useNavigate();
   
   useEffect(() => {
-    // If not loading, we still want to show splash for full 9 seconds
-    if (!isLoading) {
-      const timer = setTimeout(() => {
-        setShowSplash(false);
-      }, 9000);  // Explicitly set to 9000 milliseconds
-      
-      return () => clearTimeout(timer);
+    // If user is already logged in, navigate to dashboard
+    if (user) {
+      navigate('/');
+      return;
     }
+
+    // Only show splash screen if not logged in
+    const timer = setTimeout(() => {
+      setShowSplash(false);
+    }, 9000);  // 9 seconds as before
     
-    // Record session start time
+    return () => clearTimeout(timer);
+  }, [user, navigate]);
+  
+  // First-time session start tracking
+  useEffect(() => {
     try {
-      sessionStorage.setItem('sessionStartTime', Date.now().toString());
+      if (!sessionStorage.getItem('sessionStartTime')) {
+        sessionStorage.setItem('sessionStartTime', Date.now().toString());
+      }
     } catch (error) {
       console.warn('Failed to set session start time:', error);
     }
-  }, [isLoading]);
+  }, []);
   
-  if (showSplash || isLoading) {
+  // Show splash screen only if not logged in and it's the first time
+  if (showSplash && !user && !isLoading) {
     return (
       <ErrorBoundary fallback={<LoginError />}>
         <SplashScreen onComplete={() => setShowSplash(false)} />
@@ -54,6 +65,7 @@ const Login = () => {
     );
   }
   
+  // If logged in or loading is complete, show login form
   return (
     <ErrorBoundary fallback={<LoginError />}>
       <LanguageProvider>
@@ -70,3 +82,4 @@ const Login = () => {
 };
 
 export default Login;
+
