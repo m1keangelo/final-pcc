@@ -1,4 +1,3 @@
-
 import React from "react";
 import { QuestionRouterProps } from "./types";
 import SelfEmployedYearsQuestion from "../SelfEmployedYearsQuestion";
@@ -104,7 +103,7 @@ export const handleSelfEmployedRoute = (
       return (
         <MonthlyDebtsQuestion
           value={formData.monthlyDebts}
-          onChange={(value: string) => updateFormData("monthlyDebts", value)}
+          onChange={(value) => updateFormData("monthlyDebts", value)}
           onNext={handleNext}
           onBack={handleBack}
           currentStep={currentStep}

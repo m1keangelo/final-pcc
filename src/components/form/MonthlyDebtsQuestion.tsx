@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -15,8 +16,8 @@ export const MonthlyDebtsQuestion = ({
   currentStep,
   totalSteps
 }: {
-  value: FormState['monthlyDebts'];
-  onChange: (value: FormState['monthlyDebts']) => void;
+  value: string;
+  onChange: (value: string) => void;
   onNext: () => void;
   onBack: () => void;
   currentStep: number;
