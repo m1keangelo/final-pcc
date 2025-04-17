@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState } from "react";
 import { getRandomQuote, getBrowserLanguage, forceLanguageForTesting } from "@/utils/quoteUtils";
 
@@ -20,7 +19,6 @@ const SplashScreen = ({ onComplete }: { onComplete: () => void }) => {
     forcedLanguage: null
   });
   
-  // For testing: This button will only show in development mode
   const forceSpanish = () => {
     forceLanguageForTesting('es');
     fetchQuote();
@@ -60,13 +58,8 @@ const SplashScreen = ({ onComplete }: { onComplete: () => void }) => {
   useEffect(() => {
     fetchQuote();
     
-    // Update debug info for forced language in development mode
     if (process.env.NODE_ENV === 'development') {
-      // Get the current forced language state from the quoteUtils module
-      // using an async IIFE to check the current state
       (async () => {
-        // We'll use getRandomQuote which internally uses the forced language
-        // and then just extract the language from the result
         try {
           const testQuote = await getRandomQuote();
           setDebugInfo(prev => ({
@@ -83,7 +76,7 @@ const SplashScreen = ({ onComplete }: { onComplete: () => void }) => {
   useEffect(() => {
     const fadeOutTimer = setTimeout(() => {
       setFadeOut(true);
-    }, 8000);
+    }, 9000);
     
     const completeTimer = setTimeout(() => {
       onComplete();

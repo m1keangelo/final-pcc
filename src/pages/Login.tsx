@@ -12,11 +12,11 @@ const Login = () => {
   const [showSplash, setShowSplash] = useState(true);
   
   useEffect(() => {
-    // If not loading, we still want to show splash for a bit
+    // If not loading, we still want to show splash for full 9 seconds
     if (!isLoading) {
       const timer = setTimeout(() => {
         setShowSplash(false);
-      }, 1000);
+      }, 9000);  // Explicitly set to 9000 milliseconds
       
       return () => clearTimeout(timer);
     }
@@ -40,3 +40,4 @@ const Login = () => {
 };
 
 export default Login;
+
