@@ -67,7 +67,7 @@ export const FirstTimeBuyerQuestion = ({
       
       {/* Display feedback message if an option is selected */}
       {value !== null && (
-        <div className="mt-4 p-4 border border-[#fef9be] rounded-md bg-black text-[#fef9be]">
+        <div className="mt-4 feedback-box">
           <p className="font-medium">{getFeedbackMessage()}</p>
         </div>
       )}
