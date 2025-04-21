@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useLanguage } from "@/contexts/LanguageContext";
@@ -19,7 +20,8 @@ import {
 } from "@/components/ui/select";
 import { Label } from "@/components/ui/label";
 
-const FormContainer: React.FC = () => {
+// Use React.memo to prevent unnecessary renders
+const FormContainer: React.FC = React.memo(() => {
   const { language } = useLanguage();
   const { addClient, campaigns } = useData();
   const navigate = useNavigate();
@@ -88,11 +90,23 @@ const FormContainer: React.FC = () => {
     navigate('/documents');
   };
 
+  // Use stable keys based on form stage to prevent unnecessary remounts
+  const getStableKey = (stage: string) => {
+    switch(stage) {
+      case 'initialInfo': return 'stable-initial-info-form-1';
+      case 'questions': return 'stable-questions-form-1';
+      case 'summary': return 'stable-summary-form-1';
+      default: return `stable-form-${stage}-1`;
+    }
+  };
+
   const renderFormContent = () => {
+    const stableKey = getStableKey(formStage);
+    
     switch (formStage) {
       case 'initialInfo':
         return (
-          <>
+          <div key={stableKey}>
             <InitialInfoForm 
               formData={formData}
               onFormDataChange={handleFormDataChange}
@@ -121,16 +135,18 @@ const FormContainer: React.FC = () => {
                 </SelectContent>
               </Select>
             </div>
-          </>
+          </div>
         );
       
       case 'questions':
         return (
-          <FormQuestions 
-            initialData={formData}
-            onComplete={handleFormComplete}
-            onBack={() => setFormStage('initialInfo')}
-          />
+          <div key={stableKey}>
+            <FormQuestions 
+              initialData={formData}
+              onComplete={handleFormComplete}
+              onBack={() => setFormStage('initialInfo')}
+            />
+          </div>
         );
       
       case 'summary':
@@ -138,10 +154,12 @@ const FormContainer: React.FC = () => {
         console.log("Rendering summary with data:", summaryData);
         
         return (
-          <SummaryOutcome 
-            formData={summaryData}
-            onProceedToDocuments={handleProceedToDocuments} 
-          />
+          <div key={stableKey}>
+            <SummaryOutcome 
+              formData={summaryData}
+              onProceedToDocuments={handleProceedToDocuments} 
+            />
+          </div>
         );
       
       default:
@@ -152,12 +170,10 @@ const FormContainer: React.FC = () => {
   return (
     <div className="max-w-5xl mx-auto px-4 py-8 md:py-12 space-y-8 animate-fade-in bg-gradient-to-b from-background to-background/95">
       <FormHeader />
-      
-      <div key={`form-stage-${formStage}-${Date.now()}`} className="form-container">
-        {renderFormContent()}
-      </div>
+      {renderFormContent()}
     </div>
   );
-};
+});
 
+FormContainer.displayName = "FormContainer";
 export default FormContainer;

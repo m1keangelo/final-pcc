@@ -6,9 +6,10 @@ import { Textarea } from "@/components/ui/textarea";
 import QuestionContainer from "@/components/form/QuestionContainer";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { ArrowLeft, ArrowRight } from "lucide-react";
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState, useRef, useCallback } from "react";
 
-export const ContactInfoQuestion = ({
+// Use React.memo to prevent unnecessary re-renders
+const ContactInfoQuestion = ({
   name,
   phone,
   email,
@@ -75,7 +76,20 @@ export const ContactInfoQuestion = ({
     }
   };
   
-  const handlePhoneChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  // Use memoized handlers to prevent unnecessary re-renders
+  const handleNameChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+    onChangeName(e.target.value);
+  }, [onChangeName]);
+  
+  const handleEmailChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+    onChangeEmail(e.target.value);
+  }, [onChangeEmail]);
+  
+  const handleCommentsChange = useCallback((e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    onChangeComments(e.target.value);
+  }, [onChangeComments]);
+  
+  const handlePhoneChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
     const cleaned = value.replace(/\D/g, '');
     onChangePhone(cleaned);
@@ -85,7 +99,7 @@ export const ContactInfoQuestion = ({
     if (formattedValue !== value) {
       setFormattedPhone(formattedValue);
     }
-  };
+  }, [onChangePhone]);
   
   return (
     <QuestionContainer
@@ -101,7 +115,7 @@ export const ContactInfoQuestion = ({
           <Input
             id="name"
             value={name}
-            onChange={(e) => onChangeName(e.target.value)}
+            onChange={handleNameChange}
             placeholder={t('q.contactInfo.namePlaceholder')}
             className="text-foreground"
             ref={nameInputRef}
@@ -128,7 +142,7 @@ export const ContactInfoQuestion = ({
             id="email"
             type="email"
             value={email}
-            onChange={(e) => onChangeEmail(e.target.value)}
+            onChange={handleEmailChange}
             placeholder={t('q.contactInfo.emailPlaceholder')}
             className="text-foreground"
             ref={emailInputRef}
@@ -140,7 +154,7 @@ export const ContactInfoQuestion = ({
           <Textarea
             id="comments"
             value={comments}
-            onChange={(e) => onChangeComments(e.target.value)}
+            onChange={handleCommentsChange}
             placeholder={t('q.contactInfo.commentsPlaceholder')}
             rows={4}
             className="text-foreground"
@@ -167,4 +181,4 @@ export const ContactInfoQuestion = ({
   );
 };
 
-export default ContactInfoQuestion;
+export default React.memo(ContactInfoQuestion);

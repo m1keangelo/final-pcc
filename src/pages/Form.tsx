@@ -1,15 +1,13 @@
 
-import React, { Suspense, useMemo } from 'react';
+import React from 'react';
 import { ErrorBoundary } from "@/components/ErrorBoundary";
 import FormContainer from "@/components/form/FormContainer";
 import { Skeleton } from '@/components/ui/skeleton';
 import { toast } from 'sonner';
 import { Card } from '@/components/ui/card';
 
-const Form: React.FC = () => {
-  // Generate a stable key to prevent re-renders that might cause focus issues
-  const stableKey = useMemo(() => 'form-container-stable-key', []);
-
+// Use React.memo to prevent unnecessary re-renders
+const Form: React.FC = React.memo(() => {
   const handleError = (error: Error) => {
     console.error("Form error:", error);
     toast.error("An error occurred with the form. Please try again.");
@@ -28,14 +26,14 @@ const Form: React.FC = () => {
           </div>}
           onError={handleError}
         >
-          <Suspense fallback={<Skeleton className="w-full h-[500px]" />}>
-            {/* Use a stable key and don't change it between renders */}
-            <FormContainer key={stableKey} />
-          </Suspense>
+          <React.Suspense fallback={<Skeleton className="w-full h-[500px]" />}>
+            <FormContainer />
+          </React.Suspense>
         </ErrorBoundary>
       </Card>
     </div>
   );
-};
+});
 
+Form.displayName = "Form";
 export default Form;

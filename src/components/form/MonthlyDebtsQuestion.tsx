@@ -1,5 +1,5 @@
 
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, useCallback } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -8,7 +8,7 @@ import { FormState } from "@/types/form";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { ArrowLeft, ArrowRight, DollarSign } from "lucide-react";
 
-export const MonthlyDebtsQuestion = ({
+const MonthlyDebtsQuestion = ({
   value,
   onChange,
   onNext,
@@ -34,22 +34,22 @@ export const MonthlyDebtsQuestion = ({
     }
   }, []);
   
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleInputChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
     const val = e.target.value;
     // Keep only numbers, $ sign, commas and periods
     const cleanVal = val.replace(/[^0-9$,.]/g, '');
     setLocalValue(cleanVal);
     onChange(cleanVal);
-  };
+  }, [onChange]);
   
-  const getDebtLevel = (): 'low' | 'moderate' | 'high' => {
+  const getDebtLevel = useCallback((): 'low' | 'moderate' | 'high' => {
     const numericValue = parseFloat(localValue.replace(/[$,]/g, '')) || 0;
     if (numericValue < 500) return 'low';
     if (numericValue < 2000) return 'moderate';
     return 'high';
-  };
+  }, [localValue]);
   
-  const getFeedbackMessage = () => {
+  const getFeedbackMessage = useCallback(() => {
     const debtLevel = getDebtLevel();
     
     if (language === 'es') {
@@ -71,7 +71,7 @@ export const MonthlyDebtsQuestion = ({
           return "Seen it before — and fixed it before. Payoff plans, consolidation, or co-signers can flip your DTI. Let's talk strategy.";
       }
     }
-  };
+  }, [getDebtLevel, language]);
   
   return (
     <QuestionContainer
@@ -130,4 +130,4 @@ export const MonthlyDebtsQuestion = ({
   );
 };
 
-export default MonthlyDebtsQuestion;
+export default React.memo(MonthlyDebtsQuestion);

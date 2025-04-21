@@ -1,5 +1,5 @@
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { Button } from "@/components/ui/button";
 import { FormState } from "@/types/form";
 import { useLanguage } from "@/contexts/LanguageContext";
@@ -57,7 +57,7 @@ const FormQuestions = ({
     }
   }, [initialData]);
 
-  const handleNext = () => {
+  const handleNext = useCallback(() => {
     console.log("Current step:", currentStep, "of", totalSteps);
     
     if (currentStep < totalSteps) {
@@ -74,24 +74,24 @@ const FormQuestions = ({
       console.log("Form completed. Submitting data:", formData);
       onComplete(formData);
     }
-  };
+  }, [currentStep, totalSteps, formData, onComplete]);
 
-  const handleBack = () => {
+  const handleBack = useCallback(() => {
     if (currentStep > 1) {
       const prevStep = getPreviousStep(currentStep, formData);
       setCurrentStep(prevStep);
     } else if (onBack) {
       onBack();
     }
-  };
+  }, [currentStep, formData, onBack]);
 
-  const updateFormData = <K extends keyof FormState>(key: K, value: FormState[K]) => {
+  const updateFormData = useCallback(<K extends keyof FormState>(key: K, value: FormState[K]) => {
     setFormData(prev => {
       const updated = { ...prev, [key]: value };
       console.log(`Updated ${String(key)}:`, value);
       return updated;
     });
-  };
+  }, []);
 
   return (
     <div className="animate-fade-in">

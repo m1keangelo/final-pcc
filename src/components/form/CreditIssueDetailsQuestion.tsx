@@ -1,5 +1,5 @@
 
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, useCallback } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -9,7 +9,7 @@ import { FormState } from "@/types/form";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 
-export const CreditIssueDetailsQuestion = ({
+const CreditIssueDetailsQuestion = ({
   type,
   year,
   amount,
@@ -56,7 +56,7 @@ export const CreditIssueDetailsQuestion = ({
     }
   }, [type, year]);
   
-  const handleYearChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleYearChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
     const val = e.target.value;
     setYearInput(val);
     
@@ -67,9 +67,9 @@ export const CreditIssueDetailsQuestion = ({
     } else {
       onChangeYear(null);
     }
-  };
+  }, [onChangeYear]);
   
-  const handleAmountChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleAmountChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
     const val = e.target.value;
     setAmountInput(val);
     
@@ -79,7 +79,11 @@ export const CreditIssueDetailsQuestion = ({
     } else {
       onChangeAmount(null);
     }
-  };
+  }, [onChangeAmount]);
+  
+  const handleTypeChange = useCallback((value: string) => {
+    onChangeType(value as FormState['creditIssueType']);
+  }, [onChangeType]);
   
   const currentYear = new Date().getFullYear();
   
@@ -94,7 +98,7 @@ export const CreditIssueDetailsQuestion = ({
       <div className="space-y-6">
         <div>
           <Label htmlFor="creditIssueType" className="mb-2 block text-gallomodern-100">{t('q.creditIssueDetails.typeLabel')}</Label>
-          <Select value={type || ""} onValueChange={(value) => onChangeType(value as FormState['creditIssueType'])}>
+          <Select value={type || ""} onValueChange={handleTypeChange}>
             <SelectTrigger id="creditIssueType" className="w-full text-foreground bg-background/80">
               <SelectValue placeholder={t('q.creditIssueDetails.typePlaceholder')} />
             </SelectTrigger>
@@ -165,4 +169,4 @@ export const CreditIssueDetailsQuestion = ({
   );
 };
 
-export default CreditIssueDetailsQuestion;
+export default React.memo(CreditIssueDetailsQuestion);
