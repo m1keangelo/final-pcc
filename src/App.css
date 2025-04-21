@@ -124,12 +124,5 @@
   color: white !important;
 }
 
-/* Feedback box styling */
-.feedback-box {
-  background-color: #000000;
-  border: 1px solid #fcf8c4;
-  border-radius: 0.5rem;
-  padding: 1rem;
-  color: #fcf8c4;
-  margin-top: 1rem;
-}
+/* Note: Feedback box styling is now defined in index.css for consistency */
+

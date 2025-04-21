@@ -1,3 +1,4 @@
+
 import { Button } from "@/components/ui/button";
 import QuestionContainer from "@/components/form/QuestionContainer";
 import { FormState } from "@/types/form";
@@ -56,11 +57,11 @@ export const DownPaymentAssistanceQuestion = ({
         >
           {t('q.assistance.no')}
         </Button>
-        
-        {value !== null && (
-          <FeedbackBox message={getFeedbackMessage()} />
-        )}
       </div>
+      
+      {value !== null && (
+        <FeedbackBox message={getFeedbackMessage()} />
+      )}
       
       <div className="mt-8 flex justify-between">
         <Button

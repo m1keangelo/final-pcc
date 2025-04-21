@@ -7,6 +7,7 @@ import QuestionContainer from "@/components/form/QuestionContainer";
 import { FormState } from "@/types/form";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { ArrowLeft, ArrowRight, DollarSign } from "lucide-react";
+import FeedbackBox from "./FeedbackBox";
 
 export const DownPaymentAmountQuestion = ({
   value,
@@ -82,9 +83,7 @@ export const DownPaymentAmountQuestion = ({
             {language === 'en' ? 'Slide to adjust your down payment amount' : 'Desliza para ajustar el monto de tu pago inicial'}
           </div>
           
-          <div className="mt-4 p-4 border border-[#fef9be] rounded-md bg-black text-[#fef9be]">
-            <p className="font-medium">{getFeedbackMessage()}</p>
-          </div>
+          <FeedbackBox message={getFeedbackMessage()} />
         </div>
       </div>
       
