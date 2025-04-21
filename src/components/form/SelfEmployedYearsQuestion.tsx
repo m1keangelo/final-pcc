@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Slider } from "@/components/ui/slider";
@@ -101,8 +100,8 @@ export const SelfEmployedYearsQuestion = ({
         </div>
         
         {/* Display feedback message */}
-        <div className="mt-4 p-4 rounded-md glass-card border border-gallomodern-500/30 shadow-inner bg-gradient-to-br from-gallomodern-900/20 to-black/30">
-          <p className="font-medium text-gallomodern-100">{getFeedbackMessage()}</p>
+        <div className="mt-4 p-4 border border-[#fcf8c4] rounded-md bg-black text-[#fcf8c4]">
+          <p className="font-medium">{getFeedbackMessage()}</p>
         </div>
         
         {sliderValue < 2 && (

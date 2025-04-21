@@ -1,4 +1,3 @@
-
 import { Button } from "@/components/ui/button";
 import QuestionContainer from "@/components/form/QuestionContainer";
 import { FormState } from "@/types/form";
@@ -22,17 +21,14 @@ export const FirstTimeBuyerQuestion = ({
 }) => {
   const { t, language } = useLanguage();
   
-  // Define the feedback messages based on selection
   const getFeedbackMessage = () => {
     if (language === 'es') {
-      // Spanish feedback messages
       if (value === true) {
         return "Ser primerizo no es malo. De hecho, hay beneficios especiales, ayudas y programas solo para ti. Nosotros te ayudamos a aprovechar todo eso. Lo hacemos juntos, paso a paso.";
       } else if (value === false) {
         return "La experiencia vale oro. Aprendemos de lo que ya viviste, mejoramos lo que falló y usamos lo que funcionó. Ya sabes cómo se mueve esto. Vamos a llevarlo al siguiente nivel.";
       }
     } else {
-      // English feedback messages
       if (value === true) {
         return "First-time doesn't mean clueless — it means full access to exclusive perks, grants, and programs. We'll make sure you use every tool on the board. Let's unlock them together.";
       } else if (value === false) {
@@ -65,9 +61,8 @@ export const FirstTimeBuyerQuestion = ({
         </Button>
       </div>
       
-      {/* Display feedback message if an option is selected */}
       {value !== null && (
-        <div className="mt-4 p-4 border border-[#fef9be] rounded-md bg-black text-[#fef9be]">
+        <div className="mt-4 p-4 border border-[#fcf8c4] rounded-md bg-black text-[#fcf8c4]">
           <p className="font-medium">{getFeedbackMessage()}</p>
         </div>
       )}

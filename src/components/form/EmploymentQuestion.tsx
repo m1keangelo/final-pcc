@@ -1,4 +1,3 @@
-
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import QuestionContainer from "@/components/form/QuestionContainer";
@@ -29,25 +28,19 @@ export const EmploymentQuestion = ({
   const { t, language } = useLanguage();
   const [showOtherInput, setShowOtherInput] = useState(value === 'other');
   
-  // Handle the visibility of the "other" text field
   useEffect(() => {
     setShowOtherInput(value === 'other');
   }, [value]);
   
-  // Function to check if the form can proceed
   const isFormValid = () => {
-    // If "other" is selected, require the details field
     if (value === 'other') {
       return !!otherEmploymentDetails?.trim();
     }
-    // For other options, just require a selection
     return !!value;
   };
   
-  // Define feedback messages based on employment type selection
   const getFeedbackMessage = () => {
     if (language === 'es') {
-      // Spanish feedback messages
       switch(value) {
         case 'W-2':
           return "Fácil de manejar. Tu ingreso estable ayuda bastante. Solo mándanos tu colilla de pago más reciente y empezamos el proceso.";
@@ -63,7 +56,6 @@ export const EmploymentQuestion = ({
           return "";
       }
     } else {
-      // English feedback messages
       switch(value) {
         case 'W-2':
           return "Simple setup — your consistent income makes underwriting smooth. Send us your latest pay stub and we'll get the wheels moving.";
@@ -121,7 +113,6 @@ export const EmploymentQuestion = ({
           {t('q.employment.other')}
         </Button>
         
-        {/* Show text input for "other" option */}
         {showOtherInput && onChangeOtherDetails && (
           <div className="mt-2">
             <Input
@@ -134,9 +125,8 @@ export const EmploymentQuestion = ({
         )}
       </div>
       
-      {/* Display feedback message if an option is selected */}
       {value && (
-        <div className="mt-4 p-4 border border-[#fef9be] rounded-md bg-black text-[#fef9be]">
+        <div className="mt-4 p-4 border border-[#fcf8c4] rounded-md bg-black text-[#fcf8c4]">
           <p className="font-medium">{getFeedbackMessage()}</p>
         </div>
       )}
