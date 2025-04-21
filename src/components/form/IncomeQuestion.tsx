@@ -72,26 +72,24 @@ export const IncomeQuestion = ({
       <div className="space-y-4">
         <div className="flex items-center space-x-4">
           <div className="w-1/2">
-            <label htmlFor="income" className="block text-sm font-medium leading-6 text-white">{t('q.income.amountLabel')}</label>
-            <div className="relative mt-2 rounded-md shadow-sm">
-              <Input
-                type="number"
-                name="income"
-                id="income"
-                className="text-black"
-                placeholder={t('q.income.placeholder')}
-                value={inputValue}
-                onChange={(e) => {
-                  setInputValue(e.target.value);
-                  onChange(e.target.value);
-                }}
-              />
-            </div>
+            <label htmlFor="income" className="block text-sm font-medium text-white/80 mb-2">{t('q.income.amountLabel')}</label>
+            <Input
+              type="number"
+              name="income"
+              id="income"
+              className="text-white bg-background/80 border-gallomodern-500/30 focus:ring-gallomodern-400 focus:border-gallomodern-400 placeholder-white/50"
+              placeholder={t('q.income.placeholder')}
+              value={inputValue}
+              onChange={(e) => {
+                setInputValue(e.target.value);
+                onChange(e.target.value);
+              }}
+            />
           </div>
 
           <div className="w-1/2">
             <Select onValueChange={onChangeIncomeType} defaultValue={incomeType}>
-              <SelectTrigger className="w-full">
+              <SelectTrigger className="w-full text-white">
                 <SelectValue placeholder={t('q.income.typeLabel')} />
               </SelectTrigger>
               <SelectContent>
