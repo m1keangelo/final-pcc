@@ -2,7 +2,7 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import QuestionContainer from "@/components/form/QuestionContainer";
-import { FormState } from "@/types/form";
+import { FormState } from "@/types/formState";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 import { useState, useEffect } from "react";
