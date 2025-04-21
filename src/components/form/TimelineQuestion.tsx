@@ -5,6 +5,7 @@ import QuestionContainer from "@/components/form/QuestionContainer";
 import { FormState } from "@/types/form";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { ArrowLeft, ArrowRight } from "lucide-react";
+import FeedbackBox from "./FeedbackBox";
 
 const TimelineQuestion = ({
   value,
@@ -99,9 +100,7 @@ const TimelineQuestion = ({
       </div>
       
       {value && (
-        <div className="mt-6 feedback-box">
-          <p className="font-medium">{getFeedbackMessage()}</p>
-        </div>
+        <FeedbackBox message={getFeedbackMessage()} />
       )}
       
       <div className="mt-8 flex justify-between">

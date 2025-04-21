@@ -8,6 +8,7 @@ import QuestionContainer from "@/components/form/QuestionContainer";
 import { FormState } from "@/types/form";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { ArrowLeft, ArrowRight, DollarSign } from "lucide-react";
+import FeedbackBox from "./FeedbackBox";
 
 const IncomeQuestion = ({
   value,
@@ -154,15 +155,11 @@ const IncomeQuestion = ({
         </div>
         
         {inputValue && (
-          <div className="mt-4 feedback-box">
-            <p className="font-medium">{getFeedbackMessage()}</p>
-          </div>
+          <FeedbackBox message={getFeedbackMessage()} />
         )}
         
         {incomeType && (
-          <div className="mt-4 feedback-box">
-            <p className="font-medium">{getIncomeTypeFeedbackMessage()}</p>
-          </div>
+          <FeedbackBox message={getIncomeTypeFeedbackMessage()} />
         )}
       </div>
       

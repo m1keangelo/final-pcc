@@ -7,6 +7,7 @@ import QuestionContainer from "@/components/form/QuestionContainer";
 import { FormState } from "@/types/form";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { ArrowLeft, ArrowRight } from "lucide-react";
+import FeedbackBox from "./FeedbackBox";
 
 const SelfEmployedYearsQuestion = ({
   value,
@@ -84,9 +85,7 @@ const SelfEmployedYearsQuestion = ({
           </div>
           
           {sliderValue > 0 && (
-            <div className="mt-4 feedback-box">
-              <p className="font-medium">{getFeedbackMessage()}</p>
-            </div>
+            <FeedbackBox message={getFeedbackMessage()} />
           )}
         </div>
       </div>
