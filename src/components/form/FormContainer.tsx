@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useLanguage } from "@/contexts/LanguageContext";
@@ -47,7 +46,6 @@ const FormContainer: React.FC = () => {
     console.log('Form completion triggered with data:', completedData);
     
     try {
-      // Create a complete data object with all form information
       const finalData = {
         ...completedData,
         name: formData.name || completedData.name,
@@ -59,11 +57,9 @@ const FormContainer: React.FC = () => {
       
       console.log('Final data before setting to state:', finalData);
       
-      // First save complete data to state for the summary page
       setFormCompleteData(finalData);
       setFormData(finalData);
       
-      // Send data to backend
       const transformedData = transformFormData(finalData, selectedAgent);
       console.log('Transformed client data for backend:', transformedData);
       
@@ -72,12 +68,10 @@ const FormContainer: React.FC = () => {
         campaign: selectedCampaign
       });
       
-      // Show success message
       toast.success(language === 'en' ? 
         'Your information has been submitted successfully!' : 
         '¡Su información ha sido enviada con éxito!');
       
-      // Then change stage - this needs to happen AFTER data is set
       console.log('Changing form stage to summary');
       setTimeout(() => {
         setFormStage('summary');
@@ -140,7 +134,6 @@ const FormContainer: React.FC = () => {
         );
       
       case 'summary':
-        // Use either the complete form data or the current form data
         const summaryData = formCompleteData || formData;
         console.log("Rendering summary with data:", summaryData);
         
@@ -160,7 +153,6 @@ const FormContainer: React.FC = () => {
     <div className="max-w-5xl mx-auto px-4 py-8 md:py-12 space-y-8 animate-fade-in bg-gradient-to-b from-background to-background/95">
       <FormHeader />
       
-      {/* Using a unique key for each form stage to force re-render */}
       <div key={`form-stage-${formStage}-${Date.now()}`} className="form-container">
         {renderFormContent()}
       </div>
