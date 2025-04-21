@@ -106,9 +106,11 @@ export const CreditScoreQuestion = ({
             {getCreditCategory(sliderValue)}
           </div>
           
-          <div className="mt-4 feedback-box">
-            <p className="font-medium">{getFeedbackMessage(sliderValue)}</p>
-          </div>
+          {value && (
+            <div className="mt-4 feedback-box">
+              <p className="font-medium">{getFeedbackMessage(sliderValue)}</p>
+            </div>
+          )}
         </div>
       </div>
       
