@@ -1,5 +1,5 @@
 
-import React, { useEffect } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -26,9 +26,37 @@ const InitialInfoForm: React.FC<InitialInfoFormProps> = ({
   onNext,
 }) => {
   const { language } = useLanguage();
+  const [formattedPhone, setFormattedPhone] = useState("");
+
+  const formatPhoneNumber = useCallback((value: string) => {
+    const cleaned = value.replace(/\D/g, '');
+    const truncated = cleaned.slice(0, 10);
+    
+    if (truncated.length === 0) {
+      return "";
+    } else if (truncated.length <= 3) {
+      return `(${truncated}`;
+    } else if (truncated.length <= 6) {
+      return `(${truncated.slice(0, 3)}) ${truncated.slice(3)}`;
+    } else {
+      return `(${truncated.slice(0, 3)}) ${truncated.slice(3, 6)}-${truncated.slice(6)}`;
+    }
+  }, []);
+
+  useEffect(() => {
+    if (formData.phone) {
+      setFormattedPhone(formatPhoneNumber(formData.phone));
+    }
+  }, [formData.phone, formatPhoneNumber]);
 
   const handleInitialInfoChange = (field: keyof FormState, value: string) => {
     onFormDataChange(field, value);
+  };
+
+  const handlePhoneChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    const cleaned = value.replace(/\D/g, '');
+    onFormDataChange("phone", cleaned);
   };
 
   const handleNextFromInitialInfo = () => {
@@ -115,10 +143,8 @@ const InitialInfoForm: React.FC<InitialInfoFormProps> = ({
               </Label>
               <Input
                 id="phone"
-                value={formData.phone}
-                onChange={(e) =>
-                  handleInitialInfoChange("phone", e.target.value)
-                }
+                value={formattedPhone}
+                onChange={handlePhoneChange}
                 placeholder={
                   language === "en"
                     ? "(123) 456-7890"

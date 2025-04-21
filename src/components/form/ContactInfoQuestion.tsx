@@ -1,5 +1,6 @@
 
-import React, { useState, useRef, useEffect, useCallback, memo } from "react";
+import React, { useState, useRef, useEffect, useCallback } from "react";
+import { memo } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -59,8 +60,10 @@ const ContactInfoQuestion = ({
     const cleaned = value.replace(/\D/g, '');
     const truncated = cleaned.slice(0, 10);
     
-    if (truncated.length <= 3) {
-      return truncated;
+    if (truncated.length === 0) {
+      return "";
+    } else if (truncated.length <= 3) {
+      return `(${truncated}`;
     } else if (truncated.length <= 6) {
       return `(${truncated.slice(0, 3)}) ${truncated.slice(3)}`;
     } else {
@@ -68,13 +71,10 @@ const ContactInfoQuestion = ({
     }
   }, []);
   
-  // Initialize formatted phone value when component mounts or phone prop changes
+  // Update formatted phone whenever raw phone changes
   useEffect(() => {
-    if (phone) {
-      setFormattedPhone(formatPhoneNumber(phone));
-    } else {
-      setFormattedPhone("");
-    }
+    const formatted = formatPhoneNumber(phone);
+    setFormattedPhone(formatted);
   }, [phone, formatPhoneNumber]);
   
   // Use memoized handlers to prevent unnecessary re-renders
@@ -97,10 +97,7 @@ const ContactInfoQuestion = ({
     
     // Update the parent component with just digits
     onChangePhone(cleaned);
-    
-    // Update local state with formatted value for display
-    setFormattedPhone(formatPhoneNumber(cleaned));
-  }, [onChangePhone, formatPhoneNumber]);
+  }, [onChangePhone]);
   
   return (
     <QuestionContainer
