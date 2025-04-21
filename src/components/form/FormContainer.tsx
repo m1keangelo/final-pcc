@@ -48,9 +48,9 @@ const FormContainer: React.FC = () => {
       // Create a complete data object with all form information
       const finalData = {
         ...completedData,
-        name: formData.name,
-        phone: formData.phone,
-        email: formData.email,
+        name: formData.name || completedData.name,
+        phone: formData.phone || completedData.phone,
+        email: formData.email || completedData.email,
         agent: selectedAgent,
         campaign: selectedCampaign 
       };
@@ -76,10 +76,7 @@ const FormContainer: React.FC = () => {
       
       // Then change stage - this needs to happen AFTER data is set
       console.log('Changing form stage to summary');
-      setTimeout(() => {
-        setFormStage('summary');
-      }, 100);
-      
+      setFormStage('summary');
     } catch (error) {
       console.error("Error during form completion:", error);
       toast.error(language === 'en' ? 
@@ -92,9 +89,7 @@ const FormContainer: React.FC = () => {
     navigate('/documents');
   };
 
-  const renderForm = () => {
-    console.log("Rendering form content for stage:", formStage);
-    
+  const renderFormContent = () => {
     switch (formStage) {
       case 'initialInfo':
         return (
@@ -140,7 +135,6 @@ const FormContainer: React.FC = () => {
         );
       
       case 'summary':
-        console.log("Rendering SummaryOutcome with formData:", formData);
         return (
           <SummaryOutcome 
             formData={formData}
@@ -156,10 +150,10 @@ const FormContainer: React.FC = () => {
   return (
     <div className="max-w-5xl mx-auto px-4 py-8 md:py-12 space-y-8 animate-fade-in bg-gradient-to-b from-background to-background/95">
       <FormHeader />
-
-      {/* Using a keyed div to force re-render when form stage changes */}
-      <div key={`form-stage-${formStage}-${Date.now()}`} className="form-container">
-        {renderForm()}
+      
+      {/* Using a unique key for each form stage to force re-render */}
+      <div key={`form-stage-${formStage}`} className="form-container">
+        {renderFormContent()}
       </div>
     </div>
   );

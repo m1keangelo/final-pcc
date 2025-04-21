@@ -29,7 +29,7 @@ const SummaryOutcome = ({ formData, onProceedToDocuments }: SummaryOutcomeProps)
   
   useEffect(() => {
     console.log("SummaryOutcome mounted with formData:", formData);
-  }, []);
+  }, [formData]);
   
   // Calculate all needed data for the summary
   const clientRating = calculateClientRating(formData);
