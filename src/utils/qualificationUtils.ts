@@ -1,8 +1,22 @@
 
 import { FormState } from "@/types/form";
 import { ClientRating } from "@/types/clientRating";
-import { calculateClientRating } from "@/utils/ratingCalculator";
+import { calculateClientRating as calculateRating } from "@/utils/ratingCalculator";
 import { isQualified, getQualificationCategory } from "@/utils/qualificationChecker";
+
+// Re-export the calculate function to maintain backward compatibility
+export const calculateClientRating = calculateRating;
+
+// Define RecommendationType for use in Recommendations
+export type RecommendationType = 'credit' | 'downPayment' | 'employment' | 'identity' | 'documentation' | 'timeline' | 'other';
+
+// Define the Recommendation interface
+export interface Recommendation {
+  type: RecommendationType;
+  title: string;
+  description: string;
+  priority?: 'high' | 'medium' | 'low';
+}
 
 // Get qualification summary text based on user's form data
 export const getQualificationSummary = (state: FormState, language: 'en' | 'es'): string => {
@@ -29,53 +43,92 @@ export const getQualificationSummary = (state: FormState, language: 'en' | 'es')
 };
 
 // Get recommendations based on user's form data
-export const getRecommendations = (state: FormState, language: 'en' | 'es'): string[] => {
-  const recommendations: string[] = [];
+export const getRecommendations = (state: FormState, language: 'en' | 'es'): Recommendation[] => {
+  const recommendations: Recommendation[] = [];
   const rating = calculateClientRating(state);
   
   // Employment recommendations
   if (state.employmentType === '1099' && state.selfEmployedYears && state.selfEmployedYears < 2) {
-    recommendations.push(
-      language === 'es' 
-        ? "Continúe manteniendo registros consistentes de su negocio. Los prestamistas generalmente buscan al menos 2 años completos de trabajo por cuenta propia."
-        : "Continue maintaining consistent records for your business. Lenders typically look for at least 2 full years of self-employment."
-    );
+    recommendations.push({
+      type: 'employment',
+      title: language === 'es' ? "Continúe manteniendo registros de su negocio" : "Continue maintaining business records",
+      description: language === 'es' 
+        ? "Los prestamistas generalmente buscan al menos 2 años completos de trabajo por cuenta propia."
+        : "Lenders typically look for at least 2 full years of self-employment.",
+      priority: 'medium'
+    });
   }
   
   // Credit recommendations
   if (state.creditCategory === 'poor' || state.creditCategory === 'fair') {
-    recommendations.push(
-      language === 'es'
-        ? "Trabaje en mejorar su puntaje crediticio. Puede considerar un préstamo FHA, que tiene requisitos crediticios más flexibles."
-        : "Work on improving your credit score. Consider an FHA loan, which has more flexible credit requirements."
-    );
+    recommendations.push({
+      type: 'credit',
+      title: language === 'es' ? "Mejore su puntaje crediticio" : "Improve your credit score",
+      description: language === 'es'
+        ? "Considere un préstamo FHA, que tiene requisitos crediticios más flexibles."
+        : "Consider an FHA loan, which has more flexible credit requirements.",
+      priority: 'high'
+    });
   }
   
   // Down payment recommendations
   if (!state.downPaymentSaved || (state.downPaymentAmount && state.downPaymentAmount < 20000)) {
-    recommendations.push(
-      language === 'es'
-        ? "Explore programas de asistencia para el pago inicial. Hay muchos programas federales, estatales y locales disponibles."
-        : "Explore down payment assistance programs. There are many federal, state, and local programs available."
-    );
+    recommendations.push({
+      type: 'downPayment',
+      title: language === 'es' ? "Explore programas de asistencia" : "Explore assistance programs",
+      description: language === 'es'
+        ? "Hay muchos programas federales, estatales y locales disponibles para asistencia de pago inicial."
+        : "There are many federal, state, and local down payment assistance programs available.",
+      priority: state.downPaymentAmount && state.downPaymentAmount > 10000 ? 'medium' : 'high'
+    });
   }
   
   // Credit issues recommendations
   if (state.hasCreditIssues) {
-    recommendations.push(
-      language === 'es'
+    recommendations.push({
+      type: 'documentation',
+      title: language === 'es' ? "Prepare documentación de explicación" : "Prepare explanation documentation",
+      description: language === 'es'
         ? "Prepare una carta de explicación que detalle las circunstancias de sus problemas crediticios anteriores."
-        : "Prepare a letter of explanation detailing the circumstances of your previous credit issues."
-    );
+        : "Prepare a letter of explanation detailing the circumstances of your previous credit issues.",
+      priority: 'high'
+    });
+  }
+  
+  // Identity documentation
+  if (state.idType === 'ITIN') {
+    recommendations.push({
+      type: 'identity',
+      title: language === 'es' ? "Opciones limitadas con ITIN" : "Limited options with ITIN",
+      description: language === 'es'
+        ? "Tenga en cuenta que algunos programas de préstamos pueden no estar disponibles con un ITIN. Prepare documentación adicional."
+        : "Be aware that some loan programs may not be available with an ITIN. Prepare additional documentation.",
+      priority: 'medium'
+    });
+  }
+  
+  // Timeline recommendations
+  if (state.timeline === 'immediately' && state.hasCreditIssues) {
+    recommendations.push({
+      type: 'timeline',
+      title: language === 'es' ? "Reconsidere su línea de tiempo" : "Reconsider your timeline",
+      description: language === 'es'
+        ? "Dadas sus circunstancias crediticias, podría ser beneficioso esperar unos meses para mejorar su perfil."
+        : "Given your credit circumstances, it might be beneficial to wait a few months to improve your profile.",
+      priority: 'medium'
+    });
   }
   
   // Generic recommendations if none of the above apply
   if (recommendations.length === 0) {
-    recommendations.push(
-      language === 'es'
-        ? "Mantega sus finanzas estables y evite hacer grandes compras antes del cierre."
-        : "Keep your finances stable and avoid making large purchases before closing."
-    );
+    recommendations.push({
+      type: 'other',
+      title: language === 'es' ? "Mantenga sus finanzas estables" : "Keep your finances stable",
+      description: language === 'es'
+        ? "Evite hacer grandes compras o abrir nuevas líneas de crédito antes del cierre."
+        : "Avoid making large purchases or opening new lines of credit before closing.",
+      priority: 'low'
+    });
   }
   
   return recommendations;

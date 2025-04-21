@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from 'react';
 import { FormState } from '@/types/form';
 import { useLanguage } from '@/contexts/LanguageContext';
@@ -28,11 +27,9 @@ const SummaryOutcome = ({ formData, onProceedToDocuments }: SummaryOutcomeProps)
   const [showAnimation, setShowAnimation] = useState(true);
   const [loaded, setLoaded] = useState(false);
   
-  // Debug logs to track formData and component lifecycle
   useEffect(() => {
     console.log("SummaryOutcome mounted with formData:", formData);
     
-    // Mark as loaded after a short delay to ensure data is processed
     const timer = setTimeout(() => {
       setLoaded(true);
     }, 100);
@@ -40,7 +37,6 @@ const SummaryOutcome = ({ formData, onProceedToDocuments }: SummaryOutcomeProps)
     return () => clearTimeout(timer);
   }, [formData]);
   
-  // Ensure we have valid form data before trying to calculate anything
   if (!formData || !formData.name) {
     console.warn("SummaryOutcome received incomplete form data");
     return (
@@ -53,7 +49,6 @@ const SummaryOutcome = ({ formData, onProceedToDocuments }: SummaryOutcomeProps)
     );
   }
   
-  // Calculate all needed data for the summary
   const clientRating = calculateClientRating(formData);
   const qualificationSummary = getQualificationSummary(formData, language === 'en' ? 'en' : 'es');
   const recommendations = getRecommendations(formData, language === 'en' ? 'en' : 'es');
@@ -89,7 +84,6 @@ const SummaryOutcome = ({ formData, onProceedToDocuments }: SummaryOutcomeProps)
         {language === 'en' ? 'Loan Prequalification Results' : 'Resultados de Precalificación de Préstamo'}
       </h2>
 
-      {/* Animation Area */}
       {showAnimation && (
         <div className="flex justify-center mb-6">
           <div className="relative w-64 h-64 rounded-lg overflow-hidden border-2 border-gallopurple">
@@ -109,36 +103,29 @@ const SummaryOutcome = ({ formData, onProceedToDocuments }: SummaryOutcomeProps)
         </div>
       )}
 
-      {/* Qualification Summary Banner */}
       <Alert className={`border-l-4 ${isQualified ? 'border-l-green-500 bg-green-50' : 'border-l-orange-500 bg-orange-50'} dark:bg-opacity-10`}>
         <AlertTitle className={`text-xl font-semibold ${getSummaryTextColorClass(qualificationSummary)}`}>
           {qualificationSummary}
         </AlertTitle>
       </Alert>
 
-      {/* Prequalification Results */}
       <PrequalificationResultsCard 
         formData={formData} 
         clientRating={clientRating} 
       />
 
-      {/* Qualification Analysis */}
       <QualificationAnalysisCard 
         formData={formData} 
         clientRating={clientRating}
         isQualified={isQualified}
       />
 
-      {/* Client Rating */}
       <ClientRatingCard clientRating={clientRating} />
 
-      {/* Positive Factors */}
       <PositiveFactorsCard positiveFactors={positiveFactors} />
 
-      {/* Recommendations */}
       <RecommendationsCard recommendations={recommendations} />
 
-      {/* Next Steps */}
       <NextStepsCard 
         onProceedToDocuments={onProceedToDocuments}
         onSendSummary={handleSendSummary}
