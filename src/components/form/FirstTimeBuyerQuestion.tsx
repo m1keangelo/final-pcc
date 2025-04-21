@@ -53,20 +53,21 @@ export const FirstTimeBuyerQuestion = ({
         <Button
           variant={value === true ? 'default' : 'outline'}
           onClick={() => onChange(true)}
+          className={value === true ? "bg-gradient-to-r from-neon-purple to-neon-blue text-white" : ""}
         >
           {t('q.firsttime.yes')}
         </Button>
         <Button
           variant={value === false ? 'default' : 'outline'}
           onClick={() => onChange(false)}
+          className={value === false ? "bg-gradient-to-r from-neon-purple to-neon-blue text-white" : ""}
         >
           {t('q.firsttime.no')}
         </Button>
       </div>
       
-      {/* Updated feedback box styling */}
       {value !== null && (
-        <div className="mt-4 bg-black/70 border border-yellow-500/30 rounded-lg p-3 text-yellow-100 text-sm shadow-md">
+        <div className="mt-6 bg-black/80 border border-yellow-400/30 rounded-lg p-4 text-yellow-300 shadow-lg">
           <p>{getFeedbackMessage()}</p>
         </div>
       )}
@@ -80,7 +81,10 @@ export const FirstTimeBuyerQuestion = ({
           <ArrowLeft className="mr-2 h-4 w-4" />
           {t('form.previous')}
         </Button>
-        <Button onClick={onNext}>
+        <Button 
+          onClick={onNext}
+          className="bg-gradient-to-r from-neon-purple to-neon-blue hover:opacity-90"
+        >
           {t('form.next')}
           <ArrowRight className="ml-2 h-4 w-4" />
         </Button>
