@@ -22,7 +22,6 @@ export const FirstTimeBuyerQuestion = ({
 }) => {
   const { t, language } = useLanguage();
   
-  // Define the feedback messages based on selection
   const getFeedbackMessage = () => {
     if (language === 'es') {
       // Spanish feedback messages
@@ -65,10 +64,10 @@ export const FirstTimeBuyerQuestion = ({
         </Button>
       </div>
       
-      {/* Display feedback message if an option is selected */}
+      {/* Updated feedback box styling */}
       {value !== null && (
-        <div className="mt-4 feedback-box">
-          <p className="font-medium">{getFeedbackMessage()}</p>
+        <div className="mt-4 bg-black/70 border border-yellow-500/30 rounded-lg p-3 text-yellow-100 text-sm shadow-md">
+          <p>{getFeedbackMessage()}</p>
         </div>
       )}
       

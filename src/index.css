@@ -161,30 +161,6 @@
     @apply bg-gradient-to-br from-neon-pink via-neon-purple to-neon-blue bg-clip-text text-transparent;
   }
 
-.feedback-box {
-  background: linear-gradient(to right, rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.9));
-  border: 1px solid rgba(252, 248, 196, 0.3);
-  border-radius: 0.75rem;
-  padding: 1rem;
-  color: #fcf8c4;
-  margin-top: 1.5rem;
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-  backdrop-filter: blur(12px);
-  animation: fadeIn 0.3s ease-out;
-}
-
-/* Apply hover effect to feedback boxes */
-.feedback-box:hover {
-  border-color: rgba(252, 248, 196, 0.5);
-  transform: translateY(-1px);
-  transition: all 0.2s ease;
-}
-
-@keyframes fadeIn {
-  from { opacity: 0; transform: translateY(10px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-
 .sidebar-menu {
   background: linear-gradient(
     135deg,
