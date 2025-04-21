@@ -1,5 +1,4 @@
-
-import { useState } from "react";
+import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Slider } from "@/components/ui/slider";
@@ -40,7 +39,6 @@ export const CreditScoreQuestion = ({
     onChange(numVal);
   };
   
-  // Define feedback message based on credit score range
   const getFeedbackMessage = (score: number) => {
     if (language === 'es') {
       if (score >= 760) {
@@ -108,8 +106,7 @@ export const CreditScoreQuestion = ({
             {getCreditCategory(sliderValue)}
           </div>
           
-          {/* Display feedback message based on credit score */}
-          <div className="mt-4 p-4 border border-[#fef9be] rounded-md bg-black text-[#fef9be]">
+          <div className="mt-4 p-4 feedback-box rounded-md">
             <p className="font-medium">{getFeedbackMessage(sliderValue)}</p>
           </div>
         </div>
