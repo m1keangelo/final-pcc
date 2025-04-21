@@ -126,4 +126,3 @@ const TimelineQuestion = ({
 };
 
 export default TimelineQuestion;
-

@@ -52,10 +52,10 @@ const translations = {
     'q.timeline.title': 'Homebuying Timeline',
     'q.timeline.question': 'How soon are you looking to buy a home?',
     'q.timeline.immediately': 'Immediately (I\'ve found a home)',
-    'q.timeline.3months': 'Within 3 months',
-    'q.timeline.3to6months': '3-6 months',
-    'q.timeline.6to12months': '6-12 months',
-    'q.timeline.exploring': 'Just exploring/Not sure',
+    'q.timeline.lessThan3Months': 'Within 3 months',
+    'q.timeline.3to6Months': '3-6 months',
+    'q.timeline.6to12Months': '6-12 months',
+    'q.timeline.justExploring': 'Just exploring/Not sure',
     
     // First-Time Buyer
     'q.firsttime.title': 'First-Time Homebuyer',
@@ -69,19 +69,17 @@ const translations = {
     'q.employment.question': 'What is your current employment situation?',
     'q.employment.w2': 'W-2 Employee',
     'q.employment.1099': '1099 Contractor',
+    'q.employment.selfEmployed': 'Self-Employed',
     'q.employment.retired': 'Retired',
     'q.employment.unemployed': 'Unemployed',
     'q.employment.other': 'Other',
     'q.employment.otherPlaceholder': 'Please specify your employment situation',
     
     // Self-Employment Years
-    'q.selfyears.title': 'Self-Employment History',
-    'q.selfyears.question': 'How long have you been self-employed? Have you been in business at least two years?',
-    'q.selfyears.yearsLabel': 'How many years self-employed?',
-    'q.selfyears.placeholder': 'Enter number of years',
-    'q.selfyears.warning': 'It can be harder to get a loan with less than 2 years of self-employment. You might need a co-signer or a special program.',
-    'q.selfyears.year': 'year',
-    'q.selfyears.years': 'years',
+    'q.selfEmployedYears.title': 'Self-Employment History',
+    'q.selfEmployedYears.question': 'How long have you been self-employed?',
+    'q.selfEmployedYears.year': 'year',
+    'q.selfEmployedYears.years': 'years',
     
     // Income
     'q.income.title': 'Income',
@@ -287,10 +285,10 @@ const translations = {
     'q.timeline.title': 'Plazo para Comprar Casa',
     'q.timeline.question': '¿Qué tan pronto busca comprar una casa?',
     'q.timeline.immediately': 'Inmediatamente (ya encontré una casa)',
-    'q.timeline.3months': 'Dentro de 3 meses',
-    'q.timeline.3to6months': '3-6 meses',
-    'q.timeline.6to12months': '6-12 meses',
-    'q.timeline.exploring': 'Solo explorando/No estoy seguro',
+    'q.timeline.lessThan3Months': 'Dentro de 3 meses',
+    'q.timeline.3to6Months': '3-6 meses',
+    'q.timeline.6to12Months': '6-12 meses',
+    'q.timeline.justExploring': 'Solo explorando/No estoy seguro',
     
     // First-Time Buyer
     'q.firsttime.title': 'Comprador de Primera Vez',
@@ -304,19 +302,17 @@ const translations = {
     'q.employment.question': '¿Cuál es su situación laboral actual?',
     'q.employment.w2': 'Empleado W-2',
     'q.employment.1099': 'Contratista 1099',
+    'q.employment.selfEmployed': 'Trabajador Independiente',
     'q.employment.retired': 'Jubilado',
     'q.employment.unemployed': 'Desempleado',
     'q.employment.other': 'Otro',
     'q.employment.otherPlaceholder': 'Por favor, especifique su situación laboral',
     
     // Self-Employment Years
-    'q.selfyears.title': 'Historial de Autoempleo',
-    'q.selfyears.question': '¿Hace cuánto trabaja por cuenta propia? ¿Lleva al menos dos años con su negocio?',
-    'q.selfyears.yearsLabel': '¿Cuántos años lleva trabajando por cuenta propia?',
-    'q.selfyears.placeholder': 'Ingrese número de años',
-    'q.selfyears.warning': 'Con menos de 2 años como autónomo es más difícil calificar. Podría necesitar un co-firmante o un programa especial.',
-    'q.selfyears.year': 'año',
-    'q.selfyears.years': 'años',
+    'q.selfEmployedYears.title': 'Historial de Autoempleo',
+    'q.selfEmployedYears.question': '¿Hace cuánto trabajas por cuenta propia?',
+    'q.selfEmployedYears.year': 'año',
+    'q.selfEmployedYears.years': 'años',
     
     // Income
     'q.income.title': 'Ingresos',
@@ -471,12 +467,12 @@ const translations = {
     'bugReport.title': 'Reportar un Error',
     'bugReport.description': 'Ayúdenos a mejorar reportando cualquier problema que encuentre',
     'bugReport.descriptionPlaceholder': 'Describa el error y los pasos para reproducirlo...',
-    'bugReport.screenshot': 'Captura de Pantalla (Opcional)',
-    'bugReport.uploadImage': 'Subir Imagen',
-    'bugReport.submitted': 'Reporte de Error Enviado',
-    'bugReport.thankYou': '¡Gracias por ayudarnos a mejorar!',
-    'bugReport.submitError': 'Hubo un error al enviar su reporte. Por favor intente de nuevo.',
-    'bugReport.descriptionRequired': 'Por favor proporcione una descripción del error.',
+    'suggestion.screenshot': 'Captura de Pantalla (Opcional)',
+    'suggestion.uploadImage': 'Subir Imagen',
+    'suggestion.submitted': 'Sugerencia Enviada',
+    'suggestion.thankYou': '¡Gracias por su sugerencia!',
+    'suggestion.submitError': 'Hubo un error al enviar su sugerencia. Por favor intente de nuevo.',
+    'suggestion.descriptionRequired': 'Por favor proporcione una descripción para su sugerencia.',
     
     // Common
     'common.cancel': 'Cancelar',
