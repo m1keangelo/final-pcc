@@ -19,7 +19,6 @@ import {
   SelectValue
 } from "@/components/ui/select";
 import { Label } from "@/components/ui/label";
-import { CAMPAIGNS } from "@/types/client";
 
 // Use React.memo to prevent unnecessary renders
 const FormContainer: React.FC = React.memo(() => {
@@ -28,8 +27,8 @@ const FormContainer: React.FC = React.memo(() => {
   const navigate = useNavigate();
 
   const [formStage, setFormStage] = useState<'initialInfo' | 'questions' | 'summary'>('initialInfo');
-  const [selectedAgent, setSelectedAgent] = useState<string>("SoReal Estate"); // Keep for data structure compatibility
-  const [selectedCampaign, setSelectedCampaign] = useState<string>("Facebook");
+  const [selectedAgent, setSelectedAgent] = useState<string>("SoReal Estate");
+  const [selectedCampaign, setSelectedCampaign] = useState<string>("Dennis Lopez Campaign");
   const [formCompleteData, setFormCompleteData] = useState<FormState | null>(null);
   
   const { formData, updateFormData, handleFormDataChange, setFormData } = useFormData();
@@ -127,8 +126,8 @@ const FormContainer: React.FC = React.memo(() => {
                 <SelectTrigger id="campaign-select" className="w-full mt-2 h-11 bg-popover">
                   <SelectValue placeholder={language === 'en' ? 'Select campaign' : 'Seleccionar campaña'} />
                 </SelectTrigger>
-                <SelectContent className="bg-popover">
-                  {CAMPAIGNS.map(campaign => (
+                <SelectContent>
+                  {campaigns.map(campaign => (
                     <SelectItem key={campaign} value={campaign}>
                       {campaign}
                     </SelectItem>

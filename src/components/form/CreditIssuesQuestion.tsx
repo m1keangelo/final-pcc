@@ -1,3 +1,4 @@
+
 import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -7,6 +8,7 @@ import { FormState } from "@/types/form";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 
+// Define the issue types for better type safety
 const issueTypes = [
   { id: "bankruptcy", label: "Bankruptcy" },
   { id: "foreclosure", label: "Foreclosure" },
@@ -39,9 +41,11 @@ export const CreditIssuesQuestion = ({
 }) => {
   const { t, language } = useLanguage();
   
+  // Initialize selected issues from creditIssues
   const [selectedIssues, setSelectedIssues] = useState<IssueFlags>(() => {
     const issueFlags: IssueFlags = {};
     
+    // Only extract boolean values for our known issue types
     issueTypes.forEach(({ id }) => {
       const value = creditIssues[id as keyof typeof creditIssues];
       if (typeof value === 'boolean') {
@@ -53,8 +57,10 @@ export const CreditIssuesQuestion = ({
   });
   
   useEffect(() => {
+    // Update parent form state while preserving details
     const newCreditIssues = { ...creditIssues };
     
+    // Update boolean flags
     Object.entries(selectedIssues).forEach(([key, value]) => {
       if (value !== undefined) {
         newCreditIssues[key] = value;
@@ -151,7 +157,7 @@ export const CreditIssuesQuestion = ({
                     </div>
                     
                     {isSelected && (
-                      <div className="mt-2 ml-6 p-4 border border-[#fcf8c4] rounded-md bg-black text-[#fcf8c4]">
+                      <div className="mt-2 ml-6 p-3 border border-[#fef9be] rounded-md bg-black text-[#fef9be]">
                         <p className="text-sm">{getFeedbackMessage(issue.id)}</p>
                       </div>
                     )}

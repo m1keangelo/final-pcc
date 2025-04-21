@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
@@ -81,7 +82,7 @@ export const DownPaymentAmountQuestion = ({
             {language === 'en' ? 'Slide to adjust your down payment amount' : 'Desliza para ajustar el monto de tu pago inicial'}
           </div>
           
-          <div className="mt-4 p-4 border border-[#fcf8c4] rounded-md bg-black text-[#fcf8c4]">
+          <div className="mt-4 p-4 border border-[#fef9be] rounded-md bg-black text-[#fef9be]">
             <p className="font-medium">{getFeedbackMessage()}</p>
           </div>
         </div>

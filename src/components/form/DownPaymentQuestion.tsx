@@ -1,3 +1,4 @@
+
 import { Button } from "@/components/ui/button";
 import QuestionContainer from "@/components/form/QuestionContainer";
 import { FormState } from "@/types/form";
@@ -58,7 +59,7 @@ export const DownPaymentQuestion = ({
       </div>
       
       {value !== null && (
-        <div className="mt-4 p-4 border border-[#fcf8c4] rounded-md bg-black text-[#fcf8c4]">
+        <div className="mt-4 p-4 border border-[#fef9be] rounded-md bg-black text-[#fef9be]">
           <p className="font-medium">{getFeedbackMessage()}</p>
         </div>
       )}
