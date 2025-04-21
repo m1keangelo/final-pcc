@@ -467,12 +467,12 @@ const translations = {
     'bugReport.title': 'Reportar un Error',
     'bugReport.description': 'Ayúdenos a mejorar reportando cualquier problema que encuentre',
     'bugReport.descriptionPlaceholder': 'Describa el error y los pasos para reproducirlo...',
-    'suggestion.screenshot': 'Captura de Pantalla (Opcional)',
-    'suggestion.uploadImage': 'Subir Imagen',
-    'suggestion.submitted': 'Sugerencia Enviada',
-    'suggestion.thankYou': '¡Gracias por su sugerencia!',
-    'suggestion.submitError': 'Hubo un error al enviar su sugerencia. Por favor intente de nuevo.',
-    'suggestion.descriptionRequired': 'Por favor proporcione una descripción para su sugerencia.',
+    'bugReport.screenshot': 'Captura de Pantalla (Opcional)',
+    'bugReport.uploadImage': 'Subir Imagen',
+    'bugReport.submitted': 'Informe de Error Enviado',
+    'bugReport.thankYou': '¡Gracias por ayudarnos a mejorar!',
+    'bugReport.submitError': 'Hubo un error al enviar su informe de error. Por favor intente de nuevo.',
+    'bugReport.descriptionRequired': 'Por favor proporcione una descripción del error.',
     
     // Common
     'common.cancel': 'Cancelar',

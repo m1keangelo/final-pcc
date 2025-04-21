@@ -2,7 +2,7 @@
 export type FormState = {
   timeline: 'immediately' | '3months' | '3to6months' | '6to12months' | 'exploring' | null;
   firstTimeBuyer: boolean | null;
-  employmentType: 'W-2' | '1099' | 'retired' | 'unemployed' | 'other' | null;
+  employmentType: 'W-2' | '1099' | 'selfEmployed' | 'retired' | 'unemployed' | 'other' | null;
   otherEmploymentDetails?: string;
   selfEmployedYears: number | null;
   incomeType: 'annual' | 'monthly';
