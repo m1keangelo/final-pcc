@@ -163,8 +163,12 @@
 
   .feedback-box {
     color: #fcf8c4;  /* Font color */
-    border-color: #fcf8c4;  /* Outline color */
-    background-color: #000000;  /* Background color */
+    border-color: #fcf8c4; /* Outline color */
+    background-color: #000000; /* Background color */
+    border-width: 1px;
+    border-style: solid;
+    padding: 1rem;
+    border-radius: 0.5rem;
   }
 }
 

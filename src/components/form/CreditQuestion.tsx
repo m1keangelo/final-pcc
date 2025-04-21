@@ -1,3 +1,4 @@
+import React from "react";
 import { Button } from "@/components/ui/button";
 import QuestionContainer from "@/components/form/QuestionContainer";
 import { FormState } from "@/types/form";
@@ -97,7 +98,7 @@ export const CreditQuestion = ({
       </div>
       
       {value && (
-        <div className="mt-4 p-4 feedback-box rounded-md">
+        <div className="mt-4 feedback-box">
           <p className="font-medium">{getFeedbackMessage()}</p>
         </div>
       )}

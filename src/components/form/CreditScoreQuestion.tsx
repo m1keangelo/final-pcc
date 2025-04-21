@@ -106,7 +106,7 @@ export const CreditScoreQuestion = ({
             {getCreditCategory(sliderValue)}
           </div>
           
-          <div className="mt-4 p-4 feedback-box rounded-md">
+          <div className="mt-4 feedback-box">
             <p className="font-medium">{getFeedbackMessage(sliderValue)}</p>
           </div>
         </div>
