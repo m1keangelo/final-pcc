@@ -161,15 +161,23 @@
     @apply bg-gradient-to-br from-neon-pink via-neon-purple to-neon-blue bg-clip-text text-transparent;
   }
 
-  .feedback-box {
-    color: #fcf8c4;  /* Font color: RGB(252, 248, 196) */
-    border-color: #fcf8c4; /* Outline color: RGB(252, 248, 196) */
-    background-color: #000000; /* Background color: RGB(0, 0, 0) */
-    border-width: 1px;
-    border-style: solid;
-    padding: 1rem;
-    border-radius: 0.5rem;
-  }
+.feedback-box {
+  background: linear-gradient(to right, rgba(0, 0, 0, 0.95), rgba(0, 0, 0, 0.98));
+  border: 1px solid rgba(252, 248, 196, 0.3);
+  border-radius: 0.5rem;
+  padding: 1rem;
+  color: #fcf8c4;
+  margin-top: 1rem;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  backdrop-filter: blur(12px);
+}
+
+/* Apply hover effect to feedback boxes */
+.feedback-box:hover {
+  border-color: rgba(252, 248, 196, 0.5);
+  transform: translateY(-1px);
+  transition: all 0.2s ease;
+}
 }
 
 /* Enhanced Sidebar CSS - modernized look with smoother transitions */
