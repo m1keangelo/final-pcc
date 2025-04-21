@@ -26,10 +26,32 @@ interface SummaryOutcomeProps {
 const SummaryOutcome = ({ formData, onProceedToDocuments }: SummaryOutcomeProps) => {
   const { language } = useLanguage();
   const [showAnimation, setShowAnimation] = useState(true);
+  const [loaded, setLoaded] = useState(false);
   
+  // Debug logs to track formData and component lifecycle
   useEffect(() => {
     console.log("SummaryOutcome mounted with formData:", formData);
+    
+    // Mark as loaded after a short delay to ensure data is processed
+    const timer = setTimeout(() => {
+      setLoaded(true);
+    }, 100);
+    
+    return () => clearTimeout(timer);
   }, [formData]);
+  
+  // Ensure we have valid form data before trying to calculate anything
+  if (!formData || !formData.name) {
+    console.warn("SummaryOutcome received incomplete form data");
+    return (
+      <div className="p-6 text-center">
+        <Alert variant="destructive">
+          <AlertTitle>Error: Incomplete form data</AlertTitle>
+          <p>Please go back and complete the form properly.</p>
+        </Alert>
+      </div>
+    );
+  }
   
   // Calculate all needed data for the summary
   const clientRating = calculateClientRating(formData);
@@ -57,20 +79,9 @@ const SummaryOutcome = ({ formData, onProceedToDocuments }: SummaryOutcomeProps)
     formData, 
     clientRating, 
     isQualified,
-    qualificationSummary 
+    qualificationSummary,
+    loaded
   });
-
-  if (!formData.name) {
-    console.warn("SummaryOutcome received incomplete form data");
-    return (
-      <div className="p-6 text-center">
-        <Alert variant="destructive">
-          <AlertTitle>Error: Incomplete form data</AlertTitle>
-          <p>Please go back and complete the form properly.</p>
-        </Alert>
-      </div>
-    );
-  }
 
   return (
     <div className="space-y-6 animate-fade-in" data-testid="summary-outcome">

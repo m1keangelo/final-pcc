@@ -28,13 +28,15 @@ const FormContainer: React.FC = () => {
   const [formStage, setFormStage] = useState<'initialInfo' | 'questions' | 'summary'>('initialInfo');
   const [selectedAgent, setSelectedAgent] = useState<string>("SoReal Estate");
   const [selectedCampaign, setSelectedCampaign] = useState<string>("Dennis Lopez Campaign");
+  const [formCompleteData, setFormCompleteData] = useState<FormState | null>(null);
   
   const { formData, updateFormData, handleFormDataChange, setFormData } = useFormData();
 
   useEffect(() => {
     console.log("FormContainer - Current Stage:", formStage);
     console.log("FormContainer - Current Form Data:", formData);
-  }, [formStage, formData]);
+    console.log("FormContainer - Complete Form Data:", formCompleteData);
+  }, [formStage, formData, formCompleteData]);
 
   const handleNextFromInitialInfo = () => {
     console.log("Moving to questions stage");
@@ -57,7 +59,8 @@ const FormContainer: React.FC = () => {
       
       console.log('Final data before setting to state:', finalData);
       
-      // First save data to state
+      // First save complete data to state for the summary page
+      setFormCompleteData(finalData);
       setFormData(finalData);
       
       // Send data to backend
@@ -76,7 +79,9 @@ const FormContainer: React.FC = () => {
       
       // Then change stage - this needs to happen AFTER data is set
       console.log('Changing form stage to summary');
-      setFormStage('summary');
+      setTimeout(() => {
+        setFormStage('summary');
+      }, 100);
     } catch (error) {
       console.error("Error during form completion:", error);
       toast.error(language === 'en' ? 
@@ -135,9 +140,13 @@ const FormContainer: React.FC = () => {
         );
       
       case 'summary':
+        // Use either the complete form data or the current form data
+        const summaryData = formCompleteData || formData;
+        console.log("Rendering summary with data:", summaryData);
+        
         return (
           <SummaryOutcome 
-            formData={formData}
+            formData={summaryData}
             onProceedToDocuments={handleProceedToDocuments} 
           />
         );
@@ -152,7 +161,7 @@ const FormContainer: React.FC = () => {
       <FormHeader />
       
       {/* Using a unique key for each form stage to force re-render */}
-      <div key={`form-stage-${formStage}`} className="form-container">
+      <div key={`form-stage-${formStage}-${Date.now()}`} className="form-container">
         {renderFormContent()}
       </div>
     </div>
