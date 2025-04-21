@@ -27,6 +27,13 @@ export const MonthlyDebtsQuestion = ({
   const [localValue, setLocalValue] = useState(value || "");
   const inputRef = useRef<HTMLInputElement>(null);
   
+  // Focus input on mount
+  React.useEffect(() => {
+    if (inputRef.current) {
+      inputRef.current.focus();
+    }
+  }, []);
+  
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const val = e.target.value;
     // Keep only numbers, $ sign, commas and periods
@@ -90,7 +97,6 @@ export const MonthlyDebtsQuestion = ({
               onChange={handleInputChange}
               className="pl-10 text-foreground"
               placeholder={t('q.monthlyDebts.placeholder')}
-              autoFocus
               ref={inputRef}
             />
           </div>

@@ -1,5 +1,5 @@
 
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -37,6 +37,24 @@ export const CreditIssueDetailsQuestion = ({
   const [amountInput, setAmountInput] = useState(amount?.toString() || "");
   const yearInputRef = useRef<HTMLInputElement>(null);
   const amountInputRef = useRef<HTMLInputElement>(null);
+  
+  // Focus the year input when type is selected
+  useEffect(() => {
+    if (type && yearInputRef.current) {
+      setTimeout(() => {
+        yearInputRef.current?.focus();
+      }, 100);
+    }
+  }, [type]);
+  
+  // Focus the amount input when collections type is selected and year is entered
+  useEffect(() => {
+    if (type === 'collections' && year && amountInputRef.current) {
+      setTimeout(() => {
+        amountInputRef.current?.focus();
+      }, 100);
+    }
+  }, [type, year]);
   
   const handleYearChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const val = e.target.value;

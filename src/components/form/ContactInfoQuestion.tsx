@@ -37,11 +37,21 @@ export const ContactInfoQuestion = ({
 }) => {
   const { t } = useLanguage();
   const [formattedPhone, setFormattedPhone] = useState(phone);
+  const nameInputRef = useRef<HTMLInputElement>(null);
   const phoneInputRef = useRef<HTMLInputElement>(null);
+  const emailInputRef = useRef<HTMLInputElement>(null);
+  const commentsRef = useRef<HTMLTextAreaElement>(null);
   
   const isFormValid = () => {
     return name.trim() !== '' && phone.trim() !== '' && email.trim() !== '';
   };
+  
+  // Focus on name input when component mounts
+  useEffect(() => {
+    if (currentStep === 1 && nameInputRef.current) {
+      nameInputRef.current.focus();
+    }
+  }, [currentStep]);
   
   // Format the phone number whenever it changes
   useEffect(() => {
@@ -94,7 +104,7 @@ export const ContactInfoQuestion = ({
             onChange={(e) => onChangeName(e.target.value)}
             placeholder={t('q.contactInfo.namePlaceholder')}
             className="text-foreground"
-            autoFocus={currentStep === 1}
+            ref={nameInputRef}
           />
         </div>
         
@@ -121,6 +131,7 @@ export const ContactInfoQuestion = ({
             onChange={(e) => onChangeEmail(e.target.value)}
             placeholder={t('q.contactInfo.emailPlaceholder')}
             className="text-foreground"
+            ref={emailInputRef}
           />
         </div>
         
@@ -133,6 +144,7 @@ export const ContactInfoQuestion = ({
             placeholder={t('q.contactInfo.commentsPlaceholder')}
             rows={4}
             className="text-foreground"
+            ref={commentsRef}
           />
         </div>
       </div>

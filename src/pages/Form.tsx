@@ -29,6 +29,7 @@ const Form: React.FC = () => {
           onError={handleError}
         >
           <Suspense fallback={<Skeleton className="w-full h-[500px]" />}>
+            {/* Use a stable key and don't change it between renders */}
             <FormContainer key={stableKey} />
           </Suspense>
         </ErrorBoundary>
