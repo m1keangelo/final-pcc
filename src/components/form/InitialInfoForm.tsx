@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState, useCallback } from "react";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { Button } from "@/components/ui/button";
@@ -94,29 +93,6 @@ const InitialInfoForm: React.FC<InitialInfoFormProps> = ({
         </h2>
 
         <div className="space-y-6">
-          <div className="space-y-3">
-            <Label className="text-base font-medium">
-              {language === "en" ? "Select Agent" : "Seleccionar Agente"}
-            </Label>
-            <RadioGroup
-              value={selectedAgent}
-              onValueChange={setSelectedAgent}
-              className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 mt-2"
-            >
-              {agents.map((agent) => (
-                <div
-                  key={agent.id}
-                  className="flex items-center space-x-2 border rounded-md p-3 hover:bg-muted/20 cursor-pointer transition-colors"
-                >
-                  <RadioGroupItem value={agent.name} id={agent.id} />
-                  <Label htmlFor={agent.id} className="cursor-pointer w-full">
-                    {agent.name}
-                  </Label>
-                </div>
-              ))}
-            </RadioGroup>
-          </div>
-
           <div className="grid gap-6 md:grid-cols-2">
             <div className="space-y-2">
               <Label htmlFor="name">
@@ -125,14 +101,8 @@ const InitialInfoForm: React.FC<InitialInfoFormProps> = ({
               <Input
                 id="name"
                 value={formData.name}
-                onChange={(e) =>
-                  handleInitialInfoChange("name", e.target.value)
-                }
-                placeholder={
-                  language === "en"
-                    ? "Enter your full name"
-                    : "Ingrese su nombre completo"
-                }
+                onChange={(e) => handleInitialInfoChange("name", e.target.value)}
+                placeholder={language === "en" ? "Enter your full name" : "Ingrese su nombre completo"}
                 className="h-11"
               />
             </div>
@@ -145,11 +115,7 @@ const InitialInfoForm: React.FC<InitialInfoFormProps> = ({
                 id="phone"
                 value={formattedPhone}
                 onChange={handlePhoneChange}
-                placeholder={
-                  language === "en"
-                    ? "(123) 456-7890"
-                    : "Ingrese su número de teléfono"
-                }
+                placeholder={language === "en" ? "(123) 456-7890" : "Ingrese su número de teléfono"}
                 type="tel"
                 inputMode="numeric"
                 className="h-11"
@@ -165,11 +131,7 @@ const InitialInfoForm: React.FC<InitialInfoFormProps> = ({
               id="email"
               value={formData.email}
               onChange={(e) => handleInitialInfoChange("email", e.target.value)}
-              placeholder={
-                language === "en"
-                  ? "yourname@example.com"
-                  : "Ingrese su correo electrónico"
-              }
+              placeholder={language === "en" ? "yourname@example.com" : "Ingrese su correo electrónico"}
               type="email"
               className="h-11"
             />
@@ -182,9 +144,7 @@ const InitialInfoForm: React.FC<InitialInfoFormProps> = ({
             size="lg"
             className="bg-purple-600 hover:bg-purple-700 transition-colors w-full sm:w-auto"
           >
-            {language === "en"
-              ? "Start Questionnaire"
-              : "Comenzar Cuestionario"}
+            {language === "en" ? "Start Questionnaire" : "Comenzar Cuestionario"}
             <ArrowRight className="ml-2 h-4 w-4" />
           </Button>
         </div>

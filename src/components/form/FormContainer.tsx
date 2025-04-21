@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useLanguage } from "@/contexts/LanguageContext";
@@ -27,8 +26,8 @@ const FormContainer: React.FC = React.memo(() => {
   const navigate = useNavigate();
 
   const [formStage, setFormStage] = useState<'initialInfo' | 'questions' | 'summary'>('initialInfo');
-  const [selectedAgent, setSelectedAgent] = useState<string>("SoReal Estate");
-  const [selectedCampaign, setSelectedCampaign] = useState<string>("Dennis Lopez Campaign");
+  const [selectedAgent, setSelectedAgent] = useState<string>("SoReal Estate"); // Keep for data structure compatibility
+  const [selectedCampaign, setSelectedCampaign] = useState<string>("Facebook");
   const [formCompleteData, setFormCompleteData] = useState<FormState | null>(null);
   
   const { formData, updateFormData, handleFormDataChange, setFormData } = useFormData();
