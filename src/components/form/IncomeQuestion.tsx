@@ -101,14 +101,14 @@ export const IncomeQuestion = ({
         </div>
 
         {inputValue && (
-          <div className="mt-4 p-4 rounded-md glass-card border border-gallomodern-500/30 shadow-inner bg-gradient-to-br from-gallomodern-900/20 to-black/30">
-            <p className="font-medium text-gallomodern-100">{getFeedbackMessage()}</p>
+          <div className="mt-4 p-4 feedback-box rounded-md">
+            <p className="font-medium">{getFeedbackMessage()}</p>
           </div>
         )}
 
         {incomeType && (
-          <div className="mt-4 p-4 rounded-md glass-card border border-gallomodern-500/30 shadow-inner bg-gradient-to-br from-gallomodern-900/20 to-black/30">
-            <p className="font-medium text-gallomodern-100">{getIncomeTypeFeedbackMessage()}</p>
+          <div className="mt-4 p-4 feedback-box rounded-md">
+            <p className="font-medium">{getIncomeTypeFeedbackMessage()}</p>
           </div>
         )}
 

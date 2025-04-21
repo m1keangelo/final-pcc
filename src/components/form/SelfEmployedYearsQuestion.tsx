@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Slider } from "@/components/ui/slider";
@@ -25,14 +24,12 @@ export const SelfEmployedYearsQuestion = ({
   const { t, language } = useLanguage();
   const [sliderValue, setSliderValue] = useState(value || 1);
   
-  // Handle slider change
   const handleSliderChange = (val: number[]) => {
     const years = val[0];
     setSliderValue(years);
     onChange(years);
   };
   
-  // Define feedback message based on number of years
   const getFeedbackMessage = () => {
     if (language === 'es') {
       if (sliderValue >= 2) {
@@ -100,9 +97,8 @@ export const SelfEmployedYearsQuestion = ({
           </div>
         </div>
         
-        {/* Display feedback message */}
-        <div className="mt-4 p-4 rounded-md glass-card border border-gallomodern-500/30 shadow-inner bg-gradient-to-br from-gallomodern-900/20 to-black/30">
-          <p className="font-medium text-gallomodern-100">{getFeedbackMessage()}</p>
+        <div className="mt-4 p-4 feedback-box rounded-md">
+          <p className="font-medium">{getFeedbackMessage()}</p>
         </div>
         
         {sliderValue < 2 && (
