@@ -17,6 +17,7 @@ import RecommendationsCard from './summary/RecommendationsCard';
 import NextStepsCard from './summary/NextStepsCard';
 import PrequalificationResultsCard from './summary/PrequalificationResultsCard';
 import QualificationAnalysisCard from './summary/QualificationAnalysisCard';
+import FeedbackBox from './FeedbackBox';
 
 interface SummaryOutcomeProps {
   formData: FormState;
@@ -24,7 +25,7 @@ interface SummaryOutcomeProps {
 }
 
 const SummaryOutcome = ({ formData, onProceedToDocuments }: SummaryOutcomeProps) => {
-  const { language } = useLanguage();
+  const { language, t } = useLanguage();
   const [showAnimation, setShowAnimation] = useState(true);
   const [loaded, setLoaded] = useState(false);
   
@@ -43,8 +44,8 @@ const SummaryOutcome = ({ formData, onProceedToDocuments }: SummaryOutcomeProps)
     return (
       <div className="p-6 text-center">
         <Alert variant="destructive">
-          <AlertTitle>Error: Incomplete form data</AlertTitle>
-          <p>Please go back and complete the form properly.</p>
+          <AlertTitle>{t('form.incompleteDataError') || 'Error: Incomplete form data'}</AlertTitle>
+          <p>{t('form.incompleteDataInstructions') || 'Please go back and complete the form properly.'}</p>
         </Alert>
       </div>
     );
@@ -70,6 +71,8 @@ const SummaryOutcome = ({ formData, onProceedToDocuments }: SummaryOutcomeProps)
   };
 
   const isQualified = qualificationSummary.includes('✅');
+  
+  const summaryVariant = isQualified ? 'success' : qualificationSummary.includes('⚡') ? 'warning' : 'info';
 
   console.log("SummaryOutcome rendering with data:", { 
     formData, 
@@ -82,7 +85,7 @@ const SummaryOutcome = ({ formData, onProceedToDocuments }: SummaryOutcomeProps)
   return (
     <div className="space-y-6 animate-fade-in" data-testid="summary-outcome">
       <h2 className="text-2xl font-bold mb-4 text-center text-gallomodern-50">
-        {language === 'en' ? 'Loan Prequalification Results' : 'Resultados de Precalificación de Préstamo'}
+        {t('form.resultTitle') || (language === 'en' ? 'Loan Prequalification Results' : 'Resultados de Precalificación de Préstamo')}
       </h2>
 
       {showAnimation && (
@@ -104,11 +107,10 @@ const SummaryOutcome = ({ formData, onProceedToDocuments }: SummaryOutcomeProps)
         </div>
       )}
 
-      <Alert className={`border-l-4 ${isQualified ? 'border-l-green-500 bg-green-50' : 'border-l-orange-500 bg-orange-50'} dark:bg-opacity-10`}>
-        <AlertTitle className={`text-xl font-semibold ${getSummaryTextColorClass(qualificationSummary)}`}>
-          {qualificationSummary}
-        </AlertTitle>
-      </Alert>
+      <FeedbackBox 
+        message={qualificationSummary} 
+        variant={summaryVariant}
+      />
 
       <PrequalificationResultsCard 
         formData={formData} 

@@ -1,12 +1,16 @@
 
 import React from 'react';
+import { useLanguage } from "@/contexts/LanguageContext";
 
 interface FeedbackBoxProps {
   message: string;
+  messageKey?: string;
   variant?: 'default' | 'warning' | 'info' | 'success' | 'error';
 }
 
-const FeedbackBox = ({ message, variant = 'default' }: FeedbackBoxProps) => {
+const FeedbackBox = ({ message, messageKey, variant = 'default' }: FeedbackBoxProps) => {
+  const { t } = useLanguage();
+  
   // Base classes for consistent styling
   let baseClasses = "mt-4 p-4 rounded-md font-medium bg-black/50 border";
   
@@ -32,9 +36,12 @@ const FeedbackBox = ({ message, variant = 'default' }: FeedbackBoxProps) => {
       break;
   }
   
+  // Use translation key if provided, otherwise use direct message
+  const displayedMessage = messageKey ? t(messageKey) : message;
+  
   return (
     <div className={`${baseClasses} ${variantClasses}`}>
-      <p className="text-[15px] leading-relaxed">{message}</p>
+      <p className="text-[15px] leading-relaxed">{displayedMessage}</p>
     </div>
   );
 };
