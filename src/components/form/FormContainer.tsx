@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useLanguage } from "@/contexts/LanguageContext";
@@ -18,6 +19,7 @@ import {
   SelectValue
 } from "@/components/ui/select";
 import { Label } from "@/components/ui/label";
+import { CAMPAIGNS } from "@/types/client";
 
 // Use React.memo to prevent unnecessary renders
 const FormContainer: React.FC = React.memo(() => {
@@ -125,8 +127,8 @@ const FormContainer: React.FC = React.memo(() => {
                 <SelectTrigger id="campaign-select" className="w-full mt-2 h-11 bg-popover">
                   <SelectValue placeholder={language === 'en' ? 'Select campaign' : 'Seleccionar campaña'} />
                 </SelectTrigger>
-                <SelectContent>
-                  {campaigns.map(campaign => (
+                <SelectContent className="bg-popover">
+                  {CAMPAIGNS.map(campaign => (
                     <SelectItem key={campaign} value={campaign}>
                       {campaign}
                     </SelectItem>
