@@ -1,5 +1,5 @@
 
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -25,6 +25,7 @@ export const MonthlyDebtsQuestion = ({
 }) => {
   const { t, language } = useLanguage();
   const [localValue, setLocalValue] = useState(value || "");
+  const inputRef = useRef<HTMLInputElement>(null);
   
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const val = e.target.value;
@@ -90,6 +91,7 @@ export const MonthlyDebtsQuestion = ({
               className="pl-10 text-foreground"
               placeholder={t('q.monthlyDebts.placeholder')}
               autoFocus
+              ref={inputRef}
             />
           </div>
           <p className="text-sm text-muted-foreground mt-2">

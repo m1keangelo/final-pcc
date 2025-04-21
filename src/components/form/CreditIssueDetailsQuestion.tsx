@@ -1,5 +1,5 @@
 
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -35,6 +35,8 @@ export const CreditIssueDetailsQuestion = ({
   const { t } = useLanguage();
   const [yearInput, setYearInput] = useState(year?.toString() || "");
   const [amountInput, setAmountInput] = useState(amount?.toString() || "");
+  const yearInputRef = useRef<HTMLInputElement>(null);
+  const amountInputRef = useRef<HTMLInputElement>(null);
   
   const handleYearChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const val = e.target.value;
@@ -98,6 +100,7 @@ export const CreditIssueDetailsQuestion = ({
             onChange={handleYearChange}
             className="mt-1 text-foreground"
             placeholder={t('q.creditIssueDetails.yearPlaceholder')}
+            ref={yearInputRef}
           />
         </div>
         
@@ -116,6 +119,7 @@ export const CreditIssueDetailsQuestion = ({
                 onChange={handleAmountChange}
                 placeholder={t('q.creditIssueDetails.amountPlaceholder')}
                 className="pl-6 text-foreground"
+                ref={amountInputRef}
               />
             </div>
           </div>

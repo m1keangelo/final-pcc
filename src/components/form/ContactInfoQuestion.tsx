@@ -6,7 +6,7 @@ import { Textarea } from "@/components/ui/textarea";
 import QuestionContainer from "@/components/form/QuestionContainer";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { ArrowLeft, ArrowRight } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 
 export const ContactInfoQuestion = ({
   name,
@@ -37,6 +37,7 @@ export const ContactInfoQuestion = ({
 }) => {
   const { t } = useLanguage();
   const [formattedPhone, setFormattedPhone] = useState(phone);
+  const phoneInputRef = useRef<HTMLInputElement>(null);
   
   const isFormValid = () => {
     return name.trim() !== '' && phone.trim() !== '' && email.trim() !== '';
@@ -44,12 +45,10 @@ export const ContactInfoQuestion = ({
   
   // Format the phone number whenever it changes
   useEffect(() => {
-    if (phone) {
+    if (phone && phone !== formattedPhone.replace(/\D/g, '')) {
       const cleaned = phone.replace(/\D/g, '');
       const formatted = formatPhoneNumber(cleaned);
-      if (formatted !== formattedPhone) {
-        setFormattedPhone(formatted);
-      }
+      setFormattedPhone(formatted);
     }
   }, [phone, formattedPhone]);
   
@@ -70,7 +69,12 @@ export const ContactInfoQuestion = ({
     const value = e.target.value;
     const cleaned = value.replace(/\D/g, '');
     onChangePhone(cleaned);
-    setFormattedPhone(formatPhoneNumber(cleaned));
+    
+    // Maintain cursor position after formatting
+    const formattedValue = formatPhoneNumber(cleaned);
+    if (formattedValue !== value) {
+      setFormattedPhone(formattedValue);
+    }
   };
   
   return (
@@ -104,6 +108,7 @@ export const ContactInfoQuestion = ({
             placeholder={t('q.contactInfo.phonePlaceholder')}
             className="text-foreground"
             inputMode="numeric"
+            ref={phoneInputRef}
           />
         </div>
         
