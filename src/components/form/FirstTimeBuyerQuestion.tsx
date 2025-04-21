@@ -67,7 +67,7 @@ export const FirstTimeBuyerQuestion = ({
       </div>
       
       {value !== null && (
-        <div className="mt-6 bg-black/80 border border-yellow-400/30 rounded-lg p-4 text-yellow-300 shadow-lg">
+        <div className="mt-6 bg-[#1A1F2C] border border-[#FEF7CD]/30 rounded-lg p-4 text-[#FEF7CD] shadow-[0_4px_12px_rgba(0,0,0,0.3)]">
           <p>{getFeedbackMessage()}</p>
         </div>
       )}
