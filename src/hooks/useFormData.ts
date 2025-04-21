@@ -1,7 +1,6 @@
 
 import { useState, useEffect } from "react";
 import { FormState } from "@/types/form";
-import { formatPhoneNumber } from "@/utils/formDataTransformer";
 
 export const useFormData = () => {
   const [formData, setFormData] = useState<FormState>({
@@ -30,15 +29,8 @@ export const useFormData = () => {
     comments: ""
   });
 
-  useEffect(() => {
-    if (formData.phone) {
-      const formatted = formatPhoneNumber(formData.phone);
-      
-      if (formatted !== formData.phone) {
-        setFormData(prev => ({ ...prev, phone: formatted }));
-      }
-    }
-  }, [formData.phone]);
+  // We'll handle phone formatting in the ContactInfoQuestion component instead
+  // Removing the useEffect that was causing issues
 
   const handleFormDataChange = (field: keyof FormState, value: string) => {
     if (field === 'phone') {

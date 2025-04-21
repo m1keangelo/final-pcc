@@ -37,7 +37,7 @@ const ContactInfoQuestion = ({
   totalSteps: number;
 }) => {
   const { t } = useLanguage();
-  const [formattedPhone, setFormattedPhone] = useState(phone);
+  const [formattedPhone, setFormattedPhone] = useState("");
   const nameInputRef = useRef<HTMLInputElement>(null);
   const phoneInputRef = useRef<HTMLInputElement>(null);
   const emailInputRef = useRef<HTMLInputElement>(null);
@@ -54,16 +54,8 @@ const ContactInfoQuestion = ({
     }
   }, [currentStep]);
   
-  // Format the phone number whenever it changes
-  useEffect(() => {
-    if (phone && phone !== formattedPhone.replace(/\D/g, '')) {
-      const cleaned = phone.replace(/\D/g, '');
-      const formatted = formatPhoneNumber(cleaned);
-      setFormattedPhone(formatted);
-    }
-  }, [phone, formattedPhone]);
-  
-  const formatPhoneNumber = (value: string) => {
+  // Format phone number for display
+  const formatPhoneNumber = useCallback((value: string) => {
     const cleaned = value.replace(/\D/g, '');
     const truncated = cleaned.slice(0, 10);
     
@@ -74,7 +66,16 @@ const ContactInfoQuestion = ({
     } else {
       return `(${truncated.slice(0, 3)}) ${truncated.slice(3, 6)}-${truncated.slice(6)}`;
     }
-  };
+  }, []);
+  
+  // Initialize formatted phone value when component mounts or phone prop changes
+  useEffect(() => {
+    if (phone) {
+      setFormattedPhone(formatPhoneNumber(phone));
+    } else {
+      setFormattedPhone("");
+    }
+  }, [phone, formatPhoneNumber]);
   
   // Use memoized handlers to prevent unnecessary re-renders
   const handleNameChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
@@ -91,15 +92,15 @@ const ContactInfoQuestion = ({
   
   const handlePhoneChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
+    // Extract only digits for the raw phone value
     const cleaned = value.replace(/\D/g, '');
+    
+    // Update the parent component with just digits
     onChangePhone(cleaned);
     
-    // Maintain cursor position after formatting
-    const formattedValue = formatPhoneNumber(cleaned);
-    if (formattedValue !== value) {
-      setFormattedPhone(formattedValue);
-    }
-  }, [onChangePhone]);
+    // Update local state with formatted value for display
+    setFormattedPhone(formatPhoneNumber(cleaned));
+  }, [onChangePhone, formatPhoneNumber]);
   
   return (
     <QuestionContainer
