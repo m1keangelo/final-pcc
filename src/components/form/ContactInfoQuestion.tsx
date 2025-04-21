@@ -6,7 +6,7 @@ import { Textarea } from "@/components/ui/textarea";
 import QuestionContainer from "@/components/form/QuestionContainer";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { ArrowLeft, ArrowRight } from "lucide-react";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 export const ContactInfoQuestion = ({
   name,
@@ -36,6 +36,7 @@ export const ContactInfoQuestion = ({
   totalSteps: number;
 }) => {
   const { t } = useLanguage();
+  const [formattedPhone, setFormattedPhone] = useState(phone);
   
   const isFormValid = () => {
     return name.trim() !== '' && phone.trim() !== '' && email.trim() !== '';
@@ -44,25 +45,18 @@ export const ContactInfoQuestion = ({
   // Format the phone number whenever it changes
   useEffect(() => {
     if (phone) {
-      // Only format if there's actual content and it's not already formatted
       const cleaned = phone.replace(/\D/g, '');
-      const formattedValue = formatPhoneNumber(cleaned);
-      
-      // Only update if the formatted value is different to avoid loops
-      if (formattedValue !== phone) {
-        onChangePhone(formattedValue);
+      const formatted = formatPhoneNumber(cleaned);
+      if (formatted !== formattedPhone) {
+        setFormattedPhone(formatted);
       }
     }
-  }, [phone, onChangePhone]);
+  }, [phone, formattedPhone]);
   
   const formatPhoneNumber = (value: string) => {
-    // Remove all non-digit characters
     const cleaned = value.replace(/\D/g, '');
-    
-    // Limit to 10 digits
     const truncated = cleaned.slice(0, 10);
     
-    // Format the number
     if (truncated.length <= 3) {
       return truncated;
     } else if (truncated.length <= 6) {
@@ -73,9 +67,10 @@ export const ContactInfoQuestion = ({
   };
   
   const handlePhoneChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    // Just store the raw value - the useEffect will handle formatting
-    const value = e.target.value.replace(/\D/g, '');
-    onChangePhone(value);
+    const value = e.target.value;
+    const cleaned = value.replace(/\D/g, '');
+    onChangePhone(cleaned);
+    setFormattedPhone(formatPhoneNumber(cleaned));
   };
   
   return (
@@ -88,46 +83,51 @@ export const ContactInfoQuestion = ({
     >
       <div className="space-y-6">
         <div className="space-y-2">
-          <Label htmlFor="name">{t('q.contactInfo.nameLabel')}</Label>
+          <Label htmlFor="name" className="text-gallomodern-100">{t('q.contactInfo.nameLabel')}</Label>
           <Input
             id="name"
             value={name}
             onChange={(e) => onChangeName(e.target.value)}
             placeholder={t('q.contactInfo.namePlaceholder')}
+            className="text-foreground"
+            autoFocus={currentStep === 1}
           />
         </div>
         
         <div className="space-y-2">
-          <Label htmlFor="phone">{t('q.contactInfo.phoneLabel')}</Label>
+          <Label htmlFor="phone" className="text-gallomodern-100">{t('q.contactInfo.phoneLabel')}</Label>
           <Input
             id="phone"
             type="tel"
-            value={phone}
+            value={formattedPhone}
             onChange={handlePhoneChange}
             placeholder={t('q.contactInfo.phonePlaceholder')}
+            className="text-foreground"
             inputMode="numeric"
           />
         </div>
         
         <div className="space-y-2">
-          <Label htmlFor="email">{t('q.contactInfo.emailLabel')}</Label>
+          <Label htmlFor="email" className="text-gallomodern-100">{t('q.contactInfo.emailLabel')}</Label>
           <Input
             id="email"
             type="email"
             value={email}
             onChange={(e) => onChangeEmail(e.target.value)}
             placeholder={t('q.contactInfo.emailPlaceholder')}
+            className="text-foreground"
           />
         </div>
         
         <div className="space-y-2">
-          <Label htmlFor="comments">{t('q.contactInfo.commentsLabel')}</Label>
+          <Label htmlFor="comments" className="text-gallomodern-100">{t('q.contactInfo.commentsLabel')}</Label>
           <Textarea
             id="comments"
             value={comments}
             onChange={(e) => onChangeComments(e.target.value)}
             placeholder={t('q.contactInfo.commentsPlaceholder')}
             rows={4}
+            className="text-foreground"
           />
         </div>
       </div>

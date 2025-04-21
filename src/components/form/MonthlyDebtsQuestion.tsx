@@ -75,7 +75,7 @@ export const MonthlyDebtsQuestion = ({
     >
       <div className="space-y-6">
         <div>
-          <Label htmlFor="monthlyDebts" className="text-base">
+          <Label htmlFor="monthlyDebts" className="text-base text-gallomodern-100">
             {t('q.monthlyDebts.amountLabel')}
           </Label>
           <div className="relative mt-2">
@@ -87,8 +87,9 @@ export const MonthlyDebtsQuestion = ({
               type="text"
               value={localValue}
               onChange={handleInputChange}
-              className="pl-10 input-modern"
+              className="pl-10 text-foreground"
               placeholder={t('q.monthlyDebts.placeholder')}
+              autoFocus
             />
           </div>
           <p className="text-sm text-muted-foreground mt-2">

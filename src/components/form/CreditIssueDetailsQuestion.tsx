@@ -73,9 +73,9 @@ export const CreditIssueDetailsQuestion = ({
     >
       <div className="space-y-6">
         <div>
-          <Label htmlFor="creditIssueType" className="mb-2 block">{t('q.creditIssueDetails.typeLabel')}</Label>
+          <Label htmlFor="creditIssueType" className="mb-2 block text-gallomodern-100">{t('q.creditIssueDetails.typeLabel')}</Label>
           <Select value={type || ""} onValueChange={(value) => onChangeType(value as FormState['creditIssueType'])}>
-            <SelectTrigger id="creditIssueType" className="w-full">
+            <SelectTrigger id="creditIssueType" className="w-full text-foreground bg-background/80">
               <SelectValue placeholder={t('q.creditIssueDetails.typePlaceholder')} />
             </SelectTrigger>
             <SelectContent>
@@ -88,7 +88,7 @@ export const CreditIssueDetailsQuestion = ({
         </div>
         
         <div>
-          <Label htmlFor="creditIssueYear">{t('q.creditIssueDetails.yearLabel')}</Label>
+          <Label htmlFor="creditIssueYear" className="text-gallomodern-100">{t('q.creditIssueDetails.yearLabel')}</Label>
           <Input
             id="creditIssueYear"
             type="number"
@@ -96,17 +96,17 @@ export const CreditIssueDetailsQuestion = ({
             max={currentYear}
             value={yearInput}
             onChange={handleYearChange}
-            className="mt-1"
+            className="mt-1 text-foreground"
             placeholder={t('q.creditIssueDetails.yearPlaceholder')}
           />
         </div>
         
         {type === 'collections' && (
           <div>
-            <Label htmlFor="creditIssueAmount">{t('q.creditIssueDetails.amountLabel')}</Label>
+            <Label htmlFor="creditIssueAmount" className="text-gallomodern-100">{t('q.creditIssueDetails.amountLabel')}</Label>
             <div className="relative mt-1">
               <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
-                <span className="text-gray-500">$</span>
+                <span className="text-gallomodern-300">$</span>
               </div>
               <Input
                 id="creditIssueAmount"
@@ -115,7 +115,7 @@ export const CreditIssueDetailsQuestion = ({
                 value={amountInput}
                 onChange={handleAmountChange}
                 placeholder={t('q.creditIssueDetails.amountPlaceholder')}
-                className="pl-6"
+                className="pl-6 text-foreground"
               />
             </div>
           </div>
