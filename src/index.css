@@ -1,12 +1,391 @@
-
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-@layer utilities {
-  .feedback-box {
-    background-color: #000000;
-    border: 1px solid #fcf8c4;
-    color: #fcf8c4;
+@layer base {
+  :root {
+    --background: 225 30% 4%;
+    --foreground: 210 40% 98%;
+    
+    --card: 225 30% 6%;
+    --card-foreground: 210 40% 98%;
+    
+    --popover: 225 30% 4%;
+    --popover-foreground: 210 40% 98%;
+    
+    --primary: 265 90% 70%;
+    --primary-foreground: 210 40% 98%;
+    
+    --secondary: 218 19% 32%;
+    --secondary-foreground: 210 40% 98%;
+    
+    --muted: 218 19% 25%;
+    --muted-foreground: 215 20.2% 85%;
+    
+    --accent: 265 90% 60%;
+    --accent-foreground: 210 40% 98%;
+    
+    --destructive: 0 62.8% 40%;
+    --destructive-foreground: 210 40% 98%;
+    
+    --border: 218 19% 32%;
+    --input: 218 19% 32%;
+    --ring: 265 90% 70%;
+    
+    --radius: 0.75rem;
+
+    /* Custom sidebar colors - updated for better visibility */
+    --sidebar-bg: 267 84% 27%;
+    --sidebar-hover: 267 76% 45%;
+    --sidebar-active: 267 83% 56%;
+    --sidebar-click: 267 84% 32%;
+    --sidebar-highlight: 0 0% 100%;
   }
+}
+
+@layer base {
+  * {
+    @apply border-border selection:bg-gallomodern-900/50 selection:text-white;
+  }
+  
+  body {
+    @apply bg-background text-foreground antialiased overflow-hidden;
+    font-feature-settings: "ss01", "ss02", "cv01", "cv02", "cv03";
+    line-height: 1.6;
+  }
+  
+  html {
+    @apply scroll-smooth;
+  }
+  
+  /* Adding smooth transitions for all interactive elements */
+  button, a, input, select, textarea {
+    @apply transition-all duration-200;
+  }
+  
+  /* Modern form controls with improved visibility */
+  input, select, textarea {
+    @apply bg-white/5 border-white/10 text-white focus:border-primary/70 focus:ring-2 focus:ring-primary/50 rounded-lg;
+  }
+}
+
+@layer utilities {
+  .matrix-code {
+    font-family: monospace;
+    color: theme('colors.gallomodern.300');
+    text-shadow: 0 0 5px theme('colors.gallomodern.500');
+    opacity: 0.7;
+    animation: fall 10s linear infinite;
+  }
+  
+  @keyframes fall {
+    0% {
+      transform: translateY(-100%);
+    }
+    100% {
+      transform: translateY(1000%);
+    }
+  }
+  
+  .border-l-3 {
+    border-left-width: 3px;
+  }
+
+  .glass-card {
+    background-color: rgba(30, 30, 46, 0.7);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+  }
+
+  .text-gradient {
+    @apply bg-gradient-to-r from-gallomodern-300 via-gallomodern-200 to-neon-blue bg-clip-text text-transparent;
+  }
+  
+  .text-gradient-gallo {
+    @apply bg-gradient-to-r from-gallomodern-300 via-white to-neon-blue bg-clip-text text-transparent;
+  }
+  
+  .text-gradient-neon {
+    @apply bg-gradient-to-r from-neon-purple to-neon-blue bg-clip-text text-transparent;
+  }
+
+  .text-high-contrast {
+    @apply text-white/95 drop-shadow-sm;
+  }
+
+  .glass-morphism {
+    @apply backdrop-blur-xl bg-white/5 border border-white/10 shadow-[0_4px_12px_-2px_rgba(0,0,0,0.3)];
+  }
+  
+  .neo-morphism {
+    @apply shadow-neo border border-white/5 bg-gradient-to-br from-white/10 to-transparent;
+  }
+  
+  /* Interactive card effects */
+  .interactive-card {
+    @apply transition-all duration-300 hover:shadow-glow-purple hover:-translate-y-1;
+  }
+  
+  /* Button with gradient background and hover effect */
+  .btn-gradient {
+    @apply bg-gradient-to-r from-gallomodern-600 to-gallomodern-500 hover:from-gallomodern-500 hover:to-neon-blue 
+           text-white transition-all shadow-lg shadow-gallomodern-700/20 hover:shadow-gallomodern-700/40;
+  }
+  
+  /* Advanced focus states */
+  .focus-ring {
+    @apply focus:outline-none focus:ring-2 focus:ring-gallomodern-400/50 focus:ring-offset-2 focus:ring-offset-background;
+  }
+  
+  /* High visibility icon */
+  .icon-high-vis {
+    @apply text-neon-purple filter drop-shadow-md;
+  }
+  
+  /* Card with neon glow */
+  .neon-card {
+    @apply border border-gallomodern-500/30 shadow-glow-purple rounded-xl;
+  }
+  
+  /* Text shadow for better readability on dark backgrounds */
+  .text-shadow-sm {
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
+  }
+  
+  .text-shadow-md {
+    text-shadow: 0 2px 5px rgba(0, 0, 0, 0.7);
+  }
+  
+  /* Enhanced gradient text styles */
+  .text-gradient-fancy {
+    @apply bg-gradient-to-br from-neon-pink via-neon-purple to-neon-blue bg-clip-text text-transparent;
+  }
+}
+
+/* Enhanced Sidebar CSS - modernized look with smoother transitions */
+.sidebar-menu {
+  background: linear-gradient(
+    135deg,
+    hsl(var(--sidebar-bg) / 0.85) 0%,
+    hsl(var(--sidebar-bg) / 0.95) 100%
+  );
+  backdrop-filter: blur(12px);
+  color: #FFFFFF;
+  font-family: 'Sora', sans-serif;
+  min-height: 100vh;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  border-right: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 0 25px rgba(0, 0, 0, 0.25);
+}
+
+.sidebar-menu a {
+  padding: 14px 22px;
+  display: flex;
+  align-items: center;
+  color: #FFFFFF;
+  text-decoration: none;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  border-radius: 10px;
+  margin: 3px 8px;
+  position: relative;
+  overflow: hidden;
+}
+
+.sidebar-menu a::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(45deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0.1) 100%);
+  transform: translateX(-100%);
+  transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.sidebar-menu a:hover::before {
+  transform: translateX(0);
+}
+
+.sidebar-menu a:hover {
+  background: linear-gradient(
+    45deg,
+    hsl(var(--sidebar-hover) / 0.7),
+    hsl(var(--sidebar-hover) / 0.9)
+  );
+  transform: translateY(-2px);
+  color: #FFFFFF;
+  text-shadow: 0 0 3px rgba(255, 255, 255, 0.4);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3), 0 0 0 1px rgba(255, 255, 255, 0.05);
+}
+
+.sidebar-menu a:active {
+  transform: translateY(1px);
+  background-color: hsl(var(--sidebar-click));
+  transition: all 0.1s ease;
+}
+
+.sidebar-menu .active {
+  background: linear-gradient(
+    45deg,
+    hsl(var(--sidebar-active) / 0.8),
+    hsl(var(--sidebar-active) / 0.95)
+  );
+  color: #FFFFFF;
+  border-left: 3px solid hsl(var(--sidebar-highlight));
+  font-weight: 500;
+  box-shadow: 0 4px 15px rgba(104, 58, 184, 0.3);
+}
+
+.sidebar-menu svg {
+  margin-right: 12px;
+  color: rgb(204, 195, 255);
+  transition: all 0.3s ease;
+}
+
+.sidebar-menu a:hover svg,
+.sidebar-menu .active svg {
+  color: #FFFFFF;
+  transform: scale(1.1);
+  filter: drop-shadow(0 0 3px rgba(255, 255, 255, 0.5));
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.sidebar-menu a {
+  animation: fadeIn 0.5s ease-in;
+  animation-fill-mode: both;
+}
+
+.sidebar-menu a:nth-child(1) { animation-delay: 0.1s; }
+.sidebar-menu a:nth-child(2) { animation-delay: 0.2s; }
+.sidebar-menu a:nth-child(3) { animation-delay: 0.3s; }
+.sidebar-menu a:nth-child(4) { animation-delay: 0.4s; }
+.sidebar-menu a:nth-child(5) { animation-delay: 0.5s; }
+
+@keyframes pulse {
+  0% { opacity: 0.8; }
+  50% { opacity: 1; }
+  100% { opacity: 0.8; }
+}
+
+.sidebar-menu .active svg {
+  animation: pulse 2s infinite ease-in-out;
+}
+
+@keyframes slideInLeft {
+  from { transform: translateX(-10px); opacity: 0; }
+  to { transform: translateX(0); opacity: 1; }
+}
+
+.sidebar-menu a svg {
+  animation: slideInLeft 0.3s ease-out;
+  animation-fill-mode: both;
+}
+
+/* Card and Form styling enhancements */
+.card-modern {
+  @apply bg-card border border-border/30 rounded-xl shadow-xl;
+  background: linear-gradient(
+    160deg,
+    hsl(225 30% 7% / 0.9),
+    hsl(225 30% 5% / 0.9)
+  );
+  backdrop-filter: blur(12px);
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25), 0 0 0 1px rgba(255, 255, 255, 0.05);
+}
+
+.card-modern:hover {
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.35), 0 0 0 1px rgba(255, 255, 255, 0.08);
+  transform: translateY(-3px);
+}
+
+.input-modern {
+  @apply bg-muted/80 border border-border rounded-lg px-4 py-3;
+  backdrop-filter: blur(4px);
+  transition: all 0.2s ease;
+}
+
+.input-modern:focus {
+  @apply border-primary/70 ring-1 ring-primary/30;
+  box-shadow: 0 0 0 2px rgba(147, 51, 234, 0.15);
+}
+
+.button-modern {
+  @apply bg-primary text-primary-foreground rounded-lg px-5 py-3 font-medium;
+  background: linear-gradient(
+    45deg,
+    hsl(var(--primary)),
+    hsl(var(--accent))
+  );
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 12px rgba(147, 51, 234, 0.25);
+}
+
+.button-modern:hover {
+  background: linear-gradient(
+    45deg,
+    hsl(var(--primary) / 0.9),
+    hsl(var(--accent) / 0.9)
+  );
+  box-shadow: 0 6px 18px rgba(147, 51, 234, 0.35);
+  transform: translateY(-2px);
+}
+
+.button-modern:active {
+  transform: translateY(1px);
+  box-shadow: 0 2px 8px rgba(147, 51, 234, 0.2);
+}
+
+#root {
+  max-width: none;
+  margin: 0;
+  padding: 0;
+  text-align: left;
+  width: 100%;
+  min-height: 100vh;
+}
+
+/* Form transition animations */
+.form-transition-enter {
+  opacity: 0;
+  transform: translateY(20px);
+}
+
+.form-transition-enter-active {
+  opacity: 1;
+  transform: translateY(0);
+  transition: opacity 300ms, transform 300ms;
+}
+
+.form-transition-exit {
+  opacity: 1;
+}
+
+.form-transition-exit-active {
+  opacity: 0;
+  transition: opacity 300ms;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(155, 135, 245, 0.5);
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(155, 135, 245, 0.7);
 }
