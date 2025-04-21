@@ -162,8 +162,8 @@
     @apply bg-gradient-to-br from-neon-pink via-neon-purple to-neon-blue bg-clip-text text-transparent;
   }
 
-  /* Standard feedback box styling */
-  .feedback-box {
+  /* Standard feedback box styling - removing this as we're now using the component approach */
+  /* .feedback-box {
     background-color: rgba(0, 0, 0, 0.75);
     border: 1px solid rgba(254, 247, 205, 0.3);
     border-radius: 0.5rem;
@@ -171,7 +171,7 @@
     color: #FEF7CD;
     margin-top: 1rem;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-  }
+  } */
 }
 
 .sidebar-menu {

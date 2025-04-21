@@ -6,6 +6,7 @@ import { FormState } from "@/types/form";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 import { useState, useEffect } from "react";
+import FeedbackBox from "./FeedbackBox";
 
 export const EmploymentQuestion = ({
   value,
@@ -136,9 +137,7 @@ export const EmploymentQuestion = ({
       
       {/* Display feedback message if an option is selected */}
       {value && (
-        <div className="mt-4 p-4 border border-[#fef9be] rounded-md bg-black text-[#fef9be]">
-          <p className="font-medium">{getFeedbackMessage()}</p>
-        </div>
+        <FeedbackBox message={getFeedbackMessage()} />
       )}
       
       <div className="mt-8 flex justify-between">

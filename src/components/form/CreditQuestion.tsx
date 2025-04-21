@@ -1,9 +1,11 @@
+
 import React from "react";
 import { Button } from "@/components/ui/button";
 import QuestionContainer from "@/components/form/QuestionContainer";
 import { FormState } from "@/types/form";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { ArrowLeft, ArrowRight } from "lucide-react";
+import FeedbackBox from "./FeedbackBox";
 
 export const CreditQuestion = ({
   value,
@@ -98,9 +100,7 @@ export const CreditQuestion = ({
       </div>
       
       {value && (
-        <div className="mt-4 feedback-box">
-          <p className="font-medium">{getFeedbackMessage()}</p>
-        </div>
+        <FeedbackBox message={getFeedbackMessage()} />
       )}
       
       <div className="mt-8 flex justify-between">

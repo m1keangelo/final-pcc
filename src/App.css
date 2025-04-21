@@ -124,5 +124,4 @@
   color: white !important;
 }
 
-/* Note: Feedback box styling is now defined in index.css for consistency */
-
+/* Note: Feedback box styling is now defined in the FeedbackBox component for consistency */

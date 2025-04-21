@@ -1,3 +1,4 @@
+
 import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
@@ -6,6 +7,7 @@ import QuestionContainer from "@/components/form/QuestionContainer";
 import { FormState } from "@/types/form";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { ArrowLeft, ArrowRight } from "lucide-react";
+import FeedbackBox from "./FeedbackBox";
 
 export const CreditScoreQuestion = ({
   value,
@@ -107,9 +109,7 @@ export const CreditScoreQuestion = ({
           </div>
           
           {value && (
-            <div className="mt-4 feedback-box">
-              <p className="font-medium">{getFeedbackMessage(sliderValue)}</p>
-            </div>
+            <FeedbackBox message={getFeedbackMessage(sliderValue)} />
           )}
         </div>
       </div>

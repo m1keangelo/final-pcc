@@ -54,14 +54,12 @@ export const FirstTimeBuyerQuestion = ({
         <Button
           variant={value === true ? 'default' : 'outline'}
           onClick={() => onChange(true)}
-          className={value === true ? "bg-gradient-to-r from-neon-purple to-neon-blue text-white" : ""}
         >
           {t('q.firsttime.yes')}
         </Button>
         <Button
           variant={value === false ? 'default' : 'outline'}
           onClick={() => onChange(false)}
-          className={value === false ? "bg-gradient-to-r from-neon-purple to-neon-blue text-white" : ""}
         >
           {t('q.firsttime.no')}
         </Button>
@@ -82,7 +80,6 @@ export const FirstTimeBuyerQuestion = ({
         </Button>
         <Button 
           onClick={onNext}
-          className="bg-gradient-to-r from-neon-purple to-neon-blue hover:opacity-90"
         >
           {t('form.next')}
           <ArrowRight className="ml-2 h-4 w-4" />
