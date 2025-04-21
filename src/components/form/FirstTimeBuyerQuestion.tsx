@@ -72,12 +72,6 @@ export const FirstTimeBuyerQuestion = ({
         </div>
       )}
       
-      {value === true && (
-        <div className="mt-4 text-sm text-muted-foreground">
-          {t('q.firsttime.help')}
-        </div>
-      )}
-      
       <div className="mt-8 flex justify-between">
         <Button
           type="button"
