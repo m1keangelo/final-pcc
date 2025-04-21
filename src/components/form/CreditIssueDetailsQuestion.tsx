@@ -1,5 +1,5 @@
 
-import { useState, useRef, useEffect, useCallback } from "react";
+import React, { useState, useRef, useEffect, useCallback, memo } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -169,4 +169,4 @@ const CreditIssueDetailsQuestion = ({
   );
 };
 
-export default React.memo(CreditIssueDetailsQuestion);
+export default memo(CreditIssueDetailsQuestion);

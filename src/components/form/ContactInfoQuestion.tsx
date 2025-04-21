@@ -1,4 +1,5 @@
 
+import React, { useState, useRef, useEffect, useCallback, memo } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -6,9 +7,8 @@ import { Textarea } from "@/components/ui/textarea";
 import QuestionContainer from "@/components/form/QuestionContainer";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { ArrowLeft, ArrowRight } from "lucide-react";
-import { useEffect, useState, useRef, useCallback } from "react";
 
-// Use React.memo to prevent unnecessary re-renders
+// Use memo to prevent unnecessary re-renders
 const ContactInfoQuestion = ({
   name,
   phone,
@@ -181,4 +181,4 @@ const ContactInfoQuestion = ({
   );
 };
 
-export default React.memo(ContactInfoQuestion);
+export default memo(ContactInfoQuestion);
