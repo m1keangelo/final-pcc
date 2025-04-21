@@ -102,7 +102,7 @@ const CreditIssueDetailsQuestion = ({
             <SelectTrigger id="creditIssueType" className="w-full text-foreground bg-background/80">
               <SelectValue placeholder={t('q.creditIssueDetails.typePlaceholder')} />
             </SelectTrigger>
-            <SelectContent>
+            <SelectContent className="bg-popover">
               <SelectItem value="bankruptcy">{t('q.creditIssueDetails.bankruptcy')}</SelectItem>
               <SelectItem value="foreclosure">{t('q.creditIssueDetails.foreclosure')}</SelectItem>
               <SelectItem value="collections">{t('q.creditIssueDetails.collections')}</SelectItem>

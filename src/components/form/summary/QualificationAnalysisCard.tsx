@@ -163,11 +163,11 @@ const ChecklistItem = ({
   );
 };
 
-const QualificationAnalysisCard: React.FC<QualificationAnalysisCardProps> = ({ 
+const QualificationAnalysisCard = ({ 
   formData, 
   clientRating,
   isQualified 
-}) => {
+}: QualificationAnalysisCardProps) => {
   const { language } = useLanguage();
   const isEnglish = language === 'en';
 
