@@ -1,4 +1,3 @@
-
 import React, { useState, useRef, useEffect, useCallback, memo } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -27,7 +26,6 @@ const MonthlyDebtsQuestion = ({
   const [localValue, setLocalValue] = useState(value || "");
   const inputRef = useRef<HTMLInputElement>(null);
   
-  // Focus input on mount
   useEffect(() => {
     if (inputRef.current) {
       inputRef.current.focus();
@@ -36,7 +34,6 @@ const MonthlyDebtsQuestion = ({
   
   const handleInputChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
     const val = e.target.value;
-    // Keep only numbers, $ sign, commas and periods
     const cleanVal = val.replace(/[^0-9$,.]/g, '');
     setLocalValue(cleanVal);
     onChange(cleanVal);

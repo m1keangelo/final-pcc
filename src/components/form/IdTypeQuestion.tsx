@@ -1,4 +1,3 @@
-
 import { Button } from "@/components/ui/button";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Label } from "@/components/ui/label";
@@ -86,19 +85,19 @@ export const IdTypeQuestion = ({
         </RadioGroup>
         
         {value && (
-          <div className="mt-4 p-4 border border-[#fef9be] rounded-md bg-black text-[#fef9be]">
-            <p className="font-medium">{getFeedbackMessage()}</p>
+          <div className="mt-4 p-4 rounded-md glass-card border border-gallomodern-500/30 shadow-inner bg-gradient-to-br from-gallomodern-900/20 to-black/30">
+            <p className="font-medium text-gallomodern-100">{getFeedbackMessage()}</p>
           </div>
         )}
         
         {value === "ITIN" && (
-          <div className="text-sm p-3 bg-blue-50 text-blue-800 border border-blue-200 rounded-md">
+          <div className="text-sm p-3 rounded-md glass-card border border-blue-500/30 shadow-inner bg-blue-950/40">
             {t('q.idType.itinInfo')}
           </div>
         )}
         
         {value === "none" && (
-          <div className="text-sm p-3 bg-red-50 text-red-800 border border-red-200 rounded-md">
+          <div className="text-sm p-3 rounded-md glass-card border border-red-500/30 shadow-inner bg-red-950/40">
             {t('q.idType.noneWarning')}
           </div>
         )}
