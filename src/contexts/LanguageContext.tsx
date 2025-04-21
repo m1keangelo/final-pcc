@@ -236,10 +236,10 @@ const translations = {
     'bugReport.descriptionPlaceholder': 'Describe the bug and steps to reproduce it...',
     'bugReport.screenshot': 'Screenshot (Optional)',
     'bugReport.uploadImage': 'Upload Image',
-    'suggestion.submitted': 'Bug Report Submitted',
-    'suggestion.thankYou': 'Thank you for helping us improve!',
-    'suggestion.submitError': 'There was an error submitting your bug report. Please try again.',
-    'suggestion.descriptionRequired': 'Please provide a description of the bug.',
+    'bugReport.submitted': 'Bug Report Submitted',
+    'bugReport.thankYou': 'Thank you for helping us improve!',
+    'bugReport.submitError': 'There was an error submitting your bug report. Please try again.',
+    'bugReport.descriptionRequired': 'Please provide a description of the bug.',
     
     // Common
     'common.cancel': 'Cancel',
