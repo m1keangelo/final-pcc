@@ -21,7 +21,6 @@ export const CreditQuestion = ({
 }) => {
   const { t, language } = useLanguage();
   
-  // Define feedback messages based on credit category
   const getFeedbackMessage = () => {
     if (language === 'es') {
       switch(value) {
@@ -97,10 +96,9 @@ export const CreditQuestion = ({
         </Button>
       </div>
       
-      {/* Display feedback message if an option is selected */}
       {value && (
-        <div className="mt-4 p-4 rounded-md glass-card border border-gallomodern-500/30 shadow-inner bg-gradient-to-br from-gallomodern-900/20 to-black/30">
-          <p className="font-medium text-gallomodern-100">{getFeedbackMessage()}</p>
+        <div className="mt-4 p-4 feedback-box rounded-md">
+          <p className="font-medium">{getFeedbackMessage()}</p>
         </div>
       )}
       
