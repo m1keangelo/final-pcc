@@ -15,9 +15,9 @@ import { toast } from "@/lib/toast";
 import { Checkbox } from "@/components/ui/checkbox";
 import FeedbackManagement from "@/components/admin/FeedbackManagement";
 import { SystemLog } from "@/contexts/AuthContext";
+import { Users, Settings, FileText, Bell, LogIn } from "lucide-react";
 
 const AdminDashboard = () => {
-  const { t } = useLanguage();
   const { 
     user, 
     isSuperAdmin, 
@@ -204,10 +204,21 @@ const AdminDashboard = () => {
       </div>
 
       <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-        <TabsList className="grid grid-cols-5 w-full max-w-md mb-4">
-          <TabsTrigger value="users">Users</TabsTrigger>
-          <TabsTrigger value="campaigns">Campaigns</TabsTrigger>
-          <TabsTrigger value="feedback" className="relative">
+        <TabsList className="grid grid-cols-7 w-full max-w-full mb-4">
+          <TabsTrigger value="users" className="flex items-center gap-2">
+            <Users size={16} />
+            Users
+          </TabsTrigger>
+          <TabsTrigger value="agents" className="flex items-center gap-2">
+            <UserPlus size={16} />
+            Agents
+          </TabsTrigger>
+          <TabsTrigger value="campaigns" className="flex items-center gap-2">
+            <Bell size={16} />
+            Campaigns
+          </TabsTrigger>
+          <TabsTrigger value="feedback" className="relative flex items-center gap-2">
+            <MessageSquare size={16} />
             Feedback
             {feedbackItems.filter(item => item.status === 'new').length > 0 && (
               <Badge variant="destructive" className="ml-2">
@@ -215,10 +226,21 @@ const AdminDashboard = () => {
               </Badge>
             )}
           </TabsTrigger>
-          <TabsTrigger value="settings">Settings</TabsTrigger>
-          <TabsTrigger value="logs">Logs</TabsTrigger>
+          <TabsTrigger value="suggestions" className="flex items-center gap-2">
+            <FileText size={16} />
+            Suggestions
+          </TabsTrigger>
+          <TabsTrigger value="settings" className="flex items-center gap-2">
+            <Settings size={16} />
+            Settings
+          </TabsTrigger>
+          <TabsTrigger value="logs" className="flex items-center gap-2">
+            <LogIn size={16} />
+            Logs
+          </TabsTrigger>
         </TabsList>
 
+        
         <TabsContent value="users" className="space-y-4">
           <Card>
             <CardHeader className="pb-3">
@@ -415,6 +437,21 @@ const AdminDashboard = () => {
           </Card>
         </TabsContent>
 
+        <TabsContent value="agents" className="space-y-4">
+          <Card>
+            <CardHeader>
+              <CardTitle>Agents Management</CardTitle>
+              <CardDescription>
+                Manage and assign agents to different campaigns
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              
+              <p className="text-muted-foreground">Agents management coming soon</p>
+            </CardContent>
+          </Card>
+        </TabsContent>
+
         <TabsContent value="campaigns" className="space-y-4">
           <Card>
             <CardHeader className="pb-3">
@@ -586,6 +623,21 @@ const AdminDashboard = () => {
                   )}
                 </TableBody>
               </Table>
+            </CardContent>
+          </Card>
+        </TabsContent>
+
+        <TabsContent value="suggestions" className="space-y-4">
+          <Card>
+            <CardHeader>
+              <CardTitle>Suggestions Management</CardTitle>
+              <CardDescription>
+                Review and manage user suggestions for improving the application
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              
+              <p className="text-muted-foreground">Suggestions management coming soon</p>
             </CardContent>
           </Card>
         </TabsContent>
