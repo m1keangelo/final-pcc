@@ -15,6 +15,22 @@ import { toast } from "@/lib/toast";
 import { Checkbox } from "@/components/ui/checkbox";
 import FeedbackManagement from "@/components/admin/FeedbackManagement";
 
+const MARKETING_CAMPAIGNS = [
+  { id: '1', name: 'Facebook', activeLeads: 42, qualifiedLeads: 18 },
+  { id: '2', name: 'Instagram', activeLeads: 36, qualifiedLeads: 15 },
+  { id: '3', name: 'WhatsApp', activeLeads: 29, qualifiedLeads: 12 },
+  { id: '4', name: 'Google Ads', activeLeads: 33, qualifiedLeads: 14 },
+  { id: '5', name: 'Referral', activeLeads: 25, qualifiedLeads: 10 }
+];
+
+const AGENTS = [
+  { id: '1', name: 'SoReal Estate', activeClients: 15, qualifiedClients: 8 },
+  { id: '2', name: 'Tito Baptista', activeClients: 12, qualifiedClients: 5 },
+  { id: '3', name: 'Dens Taveras', activeClients: 10, qualifiedClients: 4 },
+  { id: '4', name: 'Dennis Lopez', activeClients: 8, qualifiedClients: 3 },
+  { id: '5', name: 'Alvaro Terry', activeClients: 9, qualifiedClients: 4 }
+];
+
 const AdminDashboard = () => {
   const { t } = useLanguage();
   const { 
@@ -190,7 +206,7 @@ const AdminDashboard = () => {
         <div>
           <h1 className="text-3xl font-bold tracking-tight">Admin Dashboard</h1>
           <p className="text-muted-foreground">
-            Manage users, campaigns, and system settings
+            Manage users, campaigns, agents, and system settings
           </p>
         </div>
         {isSuperAdmin && (
@@ -201,9 +217,10 @@ const AdminDashboard = () => {
       </div>
 
       <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-        <TabsList className="grid grid-cols-4 w-full max-w-md mb-4">
+        <TabsList className="grid grid-cols-5 w-full max-w-md mb-4">
           <TabsTrigger value="users">Users</TabsTrigger>
           <TabsTrigger value="campaigns">Campaigns</TabsTrigger>
+          <TabsTrigger value="agents">Agents</TabsTrigger>
           <TabsTrigger value="feedback" className="relative">
             Feedback
             {feedbackItems.filter(item => item.status === 'new').length > 0 && (
@@ -415,7 +432,7 @@ const AdminDashboard = () => {
           <Card>
             <CardHeader className="pb-3">
               <div className="flex justify-between items-center">
-                <CardTitle>Campaign Management</CardTitle>
+                <CardTitle>Marketing Campaigns</CardTitle>
                 <Dialog open={showAddCampaignDialog} onOpenChange={setShowAddCampaignDialog}>
                   <DialogTrigger asChild>
                     <Button>Add Campaign</Button>
@@ -464,11 +481,56 @@ const AdminDashboard = () => {
                   </TableRow>
                 </TableHeader>
                 <TableBody>
-                  {mockCampaigns.map(campaign => (
+                  {MARKETING_CAMPAIGNS.map(campaign => (
                     <TableRow key={campaign.id}>
                       <TableCell className="font-medium">{campaign.name}</TableCell>
                       <TableCell>{campaign.activeLeads}</TableCell>
                       <TableCell>{campaign.qualifiedLeads}</TableCell>
+                      <TableCell>
+                        <div className="flex items-center gap-2">
+                          <Button size="sm" variant="ghost">
+                            <Edit className="h-4 w-4" />
+                          </Button>
+                          <Button size="sm" variant="ghost">
+                            <Trash2 className="h-4 w-4" />
+                          </Button>
+                        </div>
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </CardContent>
+          </Card>
+        </TabsContent>
+
+        <TabsContent value="agents" className="space-y-4">
+          <Card>
+            <CardHeader className="pb-3">
+              <div className="flex justify-between items-center">
+                <CardTitle>Real Estate Agents</CardTitle>
+                <Button>Add Agent</Button>
+              </div>
+              <CardDescription>
+                Manage real estate agents and their performance.
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="p-0">
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead>Agent Name</TableHead>
+                    <TableHead>Active Clients</TableHead>
+                    <TableHead>Qualified Clients</TableHead>
+                    <TableHead className="w-[100px]">Actions</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {AGENTS.map(agent => (
+                    <TableRow key={agent.id}>
+                      <TableCell className="font-medium">{agent.name}</TableCell>
+                      <TableCell>{agent.activeClients}</TableCell>
+                      <TableCell>{agent.qualifiedClients}</TableCell>
                       <TableCell>
                         <div className="flex items-center gap-2">
                           <Button size="sm" variant="ghost">
