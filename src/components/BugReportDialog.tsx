@@ -30,26 +30,27 @@ const BugReportDialog = ({ isOpen, onClose }: BugReportDialogProps) => {
     try {
       setIsSubmitting(true);
       
-      // Handle image if present
       let imageUrl = undefined;
       if (selectedImage) {
-        // In a real app, this would upload the image to storage
-        // For now, we'll just store a placeholder
         imageUrl = URL.createObjectURL(selectedImage);
-        console.log("Image would be uploaded:", imageUrl);
+        console.log("Image prepared for upload:", imageUrl);
       }
       
-      // Add bug report to the system
-      await addFeedbackItem('bug', description, imageUrl);
+      const user = {
+        name: 'John Doe',
+        avatar: 'https://api.dicebear.com/7.x/avatars/svg?seed=John'
+      };
+      
+      await addFeedbackItem('bug', description, imageUrl, user);
       
       toast(`${t('bugReport.submitted')} - ${t('bugReport.thankYou')}`);
       
-      // Reset form
       setDescription("");
       setSelectedImage(null);
       onClose();
     } catch (error) {
       toast(`${t('common.error')} - ${t('bugReport.submitError')}`);
+      console.error("Error submitting bug report:", error);
     } finally {
       setIsSubmitting(false);
     }

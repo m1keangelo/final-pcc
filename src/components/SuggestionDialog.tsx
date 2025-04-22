@@ -30,26 +30,27 @@ const SuggestionDialog = ({ isOpen, onClose }: SuggestionDialogProps) => {
     try {
       setIsSubmitting(true);
       
-      // Handle image if present
       let imageUrl = undefined;
       if (selectedImage) {
-        // In a real app, this would upload the image to storage
-        // For now, we'll just store a placeholder
         imageUrl = URL.createObjectURL(selectedImage);
-        console.log("Image would be uploaded:", imageUrl);
+        console.log("Image prepared for upload:", imageUrl);
       }
       
-      // Add suggestion to the system
-      await addFeedbackItem('suggestion', suggestion, imageUrl);
+      const user = {
+        name: 'John Doe',
+        avatar: 'https://api.dicebear.com/7.x/avatars/svg?seed=John'
+      };
+      
+      await addFeedbackItem('suggestion', suggestion, imageUrl, user);
       
       toast(`${t('suggestion.submitted')} - ${t('suggestion.thankYou')}`);
       
-      // Reset form
       setSuggestion("");
       setSelectedImage(null);
       onClose();
     } catch (error) {
       toast(`${t('common.error')} - ${t('suggestion.submitError')}`);
+      console.error("Error submitting suggestion:", error);
     } finally {
       setIsSubmitting(false);
     }
