@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
@@ -25,7 +24,7 @@ const LoginForm = ({ className }: { className?: string }) => {
   const [showPassword, setShowPassword] = useState(false);
   
   const { login } = useAuth();
-  const { language } = useLanguage();
+  const { t, language } = useLanguage();
   const navigate = useNavigate();
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -33,25 +32,21 @@ const LoginForm = ({ className }: { className?: string }) => {
     setError("");
     
     if (!username || !password) {
-      setError(language === 'en' ? 'Please enter both username and password' : 'Por favor, ingrese nombre de usuario y contraseña');
+      setError(t('login.error'));
       return;
     }
     
     setIsSubmitting(true);
-    
     try {
-      console.log("Attempting login with:", username); // Debug log
       const success = await login(username, password);
-      console.log("Login result:", success); // Debug log
-      
       if (success) {
         navigate("/");
       } else {
-        setError(language === 'en' ? 'Invalid username or password' : 'Usuario o contraseña inválidos');
+        setError(t('login.error'));
       }
     } catch (error) {
       console.error("Login error:", error);
-      setError(language === 'en' ? 'Login failed. Please try again.' : 'Error al iniciar sesión. Inténtelo de nuevo.');
+      setError(t('login.error'));
     } finally {
       setIsSubmitting(false);
     }
@@ -61,26 +56,24 @@ const LoginForm = ({ className }: { className?: string }) => {
     setShowPassword(!showPassword);
   };
 
-  // Use hardcoded strings instead of translations for now
-  const usernameLabel = language === 'en' ? 'Username' : 'Usuario';
-  const passwordLabel = language === 'en' ? 'Password' : 'Contraseña';
-  const forgotPasswordText = language === 'en' ? 'Forgot password?' : '¿Olvidó su contraseña?';
-  const loginTitle = language === 'en' ? 'Sign In' : 'Iniciar Sesión';
-  const loginButtonText = isSubmitting 
-    ? (language === 'en' ? 'Logging in...' : 'Iniciando...')
-    : (language === 'en' ? 'Login' : 'Iniciar Sesión');
+  const getLoginButtonText = () => {
+    if (isSubmitting) {
+      return language === 'en' ? 'Logging in...' : 'Iniciando...';
+    }
+    return language === 'en' ? 'Login' : 'Iniciar Sesión';
+  };
 
   return (
     <div className={cn("flex flex-col items-center justify-center w-full py-8 px-6 md:w-1/2", className)}>
       <div className="w-full max-w-md glass-morphism rounded-xl p-8 shadow-2xl border border-white/10 backdrop-blur-lg transition-all duration-300 hover:shadow-glow-purple animate-fade-in">
         <h2 className="text-3xl font-bold text-center text-white mb-8 font-display text-shadow-sm">
-          {loginTitle}
+          {t('login.title')}
         </h2>
         
         <form onSubmit={handleSubmit} className="space-y-6">
           <div className="space-y-2">
             <Label htmlFor="username" className="text-white/90 font-medium text-base">
-              {usernameLabel}
+              {t('login.username')}
             </Label>
             <div className="relative">
               <div className="absolute left-3 top-1/2 transform -translate-y-1/2 text-neon-purple">
@@ -99,7 +92,7 @@ const LoginForm = ({ className }: { className?: string }) => {
           
           <div className="space-y-2">
             <Label htmlFor="password" className="text-white/90 font-medium text-base">
-              {passwordLabel}
+              {t('login.password')}
             </Label>
             <div className="relative">
               <div className="absolute left-3 top-1/2 transform -translate-y-1/2 text-neon-blue">
@@ -132,7 +125,7 @@ const LoginForm = ({ className }: { className?: string }) => {
           <div className="flex justify-end">
             <a href="#" className="text-sm text-neon-blue hover:text-neon-purple transition-colors flex items-center gap-1">
               <HelpCircle size={14} />
-              {forgotPasswordText}
+              {t('login.forgotPassword')}
             </a>
           </div>
           
@@ -144,12 +137,12 @@ const LoginForm = ({ className }: { className?: string }) => {
             {isSubmitting ? (
               <>
                 <Loader2 size={18} className="mr-2 animate-spin" />
-                {loginButtonText}
+                {getLoginButtonText()}
               </>
             ) : (
               <>
                 <LogIn size={18} className="mr-2" />
-                {loginButtonText}
+                {getLoginButtonText()}
               </>
             )}
           </Button>

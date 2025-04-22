@@ -1,4 +1,3 @@
-
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -19,16 +18,36 @@ import ClientTrash from "./pages/ClientTrash";
 import Analytics from "./pages/Analytics";
 import AdminDashboard from "./pages/AdminDashboard";
 import NotFound from "./pages/NotFound";
-import Index from "./pages/Index";
+import { useState, useEffect } from "react";
+import { toast } from "./lib/toast";
 
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
-      retry: 1,
+      retry: 2,
+      retryDelay: (attemptIndex) => Math.min(1000 * 2 ** attemptIndex, 30000),
       staleTime: 1000 * 60 * 5, // 5 minutes
       refetchOnWindowFocus: false,
+      refetchOnMount: true,
+    },
+    mutations: {
+      retry: 1,
     },
   },
+});
+
+const unsubscribeQuery = queryClient.getQueryCache().subscribe((event) => {
+  if (event.type === 'updated' && event.query.state.status === 'error') {
+    console.error('Query error:', event.query.state.error);
+    toast("There was a problem with the data request. Please try again.");
+  }
+});
+
+const unsubscribeMutation = queryClient.getMutationCache().subscribe((event) => {
+  if (event.type === 'updated' && event.mutation.state.status === 'error') {
+    console.error('Mutation error:', event.mutation.state.error);
+    toast("Your changes could not be saved. Please try again.");
+  }
 });
 
 const AppError = () => (
@@ -48,6 +67,40 @@ const AppError = () => (
   </div>
 );
 
+const OfflineDetector = () => {
+  const [isOffline, setIsOffline] = useState(!navigator.onLine);
+  
+  useEffect(() => {
+    const handleOnline = () => {
+      setIsOffline(false);
+      toast("Your internet connection has been restored.");
+    };
+    
+    const handleOffline = () => {
+      setIsOffline(true);
+      toast("Please check your internet connection.");
+    };
+    
+    window.addEventListener('online', handleOnline);
+    window.addEventListener('offline', handleOffline);
+    
+    return () => {
+      window.removeEventListener('online', handleOnline);
+      window.removeEventListener('offline', handleOffline);
+    };
+  }, []);
+  
+  if (isOffline) {
+    return (
+      <div className="fixed top-0 left-0 right-0 bg-red-600 text-white py-1 px-4 text-center z-[100]">
+        You are currently offline. Some features may be unavailable.
+      </div>
+    );
+  }
+  
+  return null;
+};
+
 const App = () => (
   <ErrorBoundary fallback={<AppError />}>
     <QueryClientProvider client={queryClient}>
@@ -58,11 +111,11 @@ const App = () => (
               <Toaster />
               <Sonner />
               <BrowserRouter>
+                <OfflineDetector />
                 <Routes>
                   <Route path="/login" element={<Login />} />
                   
-                  <Route path="/" element={<ProtectedRoute><Index /></ProtectedRoute>} />
-                  <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
+                  <Route path="/" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
                   <Route path="/form" element={<ProtectedRoute><Form /></ProtectedRoute>} />
                   <Route path="/documents" element={<ProtectedRoute><DocumentSelection /></ProtectedRoute>} />
                   <Route path="/clients" element={<ProtectedRoute><Clients /></ProtectedRoute>} />

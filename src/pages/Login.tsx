@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 import SplashScreen from "@/components/login/SplashScreen";
 import LoginForm from "@/components/login/LoginForm";
 import BrandImagery from "@/components/login/BrandImagery";
+import MatrixBackground from "@/components/login/MatrixBackground";
 import { LanguageProvider } from "@/contexts/LanguageContext";
 import { useAuth } from "@/contexts/AuthContext";
 import { ErrorBoundary } from "@/components/ErrorBoundary";
@@ -29,18 +30,27 @@ const Login = () => {
   const navigate = useNavigate();
   
   useEffect(() => {
-    // If user is already logged in, redirect to home
     if (user) {
       navigate('/');
+      return;
     }
 
-    // Show splash screen for 3 seconds
     const timer = setTimeout(() => {
       setShowSplash(false);
-    }, 3000);
+    }, 6000);
     
     return () => clearTimeout(timer);
   }, [user, navigate]);
+  
+  useEffect(() => {
+    try {
+      if (!sessionStorage.getItem('sessionStartTime')) {
+        sessionStorage.setItem('sessionStartTime', Date.now().toString());
+      }
+    } catch (error) {
+      console.warn('Failed to set session start time:', error);
+    }
+  }, []);
   
   if (showSplash && !user && !isLoading) {
     return (
@@ -54,6 +64,8 @@ const Login = () => {
     <ErrorBoundary fallback={<LoginError />}>
       <LanguageProvider>
         <div className="relative flex h-screen w-full overflow-hidden bg-gradient-to-br from-[#12121e] via-[#1a1a2a] to-[#121220]">
+          <MatrixBackground />
+          <div className="absolute inset-0 bg-gradient-radial from-transparent via-transparent to-black opacity-60"></div>
           <div className="z-10 flex w-full flex-col md:flex-row h-full items-center justify-center md:justify-start">
             <BrandImagery />
             <LoginForm className="md:ml-[-5%] lg:ml-[-10%] xl:ml-[-15%] pt-16 md:pt-8" />

@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
@@ -15,9 +14,9 @@ import { useLanguage } from "@/contexts/LanguageContext";
 import { toast } from "@/lib/toast";
 import { Checkbox } from "@/components/ui/checkbox";
 import FeedbackManagement from "@/components/admin/FeedbackManagement";
-import { Users, Settings, FileText, Bell, LogIn } from "lucide-react";
 
 const AdminDashboard = () => {
+  const { t } = useLanguage();
   const { 
     user, 
     isSuperAdmin, 
@@ -27,9 +26,7 @@ const AdminDashboard = () => {
     getAllUsers,
     feedbackItems,
     updateFeedbackStatus,
-    deleteFeedbackItem,
-    systemLogs,
-    clearSystemLogs
+    deleteFeedbackItem
   } = useAuth();
   
   const [activeTab, setActiveTab] = useState("users");
@@ -48,14 +45,18 @@ const AdminDashboard = () => {
   const [users, setUsers] = useState<any[]>([]);
 
   useEffect(() => {
-    try {
-      const allUsers = getAllUsers();
-      setUsers(allUsers);
-    } catch (error) {
-      console.error("Error getting users:", error);
-      setUsers([]);
-    }
+    const allUsers = getAllUsers();
+    setUsers(allUsers);
   }, [getAllUsers]);
+
+  useEffect(() => {
+    const newFeedbackCount = feedbackItems.filter(item => item.status === 'new').length;
+    if (newFeedbackCount > 0) {
+      document.title = `(${newFeedbackCount}) Admin Dashboard`;
+    } else {
+      document.title = 'Admin Dashboard';
+    }
+  }, [feedbackItems]);
 
   const mockCampaigns = [
     { id: '1', name: 'Dennis', activeLeads: 42, qualifiedLeads: 18 },
@@ -200,21 +201,10 @@ const AdminDashboard = () => {
       </div>
 
       <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-        <TabsList className="grid grid-cols-7 w-full max-w-full mb-4">
-          <TabsTrigger value="users" className="flex items-center gap-2">
-            <Users size={16} />
-            Users
-          </TabsTrigger>
-          <TabsTrigger value="agents" className="flex items-center gap-2">
-            <UserPlus size={16} />
-            Agents
-          </TabsTrigger>
-          <TabsTrigger value="campaigns" className="flex items-center gap-2">
-            <Bell size={16} />
-            Campaigns
-          </TabsTrigger>
-          <TabsTrigger value="feedback" className="relative flex items-center gap-2">
-            <MessageSquare size={16} />
+        <TabsList className="grid grid-cols-4 w-full max-w-md mb-4">
+          <TabsTrigger value="users">Users</TabsTrigger>
+          <TabsTrigger value="campaigns">Campaigns</TabsTrigger>
+          <TabsTrigger value="feedback" className="relative">
             Feedback
             {feedbackItems.filter(item => item.status === 'new').length > 0 && (
               <Badge variant="destructive" className="ml-2">
@@ -222,21 +212,9 @@ const AdminDashboard = () => {
               </Badge>
             )}
           </TabsTrigger>
-          <TabsTrigger value="suggestions" className="flex items-center gap-2">
-            <FileText size={16} />
-            Suggestions
-          </TabsTrigger>
-          <TabsTrigger value="settings" className="flex items-center gap-2">
-            <Settings size={16} />
-            Settings
-          </TabsTrigger>
-          <TabsTrigger value="logs" className="flex items-center gap-2">
-            <LogIn size={16} />
-            Logs
-          </TabsTrigger>
+          <TabsTrigger value="settings">Settings</TabsTrigger>
         </TabsList>
 
-        
         <TabsContent value="users" className="space-y-4">
           <Card>
             <CardHeader className="pb-3">
@@ -433,20 +411,6 @@ const AdminDashboard = () => {
           </Card>
         </TabsContent>
 
-        <TabsContent value="agents" className="space-y-4">
-          <Card>
-            <CardHeader>
-              <CardTitle>Agents Management</CardTitle>
-              <CardDescription>
-                Manage and assign agents to different campaigns
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <p className="text-muted-foreground">Agents management coming soon</p>
-            </CardContent>
-          </Card>
-        </TabsContent>
-
         <TabsContent value="campaigns" className="space-y-4">
           <Card>
             <CardHeader className="pb-3">
@@ -532,20 +496,6 @@ const AdminDashboard = () => {
           />
         </TabsContent>
 
-        <TabsContent value="suggestions" className="space-y-4">
-          <Card>
-            <CardHeader>
-              <CardTitle>Suggestions Management</CardTitle>
-              <CardDescription>
-                Review and manage user suggestions for improving the application
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <p className="text-muted-foreground">Suggestions management coming soon</p>
-            </CardContent>
-          </Card>
-        </TabsContent>
-
         <TabsContent value="settings" className="space-y-4">
           <Card>
             <CardHeader>
@@ -572,59 +522,6 @@ const AdminDashboard = () => {
             <CardFooter>
               <Button disabled>Save Settings</Button>
             </CardFooter>
-          </Card>
-        </TabsContent>
-
-        <TabsContent value="logs" className="space-y-4">
-          <Card>
-            <CardHeader className="pb-3">
-              <div className="flex justify-between items-center">
-                <CardTitle>System Logs</CardTitle>
-                <Button variant="outline" onClick={clearSystemLogs}>Clear Logs</Button>
-              </div>
-              <CardDescription>
-                View system logs for debugging purposes
-              </CardDescription>
-            </CardHeader>
-            <CardContent className="p-0">
-              <Table>
-                <TableHeader>
-                  <TableRow>
-                    <TableHead>Time</TableHead>
-                    <TableHead>Type</TableHead>
-                    <TableHead>Message</TableHead>
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  {systemLogs && systemLogs.map((log) => (
-                    <TableRow key={log.id}>
-                      <TableCell className="whitespace-nowrap">
-                        {new Date(log.timestamp).toLocaleString()}
-                      </TableCell>
-                      <TableCell>
-                        <Badge variant={
-                          log.type === 'error' ? 'destructive' :
-                          log.type === 'translation' ? 'default' :
-                          'secondary'
-                        }>
-                          {log.type}
-                        </Badge>
-                      </TableCell>
-                      <TableCell className="max-w-md truncate">
-                        {log.message}
-                      </TableCell>
-                    </TableRow>
-                  ))}
-                  {!systemLogs || systemLogs.length === 0 && (
-                    <TableRow>
-                      <TableCell colSpan={3} className="text-center py-4 text-muted-foreground">
-                        No logs available
-                      </TableCell>
-                    </TableRow>
-                  )}
-                </TableBody>
-              </Table>
-            </CardContent>
           </Card>
         </TabsContent>
       </Tabs>

@@ -1,5 +1,4 @@
 import React, { createContext, useContext, useState, ReactNode, useEffect } from 'react';
-import { useAuth } from './AuthContext';
 
 // Language type
 export type Language = 'en' | 'es';
@@ -374,7 +373,7 @@ const translations = {
     // Monthly Debts
     'q.monthlyDebts.title': 'Deudas Mensuales',
     'q.monthlyDebts.question': '¿Cuáles son sus pagos mensuales aproximados de deudas (excluyendo vivienda)?',
-    'q.monthlyDebts.amountLabel': 'Monthly Debt Payments',
+    'q.monthlyDebts.amountLabel': 'Pagos Mensuales de Deudas',
     'q.monthlyDebts.placeholder': 'Ingrese monto mensual de deudas',
     'q.monthlyDebts.helper': 'Incluya préstamos de auto, préstamos estudiantiles, tarjetas de crédito, préstamos personales, etc.',
     
@@ -492,9 +491,7 @@ const translations = {
 };
 
 // Provider component
-export const LanguageProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
-  const { addSystemLog } = useAuth();
-  
+export const LanguageProvider: React.FC<{children: ReactNode}> = ({ children }) => {
   const [language, setLanguage] = useState<Language>('en');
 
   // Save language preference to localStorage
@@ -526,12 +523,9 @@ export const LanguageProvider: React.FC<{ children: ReactNode }> = ({ children }
   const t = (key: string): string => {
     const translationSet = translations[language];
     
-    // Fix: Convert the object to a JSON string for logging
-    addSystemLog('translation', JSON.stringify({
-      key,
-      language,
-      found: !!translationSet?.[key as keyof typeof translationSet]
-    }));
+    console.log(`Translating key: ${key}`);
+    console.log(`Current language: ${language}`);
+    console.log(`Translation found: ${translationSet[key as keyof typeof translationSet] || 'NOT FOUND'}`);
     
     if (!translationSet) return key;
     
