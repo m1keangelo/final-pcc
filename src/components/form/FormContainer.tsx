@@ -76,9 +76,7 @@ const FormContainer: React.FC = React.memo(() => {
         '¡Su información ha sido enviada con éxito!');
       
       console.log('Changing form stage to summary');
-      setTimeout(() => {
-        setFormStage('summary');
-      }, 100);
+      setFormStage('summary');
     } catch (error) {
       console.error("Error during form completion:", error);
       toast.error(language === 'en' ? 

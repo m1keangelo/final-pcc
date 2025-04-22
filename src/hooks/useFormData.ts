@@ -29,10 +29,7 @@ export const useFormData = () => {
     comments: ""
   });
 
-  // We'll handle phone formatting in the ContactInfoQuestion component instead
-  // Removing the useEffect that was causing issues
-
-  const handleFormDataChange = (field: keyof FormState, value: string) => {
+  const handleFormDataChange = (field: keyof FormState, value: any) => {
     if (field === 'phone') {
       const onlyDigits = value.replace(/\D/g, '');
       setFormData({
