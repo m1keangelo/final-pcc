@@ -360,8 +360,8 @@ const translations = {
     
     // Down Payment Amount
     'q.downPaymentAmount.title': 'Cantidad de Enganche',
-    'q.downPayment.question': '¿Aproximadamente cuánto tienes ahorrado?',
-    'q.downPaymentAmount.amountLabel': 'Amount Saved',
+    'q.downPaymentAmount.question': '¿Aproximadamente cuánto tienes ahorrado?',
+    'q.downPaymentAmount.amountLabel': 'Cantidad Ahorrada',
     'q.downPaymentAmount.placeholder': 'Ingrese cantidad',
     
     // Down Payment Assistance
@@ -411,7 +411,7 @@ const translations = {
     // Contact Info
     'q.contactInfo.title': 'Información de Contacto',
     'q.contactInfo.question': '¿Cómo podemos comunicarnos con usted para brindarle más información?',
-    'q.contactInfo.nameLabel': 'Full Name',
+    'q.contactInfo.nameLabel': 'Nombre Completo',
     'q.contactInfo.namePlaceholder': 'Ingrese su nombre completo',
     'q.contactInfo.phoneLabel': 'Número de Teléfono',
     'q.contactInfo.phonePlaceholder': 'Ingrese su número de teléfono',
@@ -476,12 +476,12 @@ const translations = {
     'bugReport.title': 'Reportar un Error',
     'bugReport.description': 'Ayúdenos a mejorar reportando cualquier problema que encuentre',
     'bugReport.descriptionPlaceholder': 'Describa el error y los pasos para reproducirlo...',
-    'suggestion.screenshot': 'Captura de Pantalla (Opcional)',
-    'suggestion.uploadImage': 'Subir Imagen',
-    'suggestion.submitted': 'Bug Report Submitted',
-    'suggestion.thankYou': '¡Gracias por ayudarnos a mejorar!',
-    'suggestion.submitError': 'Hubo un error al enviar su informe de error. Por favor intente de nuevo.',
-    'suggestion.descriptionRequired': 'Por favor proporcione una descripción del error.',
+    'bugReport.screenshot': 'Captura de Pantalla (Opcional)',
+    'bugReport.uploadImage': 'Subir Imagen',
+    'bugReport.submitted': 'Informe de Error Enviado',
+    'bugReport.thankYou': '¡Gracias por ayudarnos a mejorar!',
+    'bugReport.submitError': 'Hubo un error al enviar su informe de error. Por favor intente de nuevo.',
+    'bugReport.descriptionRequired': 'Por favor proporcione una descripción del error.',
     
     // Common
     'common.cancel': 'Cancelar',
