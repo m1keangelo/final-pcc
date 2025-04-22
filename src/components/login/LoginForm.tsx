@@ -1,3 +1,4 @@
+
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
@@ -24,7 +25,7 @@ const LoginForm = ({ className }: { className?: string }) => {
   const [showPassword, setShowPassword] = useState(false);
   
   const { login } = useAuth();
-  const { t, language } = useLanguage();
+  const { language } = useLanguage();
   const navigate = useNavigate();
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -32,7 +33,7 @@ const LoginForm = ({ className }: { className?: string }) => {
     setError("");
     
     if (!username || !password) {
-      setError(t('login.error'));
+      setError(language === 'en' ? 'Please enter both username and password' : 'Por favor, ingrese nombre de usuario y contraseña');
       return;
     }
     
@@ -42,11 +43,11 @@ const LoginForm = ({ className }: { className?: string }) => {
       if (success) {
         navigate("/");
       } else {
-        setError(t('login.error'));
+        setError(language === 'en' ? 'Invalid username or password' : 'Usuario o contraseña inválidos');
       }
     } catch (error) {
       console.error("Login error:", error);
-      setError(t('login.error'));
+      setError(language === 'en' ? 'Login failed. Please try again.' : 'Error al iniciar sesión. Inténtelo de nuevo.');
     } finally {
       setIsSubmitting(false);
     }
@@ -63,17 +64,22 @@ const LoginForm = ({ className }: { className?: string }) => {
     return language === 'en' ? 'Login' : 'Iniciar Sesión';
   };
 
+  const usernameLabel = language === 'en' ? 'Username' : 'Usuario';
+  const passwordLabel = language === 'en' ? 'Password' : 'Contraseña';
+  const forgotPasswordText = language === 'en' ? 'Forgot password?' : '¿Olvidó su contraseña?';
+  const loginTitle = language === 'en' ? 'Sign In' : 'Iniciar Sesión';
+
   return (
     <div className={cn("flex flex-col items-center justify-center w-full py-8 px-6 md:w-1/2", className)}>
       <div className="w-full max-w-md glass-morphism rounded-xl p-8 shadow-2xl border border-white/10 backdrop-blur-lg transition-all duration-300 hover:shadow-glow-purple animate-fade-in">
         <h2 className="text-3xl font-bold text-center text-white mb-8 font-display text-shadow-sm">
-          {t('login.title')}
+          {loginTitle}
         </h2>
         
         <form onSubmit={handleSubmit} className="space-y-6">
           <div className="space-y-2">
             <Label htmlFor="username" className="text-white/90 font-medium text-base">
-              {t('login.username')}
+              {usernameLabel}
             </Label>
             <div className="relative">
               <div className="absolute left-3 top-1/2 transform -translate-y-1/2 text-neon-purple">
@@ -92,7 +98,7 @@ const LoginForm = ({ className }: { className?: string }) => {
           
           <div className="space-y-2">
             <Label htmlFor="password" className="text-white/90 font-medium text-base">
-              {t('login.password')}
+              {passwordLabel}
             </Label>
             <div className="relative">
               <div className="absolute left-3 top-1/2 transform -translate-y-1/2 text-neon-blue">
@@ -125,7 +131,7 @@ const LoginForm = ({ className }: { className?: string }) => {
           <div className="flex justify-end">
             <a href="#" className="text-sm text-neon-blue hover:text-neon-purple transition-colors flex items-center gap-1">
               <HelpCircle size={14} />
-              {t('login.forgotPassword')}
+              {forgotPasswordText}
             </a>
           </div>
           

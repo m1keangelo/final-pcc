@@ -30,27 +30,20 @@ const Login = () => {
   const navigate = useNavigate();
   
   useEffect(() => {
+    // Simplified redirection logic
     if (user) {
       navigate('/');
-      return;
     }
 
+    // Shorter splash screen duration to avoid potential issues
     const timer = setTimeout(() => {
       setShowSplash(false);
-    }, 6000);
+    }, 3000);
     
     return () => clearTimeout(timer);
   }, [user, navigate]);
   
-  useEffect(() => {
-    try {
-      if (!sessionStorage.getItem('sessionStartTime')) {
-        sessionStorage.setItem('sessionStartTime', Date.now().toString());
-      }
-    } catch (error) {
-      console.warn('Failed to set session start time:', error);
-    }
-  }, []);
+  // Remove session storage logic that might be causing issues
   
   if (showSplash && !user && !isLoading) {
     return (
@@ -64,8 +57,6 @@ const Login = () => {
     <ErrorBoundary fallback={<LoginError />}>
       <LanguageProvider>
         <div className="relative flex h-screen w-full overflow-hidden bg-gradient-to-br from-[#12121e] via-[#1a1a2a] to-[#121220]">
-          <MatrixBackground />
-          <div className="absolute inset-0 bg-gradient-radial from-transparent via-transparent to-black opacity-60"></div>
           <div className="z-10 flex w-full flex-col md:flex-row h-full items-center justify-center md:justify-start">
             <BrandImagery />
             <LoginForm className="md:ml-[-5%] lg:ml-[-10%] xl:ml-[-15%] pt-16 md:pt-8" />
