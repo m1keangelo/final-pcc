@@ -1,5 +1,4 @@
 import React, { createContext, useContext, useState, ReactNode, useEffect } from 'react';
-import { useAuth } from './AuthContext';
 
 // Language type
 export type Language = 'en' | 'es';
@@ -492,9 +491,7 @@ const translations = {
 };
 
 // Provider component
-export const LanguageProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
-  const { addSystemLog } = useAuth();
-  
+export const LanguageProvider: React.FC<{children: ReactNode}> = ({ children }) => {
   const [language, setLanguage] = useState<Language>('en');
 
   // Save language preference to localStorage
@@ -526,13 +523,9 @@ export const LanguageProvider: React.FC<{ children: ReactNode }> = ({ children }
   const t = (key: string): string => {
     const translationSet = translations[language];
     
-    // Log translation attempt
-    addSystemLog('translation', `Translation request for key: ${key}`, {
-      key,
-      language,
-      value: translationSet?.[key as keyof typeof translationSet],
-      found: !!translationSet?.[key as keyof typeof translationSet]
-    });
+    console.log(`Translating key: ${key}`);
+    console.log(`Current language: ${language}`);
+    console.log(`Translation found: ${translationSet[key as keyof typeof translationSet] || 'NOT FOUND'}`);
     
     if (!translationSet) return key;
     

@@ -14,7 +14,6 @@ import { useLanguage } from "@/contexts/LanguageContext";
 import { toast } from "@/lib/toast";
 import { Checkbox } from "@/components/ui/checkbox";
 import FeedbackManagement from "@/components/admin/FeedbackManagement";
-import { SystemLog } from "@/contexts/AuthContext";
 
 const AdminDashboard = () => {
   const { t } = useLanguage();
@@ -27,9 +26,7 @@ const AdminDashboard = () => {
     getAllUsers,
     feedbackItems,
     updateFeedbackStatus,
-    deleteFeedbackItem,
-    systemLogs,
-    clearSystemLogs
+    deleteFeedbackItem
   } = useAuth();
   
   const [activeTab, setActiveTab] = useState("users");
@@ -204,7 +201,7 @@ const AdminDashboard = () => {
       </div>
 
       <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-        <TabsList className="grid grid-cols-5 w-full max-w-md mb-4">
+        <TabsList className="grid grid-cols-4 w-full max-w-md mb-4">
           <TabsTrigger value="users">Users</TabsTrigger>
           <TabsTrigger value="campaigns">Campaigns</TabsTrigger>
           <TabsTrigger value="feedback" className="relative">
@@ -216,7 +213,6 @@ const AdminDashboard = () => {
             )}
           </TabsTrigger>
           <TabsTrigger value="settings">Settings</TabsTrigger>
-          <TabsTrigger value="logs">Logs</TabsTrigger>
         </TabsList>
 
         <TabsContent value="users" className="space-y-4">
@@ -526,67 +522,6 @@ const AdminDashboard = () => {
             <CardFooter>
               <Button disabled>Save Settings</Button>
             </CardFooter>
-          </Card>
-        </TabsContent>
-
-        <TabsContent value="logs" className="space-y-4">
-          <Card>
-            <CardHeader className="pb-3">
-              <div className="flex justify-between items-center">
-                <CardTitle>System Logs</CardTitle>
-                <Button variant="outline" onClick={clearSystemLogs}>Clear Logs</Button>
-              </div>
-              <CardDescription>
-                View system logs for debugging purposes
-              </CardDescription>
-            </CardHeader>
-            <CardContent className="p-0">
-              <Table>
-                <TableHeader>
-                  <TableRow>
-                    <TableHead>Time</TableHead>
-                    <TableHead>Type</TableHead>
-                    <TableHead>Message</TableHead>
-                    <TableHead>Details</TableHead>
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  {systemLogs.map((log) => (
-                    <TableRow key={log.id}>
-                      <TableCell className="whitespace-nowrap">
-                        {new Date(log.timestamp).toLocaleString()}
-                      </TableCell>
-                      <TableCell>
-                        <Badge variant={
-                          log.type === 'error' ? 'destructive' :
-                          log.type === 'translation' ? 'default' :
-                          'secondary'
-                        }>
-                          {log.type}
-                        </Badge>
-                      </TableCell>
-                      <TableCell className="max-w-md truncate">
-                        {log.message}
-                      </TableCell>
-                      <TableCell className="font-mono text-xs">
-                        {log.details ? (
-                          <code className="whitespace-pre-wrap">
-                            {JSON.stringify(log.details, null, 2)}
-                          </code>
-                        ) : null}
-                      </TableCell>
-                    </TableRow>
-                  ))}
-                  {systemLogs.length === 0 && (
-                    <TableRow>
-                      <TableCell colSpan={4} className="text-center py-4 text-muted-foreground">
-                        No logs available
-                      </TableCell>
-                    </TableRow>
-                  )}
-                </TableBody>
-              </Table>
-            </CardContent>
           </Card>
         </TabsContent>
       </Tabs>

@@ -35,15 +35,6 @@ export interface FeedbackItem {
   imageUrl?: string;
 }
 
-// Add new types for system logs
-export interface SystemLog {
-  id: string;
-  type: 'translation' | 'error' | 'debug';
-  message: string;
-  details?: any;
-  timestamp: string;
-}
-
 // Auth context type
 type AuthContextType = {
   user: User | null;
@@ -62,9 +53,6 @@ type AuthContextType = {
   addFeedbackItem: (type: 'bug' | 'suggestion', description: string, imageUrl?: string) => void;
   updateFeedbackStatus: (id: string, status: 'new' | 'read' | 'resolved') => void;
   deleteFeedbackItem: (id: string) => void;
-  systemLogs: SystemLog[];
-  addSystemLog: (type: SystemLog['type'], message: string, details?: any) => void;
-  clearSystemLogs: () => void;
 };
 
 // Expanded mock users for demo with proper role definitions
@@ -140,8 +128,6 @@ export const AuthProvider: React.FC<{children: ReactNode}> = ({ children }) => {
   const [user, setUser] = useState<User | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [feedbackItems, setFeedbackItems] = useState<FeedbackItem[]>([]);
-  
-  const [systemLogs, setSystemLogs] = useState<SystemLog[]>([]);
 
   // Computed properties for roles
   const isSuperAdmin = user?.role === 'superadmin';
@@ -295,25 +281,6 @@ export const AuthProvider: React.FC<{children: ReactNode}> = ({ children }) => {
     setFeedbackItems(prevItems => prevItems.filter(item => item.id !== id));
   };
   
-  const addSystemLog = (type: SystemLog['type'], message: string, details?: any) => {
-    const newLog: SystemLog = {
-      id: Date.now().toString(),
-      type,
-      message,
-      details,
-      timestamp: new Date().toISOString()
-    };
-    
-    setSystemLogs(prev => [newLog, ...prev].slice(0, 1000)); // Keep last 1000 logs
-    
-    // Also log to console for immediate debugging
-    console.log(`[${type.toUpperCase()}] ${message}`, details || '');
-  };
-
-  const clearSystemLogs = () => {
-    setSystemLogs([]);
-  };
-  
   // Email notification function
   const sendEmailNotification = async (item: FeedbackItem) => {
     const subject = item.type === 'bug' 
@@ -406,10 +373,7 @@ export const AuthProvider: React.FC<{children: ReactNode}> = ({ children }) => {
       feedbackItems,
       addFeedbackItem,
       updateFeedbackStatus,
-      deleteFeedbackItem,
-      systemLogs,
-      addSystemLog,
-      clearSystemLogs
+      deleteFeedbackItem
     }}>
       {children}
     </AuthContext.Provider>
