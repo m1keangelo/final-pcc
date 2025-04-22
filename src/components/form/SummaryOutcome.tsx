@@ -65,6 +65,11 @@ const SummaryOutcome = ({ formData, onProceedToDocuments }: SummaryOutcomeProps)
     );
   };
 
+  const getSummaryTextColorClass = (summary: string): string => {
+    if (summary.includes('✅')) return 'text-green-700 dark:text-green-500';
+    return 'text-amber-700 dark:text-amber-500';
+  };
+
   const isQualified = qualificationSummary.includes('✅');
   
   const summaryVariant = isQualified ? 'success' : qualificationSummary.includes('⚡') ? 'warning' : 'info';

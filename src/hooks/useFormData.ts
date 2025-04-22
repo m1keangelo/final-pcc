@@ -1,5 +1,5 @@
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { FormState } from "@/types/form";
 
 export const useFormData = () => {
