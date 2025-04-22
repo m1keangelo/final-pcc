@@ -1,3 +1,4 @@
+
 import React, { createContext, useContext, useState, ReactNode, useEffect } from 'react';
 import { useAuth } from './AuthContext';
 
@@ -526,8 +527,9 @@ export const LanguageProvider: React.FC<{ children: ReactNode }> = ({ children }
   const t = (key: string): string => {
     const translationSet = translations[language];
     
-    // Log translation attempt
-    addSystemLog('translation', `Translation request for key: ${key}`, {
+    // Here's the fix: Update this line to pass only the expected number of arguments
+    // Remove the third argument or combine the data differently
+    addSystemLog('translation', {
       key,
       language,
       value: translationSet?.[key as keyof typeof translationSet],
