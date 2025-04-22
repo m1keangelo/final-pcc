@@ -57,17 +57,14 @@ const LoginForm = ({ className }: { className?: string }) => {
     setShowPassword(!showPassword);
   };
 
-  const getLoginButtonText = () => {
-    if (isSubmitting) {
-      return language === 'en' ? 'Logging in...' : 'Iniciando...';
-    }
-    return language === 'en' ? 'Login' : 'Iniciar Sesión';
-  };
-
+  // Use hardcoded strings instead of translations for now
   const usernameLabel = language === 'en' ? 'Username' : 'Usuario';
   const passwordLabel = language === 'en' ? 'Password' : 'Contraseña';
   const forgotPasswordText = language === 'en' ? 'Forgot password?' : '¿Olvidó su contraseña?';
   const loginTitle = language === 'en' ? 'Sign In' : 'Iniciar Sesión';
+  const loginButtonText = isSubmitting 
+    ? (language === 'en' ? 'Logging in...' : 'Iniciando...')
+    : (language === 'en' ? 'Login' : 'Iniciar Sesión');
 
   return (
     <div className={cn("flex flex-col items-center justify-center w-full py-8 px-6 md:w-1/2", className)}>
@@ -143,12 +140,12 @@ const LoginForm = ({ className }: { className?: string }) => {
             {isSubmitting ? (
               <>
                 <Loader2 size={18} className="mr-2 animate-spin" />
-                {getLoginButtonText()}
+                {loginButtonText}
               </>
             ) : (
               <>
                 <LogIn size={18} className="mr-2" />
-                {getLoginButtonText()}
+                {loginButtonText}
               </>
             )}
           </Button>

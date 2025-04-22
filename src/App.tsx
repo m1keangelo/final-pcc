@@ -20,26 +20,16 @@ import Analytics from "./pages/Analytics";
 import AdminDashboard from "./pages/AdminDashboard";
 import NotFound from "./pages/NotFound";
 import Index from "./pages/Index";
-import { useState } from "react";
-import { toast } from "./lib/toast";
 
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
-      retry: 2,
-      retryDelay: (attemptIndex) => Math.min(1000 * 2 ** attemptIndex, 30000),
+      retry: 1,
       staleTime: 1000 * 60 * 5, // 5 minutes
       refetchOnWindowFocus: false,
-      refetchOnMount: true,
-    },
-    mutations: {
-      retry: 1,
     },
   },
 });
-
-// Remove the unsubscribe functions that could be causing issues
-// queryClient subscription handlers are causing errors
 
 const AppError = () => (
   <div className="min-h-screen bg-gray-900 flex items-center justify-center p-4">
@@ -57,13 +47,6 @@ const AppError = () => (
     </div>
   </div>
 );
-
-const OfflineDetector = () => {
-  const [isOffline, setIsOffline] = useState(!navigator.onLine);
-  
-  // useEffect is causing issues - let's simplify this component
-  return null;
-};
 
 const App = () => (
   <ErrorBoundary fallback={<AppError />}>

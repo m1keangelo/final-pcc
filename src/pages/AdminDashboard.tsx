@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
@@ -14,7 +15,6 @@ import { useLanguage } from "@/contexts/LanguageContext";
 import { toast } from "@/lib/toast";
 import { Checkbox } from "@/components/ui/checkbox";
 import FeedbackManagement from "@/components/admin/FeedbackManagement";
-import { SystemLog } from "@/contexts/AuthContext";
 import { Users, Settings, FileText, Bell, LogIn } from "lucide-react";
 
 const AdminDashboard = () => {
@@ -48,18 +48,14 @@ const AdminDashboard = () => {
   const [users, setUsers] = useState<any[]>([]);
 
   useEffect(() => {
-    const allUsers = getAllUsers();
-    setUsers(allUsers);
-  }, [getAllUsers]);
-
-  useEffect(() => {
-    const newFeedbackCount = feedbackItems.filter(item => item.status === 'new').length;
-    if (newFeedbackCount > 0) {
-      document.title = `(${newFeedbackCount}) Admin Dashboard`;
-    } else {
-      document.title = 'Admin Dashboard';
+    try {
+      const allUsers = getAllUsers();
+      setUsers(allUsers);
+    } catch (error) {
+      console.error("Error getting users:", error);
+      setUsers([]);
     }
-  }, [feedbackItems]);
+  }, [getAllUsers]);
 
   const mockCampaigns = [
     { id: '1', name: 'Dennis', activeLeads: 42, qualifiedLeads: 18 },
@@ -446,7 +442,6 @@ const AdminDashboard = () => {
               </CardDescription>
             </CardHeader>
             <CardContent>
-              
               <p className="text-muted-foreground">Agents management coming soon</p>
             </CardContent>
           </Card>
@@ -537,6 +532,20 @@ const AdminDashboard = () => {
           />
         </TabsContent>
 
+        <TabsContent value="suggestions" className="space-y-4">
+          <Card>
+            <CardHeader>
+              <CardTitle>Suggestions Management</CardTitle>
+              <CardDescription>
+                Review and manage user suggestions for improving the application
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <p className="text-muted-foreground">Suggestions management coming soon</p>
+            </CardContent>
+          </Card>
+        </TabsContent>
+
         <TabsContent value="settings" className="space-y-4">
           <Card>
             <CardHeader>
@@ -584,11 +593,10 @@ const AdminDashboard = () => {
                     <TableHead>Time</TableHead>
                     <TableHead>Type</TableHead>
                     <TableHead>Message</TableHead>
-                    <TableHead>Details</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
-                  {systemLogs.map((log) => (
+                  {systemLogs && systemLogs.map((log) => (
                     <TableRow key={log.id}>
                       <TableCell className="whitespace-nowrap">
                         {new Date(log.timestamp).toLocaleString()}
@@ -605,39 +613,17 @@ const AdminDashboard = () => {
                       <TableCell className="max-w-md truncate">
                         {log.message}
                       </TableCell>
-                      <TableCell className="font-mono text-xs">
-                        {log.details ? (
-                          <code className="whitespace-pre-wrap">
-                            {JSON.stringify(log.details, null, 2)}
-                          </code>
-                        ) : null}
-                      </TableCell>
                     </TableRow>
                   ))}
-                  {systemLogs.length === 0 && (
+                  {!systemLogs || systemLogs.length === 0 && (
                     <TableRow>
-                      <TableCell colSpan={4} className="text-center py-4 text-muted-foreground">
+                      <TableCell colSpan={3} className="text-center py-4 text-muted-foreground">
                         No logs available
                       </TableCell>
                     </TableRow>
                   )}
                 </TableBody>
               </Table>
-            </CardContent>
-          </Card>
-        </TabsContent>
-
-        <TabsContent value="suggestions" className="space-y-4">
-          <Card>
-            <CardHeader>
-              <CardTitle>Suggestions Management</CardTitle>
-              <CardDescription>
-                Review and manage user suggestions for improving the application
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              
-              <p className="text-muted-foreground">Suggestions management coming soon</p>
             </CardContent>
           </Card>
         </TabsContent>

@@ -3,7 +3,6 @@ import { useState, useEffect } from "react";
 import SplashScreen from "@/components/login/SplashScreen";
 import LoginForm from "@/components/login/LoginForm";
 import BrandImagery from "@/components/login/BrandImagery";
-import MatrixBackground from "@/components/login/MatrixBackground";
 import { LanguageProvider } from "@/contexts/LanguageContext";
 import { useAuth } from "@/contexts/AuthContext";
 import { ErrorBoundary } from "@/components/ErrorBoundary";
@@ -30,20 +29,18 @@ const Login = () => {
   const navigate = useNavigate();
   
   useEffect(() => {
-    // Simplified redirection logic
+    // If user is already logged in, redirect to home
     if (user) {
       navigate('/');
     }
 
-    // Shorter splash screen duration to avoid potential issues
+    // Show splash screen for 3 seconds
     const timer = setTimeout(() => {
       setShowSplash(false);
     }, 3000);
     
     return () => clearTimeout(timer);
   }, [user, navigate]);
-  
-  // Remove session storage logic that might be causing issues
   
   if (showSplash && !user && !isLoading) {
     return (
