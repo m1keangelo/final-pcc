@@ -89,7 +89,11 @@ const translations = {
     'q.income.monthly': 'Monthly Income',
     'q.income.amountLabel': 'Income Amount',
     'q.income.placeholder': 'Enter your income',
-
+    'q.income.annualLabel': 'Annual Income Amount',
+    'q.income.annualPlaceholder': 'Enter your annual income',
+    'q.income.monthlyLabel': 'Monthly Income Amount',
+    'q.income.monthlyPlaceholder': 'Enter your monthly income',
+    
     // Credit
     'q.credit.title': 'Credit Health',
     'q.credit.question': 'How would you describe your credit?',
@@ -322,6 +326,10 @@ const translations = {
     'q.income.monthly': 'Ingreso Mensual',
     'q.income.amountLabel': 'Monto de Ingresos',
     'q.income.placeholder': 'Ingrese sus ingresos',
+    'q.income.annualLabel': 'Monto de Ingreso Anual',
+    'q.income.annualPlaceholder': 'Ingrese su ingreso anual',
+    'q.income.monthlyLabel': 'Monto de Ingreso Mensual',
+    'q.income.monthlyPlaceholder': 'Ingrese su ingreso mensual',
     
     // Credit
     'q.credit.title': 'Estado del Crédito',
@@ -514,6 +522,11 @@ export const LanguageProvider: React.FC<{children: ReactNode}> = ({ children }) 
   // Translation function
   const t = (key: string): string => {
     const translationSet = translations[language];
+    
+    console.log(`Translating key: ${key}`);
+    console.log(`Current language: ${language}`);
+    console.log(`Translation found: ${translationSet[key as keyof typeof translationSet] || 'NOT FOUND'}`);
+    
     if (!translationSet) return key;
     
     return translationSet[key as keyof typeof translationSet] || key;
