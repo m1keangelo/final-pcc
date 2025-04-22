@@ -1,3 +1,4 @@
+
 import React, { useState } from "react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter, DialogDescription } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
@@ -36,12 +37,14 @@ const SuggestionDialog = ({ isOpen, onClose }: SuggestionDialogProps) => {
         console.log("Image prepared for upload:", imageUrl);
       }
       
-      const user = {
+      // Create user object to pass to addFeedbackItem
+      const userData = {
         name: 'John Doe',
         avatar: 'https://api.dicebear.com/7.x/avatars/svg?seed=John'
       };
       
-      await addFeedbackItem('suggestion', suggestion, imageUrl, user);
+      // Pass userData as the third argument instead of separating user properties
+      await addFeedbackItem('suggestion', suggestion, imageUrl, userData);
       
       toast(`${t('suggestion.submitted')} - ${t('suggestion.thankYou')}`);
       
