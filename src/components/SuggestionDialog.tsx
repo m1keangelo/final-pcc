@@ -37,14 +37,9 @@ const SuggestionDialog = ({ isOpen, onClose }: SuggestionDialogProps) => {
         console.log("Image prepared for upload:", imageUrl);
       }
       
-      // Create user object to pass to addFeedbackItem
-      const userData = {
-        name: 'John Doe',
-        avatar: 'https://api.dicebear.com/7.x/avatars/svg?seed=John'
-      };
-      
-      // Pass userData as the third argument instead of separating user properties
-      await addFeedbackItem('suggestion', suggestion, imageUrl, userData);
+      // Create user data but don't pass it directly as it's not expected by the function
+      // The user data will be handled by the backend/context
+      await addFeedbackItem('suggestion', suggestion, imageUrl);
       
       toast(`${t('suggestion.submitted')} - ${t('suggestion.thankYou')}`);
       
