@@ -38,8 +38,12 @@ const LoginForm = ({ className }: { className?: string }) => {
     }
     
     setIsSubmitting(true);
+    
     try {
+      console.log("Attempting login with:", username); // Debug log
       const success = await login(username, password);
+      console.log("Login result:", success); // Debug log
+      
       if (success) {
         navigate("/");
       } else {

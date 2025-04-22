@@ -1,4 +1,3 @@
-
 import React, { createContext, useContext, useState, ReactNode, useEffect } from 'react';
 import { useAuth } from './AuthContext';
 
@@ -361,8 +360,8 @@ const translations = {
     
     // Down Payment Amount
     'q.downPaymentAmount.title': 'Cantidad de Enganche',
-    'q.downPaymentAmount.question': '¿Aproximadamente cuánto tienes ahorrado?',
-    'q.downPaymentAmount.amountLabel': 'Cantidad Ahorrada',
+    'q.downPayment.question': '¿Aproximadamente cuánto tienes ahorrado?',
+    'q.downPaymentAmount.amountLabel': 'Amount Saved',
     'q.downPaymentAmount.placeholder': 'Ingrese cantidad',
     
     // Down Payment Assistance
@@ -375,7 +374,7 @@ const translations = {
     // Monthly Debts
     'q.monthlyDebts.title': 'Deudas Mensuales',
     'q.monthlyDebts.question': '¿Cuáles son sus pagos mensuales aproximados de deudas (excluyendo vivienda)?',
-    'q.monthlyDebts.amountLabel': 'Pagos Mensuales de Deudas',
+    'q.monthlyDebts.amountLabel': 'Monthly Debt Payments',
     'q.monthlyDebts.placeholder': 'Ingrese monto mensual de deudas',
     'q.monthlyDebts.helper': 'Incluya préstamos de auto, préstamos estudiantiles, tarjetas de crédito, préstamos personales, etc.',
     
@@ -412,7 +411,7 @@ const translations = {
     // Contact Info
     'q.contactInfo.title': 'Información de Contacto',
     'q.contactInfo.question': '¿Cómo podemos comunicarnos con usted para brindarle más información?',
-    'q.contactInfo.nameLabel': 'Nombre Completo',
+    'q.contactInfo.nameLabel': 'Full Name',
     'q.contactInfo.namePlaceholder': 'Ingrese su nombre completo',
     'q.contactInfo.phoneLabel': 'Número de Teléfono',
     'q.contactInfo.phonePlaceholder': 'Ingrese su número de teléfono',
@@ -477,12 +476,12 @@ const translations = {
     'bugReport.title': 'Reportar un Error',
     'bugReport.description': 'Ayúdenos a mejorar reportando cualquier problema que encuentre',
     'bugReport.descriptionPlaceholder': 'Describa el error y los pasos para reproducirlo...',
-    'bugReport.screenshot': 'Captura de Pantalla (Opcional)',
-    'bugReport.uploadImage': 'Subir Imagen',
-    'bugReport.submitted': 'Informe de Error Enviado',
-    'bugReport.thankYou': '¡Gracias por ayudarnos a mejorar!',
-    'bugReport.submitError': 'Hubo un error al enviar su informe de error. Por favor intente de nuevo.',
-    'bugReport.descriptionRequired': 'Por favor proporcione una descripción del error.',
+    'suggestion.screenshot': 'Captura de Pantalla (Opcional)',
+    'suggestion.uploadImage': 'Subir Imagen',
+    'suggestion.submitted': 'Bug Report Submitted',
+    'suggestion.thankYou': '¡Gracias por ayudarnos a mejorar!',
+    'suggestion.submitError': 'Hubo un error al enviar su informe de error. Por favor intente de nuevo.',
+    'suggestion.descriptionRequired': 'Por favor proporcione una descripción del error.',
     
     // Common
     'common.cancel': 'Cancelar',
@@ -527,14 +526,12 @@ export const LanguageProvider: React.FC<{ children: ReactNode }> = ({ children }
   const t = (key: string): string => {
     const translationSet = translations[language];
     
-    // Here's the fix: Update this line to pass only the expected number of arguments
-    // Remove the third argument or combine the data differently
-    addSystemLog('translation', {
+    // Fix: Convert the object to a JSON string for logging
+    addSystemLog('translation', JSON.stringify({
       key,
       language,
-      value: translationSet?.[key as keyof typeof translationSet],
       found: !!translationSet?.[key as keyof typeof translationSet]
-    });
+    }));
     
     if (!translationSet) return key;
     

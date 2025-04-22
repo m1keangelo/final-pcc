@@ -310,6 +310,9 @@ export const AuthProvider: React.FC<{children: ReactNode}> = ({ children }) => {
     const userKey = username.toLowerCase();
     const userRecord = users[userKey];
     
+    // Add a debug log
+    console.log("Login attempt:", { username: userKey, found: !!userRecord });
+    
     if (userRecord && userRecord.password === password) {
       setUser(userRecord.user);
       localStorage.setItem('galloavion_user', JSON.stringify(userRecord.user));
