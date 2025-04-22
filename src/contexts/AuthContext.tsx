@@ -1,3 +1,4 @@
+
 import React, { createContext, useContext, useState, ReactNode, useEffect } from 'react';
 import { toast } from "../lib/toast";
 
@@ -9,31 +10,8 @@ type User = {
   email?: string;
   role?: 'admin' | 'superadmin' | 'assistant';
   campaign?: string;
-  campaigns?: string[]; // Added for multiple campaigns
   permissions?: string[]; // Added permissions array
 };
-
-// New user input type
-type NewUserInput = {
-  username: string;
-  password: string;
-  name: string;
-  role: 'admin' | 'superadmin' | 'assistant';
-  campaign?: string;
-  campaigns?: string[];
-  permissions?: string[];
-  email?: string;
-};
-
-// Feedback item type for bugs and suggestions
-export interface FeedbackItem {
-  id: string;
-  type: 'bug' | 'suggestion';
-  description: string;
-  timestamp: string;
-  status: 'new' | 'read' | 'resolved';
-  imageUrl?: string;
-}
 
 // Auth context type
 type AuthContextType = {
@@ -44,15 +22,7 @@ type AuthContextType = {
   isSuperAdmin: boolean;
   isAdmin: boolean;
   hasPermission: (permission: string) => boolean;
-  updateUserPermissions: (userId: string, permissions: string[]) => void;
-  addUser: (userData: NewUserInput) => boolean;
-  deleteUser: (userId: string) => boolean;
-  getAllUsers: () => User[];
-  // Feedback management
-  feedbackItems: FeedbackItem[];
-  addFeedbackItem: (type: 'bug' | 'suggestion', description: string, imageUrl?: string) => void;
-  updateFeedbackStatus: (id: string, status: 'new' | 'read' | 'resolved') => void;
-  deleteFeedbackItem: (id: string) => void;
+  updateUserPermissions: (userId: string, permissions: string[]) => void; // New function
 };
 
 // Expanded mock users for demo with proper role definitions
@@ -65,7 +35,6 @@ const MOCK_USERS: Record<string, { password: string, user: User }> = {
       username: 'admin', 
       role: 'admin', 
       email: 'admin@galloavion.com',
-      campaigns: ['All'],
       permissions: ['MANAGE_USERS', 'MANAGE_FORMS', 'ACCESS_ANALYTICS', 'DELETE_CLIENTS']
     }
   },
@@ -77,7 +46,6 @@ const MOCK_USERS: Record<string, { password: string, user: User }> = {
       username: 'maria', 
       role: 'assistant',
       campaign: 'Dennis',
-      campaigns: ['Dennis', 'Tito'],
       permissions: []
     }
   },
@@ -89,7 +57,6 @@ const MOCK_USERS: Record<string, { password: string, user: User }> = {
       username: 'juan', 
       role: 'assistant',
       campaign: 'Michael',
-      campaigns: ['Michael'],
       permissions: []
     }
   },
@@ -101,7 +68,6 @@ const MOCK_USERS: Record<string, { password: string, user: User }> = {
       username: 'm1keangelo', 
       role: 'superadmin', 
       email: 'm1keangelo@icloud.com',
-      campaigns: ['All'],
       permissions: ['MANAGE_USERS', 'MANAGE_FORMS', 'ACCESS_ANALYTICS', 'DELETE_CLIENTS', 'VIEW_ALL_CAMPAIGNS', 'MANAGE_TRAINING', 'MANAGE_ANIMATIONS']
     }
   }
@@ -127,7 +93,6 @@ export const AuthProvider: React.FC<{children: ReactNode}> = ({ children }) => {
   const [users, setUsers] = useState<Record<string, { password: string, user: User }>>(MOCK_USERS);
   const [user, setUser] = useState<User | null>(null);
   const [isLoading, setIsLoading] = useState(true);
-  const [feedbackItems, setFeedbackItems] = useState<FeedbackItem[]>([]);
 
   // Computed properties for roles
   const isSuperAdmin = user?.role === 'superadmin';
@@ -145,71 +110,6 @@ export const AuthProvider: React.FC<{children: ReactNode}> = ({ children }) => {
     
     // Then check if user has explicit permission
     return user.permissions?.includes(permission) || false;
-  };
-
-  // Get all users (for admin dashboard)
-  const getAllUsers = (): User[] => {
-    return Object.values(users).map(entry => entry.user);
-  };
-
-  // Add a new user
-  const addUser = (userData: NewUserInput): boolean => {
-    const { username, password, name, role, campaign, campaigns, permissions = [] } = userData;
-    
-    // Check if username is already taken
-    if (users[username.toLowerCase()]) {
-      return false;
-    }
-    
-    // Create new user ID
-    const newUserId = Date.now().toString();
-    
-    // Create the new user object
-    const newUser = {
-      id: newUserId,
-      name,
-      username,
-      role,
-      campaign,
-      campaigns: campaigns || (campaign ? [campaign] : []),
-      permissions
-    };
-    
-    // Add to users state
-    setUsers(prev => ({
-      ...prev,
-      [username.toLowerCase()]: {
-        password,
-        user: newUser
-      }
-    }));
-    
-    console.log("Added user:", newUser);
-    console.log("Current users:", getAllUsers());
-    
-    return true;
-  };
-
-  // Delete a user
-  const deleteUser = (userId: string): boolean => {
-    let deleted = false;
-    
-    setUsers(prev => {
-      const newUsers = { ...prev };
-      
-      // Find and remove user with the matching ID
-      for (const key in newUsers) {
-        if (newUsers[key].user.id === userId) {
-          delete newUsers[key];
-          deleted = true;
-          break;
-        }
-      }
-      
-      return deleted ? newUsers : prev;
-    });
-    
-    return deleted;
   };
 
   // Update user permissions
@@ -242,72 +142,6 @@ export const AuthProvider: React.FC<{children: ReactNode}> = ({ children }) => {
       }
       
       return updatedUsers;
-    });
-  };
-
-  // Add feedback item (bug or suggestion)
-  const addFeedbackItem = async (type: 'bug' | 'suggestion', description: string, imageUrl?: string) => {
-    const newItem: FeedbackItem = {
-      id: Date.now().toString(),
-      type,
-      description,
-      timestamp: new Date().toISOString(),
-      status: 'new',
-      imageUrl
-    };
-    
-    setFeedbackItems(prev => [newItem, ...prev]);
-    
-    // Send email notification
-    try {
-      await sendEmailNotification(newItem);
-      console.log(`Email notification sent for new ${type}`);
-    } catch (error) {
-      console.error('Failed to send email notification:', error);
-    }
-  };
-
-  // Update feedback status
-  const updateFeedbackStatus = (id: string, status: 'new' | 'read' | 'resolved') => {
-    setFeedbackItems(prevItems => 
-      prevItems.map(item => 
-        item.id === id ? { ...item, status } : item
-      )
-    );
-  };
-
-  // Delete feedback item
-  const deleteFeedbackItem = (id: string) => {
-    setFeedbackItems(prevItems => prevItems.filter(item => item.id !== id));
-  };
-  
-  // Email notification function
-  const sendEmailNotification = async (item: FeedbackItem) => {
-    const subject = item.type === 'bug' 
-      ? ':::: Mucho Dinero BUG ::::' 
-      : ':::: Mucho Dinero SUGGESTION ::::';
-      
-    const emailData = {
-      to: 'm1keangelo@icloud.com',
-      subject,
-      body: `
-        Type: ${item.type.toUpperCase()}
-        
-        Description:
-        ${item.description}
-        
-        Timestamp: ${new Date(item.timestamp).toLocaleString()}
-        ${item.imageUrl ? `\nScreenshot: ${item.imageUrl}` : ''}
-      `
-    };
-    
-    // In a real application, this would send an actual email
-    // For demo purposes, we'll just log it
-    console.log('Email notification data:', emailData);
-    
-    // Simulating email API call
-    return new Promise((resolve) => {
-      setTimeout(resolve, 500);
     });
   };
 
@@ -366,14 +200,7 @@ export const AuthProvider: React.FC<{children: ReactNode}> = ({ children }) => {
       isSuperAdmin,
       isAdmin,
       hasPermission,
-      updateUserPermissions,
-      addUser,
-      deleteUser,
-      getAllUsers,
-      feedbackItems,
-      addFeedbackItem,
-      updateFeedbackStatus,
-      deleteFeedbackItem
+      updateUserPermissions
     }}>
       {children}
     </AuthContext.Provider>

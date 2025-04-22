@@ -1,15 +1,13 @@
 
-import React, { useState } from "react";
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { Label } from "@/components/ui/label";
 import { Slider } from "@/components/ui/slider";
 import QuestionContainer from "@/components/form/QuestionContainer";
 import { FormState } from "@/types/form";
 import { useLanguage } from "@/contexts/LanguageContext";
-import { ArrowLeft, ArrowRight } from "lucide-react";
-import FeedbackBox from "./FeedbackBox";
+import { ArrowLeft, ArrowRight, Briefcase } from "lucide-react";
 
-const SelfEmployedYearsQuestion = ({
+export const SelfEmployedYearsQuestion = ({
   value,
   onChange,
   onNext,
@@ -25,69 +23,93 @@ const SelfEmployedYearsQuestion = ({
   totalSteps: number;
 }) => {
   const { t, language } = useLanguage();
-  const [sliderValue, setSliderValue] = useState<number>(value || 0);
+  const [sliderValue, setSliderValue] = useState(value || 1);
   
+  // Handle slider change
   const handleSliderChange = (val: number[]) => {
-    const numVal = val[0];
-    setSliderValue(numVal);
-    onChange(numVal);
+    const years = val[0];
+    setSliderValue(years);
+    onChange(years);
   };
   
+  // Define feedback message based on number of years
   const getFeedbackMessage = () => {
     if (language === 'es') {
-      if (sliderValue >= 3) {
-        return "Excelente. Tienes suficiente historial para calificar para préstamos convencionales. Necesitaremos ver tus declaraciones de impuestos de los últimos 2 años.";
-      } else if (sliderValue >= 1) {
-        return "Estamos cerca. Con 2+ años, tienes más opciones. Por ahora, podríamos usar un préstamo no tradicional o considerar otras fuentes de ingresos. Hablemos de estrategias.";
+      if (sliderValue >= 2) {
+        return "Perfecto. Ya estás establecido. Usamos tus impuestos y formas aceptadas por los bancos para ayudarte a calificar. Estás en muy buena posición.";
+      } else if (sliderValue === 1) {
+        return "Si trabajabas en lo mismo antes, puede que solo necesitemos un año de impuestos. Podemos preparar un buen caso para mostrar tu avance.";
       } else {
-        return "Entendido. Para trabajadores independientes, los prestamistas normalmente buscan 2+ años. Pero tenemos opciones alternativas y podemos usar otros ingresos si los tienes. Vamos a explorar opciones.";
+        return "Puede que sea muy pronto para ciertos préstamos, pero hay bancos que aceptan tus movimientos bancarios o tus ahorros. Podemos hacerte un plan de 90 días o buscar caminos diferentes.";
       }
     } else {
-      if (sliderValue >= 3) {
-        return "Excellent. You have sufficient history to qualify for conventional loans. We'll need to see your tax returns for the past 2 years.";
-      } else if (sliderValue >= 1) {
-        return "We're close. With 2+ years, you have more options. For now, we could use non-QM loans or consider other income sources. Let's talk strategy.";
+      if (sliderValue >= 2) {
+        return "Beautiful. You're established — we'll grab your tax returns and use lender-approved methods to qualify you properly. You're in a strong position.";
+      } else if (sliderValue === 1) {
+        return "If you're in the same field as before, we may only need 1 tax year. We'll write a strong case to underwriting. Let's line everything up to prove your momentum.";
       } else {
-        return "Got it. For self-employed borrowers, lenders typically look for 2+ years. But we have alternative options and can use other income if you have it. Let's explore options.";
+        return "Might be early for conventional, but there are lenders who will use bank statements or assets. We'll prep you with a 90-day success plan or explore outside-the-box options.";
       }
     }
+  };
+
+  const getYearMarkers = () => {
+    const markers = [];
+    for (let i = 1; i <= 10; i += 3) {
+      markers.push(
+        <div key={i} className="absolute text-xs text-gallomodern-300" style={{left: `${(i/100)*100}%`}}>
+          {i}
+        </div>
+      );
+    }
+    return markers;
   };
   
   return (
     <QuestionContainer
-      title={t('q.selfEmployedYears.title')}
-      questionText={t('q.selfEmployedYears.question')}
-      questionId="selfEmployedYears"
+      title={t('q.selfyears.title')}
+      questionText={t('q.selfyears.question')}
+      questionId="selfemployedyears"
       currentStep={currentStep}
       totalSteps={totalSteps}
     >
-      <div className="space-y-6">
+      <div className="space-y-4">
         <div className="mt-4 mb-8">
           <div className="flex items-center justify-center mb-6">
-            <div className="flex items-center justify-center bg-muted/30 p-3 rounded-full h-16 w-40 border border-primary/20">
-              <span className="text-2xl font-semibold">{sliderValue} {sliderValue === 1 ? t('q.selfEmployedYears.year') : t('q.selfEmployedYears.years')}</span>
+            <div className="flex items-center justify-center bg-gallomodern-900/50 p-3 rounded-full h-20 w-44 border border-gallomodern-400/30 shadow-inner bg-gradient-to-b from-black/50 to-transparent">
+              <Briefcase className="mr-2 h-6 w-6 text-gallomodern-300" />
+              <span className="text-3xl font-semibold text-gradient">
+                {sliderValue} <span className="text-lg">{sliderValue === 1 ? t('q.selfyears.year') : t('q.selfyears.years')}</span>
+              </span>
             </div>
           </div>
           
-          <div className="pt-4">
+          <div className="pt-8 relative">
             <Slider
               value={[sliderValue]}
-              min={0}
-              max={15}
+              min={1}
+              max={100}
               step={1}
               onValueChange={handleSliderChange}
               className="my-6"
             />
-            <div className="flex justify-between text-xs text-muted-foreground mt-2">
-              <span>0 {t('q.selfEmployedYears.years')}</span>
-              <span>15+ {t('q.selfEmployedYears.years')}</span>
+            <div className="flex justify-between text-xs text-muted-foreground mt-8 relative">
+              <span>1 {t('q.selfyears.year')}</span>
+              <span>100 {t('q.selfyears.years')}</span>
             </div>
           </div>
-          
-          {sliderValue > 0 && (
-            <FeedbackBox message={getFeedbackMessage()} />
-          )}
         </div>
+        
+        {/* Display feedback message */}
+        <div className="mt-4 p-4 rounded-md glass-card border border-gallomodern-500/30 shadow-inner bg-gradient-to-br from-gallomodern-900/20 to-black/30">
+          <p className="font-medium text-gallomodern-100">{getFeedbackMessage()}</p>
+        </div>
+        
+        {sliderValue < 2 && (
+          <div className="text-sm text-amber-400 bg-amber-950/40 p-4 rounded-md border border-amber-500/30 mt-4">
+            {t('q.selfyears.warning')}
+          </div>
+        )}
       </div>
       
       <div className="mt-8 flex justify-between">

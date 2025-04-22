@@ -4,7 +4,6 @@ import QuestionContainer from "@/components/form/QuestionContainer";
 import { FormState } from "@/types/form";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { ArrowLeft, ArrowRight } from "lucide-react";
-import FeedbackBox from "./FeedbackBox";
 
 export const FirstTimeBuyerQuestion = ({
   value,
@@ -23,6 +22,7 @@ export const FirstTimeBuyerQuestion = ({
 }) => {
   const { t, language } = useLanguage();
   
+  // Define the feedback messages based on selection
   const getFeedbackMessage = () => {
     if (language === 'es') {
       // Spanish feedback messages
@@ -65,8 +65,17 @@ export const FirstTimeBuyerQuestion = ({
         </Button>
       </div>
       
+      {/* Display feedback message if an option is selected */}
       {value !== null && (
-        <FeedbackBox message={getFeedbackMessage()} />
+        <div className="mt-4 p-4 border border-[#fef9be] rounded-md bg-black text-[#fef9be]">
+          <p className="font-medium">{getFeedbackMessage()}</p>
+        </div>
+      )}
+      
+      {value === true && (
+        <div className="mt-4 text-sm text-muted-foreground">
+          {t('q.firsttime.help')}
+        </div>
       )}
       
       <div className="mt-8 flex justify-between">
@@ -78,9 +87,7 @@ export const FirstTimeBuyerQuestion = ({
           <ArrowLeft className="mr-2 h-4 w-4" />
           {t('form.previous')}
         </Button>
-        <Button 
-          onClick={onNext}
-        >
+        <Button onClick={onNext}>
           {t('form.next')}
           <ArrowRight className="ml-2 h-4 w-4" />
         </Button>

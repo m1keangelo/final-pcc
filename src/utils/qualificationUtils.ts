@@ -1,217 +1,183 @@
 
-import { FormState } from "@/types/form";
-import { ClientRating } from "@/types/clientRating";
-import { calculateClientRating as calculateRating } from "@/utils/ratingCalculator";
-import { isQualified, getQualificationCategory } from "@/utils/qualificationChecker";
+import { FormState, getQualificationCategory, isQualified } from '@/types/form';
 
-// Re-export the calculate function to maintain backward compatibility
-export const calculateClientRating = calculateRating;
+export type RecommendationType = 'credit' | 'income' | 'downPayment' | 'employment' | 'documentation' | 'timeline' | 'identity';
+export type RecommendationPriority = 'high' | 'medium' | 'low';
 
-// Define RecommendationType for use in Recommendations
-export type RecommendationType = 'credit' | 'downPayment' | 'employment' | 'identity' | 'documentation' | 'timeline' | 'other';
-
-// Define the Recommendation interface
 export interface Recommendation {
   type: RecommendationType;
-  title: string;
+  title: string; 
   description: string;
-  priority?: 'high' | 'medium' | 'low';
+  actionable: boolean;
+  priority?: RecommendationPriority;
 }
 
-// Get qualification summary text based on user's form data
-export const getQualificationSummary = (state: FormState, language: 'en' | 'es'): string => {
-  const qualified = isQualified(state);
-  const category = getQualificationCategory(state);
-  
-  if (language === 'es') {
-    if (!qualified) {
-      return "⚠️ Basándonos en la información proporcionada, identificamos algunos problemas que necesitan ser abordados antes de calificar.";
-    } else if (category === 'fixesNeeded') {
-      return "⚡ Basándonos en la información proporcionada, parece que califica con condiciones. Hay algunas áreas que podrían mejorarse.";
-    } else {
-      return "✅ ¡Según la información proporcionada, parece que califica para un préstamo hipotecario!";
-    }
-  } else {
-    if (!qualified) {
-      return "⚠️ Based on the information provided, we've identified some issues that need to be addressed before qualifying.";
-    } else if (category === 'fixesNeeded') {
-      return "⚡ Based on the information provided, you appear to qualify with conditions. There are some areas that could be improved.";
-    } else {
-      return "✅ Based on the information provided, you appear to qualify for a mortgage loan!";
-    }
-  }
-};
-
-// Get recommendations based on user's form data
-export const getRecommendations = (state: FormState, language: 'en' | 'es'): Recommendation[] => {
+export const getRecommendations = (formState: FormState, language: 'en' | 'es'): Recommendation[] => {
   const recommendations: Recommendation[] = [];
-  const rating = calculateClientRating(state);
-  
-  // Employment recommendations
-  if (state.employmentType === '1099' && state.selfEmployedYears && state.selfEmployedYears < 2) {
-    recommendations.push({
-      type: 'employment',
-      title: language === 'es' ? "Continúe manteniendo registros de su negocio" : "Continue maintaining business records",
-      description: language === 'es' 
-        ? "Los prestamistas generalmente buscan al menos 2 años completos de trabajo por cuenta propia."
-        : "Lenders typically look for at least 2 full years of self-employment.",
-      priority: 'medium'
-    });
-  }
   
   // Credit recommendations
-  if (state.creditCategory === 'poor' || state.creditCategory === 'fair') {
+  if (formState.creditCategory === 'poor' || formState.creditCategory === 'fair') {
     recommendations.push({
       type: 'credit',
-      title: language === 'es' ? "Mejore su puntaje crediticio" : "Improve your credit score",
-      description: language === 'es'
-        ? "Considere un préstamo FHA, que tiene requisitos crediticios más flexibles."
-        : "Consider an FHA loan, which has more flexible credit requirements.",
-      priority: 'high'
+      title: language === 'en' 
+        ? 'Credit Score Improvement' 
+        : 'Mejora de Puntaje de Crédito',
+      description: language === 'en'
+        ? 'Your credit score is a bit low. Consider becoming an authorized user on a family member\'s credit card to boost your score faster. You can also use a rent-reporting service so your on-time rent payments count towards building credit.' 
+        : 'Su puntaje de crédito es un poco bajo. Considere añadirse como usuario autorizado en la tarjeta de crédito de un familiar para ayudar a subir su puntaje más rápido. También puede usar un servicio de reportar su renta a las agencias de crédito.',
+      actionable: true,
+      priority: formState.creditCategory === 'poor' ? 'high' : 'medium'
     });
   }
   
   // Down payment recommendations
-  if (!state.downPaymentSaved || (state.downPaymentAmount && state.downPaymentAmount < 20000)) {
+  if (!formState.downPaymentSaved) {
     recommendations.push({
       type: 'downPayment',
-      title: language === 'es' ? "Explore programas de asistencia" : "Explore assistance programs",
-      description: language === 'es'
-        ? "Hay muchos programas federales, estatales y locales disponibles para asistencia de pago inicial."
-        : "There are many federal, state, and local down payment assistance programs available.",
-      priority: state.downPaymentAmount && state.downPaymentAmount > 10000 ? 'medium' : 'high'
-    });
-  }
-  
-  // Credit issues recommendations
-  if (state.hasCreditIssues) {
-    recommendations.push({
-      type: 'documentation',
-      title: language === 'es' ? "Prepare documentación de explicación" : "Prepare explanation documentation",
-      description: language === 'es'
-        ? "Prepare una carta de explicación que detalle las circunstancias de sus problemas crediticios anteriores."
-        : "Prepare a letter of explanation detailing the circumstances of your previous credit issues.",
+      title: language === 'en' 
+        ? 'Down Payment Assistance' 
+        : 'Asistencia para el Enganche',
+      description: language === 'en'
+        ? 'You indicated you don\'t have savings for a down payment. There are assistance programs that can help with this, including grants and loans for first-time buyers. We can connect you with local resources.' 
+        : 'Indicó que no tiene ahorros para el enganche. Existen programas de asistencia que pueden ayudar, incluyendo subvenciones y préstamos para compradores primerizos. Podemos conectarle con recursos locales.',
+      actionable: true,
       priority: 'high'
     });
   }
   
-  // Identity documentation
-  if (state.idType === 'ITIN') {
+  // Self-employment recommendations
+  if (formState.employmentType === '1099' && formState.selfEmployedYears && formState.selfEmployedYears < 2) {
+    recommendations.push({
+      type: 'employment',
+      title: language === 'en' 
+        ? 'Self-Employment History' 
+        : 'Historial de Auto-Empleo',
+      description: language === 'en'
+        ? 'Lenders typically require at least 2 years of self-employment history. You might need a co-signer or to wait until you have a longer track record.' 
+        : 'Los prestamistas normalmente requieren al menos 2 años de historial de auto-empleo. Es posible que necesite un co-firmante o esperar hasta tener un historial más largo.',
+      actionable: false,
+      priority: 'medium'
+    });
+  }
+  
+  // Identity/SSN recommendations
+  if (formState.idType === 'none') {
     recommendations.push({
       type: 'identity',
-      title: language === 'es' ? "Opciones limitadas con ITIN" : "Limited options with ITIN",
-      description: language === 'es'
-        ? "Tenga en cuenta que algunos programas de préstamos pueden no estar disponibles con un ITIN. Prepare documentación adicional."
-        : "Be aware that some loan programs may not be available with an ITIN. Prepare additional documentation.",
+      title: language === 'en' 
+        ? 'Alternative Documentation Options' 
+        : 'Opciones de Documentación Alternativa',
+      description: language === 'en' 
+        ? 'Without an SSN or ITIN, you\'ll need a co-signer with established credit. Alternatively, you can explore obtaining an ITIN which would allow you to apply for certain mortgage programs.' 
+        : 'Sin un SSN o ITIN, necesitará un co-firmante con crédito establecido. Alternativamente, puede explorar obtener un ITIN que le permitiría solicitar ciertos programas hipotecarios.',
+      actionable: true,
+      priority: 'high'
+    });
+  } else if (formState.idType === 'ITIN') {
+    recommendations.push({
+      type: 'identity',
+      title: language === 'en' 
+        ? 'ITIN Mortgage Options' 
+        : 'Opciones de Hipoteca con ITIN',
+      description: language === 'en'
+        ? 'With an ITIN, you can qualify for certain mortgage programs, though they typically require a larger down payment. We\'ll help you find lenders who work with ITIN borrowers.' 
+        : 'Con un ITIN, puede calificar para ciertos programas hipotecarios, aunque típicamente requieren un enganche mayor. Le ayudaremos a encontrar prestamistas que trabajen con prestatarios con ITIN.',
+      actionable: true,
       priority: 'medium'
     });
   }
   
-  // Timeline recommendations
-  if (state.timeline === 'immediately' && state.hasCreditIssues) {
-    recommendations.push({
-      type: 'timeline',
-      title: language === 'es' ? "Reconsidere su línea de tiempo" : "Reconsider your timeline",
-      description: language === 'es'
-        ? "Dadas sus circunstancias crediticias, podría ser beneficioso esperar unos meses para mejorar su perfil."
-        : "Given your credit circumstances, it might be beneficial to wait a few months to improve your profile.",
-      priority: 'medium'
-    });
-  }
-  
-  // Generic recommendations if none of the above apply
-  if (recommendations.length === 0) {
-    recommendations.push({
-      type: 'other',
-      title: language === 'es' ? "Mantenga sus finanzas estables" : "Keep your finances stable",
-      description: language === 'es'
-        ? "Evite hacer grandes compras o abrir nuevas líneas de crédito antes del cierre."
-        : "Avoid making large purchases or opening new lines of credit before closing.",
-      priority: 'low'
-    });
+  // Credit issues recommendations
+  if (formState.hasCreditIssues) {
+    if (formState.creditIssueType === 'bankruptcy' || formState.creditIssueType === 'foreclosure') {
+      const currentYear = new Date().getFullYear();
+      const yearsSinceIssue = formState.creditIssueYear ? currentYear - formState.creditIssueYear : null;
+      
+      if (yearsSinceIssue !== null && yearsSinceIssue < 4) {
+        recommendations.push({
+          type: 'credit',
+          title: language === 'en' 
+            ? 'Credit Event Recovery' 
+            : 'Recuperación de Evento de Crédito',
+          description: language === 'en'
+            ? `Most lenders require a waiting period of 2-7 years after a ${formState.creditIssueType}. You may need to wait ${Math.max(0, 4 - yearsSinceIssue)} more years while rebuilding your credit.` 
+            : `La mayoría de los prestamistas requieren un período de espera de 2-7 años después de una ${formState.creditIssueType === 'bankruptcy' ? 'bancarrota' : 'ejecución hipotecaria'}. Es posible que necesite esperar ${Math.max(0, 4 - yearsSinceIssue)} años más mientras reconstruye su crédito.`,
+          actionable: false,
+          priority: 'high'
+        });
+      }
+    } else if (formState.creditIssueType === 'collections' && (formState.creditIssueAmount || 0) > 500) {
+      recommendations.push({
+        type: 'credit',
+        title: language === 'en' 
+          ? 'Collections Resolution' 
+          : 'Resolución de Colecciones',
+        description: language === 'en'
+          ? 'You have significant collections that may impact loan approval. Consider setting up payment plans or negotiating settlements for these accounts before applying.' 
+          : 'Tiene colecciones significativas que pueden afectar la aprobación del préstamo. Considere establecer planes de pago o negociar acuerdos para estas cuentas antes de aplicar.',
+        actionable: true,
+        priority: 'high'
+      });
+    }
   }
   
   return recommendations;
 };
 
-// Get positive factors to highlight from user's form data
-export const getPositiveFactors = (state: FormState, language: 'en' | 'es'): string[] => {
-  const positiveFactors: string[] = [];
-  const rating = calculateClientRating(state);
+export const getQualificationSummary = (formState: FormState, language: 'en' | 'es'): string => {
+  const category = getQualificationCategory(formState);
   
-  // Income factor
-  if (rating.incomeRating >= 8) {
-    positiveFactors.push(
-      language === 'es'
-        ? "Ingresos sólidos que están por encima de los requisitos típicos del prestamista."
-        : "Strong income that's above typical lender requirements."
-    );
+  if (category === 'ready') {
+    return language === 'en'
+      ? '✅ Based on what you\'ve told me, you can likely qualify to buy a home!'
+      : '✅ Basado en lo que me has contado, ¡es muy probable que califiques para comprar una casa!';
+  } else if (category === 'fixesNeeded') {
+    return language === 'en'
+      ? '⚠️ Based on what you\'ve told me, with a few improvements, you should be able to qualify for a home loan.'
+      : '⚠️ Basado en lo que me has contado, con algunas mejoras, deberías poder calificar para un préstamo hipotecario.';
+  } else {
+    return language === 'en'
+      ? '⚠️ Based on what you\'ve told me, it seems you need to resolve some issues before you can buy a home.'
+      : '⚠️ Basado en lo que me has contado, parece que necesitas resolver algunos puntos antes de poder comprar una casa.';
   }
-  
-  // Credit factor
-  if (state.creditCategory === 'excellent' || state.creditCategory === 'good') {
-    positiveFactors.push(
-      language === 'es'
-        ? "Buen historial crediticio que aumentará las probabilidades de aprobación."
-        : "Good credit history that will increase approval odds."
-    );
-  }
-  
-  // Down payment factor
-  if (state.downPaymentSaved && state.downPaymentAmount && state.downPaymentAmount >= 20000) {
-    positiveFactors.push(
-      language === 'es'
-        ? "Pago inicial significativo ahorrado, lo que demuestra capacidad financiera."
-        : "Significant down payment saved, demonstrating financial capability."
-    );
-  }
-  
-  // Employment factor
-  if (state.employmentType === 'W-2') {
-    positiveFactors.push(
-      language === 'es'
-        ? "Empleo estable con ingresos W-2, lo que los prestamistas consideran menos riesgoso."
-        : "Stable employment with W-2 income, which lenders consider less risky."
-    );
-  } else if (state.employmentType === '1099' && state.selfEmployedYears && state.selfEmployedYears >= 2) {
-    positiveFactors.push(
-      language === 'es'
-        ? `Historial establecido de trabajo por cuenta propia (${state.selfEmployedYears} años), que cumple con los requisitos del prestamista.`
-        : `Established self-employment history (${state.selfEmployedYears} years), which meets lender requirements.`
-    );
-  }
-  
-  // First-time homebuyer factor
-  if (state.firstTimeBuyer) {
-    positiveFactors.push(
-      language === 'es'
-        ? "Elegible para programas especiales de comprador de primera vivienda."
-        : "Eligible for special first-time homebuyer programs."
-    );
-  }
-  
-  // No credit issues factor
-  if (!state.hasCreditIssues) {
-    positiveFactors.push(
-      language === 'es'
-        ? "Sin problemas crediticios graves recientes (como bancarrota o ejecución hipotecaria)."
-        : "No major recent credit issues (like bankruptcy or foreclosure)."
-    );
-  }
-  
-  return positiveFactors;
 };
 
-// Get next steps prompt
+export const getPositiveFactors = (formState: FormState, language: 'en' | 'es'): string[] => {
+  const factors: string[] = [];
+  
+  // First time buyer advantage
+  if (formState.firstTimeBuyer) {
+    factors.push(language === 'en' 
+      ? 'You\'re a first-time buyer, which means you might qualify for special programs.'
+      : 'Eres comprador de primera vez, lo que significa que podrías calificar para programas especiales.');
+  }
+  
+  // Stable employment
+  if (formState.employmentType === 'W-2') {
+    factors.push(language === 'en'
+      ? 'You have stable employment, which is great for qualifying.'
+      : 'Tienes un empleo estable, lo cual es excelente para calificar.');
+  }
+  
+  // Good credit
+  if (formState.creditCategory === 'good' || formState.creditCategory === 'excellent') {
+    factors.push(language === 'en'
+      ? 'You have good credit, which will help you get better loan terms.'
+      : 'Tienes buen crédito, lo que te ayudará a obtener mejores términos de préstamo.');
+  }
+  
+  // Down payment saved
+  if (formState.downPaymentSaved) {
+    factors.push(language === 'en'
+      ? 'You already have savings for a down payment, which is a big step toward homeownership.'
+      : 'Ya tienes ahorros para el enganche, lo cual es un gran paso hacia la propiedad de vivienda.');
+  }
+  
+  return factors;
+};
+
 export const getNextStepsPrompt = (language: 'en' | 'es'): string => {
-  return language === 'es'
-    ? "Estamos listos para continuar con su proceso de preaprobación. Estos son los próximos pasos recomendados:"
-    : "We're ready to continue with your pre-approval process. Here are the recommended next steps:";
-};
-
-export default {
-  getQualificationSummary,
-  getRecommendations,
-  getPositiveFactors,
-  getNextStepsPrompt
+  return language === 'en'
+    ? 'Would you like us to help you put a plan together and officially check your qualification?'
+    : '¿Le gustaría que le ayudemos a armar un plan y verificar oficialmente su calificación?';
 };

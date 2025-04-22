@@ -1,5 +1,5 @@
 
-import React, { useState, useRef, useEffect, useCallback, memo } from "react";
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -7,9 +7,8 @@ import QuestionContainer from "@/components/form/QuestionContainer";
 import { FormState } from "@/types/form";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { ArrowLeft, ArrowRight, DollarSign } from "lucide-react";
-import FeedbackBox from "./FeedbackBox";
 
-const MonthlyDebtsQuestion = ({
+export const MonthlyDebtsQuestion = ({
   value,
   onChange,
   onNext,
@@ -26,29 +25,23 @@ const MonthlyDebtsQuestion = ({
 }) => {
   const { t, language } = useLanguage();
   const [localValue, setLocalValue] = useState(value || "");
-  const inputRef = useRef<HTMLInputElement>(null);
   
-  useEffect(() => {
-    if (inputRef.current) {
-      inputRef.current.focus();
-    }
-  }, []);
-  
-  const handleInputChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const val = e.target.value;
+    // Keep only numbers, $ sign, commas and periods
     const cleanVal = val.replace(/[^0-9$,.]/g, '');
     setLocalValue(cleanVal);
     onChange(cleanVal);
-  }, [onChange]);
+  };
   
-  const getDebtLevel = useCallback((): 'low' | 'moderate' | 'high' => {
+  const getDebtLevel = (): 'low' | 'moderate' | 'high' => {
     const numericValue = parseFloat(localValue.replace(/[$,]/g, '')) || 0;
     if (numericValue < 500) return 'low';
     if (numericValue < 2000) return 'moderate';
     return 'high';
-  }, [localValue]);
+  };
   
-  const getFeedbackMessage = useCallback(() => {
+  const getFeedbackMessage = () => {
     const debtLevel = getDebtLevel();
     
     if (language === 'es') {
@@ -70,7 +63,7 @@ const MonthlyDebtsQuestion = ({
           return "Seen it before — and fixed it before. Payoff plans, consolidation, or co-signers can flip your DTI. Let's talk strategy.";
       }
     }
-  }, [getDebtLevel, language]);
+  };
   
   return (
     <QuestionContainer
@@ -82,7 +75,7 @@ const MonthlyDebtsQuestion = ({
     >
       <div className="space-y-6">
         <div>
-          <Label htmlFor="monthlyDebts" className="text-base text-gallomodern-100">
+          <Label htmlFor="monthlyDebts" className="text-base">
             {t('q.monthlyDebts.amountLabel')}
           </Label>
           <div className="relative mt-2">
@@ -94,9 +87,8 @@ const MonthlyDebtsQuestion = ({
               type="text"
               value={localValue}
               onChange={handleInputChange}
-              className="pl-10 text-foreground"
+              className="pl-10 input-modern"
               placeholder={t('q.monthlyDebts.placeholder')}
-              ref={inputRef}
             />
           </div>
           <p className="text-sm text-muted-foreground mt-2">
@@ -105,7 +97,9 @@ const MonthlyDebtsQuestion = ({
         </div>
         
         {localValue && (
-          <FeedbackBox message={getFeedbackMessage()} />
+          <div className="mt-4 p-4 rounded-md glass-card border border-gallomodern-500/30 shadow-inner bg-gradient-to-br from-gallomodern-900/20 to-black/30">
+            <p className="font-medium text-gallomodern-100">{getFeedbackMessage()}</p>
+          </div>
         )}
       </div>
       
@@ -127,4 +121,4 @@ const MonthlyDebtsQuestion = ({
   );
 };
 
-export default memo(MonthlyDebtsQuestion);
+export default MonthlyDebtsQuestion;

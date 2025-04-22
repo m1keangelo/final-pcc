@@ -1,3 +1,4 @@
+
 #root {
   max-width: none;
   margin: 0 auto;
@@ -83,42 +84,3 @@
   }
 }
 
-/* Mobile Specific Adjustments */
-@media (max-width: 640px) {
-  h1, .h1 {
-    word-break: break-word;
-    hyphens: auto;
-  }
-  
-  /* Add some spacing to avoid content being hidden behind the mobile nav */
-  .page-content {
-    padding-top: 4rem;
-  }
-  
-  /* Improve dropdown menu visibility on mobile */
-  [data-radix-popper-content-wrapper] {
-    z-index: 50 !important;
-  }
-}
-
-/* Fix for select menus on mobile */
-.select-content {
-  background-color: #222 !important;
-  color: white !important;
-  border-color: rgba(123, 104, 238, 0.3) !important;
-  z-index: 50 !important;
-}
-
-/* Make sure dropdowns appear on top of everything */
-[role="menu"],
-[role="listbox"],
-[role="dialog"] {
-  z-index: 999 !important;
-  background-color: rgb(17, 17, 27) !important;
-  border: 1px solid rgba(123, 104, 238, 0.3) !important;
-}
-
-/* Ensure select items are visible */
-[role="option"] {
-  color: white !important;
-}

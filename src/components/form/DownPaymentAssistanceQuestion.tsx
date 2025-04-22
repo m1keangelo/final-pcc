@@ -4,7 +4,6 @@ import QuestionContainer from "@/components/form/QuestionContainer";
 import { FormState } from "@/types/form";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { ArrowLeft, ArrowRight } from "lucide-react";
-import FeedbackBox from "./FeedbackBox";
 
 export const DownPaymentAssistanceQuestion = ({
   value,
@@ -57,11 +56,13 @@ export const DownPaymentAssistanceQuestion = ({
         >
           {t('q.assistance.no')}
         </Button>
+        
+        {value !== null && (
+          <div className="mt-4 p-4 border border-[#fef9be] rounded-md bg-black text-[#fef9be]">
+            <p className="font-medium">{getFeedbackMessage()}</p>
+          </div>
+        )}
       </div>
-      
-      {value !== null && (
-        <FeedbackBox message={getFeedbackMessage()} />
-      )}
       
       <div className="mt-8 flex justify-between">
         <Button

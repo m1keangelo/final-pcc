@@ -1,3 +1,4 @@
+
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -14,13 +15,13 @@ import Login from "./pages/Login";
 import Form from "./pages/Form";
 import DocumentSelection from "./pages/DocumentSelection";
 import Clients from "./pages/Clients";
-import ClientTrash from "./pages/ClientTrash";
 import Analytics from "./pages/Analytics";
 import AdminDashboard from "./pages/AdminDashboard";
 import NotFound from "./pages/NotFound";
 import { useState, useEffect } from "react";
 import { toast } from "./lib/toast";
 
+// Create a more robust QueryClient with retry and error handling
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
@@ -36,7 +37,9 @@ const queryClient = new QueryClient({
   },
 });
 
+// Configure global error handlers using the proper event listener approach
 const unsubscribeQuery = queryClient.getQueryCache().subscribe((event) => {
+  // Check if it's an updated event and the query has error state
   if (event.type === 'updated' && event.query.state.status === 'error') {
     console.error('Query error:', event.query.state.error);
     toast("There was a problem with the data request. Please try again.");
@@ -44,12 +47,22 @@ const unsubscribeQuery = queryClient.getQueryCache().subscribe((event) => {
 });
 
 const unsubscribeMutation = queryClient.getMutationCache().subscribe((event) => {
+  // Check if it's an updated event and the mutation has error state
   if (event.type === 'updated' && event.mutation.state.status === 'error') {
     console.error('Mutation error:', event.mutation.state.error);
     toast("Your changes could not be saved. Please try again.");
   }
 });
 
+// Cleanup function (not used here but good practice in components)
+// useEffect(() => {
+//   return () => {
+//     unsubscribeQuery();
+//     unsubscribeMutation();
+//   };
+// }, []);
+
+// Fallback UI for the entire app
 const AppError = () => (
   <div className="min-h-screen bg-gray-900 flex items-center justify-center p-4">
     <div className="bg-gray-800 border border-red-500 rounded-lg p-6 max-w-md text-center">
@@ -67,6 +80,7 @@ const AppError = () => (
   </div>
 );
 
+// Offline detector component
 const OfflineDetector = () => {
   const [isOffline, setIsOffline] = useState(!navigator.onLine);
   
@@ -119,7 +133,6 @@ const App = () => (
                   <Route path="/form" element={<ProtectedRoute><Form /></ProtectedRoute>} />
                   <Route path="/documents" element={<ProtectedRoute><DocumentSelection /></ProtectedRoute>} />
                   <Route path="/clients" element={<ProtectedRoute><Clients /></ProtectedRoute>} />
-                  <Route path="/trash" element={<ProtectedRoute requiresAdmin={true}><ClientTrash /></ProtectedRoute>} />
                   <Route path="/analytics" element={<ProtectedRoute><Analytics /></ProtectedRoute>} />
                   <Route path="/admin" element={
                     <ProtectedRoute requiresAdmin={true}>

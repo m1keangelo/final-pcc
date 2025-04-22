@@ -1,6 +1,7 @@
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { FormState } from "@/types/form";
+import { formatPhoneNumber } from "@/utils/formDataTransformer";
 
 export const useFormData = () => {
   const [formData, setFormData] = useState<FormState>({
@@ -29,7 +30,17 @@ export const useFormData = () => {
     comments: ""
   });
 
-  const handleFormDataChange = (field: keyof FormState, value: any) => {
+  useEffect(() => {
+    if (formData.phone) {
+      const formatted = formatPhoneNumber(formData.phone);
+      
+      if (formatted !== formData.phone) {
+        setFormData(prev => ({ ...prev, phone: formatted }));
+      }
+    }
+  }, [formData.phone]);
+
+  const handleFormDataChange = (field: keyof FormState, value: string) => {
     if (field === 'phone') {
       const onlyDigits = value.replace(/\D/g, '');
       setFormData({

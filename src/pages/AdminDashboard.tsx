@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
@@ -9,70 +10,33 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { UserPlus, Edit, Trash2, Search, Shield, MessageSquare } from "lucide-react";
+import { UserPlus, Edit, Trash2, Search, Shield } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { toast } from "@/lib/toast";
 import { Checkbox } from "@/components/ui/checkbox";
-import FeedbackManagement from "@/components/admin/FeedbackManagement";
-
-const MARKETING_CAMPAIGNS = [
-  { id: '1', name: 'Facebook', activeLeads: 42, qualifiedLeads: 18 },
-  { id: '2', name: 'Instagram', activeLeads: 36, qualifiedLeads: 15 },
-  { id: '3', name: 'WhatsApp', activeLeads: 29, qualifiedLeads: 12 },
-  { id: '4', name: 'Google Ads', activeLeads: 33, qualifiedLeads: 14 },
-  { id: '5', name: 'Referral', activeLeads: 25, qualifiedLeads: 10 }
-];
-
-const AGENTS = [
-  { id: '1', name: 'SoReal Estate', activeClients: 15, qualifiedClients: 8 },
-  { id: '2', name: 'Tito Baptista', activeClients: 12, qualifiedClients: 5 },
-  { id: '3', name: 'Dens Taveras', activeClients: 10, qualifiedClients: 4 },
-  { id: '4', name: 'Dennis Lopez', activeClients: 8, qualifiedClients: 3 },
-  { id: '5', name: 'Alvaro Terry', activeClients: 9, qualifiedClients: 4 }
-];
+import { Form, FormControl, FormField, FormItem, FormLabel } from "@/components/ui/form";
 
 const AdminDashboard = () => {
   const { t } = useLanguage();
-  const { 
-    user, 
-    isSuperAdmin, 
-    updateUserPermissions, 
-    addUser, 
-    deleteUser, 
-    getAllUsers,
-    feedbackItems,
-    updateFeedbackStatus,
-    deleteFeedbackItem
-  } = useAuth();
-  
+  const { user, isSuperAdmin, updateUserPermissions } = useAuth();
   const [activeTab, setActiveTab] = useState("users");
   const [showAddUserDialog, setShowAddUserDialog] = useState(false);
   const [showAddCampaignDialog, setShowAddCampaignDialog] = useState(false);
   const [showPermissionsDialog, setShowPermissionsDialog] = useState(false);
   const [newUsername, setNewUsername] = useState("");
-  const [newPassword, setNewPassword] = useState("");
-  const [newName, setNewName] = useState("");
   const [newRole, setNewRole] = useState("assistant");
   const [selectedCampaigns, setSelectedCampaigns] = useState<string[]>([]);
   const [campaignName, setCampaignName] = useState("");
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedUserId, setSelectedUserId] = useState<string>("");
   const [selectedUserPermissions, setSelectedUserPermissions] = useState<string[]>([]);
-  const [users, setUsers] = useState<any[]>([]);
 
-  useEffect(() => {
-    const allUsers = getAllUsers();
-    setUsers(allUsers);
-  }, [getAllUsers]);
-
-  useEffect(() => {
-    const newFeedbackCount = feedbackItems.filter(item => item.status === 'new').length;
-    if (newFeedbackCount > 0) {
-      document.title = `(${newFeedbackCount}) Admin Dashboard`;
-    } else {
-      document.title = 'Admin Dashboard';
-    }
-  }, [feedbackItems]);
+  const mockUsers = [
+    { id: '1', username: 'admin', name: 'Admin User', role: 'admin', campaigns: ['All'], permissions: ['MANAGE_USERS', 'MANAGE_FORMS', 'ACCESS_ANALYTICS', 'DELETE_CLIENTS'] },
+    { id: '2', username: 'maria', name: 'Maria Rodriguez', role: 'assistant', campaigns: ['Dennis', 'Tito'], permissions: [] },
+    { id: '3', username: 'juan', name: 'Juan Perez', role: 'assistant', campaigns: ['Michael'], permissions: [] },
+    { id: '0', username: 'm1keangelo', name: 'Super Admin', role: 'superadmin', campaigns: ['All'], permissions: ['MANAGE_USERS', 'MANAGE_FORMS', 'ACCESS_ANALYTICS', 'DELETE_CLIENTS', 'VIEW_ALL_CAMPAIGNS', 'MANAGE_TRAINING', 'MANAGE_ANIMATIONS'] }
+  ];
 
   const mockCampaigns = [
     { id: '1', name: 'Dennis', activeLeads: 42, qualifiedLeads: 18 },
@@ -88,8 +52,8 @@ const AdminDashboard = () => {
   ];
 
   const handleAddUser = () => {
-    if (!newUsername || !newPassword || !newName) {
-      toast.error("Username, password, and name are required");
+    if (!newUsername) {
+      toast.error("Username is required");
       return;
     }
 
@@ -98,40 +62,12 @@ const AdminDashboard = () => {
       return;
     }
 
-    const result = addUser({
-      username: newUsername,
-      password: newPassword,
-      name: newName,
-      role: newRole as 'admin' | 'superadmin' | 'assistant',
-      campaign: selectedCampaigns.length === 1 ? selectedCampaigns[0] : undefined,
-      campaigns: selectedCampaigns
-    });
-
-    if (result) {
-      toast.success(`User ${newUsername} added successfully`);
-      
-      const updatedUsers = getAllUsers();
-      setUsers(updatedUsers);
-      
-      setNewUsername("");
-      setNewPassword("");
-      setNewName("");
-      setNewRole("assistant");
-      setSelectedCampaigns([]);
-      setShowAddUserDialog(false);
-    } else {
-      toast.error("Failed to add user. Username may already exist.");
-    }
-  };
-
-  const handleDeleteUser = (userId: string) => {
-    if (deleteUser(userId)) {
-      toast.success("User deleted successfully");
-      const updatedUsers = getAllUsers();
-      setUsers(updatedUsers);
-    } else {
-      toast.error("Failed to delete user");
-    }
+    // In a real app, this would make an API call to create the user
+    toast.success(`User ${newUsername} added successfully`);
+    setNewUsername("");
+    setNewRole("assistant");
+    setSelectedCampaigns([]);
+    setShowAddUserDialog(false);
   };
 
   const handleAddCampaign = () => {
@@ -140,6 +76,7 @@ const AdminDashboard = () => {
       return;
     }
 
+    // In a real app, this would make an API call to create the campaign
     toast.success(`Campaign ${campaignName} added successfully`);
     setCampaignName("");
     setShowAddCampaignDialog(false);
@@ -163,10 +100,6 @@ const AdminDashboard = () => {
     if (selectedUserId) {
       updateUserPermissions(selectedUserId, selectedUserPermissions);
       toast.success("User permissions updated successfully");
-      
-      const updatedUsers = getAllUsers();
-      setUsers(updatedUsers);
-      
       setShowPermissionsDialog(false);
     }
   };
@@ -179,25 +112,11 @@ const AdminDashboard = () => {
     );
   };
 
-  const handleMarkAsRead = (id: string) => {
-    updateFeedbackStatus(id, 'read');
-    toast.success("Item marked as read");
-  };
-
-  const handleResolve = (id: string) => {
-    updateFeedbackStatus(id, 'resolved');
-    toast.success("Item marked as resolved");
-  };
-
-  const handleDeleteFeedback = (id: string) => {
-    deleteFeedbackItem(id);
-    toast.success("Feedback item deleted");
-  };
-
-  const filteredUsers = users.filter(user => 
+  // Filter users based on search query
+  const filteredUsers = mockUsers.filter(user => 
     user.username.toLowerCase().includes(searchQuery.toLowerCase()) ||
     user.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    (user.campaigns && user.campaigns.some((campaign: string) => campaign.toLowerCase().includes(searchQuery.toLowerCase())))
+    user.campaigns.some(campaign => campaign.toLowerCase().includes(searchQuery.toLowerCase()))
   );
 
   return (
@@ -206,7 +125,7 @@ const AdminDashboard = () => {
         <div>
           <h1 className="text-3xl font-bold tracking-tight">Admin Dashboard</h1>
           <p className="text-muted-foreground">
-            Manage users, campaigns, agents, and system settings
+            Manage users, campaigns, and system settings
           </p>
         </div>
         {isSuperAdmin && (
@@ -217,21 +136,13 @@ const AdminDashboard = () => {
       </div>
 
       <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-        <TabsList className="grid grid-cols-5 w-full max-w-md mb-4">
+        <TabsList className="grid grid-cols-3 w-full max-w-md mb-4">
           <TabsTrigger value="users">Users</TabsTrigger>
           <TabsTrigger value="campaigns">Campaigns</TabsTrigger>
-          <TabsTrigger value="agents">Agents</TabsTrigger>
-          <TabsTrigger value="feedback" className="relative">
-            Feedback
-            {feedbackItems.filter(item => item.status === 'new').length > 0 && (
-              <Badge variant="destructive" className="ml-2">
-                {feedbackItems.filter(item => item.status === 'new').length}
-              </Badge>
-            )}
-          </TabsTrigger>
           <TabsTrigger value="settings">Settings</TabsTrigger>
         </TabsList>
 
+        {/* USERS TAB */}
         <TabsContent value="users" className="space-y-4">
           <Card>
             <CardHeader className="pb-3">
@@ -260,29 +171,6 @@ const AdminDashboard = () => {
                           id="username"
                           value={newUsername}
                           onChange={(e) => setNewUsername(e.target.value)}
-                          className="col-span-3"
-                        />
-                      </div>
-                      <div className="grid grid-cols-4 items-center gap-4">
-                        <Label htmlFor="password" className="text-right">
-                          Password
-                        </Label>
-                        <Input
-                          id="password"
-                          type="password"
-                          value={newPassword}
-                          onChange={(e) => setNewPassword(e.target.value)}
-                          className="col-span-3"
-                        />
-                      </div>
-                      <div className="grid grid-cols-4 items-center gap-4">
-                        <Label htmlFor="name" className="text-right">
-                          Full Name
-                        </Label>
-                        <Input
-                          id="name"
-                          value={newName}
-                          onChange={(e) => setNewName(e.target.value)}
                           className="col-span-3"
                         />
                       </div>
@@ -384,7 +272,7 @@ const AdminDashboard = () => {
                       </TableCell>
                       <TableCell>
                         <div className="flex flex-wrap gap-1">
-                          {user.campaigns && user.campaigns.map((campaign: string) => (
+                          {user.campaigns.map(campaign => (
                             <Badge key={campaign} variant="outline" className="bg-black/30">
                               {campaign}
                             </Badge>
@@ -413,7 +301,6 @@ const AdminDashboard = () => {
                               size="sm" 
                               variant="ghost"
                               title="Delete User"
-                              onClick={() => handleDeleteUser(user.id)}
                             >
                               <Trash2 className="h-4 w-4" />
                             </Button>
@@ -428,11 +315,12 @@ const AdminDashboard = () => {
           </Card>
         </TabsContent>
 
+        {/* CAMPAIGNS TAB */}
         <TabsContent value="campaigns" className="space-y-4">
           <Card>
             <CardHeader className="pb-3">
               <div className="flex justify-between items-center">
-                <CardTitle>Marketing Campaigns</CardTitle>
+                <CardTitle>Campaign Management</CardTitle>
                 <Dialog open={showAddCampaignDialog} onOpenChange={setShowAddCampaignDialog}>
                   <DialogTrigger asChild>
                     <Button>Add Campaign</Button>
@@ -481,7 +369,7 @@ const AdminDashboard = () => {
                   </TableRow>
                 </TableHeader>
                 <TableBody>
-                  {MARKETING_CAMPAIGNS.map(campaign => (
+                  {mockCampaigns.map(campaign => (
                     <TableRow key={campaign.id}>
                       <TableCell className="font-medium">{campaign.name}</TableCell>
                       <TableCell>{campaign.activeLeads}</TableCell>
@@ -504,60 +392,7 @@ const AdminDashboard = () => {
           </Card>
         </TabsContent>
 
-        <TabsContent value="agents" className="space-y-4">
-          <Card>
-            <CardHeader className="pb-3">
-              <div className="flex justify-between items-center">
-                <CardTitle>Real Estate Agents</CardTitle>
-                <Button>Add Agent</Button>
-              </div>
-              <CardDescription>
-                Manage real estate agents and their performance.
-              </CardDescription>
-            </CardHeader>
-            <CardContent className="p-0">
-              <Table>
-                <TableHeader>
-                  <TableRow>
-                    <TableHead>Agent Name</TableHead>
-                    <TableHead>Active Clients</TableHead>
-                    <TableHead>Qualified Clients</TableHead>
-                    <TableHead className="w-[100px]">Actions</TableHead>
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  {AGENTS.map(agent => (
-                    <TableRow key={agent.id}>
-                      <TableCell className="font-medium">{agent.name}</TableCell>
-                      <TableCell>{agent.activeClients}</TableCell>
-                      <TableCell>{agent.qualifiedClients}</TableCell>
-                      <TableCell>
-                        <div className="flex items-center gap-2">
-                          <Button size="sm" variant="ghost">
-                            <Edit className="h-4 w-4" />
-                          </Button>
-                          <Button size="sm" variant="ghost">
-                            <Trash2 className="h-4 w-4" />
-                          </Button>
-                        </div>
-                      </TableCell>
-                    </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
-            </CardContent>
-          </Card>
-        </TabsContent>
-
-        <TabsContent value="feedback" className="space-y-4">
-          <FeedbackManagement 
-            feedbackItems={feedbackItems}
-            onMarkAsRead={handleMarkAsRead}
-            onResolve={handleResolve}
-            onDelete={handleDeleteFeedback}
-          />
-        </TabsContent>
-
+        {/* SETTINGS TAB */}
         <TabsContent value="settings" className="space-y-4">
           <Card>
             <CardHeader>
@@ -588,6 +423,7 @@ const AdminDashboard = () => {
         </TabsContent>
       </Tabs>
 
+      {/* Permissions Dialog */}
       <Dialog open={showPermissionsDialog} onOpenChange={setShowPermissionsDialog}>
         <DialogContent>
           <DialogHeader>

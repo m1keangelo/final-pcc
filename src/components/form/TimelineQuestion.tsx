@@ -1,13 +1,11 @@
 
-import React from "react";
 import { Button } from "@/components/ui/button";
 import QuestionContainer from "@/components/form/QuestionContainer";
 import { FormState } from "@/types/form";
 import { useLanguage } from "@/contexts/LanguageContext";
-import { ArrowLeft, ArrowRight } from "lucide-react";
-import FeedbackBox from "./FeedbackBox";
+import { ArrowLeft, ArrowRight, Clock, CalendarDays, CalendarClock, CalendarCheck, HelpCircle } from "lucide-react";
 
-const TimelineQuestion = ({
+export const TimelineQuestion = ({
   value,
   onChange,
   onNext,
@@ -26,35 +24,48 @@ const TimelineQuestion = ({
   
   const getFeedbackMessage = () => {
     if (language === 'es') {
+      // Spanish feedback messages
       switch(value) {
         case 'immediately':
-          return "¡Genial! Podemos ayudarte a obtener una pre-aprobación en 24 horas para comenzar a hacer ofertas. El proceso completo toma entre 30-45 días.";
+          return "Nos encanta que tengas esa urgencia. Esta misma semana podemos ayudarte con tu preaprobación y empezar a buscar casa. Moverte rápido te da más ventaja. ¡Aprovechemos el momento!";
         case '3months':
-          return "Perfecto para planificar. Tenemos tiempo para mejorar tu crédito y elegir el programa ideal. ¿Quieres una estrategia detallada?";
+          return "Es el momento ideal. Podemos mejorar tu crédito, revisar papeles y aumentar tu capacidad de compra. Si estás arrendando, la mayoría de apartamentos solo piden 60 días para cancelar. A veces, hasta podemos ayudarte con eso.";
         case '3to6months':
-          return "Excelente momento para prepararse. Podemos revisar tu crédito, ahorros y ayudarte a mejorar tu perfil para calificar para mejores tasas.";
+          return "Es tiempo de prepararte bien. Vamos paso a paso: salimos de deudas, ahorras más y subimos tu puntaje de crédito. Si tienes arriendo, la mayoría permiten salir con solo 2 meses de aviso. Podemos ayudarte con eso si es necesario.";
         case '6to12months':
-          return "Tiempo perfecto para una planificación completa. Podemos trabajar en crédito, ahorros, deudas, y encontrar opciones de asistencia para tu cuota inicial.";
+          return "Te estás adelantando, y eso es muy bueno. Hacemos un plan tranquilo para que estés listo con tiempo. Si tienes contrato de arriendo, algunos caseros aceptan que uno pague para salir antes. Podemos mirar si te ayudamos con eso.";
         case 'exploring':
-          return "Sin problema. Podemos revisar tus opciones sin compromiso y ayudarte a entender el proceso. Puedes decidir cuando estés listo.";
+          return "Tranquilo, no hay presión. Solo queremos darte buena información y números reales para cuando te decidas. ¿Quieres que armemos un plan \"¿y si sí?\" solo para ti?";
         default:
           return "";
       }
     } else {
+      // English feedback messages
       switch(value) {
         case 'immediately':
-          return "Great! We can help you get pre-approved within 24 hours to start making offers. The full process takes about 30-45 days.";
+          return "Love the urgency. Let's lock in your pre-approval this week and line up properties so you're ready to move with confidence. Quick action = leverage. Let's make it count.";
         case '3months':
-          return "Perfect timing for planning. We have time to boost your credit and select the right program. Want a full roadmap?";
+          return "Perfect window. We'll fine-tune your credit, docs, and buying power so when the time comes, you're bulletproof. If you're in a lease, keep in mind most apartments only require 60 days to break — and in some cases, we can help cover that.";
         case '3to6months':
-          return "Great spot to get prepared. We can review your credit, savings, and help you improve your profile to qualify for better rates.";
+          return "This is your prep season. We'll get strategic — clear old debts, boost savings, and tune your credit. If you're currently leasing, we can start working on exit strategies — most leases only ask for 2 months, and we may be able to assist.";
         case '6to12months':
-          return "Perfect timing for a full plan. We can work on credit, savings, debts, and find down payment assistance options.";
+          return "You're thinking ahead — and that's powerful. We'll craft a no-stress game plan that gets you lender-ready early so you can pounce on the right deal when it's time. Locked into a lease? Let's explore options now — some landlords accept buyouts, and we might help with that.";
         case 'exploring':
-          return "No problem. We can review your options with no pressure and help you understand the process. You can decide when you're ready.";
+          return "No pressure here — just guidance. We'll give you the real numbers and facts so when you're ready, there's no guessing. Want us to build a 'what if' scenario just for you?";
         default:
           return "";
       }
+    }
+  };
+
+  const getIconForOption = (option: string) => {
+    switch(option) {
+      case 'immediately': return <Clock className="mr-2 h-5 w-5" />;
+      case '3months': return <CalendarDays className="mr-2 h-5 w-5" />;
+      case '3to6months': return <CalendarClock className="mr-2 h-5 w-5" />;
+      case '6to12months': return <CalendarCheck className="mr-2 h-5 w-5" />;
+      case 'exploring': return <HelpCircle className="mr-2 h-5 w-5" />;
+      default: return null;
     }
   };
   
@@ -66,60 +77,68 @@ const TimelineQuestion = ({
       currentStep={currentStep}
       totalSteps={totalSteps}
     >
-      <div className="grid gap-4">
+      <div className="grid gap-3">
         <Button
-          variant={value === 'immediately' ? 'default' : 'outline'}
+          variant={value === 'immediately' ? 'glow' : 'outline'}
           onClick={() => onChange('immediately')}
+          className={`flex justify-start text-left transition-all duration-300 ${value === 'immediately' ? '' : 'hover:border-gallomodern-300/40 hover:text-gallomodern-300'}`}
         >
+          {getIconForOption('immediately')}
           {t('q.timeline.immediately')}
         </Button>
         <Button
-          variant={value === '3months' ? 'default' : 'outline'}
+          variant={value === '3months' ? 'glow' : 'outline'}
           onClick={() => onChange('3months')}
+          className={`flex justify-start text-left transition-all duration-300 ${value === '3months' ? '' : 'hover:border-gallomodern-300/40 hover:text-gallomodern-300'}`}
         >
-          {t('q.timeline.lessThan3Months')}
+          {getIconForOption('3months')}
+          {t('q.timeline.3months')}
         </Button>
         <Button
-          variant={value === '3to6months' ? 'default' : 'outline'}
+          variant={value === '3to6months' ? 'glow' : 'outline'}
           onClick={() => onChange('3to6months')}
+          className={`flex justify-start text-left transition-all duration-300 ${value === '3to6months' ? '' : 'hover:border-gallomodern-300/40 hover:text-gallomodern-300'}`}
         >
-          {t('q.timeline.3to6Months')}
+          {getIconForOption('3to6months')}
+          {t('q.timeline.3to6months')}
         </Button>
         <Button
-          variant={value === '6to12months' ? 'default' : 'outline'}
+          variant={value === '6to12months' ? 'glow' : 'outline'}
           onClick={() => onChange('6to12months')}
+          className={`flex justify-start text-left transition-all duration-300 ${value === '6to12months' ? '' : 'hover:border-gallomodern-300/40 hover:text-gallomodern-300'}`}
         >
-          {t('q.timeline.6to12Months')}
+          {getIconForOption('6to12months')}
+          {t('q.timeline.6to12months')}
         </Button>
         <Button
-          variant={value === 'exploring' ? 'default' : 'outline'}
+          variant={value === 'exploring' ? 'glow' : 'outline'}
           onClick={() => onChange('exploring')}
+          className={`flex justify-start text-left transition-all duration-300 ${value === 'exploring' ? '' : 'hover:border-gallomodern-300/40 hover:text-gallomodern-300'}`}
         >
-          {t('q.timeline.justExploring')}
+          {getIconForOption('exploring')}
+          {t('q.timeline.exploring')}
         </Button>
       </div>
       
       {value && (
-        <FeedbackBox message={getFeedbackMessage()} />
+        <div className="mt-6 p-4 rounded-md glass-card border border-gallomodern-500/30 shadow-inner bg-gradient-to-br from-gallomodern-900/20 to-black/30">
+          <p className="font-medium text-gallomodern-100">{getFeedbackMessage()}</p>
+        </div>
       )}
       
       <div className="mt-8 flex justify-between">
-        {onBack && (
-          <Button
-            type="button"
-            variant="outline"
-            onClick={onBack}
-          >
-            <ArrowLeft className="mr-2 h-4 w-4" />
-            {t('form.previous')}
-          </Button>
-        )}
-        <div className={onBack ? "" : "ml-auto"}>
-          <Button onClick={onNext} disabled={!value}>
-            {t('form.next')}
-            <ArrowRight className="ml-2 h-4 w-4" />
-          </Button>
-        </div>
+        <Button
+          type="button"
+          variant="outline"
+          onClick={onBack}
+        >
+          <ArrowLeft className="mr-2 h-4 w-4" />
+          {t('form.previous')}
+        </Button>
+        <Button onClick={onNext}>
+          {t('form.next')}
+          <ArrowRight className="ml-2 h-4 w-4" />
+        </Button>
       </div>
     </QuestionContainer>
   );

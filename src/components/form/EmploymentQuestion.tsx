@@ -2,11 +2,10 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import QuestionContainer from "@/components/form/QuestionContainer";
-import { FormState } from "@/types/formState";
+import { FormState } from "@/types/form";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 import { useState, useEffect } from "react";
-import FeedbackBox from "./FeedbackBox";
 
 export const EmploymentQuestion = ({
   value,
@@ -53,15 +52,13 @@ export const EmploymentQuestion = ({
         case 'W-2':
           return "Fácil de manejar. Tu ingreso estable ayuda bastante. Solo mándanos tu colilla de pago más reciente y empezamos el proceso.";
         case '1099':
-          return "Tú manejas tu negocio. Usamos tus impuestos, tus depósitos bancarios y formas legales para mostrar todo lo que ganas.";
-        case 'selfEmployed':
-          return "Trabajar para ti mismo es genial. Necesitaremos tus declaraciones de impuestos de los últimos dos años y estados bancarios para demostrar ingresos estables.";
+          return "Tú manejas tu negocio. Usamos tus impuestos, tus depósitos bancarios y formas legales para mostrar todo lo que ganas. Aunque tengas deducciones, hay formas de explicar tu ingreso real.";
         case 'retired':
-          return "Usamos tus ingresos fijos como pensión, seguro social o inversiones. Estos ingresos estables son perfectos para un préstamo.";
+          return "Ya trabajaste, ahora usamos tus beneficios. Sea pensión, seguro social o tus ahorros, todo se puede usar para ayudarte a calificar.";
         case 'unemployed':
-          return "Podríamos usar otros ingresos como manutención, asistencia o pensiones. También podemos explorar un co-firmante para ayudarte.";
+          return "Está bien. Si tienes ahorros, un trabajo por comenzar o alguien que te respalde, buscamos la forma. Hemos ayudado a muchos como tú — y sí se puede cerrar negocio.";
         case 'other':
-          return "Hay muchas formas de verificar tus ingresos. Cuéntanos más sobre tu situación y encontraremos el camino adecuado.";
+          return "Cada situación es diferente. Si tu caso no es común, podemos encontrar la forma de explicarlo. La vida real tiene matices, igual que los préstamos.";
         default:
           return "";
       }
@@ -69,17 +66,15 @@ export const EmploymentQuestion = ({
       // English feedback messages
       switch(value) {
         case 'W-2':
-          return "Straightforward to handle. Your stable income is a plus. Just send over your most recent paystubs and we'll get started.";
+          return "Simple setup — your consistent income makes underwriting smooth. Send us your latest pay stub and we'll get the wheels moving.";
         case '1099':
-          return "You run your business. We'll use your tax returns, bank deposits, and legal forms to showcase all your income.";
-        case 'selfEmployed':
-          return "Being your own boss is great. We'll need your tax returns for the past two years and bank statements to prove stable income.";
+          return "You're the boss. We'll use tax returns, bank deposits, and smart structuring to show the full picture. If write-offs shrink your income, we'll use lender tricks to show the real story.";
         case 'retired':
-          return "We'll use your fixed income sources like pensions, social security, or investments. These stable incomes work well for a loan.";
+          return "You've earned it — now we'll put those retirement benefits to work. Pension, Social Security, or assets, we'll leverage every bit.";
         case 'unemployed':
-          return "We could use other income like alimony, assistance, or pensions. We can also explore a co-signer to help you qualify.";
+          return "That's OK. If you've got savings, a job lined up, or a strong co-borrower, we'll build a workaround. We've helped many in transition — and still closed deals.";
         case 'other':
-          return "There are many ways to verify income. Tell us more about your situation and we'll find the right path forward.";
+          return "Every path has a paper trail. If it's not standard, we'll make it understandable. Real life isn't always black and white — and neither is lending.";
         default:
           return "";
       }
@@ -108,12 +103,6 @@ export const EmploymentQuestion = ({
           {t('q.employment.1099')}
         </Button>
         <Button
-          variant={value === 'selfEmployed' ? 'default' : 'outline'}
-          onClick={() => onChange('selfEmployed')}
-        >
-          {t('q.employment.selfEmployed')}
-        </Button>
-        <Button
           variant={value === 'retired' ? 'default' : 'outline'}
           onClick={() => onChange('retired')}
         >
@@ -131,21 +120,25 @@ export const EmploymentQuestion = ({
         >
           {t('q.employment.other')}
         </Button>
+        
+        {/* Show text input for "other" option */}
+        {showOtherInput && onChangeOtherDetails && (
+          <div className="mt-2">
+            <Input
+              placeholder={t('q.employment.otherPlaceholder') || "Please specify your employment situation"}
+              value={otherEmploymentDetails || ""}
+              onChange={(e) => onChangeOtherDetails(e.target.value)}
+              className="mt-2"
+            />
+          </div>
+        )}
       </div>
       
-      {showOtherInput && (
-        <div className="mt-4">
-          <Input
-            value={otherEmploymentDetails || ''}
-            onChange={(e) => onChangeOtherDetails && onChangeOtherDetails(e.target.value)}
-            placeholder={t('q.employment.otherPlaceholder')}
-            className="text-foreground"
-          />
-        </div>
-      )}
-      
+      {/* Display feedback message if an option is selected */}
       {value && (
-        <FeedbackBox message={getFeedbackMessage()} />
+        <div className="mt-4 p-4 border border-[#fef9be] rounded-md bg-black text-[#fef9be]">
+          <p className="font-medium">{getFeedbackMessage()}</p>
+        </div>
       )}
       
       <div className="mt-8 flex justify-between">

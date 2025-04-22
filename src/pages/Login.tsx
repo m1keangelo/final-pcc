@@ -7,6 +7,7 @@ import MatrixBackground from "@/components/login/MatrixBackground";
 import { LanguageProvider } from "@/contexts/LanguageContext";
 import { useAuth } from "@/contexts/AuthContext";
 import { ErrorBoundary } from "@/components/ErrorBoundary";
+import { toast } from "@/lib/toast";
 import { useNavigate } from "react-router-dom";
 
 const LoginError = () => (
@@ -37,7 +38,7 @@ const Login = () => {
 
     const timer = setTimeout(() => {
       setShowSplash(false);
-    }, 6000);
+    }, 6000); // Reduced from 9000 to 6000 for better UX
     
     return () => clearTimeout(timer);
   }, [user, navigate]);
@@ -66,9 +67,9 @@ const Login = () => {
         <div className="relative flex h-screen w-full overflow-hidden bg-gradient-to-br from-[#12121e] via-[#1a1a2a] to-[#121220]">
           <MatrixBackground />
           <div className="absolute inset-0 bg-gradient-radial from-transparent via-transparent to-black opacity-60"></div>
-          <div className="z-10 flex w-full flex-col md:flex-row h-full items-center justify-center md:justify-start">
+          <div className="z-10 flex w-full flex-col md:flex-row h-full items-center">
             <BrandImagery />
-            <LoginForm className="md:ml-[-5%] lg:ml-[-10%] xl:ml-[-15%] pt-16 md:pt-8" />
+            <LoginForm />
           </div>
         </div>
       </LanguageProvider>

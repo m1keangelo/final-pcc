@@ -7,7 +7,6 @@ import QuestionContainer from "@/components/form/QuestionContainer";
 import { FormState } from "@/types/form";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { ArrowLeft, ArrowRight } from "lucide-react";
-import FeedbackBox from "./FeedbackBox";
 
 // Define the issue types for better type safety
 const issueTypes = [
@@ -158,7 +157,9 @@ export const CreditIssuesQuestion = ({
                     </div>
                     
                     {isSelected && (
-                      <FeedbackBox message={getFeedbackMessage(issue.id)} />
+                      <div className="mt-2 ml-6 p-3 border border-[#fef9be] rounded-md bg-black text-[#fef9be]">
+                        <p className="text-sm">{getFeedbackMessage(issue.id)}</p>
+                      </div>
                     )}
                   </div>
                 );

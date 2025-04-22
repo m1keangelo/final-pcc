@@ -4,9 +4,8 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter, DialogD
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { useLanguage } from "@/contexts/LanguageContext";
-import { toast } from "@/lib/toast";
+import { toast } from "@/hooks/use-toast";
 import { ImagePlus } from "lucide-react";
-import { useAuth } from "@/contexts/AuthContext";
 
 interface BugReportDialogProps {
   isOpen: boolean;
@@ -15,7 +14,6 @@ interface BugReportDialogProps {
 
 const BugReportDialog = ({ isOpen, onClose }: BugReportDialogProps) => {
   const { t } = useLanguage();
-  const { addFeedbackItem } = useAuth();
   const [description, setDescription] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [selectedImage, setSelectedImage] = useState<File | null>(null);
@@ -24,31 +22,36 @@ const BugReportDialog = ({ isOpen, onClose }: BugReportDialogProps) => {
     e.preventDefault();
     
     if (!description.trim()) {
-      toast(`${t('common.error')} - ${t('bugReport.descriptionRequired')}`);
+      toast({
+        title: t('common.error'),
+        description: t('bugReport.descriptionRequired'),
+        variant: "destructive"
+      });
       return;
     }
 
     try {
       setIsSubmitting(true);
       
-      let imageUrl = undefined;
-      if (selectedImage) {
-        imageUrl = URL.createObjectURL(selectedImage);
-        console.log("Image prepared for upload:", imageUrl);
-      }
+      // Here would be the code to submit to a database
+      // For now we'll just simulate a submission
+      await new Promise(resolve => setTimeout(resolve, 1000));
       
-      // Create user data but don't pass it directly as it's not expected by the function
-      // The user data will be handled by the backend/context
-      await addFeedbackItem('bug', description, imageUrl);
+      toast({
+        title: t('bugReport.submitted'),
+        description: t('bugReport.thankYou'),
+      });
       
-      toast(`${t('bugReport.submitted')} - ${t('bugReport.thankYou')}`);
-      
+      // Reset form
       setDescription("");
       setSelectedImage(null);
       onClose();
     } catch (error) {
-      toast(`${t('common.error')} - ${t('bugReport.submitError')}`);
-      console.error("Error submitting bug report:", error);
+      toast({
+        title: t('common.error'),
+        description: t('bugReport.submitError'),
+        variant: "destructive"
+      });
     } finally {
       setIsSubmitting(false);
     }

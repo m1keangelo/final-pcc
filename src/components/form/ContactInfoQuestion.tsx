@@ -1,6 +1,4 @@
 
-import React, { useState, useRef, useEffect, useCallback } from "react";
-import { memo } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -8,9 +6,9 @@ import { Textarea } from "@/components/ui/textarea";
 import QuestionContainer from "@/components/form/QuestionContainer";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { ArrowLeft, ArrowRight } from "lucide-react";
+import { useEffect } from "react";
 
-// Use memo to prevent unnecessary re-renders
-const ContactInfoQuestion = ({
+export const ContactInfoQuestion = ({
   name,
   phone,
   email,
@@ -38,66 +36,47 @@ const ContactInfoQuestion = ({
   totalSteps: number;
 }) => {
   const { t } = useLanguage();
-  const [formattedPhone, setFormattedPhone] = useState("");
-  const nameInputRef = useRef<HTMLInputElement>(null);
-  const phoneInputRef = useRef<HTMLInputElement>(null);
-  const emailInputRef = useRef<HTMLInputElement>(null);
-  const commentsRef = useRef<HTMLTextAreaElement>(null);
   
   const isFormValid = () => {
     return name.trim() !== '' && phone.trim() !== '' && email.trim() !== '';
   };
   
-  // Focus on name input when component mounts
+  // Format the phone number whenever it changes
   useEffect(() => {
-    if (currentStep === 1 && nameInputRef.current) {
-      nameInputRef.current.focus();
+    if (phone) {
+      // Only format if there's actual content and it's not already formatted
+      const cleaned = phone.replace(/\D/g, '');
+      const formattedValue = formatPhoneNumber(cleaned);
+      
+      // Only update if the formatted value is different to avoid loops
+      if (formattedValue !== phone) {
+        onChangePhone(formattedValue);
+      }
     }
-  }, [currentStep]);
+  }, [phone, onChangePhone]);
   
-  // Format phone number for display
-  const formatPhoneNumber = useCallback((value: string) => {
+  const formatPhoneNumber = (value: string) => {
+    // Remove all non-digit characters
     const cleaned = value.replace(/\D/g, '');
+    
+    // Limit to 10 digits
     const truncated = cleaned.slice(0, 10);
     
-    if (truncated.length === 0) {
-      return "";
-    } else if (truncated.length <= 3) {
-      return `(${truncated}`;
+    // Format the number
+    if (truncated.length <= 3) {
+      return truncated;
     } else if (truncated.length <= 6) {
       return `(${truncated.slice(0, 3)}) ${truncated.slice(3)}`;
     } else {
       return `(${truncated.slice(0, 3)}) ${truncated.slice(3, 6)}-${truncated.slice(6)}`;
     }
-  }, []);
+  };
   
-  // Update formatted phone whenever raw phone changes
-  useEffect(() => {
-    const formatted = formatPhoneNumber(phone);
-    setFormattedPhone(formatted);
-  }, [phone, formatPhoneNumber]);
-  
-  // Use memoized handlers to prevent unnecessary re-renders
-  const handleNameChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
-    onChangeName(e.target.value);
-  }, [onChangeName]);
-  
-  const handleEmailChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
-    onChangeEmail(e.target.value);
-  }, [onChangeEmail]);
-  
-  const handleCommentsChange = useCallback((e: React.ChangeEvent<HTMLTextAreaElement>) => {
-    onChangeComments(e.target.value);
-  }, [onChangeComments]);
-  
-  const handlePhoneChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value;
-    // Extract only digits for the raw phone value
-    const cleaned = value.replace(/\D/g, '');
-    
-    // Update the parent component with just digits
-    onChangePhone(cleaned);
-  }, [onChangePhone]);
+  const handlePhoneChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    // Just store the raw value - the useEffect will handle formatting
+    const value = e.target.value.replace(/\D/g, '');
+    onChangePhone(value);
+  };
   
   return (
     <QuestionContainer
@@ -109,54 +88,46 @@ const ContactInfoQuestion = ({
     >
       <div className="space-y-6">
         <div className="space-y-2">
-          <Label htmlFor="name" className="text-gallomodern-100">{t('q.contactInfo.nameLabel')}</Label>
+          <Label htmlFor="name">{t('q.contactInfo.nameLabel')}</Label>
           <Input
             id="name"
             value={name}
-            onChange={handleNameChange}
+            onChange={(e) => onChangeName(e.target.value)}
             placeholder={t('q.contactInfo.namePlaceholder')}
-            className="text-foreground"
-            ref={nameInputRef}
           />
         </div>
         
         <div className="space-y-2">
-          <Label htmlFor="phone" className="text-gallomodern-100">{t('q.contactInfo.phoneLabel')}</Label>
+          <Label htmlFor="phone">{t('q.contactInfo.phoneLabel')}</Label>
           <Input
             id="phone"
             type="tel"
-            value={formattedPhone}
+            value={phone}
             onChange={handlePhoneChange}
             placeholder={t('q.contactInfo.phonePlaceholder')}
-            className="text-foreground"
             inputMode="numeric"
-            ref={phoneInputRef}
           />
         </div>
         
         <div className="space-y-2">
-          <Label htmlFor="email" className="text-gallomodern-100">{t('q.contactInfo.emailLabel')}</Label>
+          <Label htmlFor="email">{t('q.contactInfo.emailLabel')}</Label>
           <Input
             id="email"
             type="email"
             value={email}
-            onChange={handleEmailChange}
+            onChange={(e) => onChangeEmail(e.target.value)}
             placeholder={t('q.contactInfo.emailPlaceholder')}
-            className="text-foreground"
-            ref={emailInputRef}
           />
         </div>
         
         <div className="space-y-2">
-          <Label htmlFor="comments" className="text-gallomodern-100">{t('q.contactInfo.commentsLabel')}</Label>
+          <Label htmlFor="comments">{t('q.contactInfo.commentsLabel')}</Label>
           <Textarea
             id="comments"
             value={comments}
-            onChange={handleCommentsChange}
+            onChange={(e) => onChangeComments(e.target.value)}
             placeholder={t('q.contactInfo.commentsPlaceholder')}
             rows={4}
-            className="text-foreground"
-            ref={commentsRef}
           />
         </div>
       </div>
@@ -179,4 +150,4 @@ const ContactInfoQuestion = ({
   );
 };
 
-export default memo(ContactInfoQuestion);
+export default ContactInfoQuestion;

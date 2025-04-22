@@ -52,10 +52,10 @@ const translations = {
     'q.timeline.title': 'Homebuying Timeline',
     'q.timeline.question': 'How soon are you looking to buy a home?',
     'q.timeline.immediately': 'Immediately (I\'ve found a home)',
-    'q.timeline.lessThan3Months': 'Within 3 months',
-    'q.timeline.3to6Months': '3-6 months',
-    'q.timeline.6to12Months': '6-12 months',
-    'q.timeline.justExploring': 'Just exploring/Not sure',
+    'q.timeline.3months': 'Within 3 months',
+    'q.timeline.3to6months': '3-6 months',
+    'q.timeline.6to12months': '6-12 months',
+    'q.timeline.exploring': 'Just exploring/Not sure',
     
     // First-Time Buyer
     'q.firsttime.title': 'First-Time Homebuyer',
@@ -69,17 +69,19 @@ const translations = {
     'q.employment.question': 'What is your current employment situation?',
     'q.employment.w2': 'W-2 Employee',
     'q.employment.1099': '1099 Contractor',
-    'q.employment.selfEmployed': 'Self-Employed',
     'q.employment.retired': 'Retired',
     'q.employment.unemployed': 'Unemployed',
     'q.employment.other': 'Other',
     'q.employment.otherPlaceholder': 'Please specify your employment situation',
     
     // Self-Employment Years
-    'q.selfEmployedYears.title': 'Self-Employment History',
-    'q.selfEmployedYears.question': 'How long have you been self-employed?',
-    'q.selfEmployedYears.year': 'year',
-    'q.selfEmployedYears.years': 'years',
+    'q.selfyears.title': 'Self-Employment History',
+    'q.selfyears.question': 'How long have you been self-employed? Have you been in business at least two years?',
+    'q.selfyears.yearsLabel': 'How many years self-employed?',
+    'q.selfyears.placeholder': 'Enter number of years',
+    'q.selfyears.warning': 'It can be harder to get a loan with less than 2 years of self-employment. You might need a co-signer or a special program.',
+    'q.selfyears.year': 'year',
+    'q.selfyears.years': 'years',
     
     // Income
     'q.income.title': 'Income',
@@ -89,11 +91,7 @@ const translations = {
     'q.income.monthly': 'Monthly Income',
     'q.income.amountLabel': 'Income Amount',
     'q.income.placeholder': 'Enter your income',
-    'q.income.annualLabel': 'Annual Income Amount',
-    'q.income.annualPlaceholder': 'Enter your annual income',
-    'q.income.monthlyLabel': 'Monthly Income Amount',
-    'q.income.monthlyPlaceholder': 'Enter your monthly income',
-    
+
     // Credit
     'q.credit.title': 'Credit Health',
     'q.credit.question': 'How would you describe your credit?',
@@ -289,10 +287,10 @@ const translations = {
     'q.timeline.title': 'Plazo para Comprar Casa',
     'q.timeline.question': '¿Qué tan pronto busca comprar una casa?',
     'q.timeline.immediately': 'Inmediatamente (ya encontré una casa)',
-    'q.timeline.lessThan3Months': 'Dentro de 3 meses',
-    'q.timeline.3to6Months': '3-6 meses',
-    'q.timeline.6to12Months': '6-12 meses',
-    'q.timeline.justExploring': 'Solo explorando/No estoy seguro',
+    'q.timeline.3months': 'Dentro de 3 meses',
+    'q.timeline.3to6months': '3-6 meses',
+    'q.timeline.6to12months': '6-12 meses',
+    'q.timeline.exploring': 'Solo explorando/No estoy seguro',
     
     // First-Time Buyer
     'q.firsttime.title': 'Comprador de Primera Vez',
@@ -306,17 +304,19 @@ const translations = {
     'q.employment.question': '¿Cuál es su situación laboral actual?',
     'q.employment.w2': 'Empleado W-2',
     'q.employment.1099': 'Contratista 1099',
-    'q.employment.selfEmployed': 'Trabajador Independiente',
     'q.employment.retired': 'Jubilado',
     'q.employment.unemployed': 'Desempleado',
     'q.employment.other': 'Otro',
     'q.employment.otherPlaceholder': 'Por favor, especifique su situación laboral',
     
     // Self-Employment Years
-    'q.selfEmployedYears.title': 'Historial de Autoempleo',
-    'q.selfEmployedYears.question': '¿Hace cuánto trabajas por cuenta propia?',
-    'q.selfEmployedYears.year': 'año',
-    'q.selfEmployedYears.years': 'años',
+    'q.selfyears.title': 'Historial de Autoempleo',
+    'q.selfyears.question': '¿Hace cuánto trabaja por cuenta propia? ¿Lleva al menos dos años con su negocio?',
+    'q.selfyears.yearsLabel': '¿Cuántos años lleva trabajando por cuenta propia?',
+    'q.selfyears.placeholder': 'Ingrese número de años',
+    'q.selfyears.warning': 'Con menos de 2 años como autónomo es más difícil calificar. Podría necesitar un co-firmante o un programa especial.',
+    'q.selfyears.year': 'año',
+    'q.selfyears.years': 'años',
     
     // Income
     'q.income.title': 'Ingresos',
@@ -326,10 +326,6 @@ const translations = {
     'q.income.monthly': 'Ingreso Mensual',
     'q.income.amountLabel': 'Monto de Ingresos',
     'q.income.placeholder': 'Ingrese sus ingresos',
-    'q.income.annualLabel': 'Monto de Ingreso Anual',
-    'q.income.annualPlaceholder': 'Ingrese su ingreso anual',
-    'q.income.monthlyLabel': 'Monto de Ingreso Mensual',
-    'q.income.monthlyPlaceholder': 'Ingrese su ingreso mensual',
     
     // Credit
     'q.credit.title': 'Estado del Crédito',
@@ -477,9 +473,9 @@ const translations = {
     'bugReport.descriptionPlaceholder': 'Describa el error y los pasos para reproducirlo...',
     'bugReport.screenshot': 'Captura de Pantalla (Opcional)',
     'bugReport.uploadImage': 'Subir Imagen',
-    'bugReport.submitted': 'Informe de Error Enviado',
+    'bugReport.submitted': 'Reporte de Error Enviado',
     'bugReport.thankYou': '¡Gracias por ayudarnos a mejorar!',
-    'bugReport.submitError': 'Hubo un error al enviar su informe de error. Por favor intente de nuevo.',
+    'bugReport.submitError': 'Hubo un error al enviar su reporte. Por favor intente de nuevo.',
     'bugReport.descriptionRequired': 'Por favor proporcione una descripción del error.',
     
     // Common
@@ -522,11 +518,6 @@ export const LanguageProvider: React.FC<{children: ReactNode}> = ({ children }) 
   // Translation function
   const t = (key: string): string => {
     const translationSet = translations[language];
-    
-    console.log(`Translating key: ${key}`);
-    console.log(`Current language: ${language}`);
-    console.log(`Translation found: ${translationSet[key as keyof typeof translationSet] || 'NOT FOUND'}`);
-    
     if (!translationSet) return key;
     
     return translationSet[key as keyof typeof translationSet] || key;

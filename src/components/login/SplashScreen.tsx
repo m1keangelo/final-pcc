@@ -1,3 +1,4 @@
+
 import React, { useEffect, useState } from "react";
 import { getRandomQuote, getBrowserLanguage, forceLanguageForTesting } from "@/utils/quoteUtils";
 import { useToast } from "@/hooks/use-toast";
@@ -83,9 +84,6 @@ const SplashScreen = ({ onComplete }: { onComplete: () => void }) => {
       }`}
     >
       <div className="relative flex flex-col items-center text-center max-w-4xl px-6">
-        <div className="mb-4">
-        </div>
-        
         <div className="mb-10">
           <div className="relative group">
             <div className="absolute -inset-0.5 bg-gallomodern-500 rounded-full blur opacity-50 group-hover:opacity-75 transition duration-300 animate-pulse"></div>

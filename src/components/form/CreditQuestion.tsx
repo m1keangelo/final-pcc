@@ -1,11 +1,9 @@
 
-import React from "react";
 import { Button } from "@/components/ui/button";
 import QuestionContainer from "@/components/form/QuestionContainer";
 import { FormState } from "@/types/form";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { ArrowLeft, ArrowRight } from "lucide-react";
-import FeedbackBox from "./FeedbackBox";
 
 export const CreditQuestion = ({
   value,
@@ -24,6 +22,7 @@ export const CreditQuestion = ({
 }) => {
   const { t, language } = useLanguage();
   
+  // Define feedback messages based on credit category
   const getFeedbackMessage = () => {
     if (language === 'es') {
       switch(value) {
@@ -99,8 +98,11 @@ export const CreditQuestion = ({
         </Button>
       </div>
       
+      {/* Display feedback message if an option is selected */}
       {value && (
-        <FeedbackBox message={getFeedbackMessage()} />
+        <div className="mt-4 p-4 border border-[#fef9be] rounded-md bg-black text-[#fef9be]">
+          <p className="font-medium">{getFeedbackMessage()}</p>
+        </div>
       )}
       
       <div className="mt-8 flex justify-between">

@@ -5,7 +5,6 @@ import { FormState, calculateClientRating } from "@/types/form";
 import { getPositiveFactors, getQualificationSummary } from "@/utils/qualificationUtils";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { ArrowLeft, CheckCircle, ShieldCheck, Home } from "lucide-react";
-import FeedbackBox from "./FeedbackBox";
 
 export const SummaryQuestion = ({
   formData,
@@ -39,27 +38,26 @@ export const SummaryQuestion = ({
           </div>
         </div>
         
-        <FeedbackBox message={qualificationSummary} variant={
-          qualificationSummary.includes('✅') ? 'success' :
-          qualificationSummary.includes('⚡') ? 'warning' : 'info'
-        } />
-        
-        {positiveFactors.length > 0 && (
-          <div className="space-y-3">
-            <h4 className="font-medium text-gallomodern-200 flex items-center gap-2">
-              <ShieldCheck className="h-5 w-5" />
-              {t('q.summary.positiveFactors')}
-            </h4>
-            <ul className="space-y-2.5 pl-2">
-              {positiveFactors.map((factor, index) => (
-                <li key={index} className="flex items-start gap-2.5 bg-gallomodern-900/20 p-2.5 rounded-md border-l-2 border-gallomodern-300/50">
-                  <CheckCircle className="h-5 w-5 text-gallomodern-300 mt-0.5 flex-shrink-0" />
-                  <span className="text-gallomodern-50">{factor}</span>
-                </li>
-              ))}
-            </ul>
-          </div>
-        )}
+        <div className="p-5 rounded-lg glass-card border border-gallomodern-500/20 shadow-lg">
+          <p className="font-medium text-lg mb-6 text-gallomodern-50">{qualificationSummary}</p>
+          
+          {positiveFactors.length > 0 && (
+            <div className="space-y-3">
+              <h4 className="font-medium text-gallomodern-200 flex items-center gap-2">
+                <ShieldCheck className="h-5 w-5" />
+                {t('q.summary.positiveFactors')}
+              </h4>
+              <ul className="space-y-2.5 pl-2">
+                {positiveFactors.map((factor, index) => (
+                  <li key={index} className="flex items-start gap-2.5 bg-gallomodern-900/20 p-2.5 rounded-md border-l-2 border-gallomodern-300/50">
+                    <CheckCircle className="h-5 w-5 text-gallomodern-300 mt-0.5 flex-shrink-0" />
+                    <span className="text-gallomodern-50">{factor}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
+        </div>
         
         <div className="grid gap-4">
           <Button 

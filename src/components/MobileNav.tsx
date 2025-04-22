@@ -18,9 +18,9 @@ const MobileNav = () => {
           <Button 
             variant="outline" 
             size="icon" 
-            className="md:hidden fixed top-4 left-4 z-40 h-10 w-10 bg-black/50 border-purple-400/30"
+            className="md:hidden fixed top-4 left-4 z-10 h-12 w-12"
           >
-            <Menu size={20} />
+            <Menu size={24} />
             <span className="sr-only">{t('nav.menu')}</span>
           </Button>
         </SheetTrigger>
@@ -30,7 +30,7 @@ const MobileNav = () => {
       </Sheet>
       
       {/* Show language toggle in header for mobile */}
-      <div className="md:hidden fixed top-4 right-4 z-40">
+      <div className="md:hidden fixed top-4 right-4 z-10">
         <LanguageToggle />
       </div>
     </>

@@ -4,7 +4,6 @@ import { Button } from "@/components/ui/button";
 import { Globe } from "lucide-react";
 import { ReactNode } from "react";
 import { useToast } from "@/hooks/use-toast";
-import { useIsMobile } from "@/hooks/use-mobile";
 
 type LanguageToggleProps = {
   className?: string;
@@ -14,7 +13,6 @@ type LanguageToggleProps = {
 const LanguageToggle = ({ className, children }: LanguageToggleProps) => {
   const { language, setLanguage } = useLanguage();
   const { toast } = useToast();
-  const isMobile = useIsMobile();
 
   const handleLanguageToggle = () => {
     const newLanguage = language === 'en' ? 'es' : 'en';
@@ -35,14 +33,14 @@ const LanguageToggle = ({ className, children }: LanguageToggleProps) => {
         onClick={handleLanguageToggle}
         variant="outline"
         size="sm"
-        className="flex items-center gap-1 bg-[#2a2a3a] border-[#4a4a5a] hover:bg-[#3a3a4a] text-gray-200 h-8 px-2"
+        className="flex items-center gap-1 bg-[#2a2a3a] border-[#4a4a5a] hover:bg-[#3a3a4a] text-gray-200"
         title={language === 'en' ? "Cambiar a español" : "Switch to English"}
       >
-        <Globe size={14} className="mr-1" />
-        {isMobile ? (
-          <span>{language === 'en' ? "ES" : "EN"}</span>
+        <Globe size={16} className="mr-1" />
+        {language === 'en' ? (
+          <span>Español</span>
         ) : (
-          <span>{language === 'en' ? "Español" : "English"}</span>
+          <span>English</span>
         )}
       </Button>
     </div>

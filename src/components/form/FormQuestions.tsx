@@ -1,5 +1,5 @@
 
-import { useState, useEffect, useCallback } from "react";
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { FormState } from "@/types/form";
 import { useLanguage } from "@/contexts/LanguageContext";
@@ -20,7 +20,7 @@ const FormQuestions = ({
   const [currentStep, setCurrentStep] = useState(1);
   const totalSteps = getTotalSteps();
 
-  const [formData, setFormData] = useState<FormState>({
+  const [formData, setFormData] = useState<FormState>(initialData || {
     timeline: 'exploring',
     firstTimeBuyer: null,
     employmentType: null,
@@ -38,7 +38,7 @@ const FormQuestions = ({
     creditIssueType: null,
     creditIssueYear: null,
     creditIssueAmount: null,
-    creditIssues: {}, // Initialize the credit issues data structure
+    creditIssues: {}, // Initialize the new credit issues data structure
     idType: null,
     name: "",
     phone: "",
@@ -46,20 +46,7 @@ const FormQuestions = ({
     comments: ""
   });
 
-  // Initialize from props if available
-  useEffect(() => {
-    if (initialData) {
-      console.log("FormQuestions initializing with data:", initialData);
-      setFormData(prevData => ({
-        ...prevData,
-        ...initialData
-      }));
-    }
-  }, [initialData]);
-
-  const handleNext = useCallback(() => {
-    console.log("Current step:", currentStep, "of", totalSteps);
-    
+  const handleNext = () => {
     if (currentStep < totalSteps) {
       // Set income to 0 if unemployed before skipping
       if (currentStep === 3 && formData.employmentType === 'unemployed') {
@@ -67,31 +54,24 @@ const FormQuestions = ({
       }
       
       const nextStep = getNextStep(currentStep, formData);
-      console.log("Moving to step:", nextStep);
       setCurrentStep(nextStep);
     } else {
-      // We're at the last step, complete the form
-      console.log("Form completed. Submitting data:", formData);
       onComplete(formData);
     }
-  }, [currentStep, totalSteps, formData, onComplete]);
+  };
 
-  const handleBack = useCallback(() => {
+  const handleBack = () => {
     if (currentStep > 1) {
       const prevStep = getPreviousStep(currentStep, formData);
       setCurrentStep(prevStep);
     } else if (onBack) {
       onBack();
     }
-  }, [currentStep, formData, onBack]);
+  };
 
-  const updateFormData = useCallback(<K extends keyof FormState>(key: K, value: FormState[K]) => {
-    setFormData(prev => {
-      const updated = { ...prev, [key]: value };
-      console.log(`Updated ${String(key)}:`, value);
-      return updated;
-    });
-  }, []);
+  const updateFormData = <K extends keyof FormState>(key: K, value: FormState[K]) => {
+    setFormData({ ...formData, [key]: value });
+  };
 
   return (
     <div className="animate-fade-in">

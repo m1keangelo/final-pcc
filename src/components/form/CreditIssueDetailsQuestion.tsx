@@ -1,5 +1,5 @@
 
-import React, { useState, useRef, useEffect, useCallback, memo } from "react";
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -9,7 +9,7 @@ import { FormState } from "@/types/form";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 
-const CreditIssueDetailsQuestion = ({
+export const CreditIssueDetailsQuestion = ({
   type,
   year,
   amount,
@@ -35,28 +35,8 @@ const CreditIssueDetailsQuestion = ({
   const { t } = useLanguage();
   const [yearInput, setYearInput] = useState(year?.toString() || "");
   const [amountInput, setAmountInput] = useState(amount?.toString() || "");
-  const yearInputRef = useRef<HTMLInputElement>(null);
-  const amountInputRef = useRef<HTMLInputElement>(null);
   
-  // Focus the year input when type is selected
-  useEffect(() => {
-    if (type && yearInputRef.current) {
-      setTimeout(() => {
-        yearInputRef.current?.focus();
-      }, 100);
-    }
-  }, [type]);
-  
-  // Focus the amount input when collections type is selected and year is entered
-  useEffect(() => {
-    if (type === 'collections' && year && amountInputRef.current) {
-      setTimeout(() => {
-        amountInputRef.current?.focus();
-      }, 100);
-    }
-  }, [type, year]);
-  
-  const handleYearChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleYearChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const val = e.target.value;
     setYearInput(val);
     
@@ -67,9 +47,9 @@ const CreditIssueDetailsQuestion = ({
     } else {
       onChangeYear(null);
     }
-  }, [onChangeYear]);
+  };
   
-  const handleAmountChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleAmountChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const val = e.target.value;
     setAmountInput(val);
     
@@ -79,11 +59,7 @@ const CreditIssueDetailsQuestion = ({
     } else {
       onChangeAmount(null);
     }
-  }, [onChangeAmount]);
-  
-  const handleTypeChange = useCallback((value: string) => {
-    onChangeType(value as FormState['creditIssueType']);
-  }, [onChangeType]);
+  };
   
   const currentYear = new Date().getFullYear();
   
@@ -97,12 +73,12 @@ const CreditIssueDetailsQuestion = ({
     >
       <div className="space-y-6">
         <div>
-          <Label htmlFor="creditIssueType" className="mb-2 block text-gallomodern-100">{t('q.creditIssueDetails.typeLabel')}</Label>
-          <Select value={type || ""} onValueChange={handleTypeChange}>
-            <SelectTrigger id="creditIssueType" className="w-full text-foreground bg-background/80">
+          <Label htmlFor="creditIssueType" className="mb-2 block">{t('q.creditIssueDetails.typeLabel')}</Label>
+          <Select value={type || ""} onValueChange={(value) => onChangeType(value as FormState['creditIssueType'])}>
+            <SelectTrigger id="creditIssueType" className="w-full">
               <SelectValue placeholder={t('q.creditIssueDetails.typePlaceholder')} />
             </SelectTrigger>
-            <SelectContent className="bg-popover">
+            <SelectContent>
               <SelectItem value="bankruptcy">{t('q.creditIssueDetails.bankruptcy')}</SelectItem>
               <SelectItem value="foreclosure">{t('q.creditIssueDetails.foreclosure')}</SelectItem>
               <SelectItem value="collections">{t('q.creditIssueDetails.collections')}</SelectItem>
@@ -112,7 +88,7 @@ const CreditIssueDetailsQuestion = ({
         </div>
         
         <div>
-          <Label htmlFor="creditIssueYear" className="text-gallomodern-100">{t('q.creditIssueDetails.yearLabel')}</Label>
+          <Label htmlFor="creditIssueYear">{t('q.creditIssueDetails.yearLabel')}</Label>
           <Input
             id="creditIssueYear"
             type="number"
@@ -120,18 +96,17 @@ const CreditIssueDetailsQuestion = ({
             max={currentYear}
             value={yearInput}
             onChange={handleYearChange}
-            className="mt-1 text-foreground"
+            className="mt-1"
             placeholder={t('q.creditIssueDetails.yearPlaceholder')}
-            ref={yearInputRef}
           />
         </div>
         
         {type === 'collections' && (
           <div>
-            <Label htmlFor="creditIssueAmount" className="text-gallomodern-100">{t('q.creditIssueDetails.amountLabel')}</Label>
+            <Label htmlFor="creditIssueAmount">{t('q.creditIssueDetails.amountLabel')}</Label>
             <div className="relative mt-1">
               <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
-                <span className="text-gallomodern-300">$</span>
+                <span className="text-gray-500">$</span>
               </div>
               <Input
                 id="creditIssueAmount"
@@ -140,8 +115,7 @@ const CreditIssueDetailsQuestion = ({
                 value={amountInput}
                 onChange={handleAmountChange}
                 placeholder={t('q.creditIssueDetails.amountPlaceholder')}
-                className="pl-6 text-foreground"
-                ref={amountInputRef}
+                className="pl-6"
               />
             </div>
           </div>
@@ -169,4 +143,4 @@ const CreditIssueDetailsQuestion = ({
   );
 };
 
-export default memo(CreditIssueDetailsQuestion);
+export default CreditIssueDetailsQuestion;
